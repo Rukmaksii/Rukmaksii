@@ -11,14 +11,27 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float sensitivity = .1F;
 
 
+    // the world space point the camera will rotate around
+    private Vector3 camRotationAnchor
+    {
+        get
+        {
+            var collider = GetComponent<CapsuleCollider>();
+            return transform.TransformPoint(collider.center + Vector3.up * (collider.height / 4));
+        }
+    }
     private Vector3 movement = Vector3.zero;
     
     private Rigidbody rigidBody;
+
+    private Camera cam;
     
     
     void Start()
     {
         rigidBody = GetComponent<Rigidbody>();
+        cam = GetComponentInChildren<Camera>();
+        cam.enabled = true;
     }
 
     // Update is called once per frame
@@ -44,6 +57,7 @@ public class PlayerController : MonoBehaviour
     public void OnRotation(InputValue value)
     {
         Vector2 rotation = value.Get<Vector2>();
-        transform.Rotate(Vector3.down, rotation.x * sensitivity);
+        transform.Rotate(Vector3.up, rotation.x * sensitivity);
+        Debug.Log($"cam point: {camRotationAnchor}");
     }
 }
