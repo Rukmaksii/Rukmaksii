@@ -26,7 +26,6 @@ public class PlayerController : MonoBehaviour
         if (movement != Vector3.zero)
         {
             Vector3 moveVector = Vector3.ClampMagnitude(movement, 1f);
-            moveVector = transform.TransformDirection(movement);
             rigidBody.MovePosition(transform.position + moveVector * Time.deltaTime * movementSpeed);
         }
         
