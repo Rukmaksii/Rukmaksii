@@ -5,8 +5,29 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     [SerializeField] private Vector3 offset = new Vector3(0f, 1f, -2f);
-    [SerializeField] private float baseAngle = 5F;
+    [SerializeField] private float baseAngle = -5F;
     [SerializeField] private float maxAngle = 30F;
+
+    private float _addedAngle = 0f;
+
+    public float AddedAngle
+    {
+        get => _addedAngle;
+        set
+        {
+            if (Mathf.Abs(_addedAngle) <= maxAngle)
+            {
+                _addedAngle = value;
+            } else if (_addedAngle < 0)
+            {
+                _addedAngle = -maxAngle;
+            }
+            else
+            {
+                _addedAngle = maxAngle;
+            }
+        }
+    }
 
 
     private Camera cam;
@@ -15,20 +36,18 @@ public class CameraController : MonoBehaviour
     void Start()
     {
         cam = GetComponent<Camera>();
-        // cam.transform.Rotate(Vector3.left, baseAngle);
     }
 
-    public void OnPlayerMove(Vector3 camAnchor, Transform playerTransform, float addedAngle = 0f)
+    public void OnPlayerMove(Vector3 camAnchor, Transform playerTransform)
     {
         Vector3 camPosition = camAnchor + playerTransform.TransformVector(offset);
         cam.transform.position = camPosition;
 
-        Vector3 playerAngles = playerTransform.eulerAngles;
+        Vector3 playerAngles = playerTransform.localEulerAngles;
 
-        cam.transform.eulerAngles = playerAngles;
+        Vector3 camAngles = playerAngles + Vector3.right * (AddedAngle + baseAngle);
 
-        if (addedAngle == 0F)
-            return;
+        cam.transform.localEulerAngles = camAngles;
     }
 
     // Update is called once per frame

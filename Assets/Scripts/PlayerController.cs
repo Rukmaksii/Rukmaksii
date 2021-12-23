@@ -21,9 +21,6 @@ public class PlayerController : NetworkBehaviour
 
     private CameraController cameraController;
 
-    private float cameraAngleDelta = 0f;
-
-
     // the world space point the camera will rotate around
     private Vector3 camRotationAnchor
     {
@@ -72,7 +69,7 @@ public class PlayerController : NetworkBehaviour
     {
         if (!IsLocalPlayer)
             return;
-        cameraController.OnPlayerMove(camRotationAnchor, transform, cameraAngleDelta);
+        cameraController.OnPlayerMove(camRotationAnchor, transform);
     }
 
     public void OnMove(InputValue value)
@@ -92,6 +89,6 @@ public class PlayerController : NetworkBehaviour
         Vector2 rotation = value.Get<Vector2>();
         transform.Rotate(Vector3.up, rotation.x * sensitivity);
 
-        cameraAngleDelta = rotation.y * sensitivity;
+        cameraController.AddedAngle += rotation.y * sensitivity;
     }
 }
