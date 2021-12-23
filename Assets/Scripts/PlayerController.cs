@@ -60,5 +60,9 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 rotation = value.Get<Vector2>();
         transform.Rotate(Vector3.up, rotation.x * sensitivity);
+        
+        cam.transform.RotateAround(camRotationAnchor, transform.TransformDirection(Vector3.left), rotation.y * sensitivity);
+        
+        Debug.Log($"camera angle: {cam.transform.localEulerAngles}");
     }
 }
