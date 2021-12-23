@@ -1,16 +1,27 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
+using Unity.Netcode;
+using Unity.Netcode.Components;
+using Unity.Netcode.Samples;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
 
-public class PlayerController : MonoBehaviour
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(NetworkObject))]
+[RequireComponent(typeof(ClientNetworkTransform))]
+public class PlayerController : NetworkBehaviour
 {
     // Constants to be set by unity
     [SerializeField] private float movementSpeed = 5F;
     [SerializeField] private float sensitivity = .1F;
+
+    private CameraController cameraController;
+
+    private float cameraAngleDelta = 0f;
 
 
     // the world space point the camera will rotate around
@@ -27,29 +38,47 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody rigidBody;
 
-    private Camera cam;
-
 
     void Start()
     {
-        rigidBody = GetComponent<Rigidbody>();
-        cam = GetComponentInChildren<Camera>();
-        cam.enabled = true;
+        GameObject playerCamera = GameObject.FindGameObjectWithTag("Player Camera");
+        cameraController = playerCamera.GetComponent<CameraController>();
+        cameraController.OnPlayerMove(camRotationAnchor, transform);
     }
 
-    // Update is called once per frame
+    void Awake()
+    {
+        rigidBody = GetComponent<Rigidbody>();
+    }
+
     void FixedUpdate()
     {
+        if (!IsLocalPlayer)
+            return;
+
         if (movement != Vector3.zero)
         {
             Vector3 moveVector = Vector3.ClampMagnitude(movement, 1f);
             moveVector = transform.TransformVector(moveVector);
             rigidBody.MovePosition(transform.position + moveVector * Time.deltaTime * movementSpeed);
         }
+
+        // forces the capsule to stand up
+        transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+    }
+
+    // Update is called once per frame
+    private void Update()
+    {
+        if (!IsLocalPlayer)
+            return;
+        cameraController.OnPlayerMove(camRotationAnchor, transform, cameraAngleDelta);
     }
 
     public void OnMove(InputValue value)
     {
+        if (!IsLocalPlayer)
+            return;
         Vector2 direction = value.Get<Vector2>();
 
         movement.x = direction.x;
@@ -58,11 +87,11 @@ public class PlayerController : MonoBehaviour
 
     public void OnRotation(InputValue value)
     {
+        if (!IsLocalPlayer)
+            return;
         Vector2 rotation = value.Get<Vector2>();
         transform.Rotate(Vector3.up, rotation.x * sensitivity);
-        
-        cam.transform.RotateAround(camRotationAnchor, transform.TransformDirection(Vector3.left), rotation.y * sensitivity);
-        
-        Debug.Log($"camera angle: {cam.transform.localEulerAngles}");
+
+        cameraAngleDelta = rotation.y * sensitivity;
     }
 }
