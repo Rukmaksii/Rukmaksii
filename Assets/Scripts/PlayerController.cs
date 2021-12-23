@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
 
 public class PlayerController : MonoBehaviour
 {
-    
     // Constants to be set by unity
     [SerializeField] private float movementSpeed = 5F;
     [SerializeField] private float sensitivity = .1F;
@@ -20,13 +22,14 @@ public class PlayerController : MonoBehaviour
             return transform.TransformPoint(collider.center + Vector3.up * (collider.height / 4));
         }
     }
+
     private Vector3 movement = Vector3.zero;
-    
+
     private Rigidbody rigidBody;
 
     private Camera cam;
-    
-    
+
+
     void Start()
     {
         rigidBody = GetComponent<Rigidbody>();
@@ -43,7 +46,6 @@ public class PlayerController : MonoBehaviour
             moveVector = transform.TransformVector(moveVector);
             rigidBody.MovePosition(transform.position + moveVector * Time.deltaTime * movementSpeed);
         }
-        
     }
 
     public void OnMove(InputValue value)
@@ -58,6 +60,5 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 rotation = value.Get<Vector2>();
         transform.Rotate(Vector3.up, rotation.x * sensitivity);
-        Debug.Log($"cam point: {camRotationAnchor}");
     }
 }
