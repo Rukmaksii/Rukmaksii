@@ -10,6 +10,11 @@ using UnityEngine.InputSystem;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
 
+/**
+ * <summary>
+ *      The controller class for any player spawned in the game
+ * </summary>
+ */
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(NetworkObject))]
 [RequireComponent(typeof(ClientNetworkTransform))]
@@ -74,6 +79,12 @@ public class PlayerController : NetworkBehaviour
         cameraController.OnPlayerMove(camRotationAnchor, transform);
     }
 
+    /**
+     * <summary>
+     *      Called when the move event is triggered within unity
+     * </summary>
+     * <param name="value">the <see cref="InputValue"/> giving the move axis values </param>
+     */
     public void OnMove(InputValue value)
     {
         if (!IsLocalPlayer)
@@ -84,6 +95,13 @@ public class PlayerController : NetworkBehaviour
         movement.z = direction.y;
     }
 
+    
+    /**
+     * <summary>
+     *      Called when the rotation event is triggered within unity
+     * </summary>
+     * <param name="value">the <see cref="InputValue"/> giving the rotation delta </param>
+     */
     public void OnRotation(InputValue value)
     {
         if (!IsLocalPlayer)

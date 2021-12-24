@@ -5,14 +5,50 @@ using UnityEngine;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 
+
+/**
+ * <summary>
+ *      The controller for the <see cref="Camera"/> bound to the player in the game
+ * </summary>
+ */
 public class CameraController : MonoBehaviour
 {
+    
+    /**
+     * <value>
+     *      the local offset of the camera
+     * </value>
+     */
     [SerializeField] private Vector3 offset = new Vector3(0f, 0, -2f);
+    
+    /**
+     * <value>
+     *      the base angle on the x-axis (pitch) of the camera
+     * </value>
+     */
     [SerializeField] private float baseAngle = -5F;
+    
+    /**
+     * <value>
+     *      the max angle of the camera on the x-axis (pitch)
+     * </value>
+     * <para>
+     *      Example:
+     *      <code>
+     *          maxAngle = 30f;
+     *          the pitch of the camera can go from 
+     *      </code>
+     * </para>
+     */
     [SerializeField] private float maxAngle = 90F;
 
     private float _addedAngle;
 
+    /**
+     * <value>
+     *      the angle of the camera on the local x-axis (pitch)
+     * </value>
+     */
     public float AddedAngle
     {
         get => _addedAngle;
@@ -34,6 +70,11 @@ public class CameraController : MonoBehaviour
     }
 
 
+    /**
+     * <value>
+     *      the attached <see cref="Camera"/>
+     * </value>
+     */
     private Camera cam;
 
 
@@ -43,6 +84,12 @@ public class CameraController : MonoBehaviour
         _addedAngle = baseAngle;
     }
 
+    
+    /**
+     * <summary>
+     *      called when the player moves
+     * </summary>
+     */
     public void OnPlayerMove(Vector3 camAnchor, Transform playerTransform)
     {
 
