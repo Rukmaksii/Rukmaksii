@@ -52,16 +52,18 @@ public class PlayerController : NetworkBehaviour
     {
         if (!IsLocalPlayer)
             return;
+        
+        var playerTransform = transform;
 
         if (movement != Vector3.zero)
         {
             Vector3 moveVector = Vector3.ClampMagnitude(movement, 1f);
             moveVector = transform.TransformVector(moveVector);
-            rigidBody.MovePosition(transform.position + moveVector * Time.deltaTime * movementSpeed);
+            rigidBody.MovePosition(playerTransform.position + moveVector * Time.deltaTime * movementSpeed);
         }
 
         // forces the capsule to stand up
-        transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+        playerTransform.localEulerAngles = new Vector3(0, playerTransform.localEulerAngles.y, 0);
     }
 
     // Update is called once per frame
@@ -89,6 +91,6 @@ public class PlayerController : NetworkBehaviour
         Vector2 rotation = value.Get<Vector2>();
         transform.Rotate(Vector3.up, rotation.x * sensitivity);
 
-        cameraController.AddedAngle += rotation.y * sensitivity;
+        cameraController.AddedAngle -= rotation.y * sensitivity;
     }
 }
