@@ -18,6 +18,7 @@ public class PlayerController : NetworkBehaviour
 {
     // Constants to be set by unity
     [SerializeField] private float movementSpeed = 5F;
+    [SerializeField] private float jumpForce = 5f;
     [SerializeField] private float sensitivity = .1F;
 
     protected CameraController cameraController;
@@ -66,7 +67,7 @@ public class PlayerController : NetworkBehaviour
         }
 
         // forces the capsule to stand up
-        playerTransform.localEulerAngles = new Vector3(0, playerTransform.localEulerAngles.y, 0);
+        playerTransform.eulerAngles = new Vector3(0, playerTransform.eulerAngles.y, 0);
     }
 
     // Update is called once per frame
@@ -110,10 +111,14 @@ public class PlayerController : NetworkBehaviour
         cameraController.AddedAngle -= rotation.y * sensitivity;
     }
 
-    /*public void OnJump()
+    public void OnJump()
     {
-        Debug.Log("jumping !");
-    }*/
+        if (!IsLocalPlayer)
+            return;
+        
+        if(isGrounded)
+            rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
