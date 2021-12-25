@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using Unity.Netcode.Samples;
 using UnityEngine;
@@ -34,6 +35,8 @@ public class PlayerController : NetworkBehaviour
     private Vector3 movement = Vector3.zero;
 
     protected Rigidbody rigidBody;
+
+    protected bool isGrounded = false;
 
 
     void Start()
@@ -106,6 +109,21 @@ public class PlayerController : NetworkBehaviour
 
         cameraController.AddedAngle -= rotation.y * sensitivity;
     }
-    
-    
+
+    /*public void OnJump()
+    {
+        Debug.Log("jumping !");
+    }*/
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+            isGrounded = true;
+    }
+
+    private void OnCollisionExit(Collision other)
+    {
+        if (other.gameObject.CompareTag("Ground"))
+            isGrounded = false;
+    }
 }
