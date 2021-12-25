@@ -1,9 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Numerics;
 using Unity.Netcode;
-using Unity.Netcode.Components;
 using Unity.Netcode.Samples;
 using UnityEngine;
 using UnityEngine.InputSystem;
