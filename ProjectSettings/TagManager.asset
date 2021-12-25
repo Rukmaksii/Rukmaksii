@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Player Camera
+  - Ground
   layers:
   - Default
   - TransparentFX
