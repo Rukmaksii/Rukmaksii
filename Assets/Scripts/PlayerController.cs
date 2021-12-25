@@ -19,10 +19,10 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private float movementSpeed = 5F;
     [SerializeField] private float sensitivity = .1F;
 
-    private CameraController cameraController;
+    protected CameraController cameraController;
 
     // the world space point the camera will rotate around
-    private Vector3 camRotationAnchor
+    protected Vector3 camRotationAnchor
     {
         get
         {
@@ -33,7 +33,7 @@ public class PlayerController : NetworkBehaviour
 
     private Vector3 movement = Vector3.zero;
 
-    private Rigidbody rigidBody;
+    protected Rigidbody rigidBody;
 
 
     void Start()
