@@ -103,8 +103,4 @@ public class CameraController : MonoBehaviour
         camTransform.localEulerAngles = camAngles;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-    }
 }

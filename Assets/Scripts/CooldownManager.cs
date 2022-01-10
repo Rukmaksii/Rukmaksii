@@ -1,18 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CooldownManager : MonoBehaviour
 {
     [SerializeField] protected float dashCooldown = 3f;
 
-    private bool dashTriggered = false;
-    private float dashedSince = 0f;
+    private bool dashTriggered;
+    private float dashedSince;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
 
     // Update is called once per frame
     void FixedUpdate()

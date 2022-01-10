@@ -26,10 +26,13 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private float runningSpeedMultiplier = 2f;
 
     [SerializeField] private float jumpForce = 5f;
+    /**
+     * <value>the mouse sensitivity</value>
+     */
     [SerializeField] private float sensitivity = .1F;
 
 
-    private bool isRunning = false;
+    private bool isRunning;
 
     public bool IsRunning => isRunning;
 
@@ -43,16 +46,19 @@ public class PlayerController : NetworkBehaviour
     {
         get
         {
-            var collider = GetComponent<CapsuleCollider>();
-            return transform.TransformPoint(collider.center + Vector3.up * (collider.height / 4));
+            var cld = GetComponent<CapsuleCollider>();
+            return transform.TransformPoint(cld.center + Vector3.up * (cld.height / 4));
         }
     }
 
+    /**
+     * <value>the current movement requested to be made</value>
+     */
     private Vector3 movement = Vector3.zero;
 
     protected Rigidbody rigidBody;
 
-    protected bool isGrounded = false;
+    protected bool isGrounded;
 
 
     private Vector3 dashDirection;
@@ -61,8 +67,12 @@ public class PlayerController : NetworkBehaviour
      * <value>the duration of the dash in seconds</value>
      */
     [SerializeField] protected float dashDuration = 0.3F;
+
     [SerializeField] protected float dashForce = 80f;
-    
+
+    /**
+     * <value>the time in seconds since the dash has been called</value>
+     */
     private float dashStartedSince = -1f;
 
 
@@ -94,7 +104,7 @@ public class PlayerController : NetworkBehaviour
 
         // dash has to be handled before movement
         handleDash();
-        
+
         if (movement != Vector3.zero && !IsDashing)
         {
             Vector3 moveVector = Vector3.ClampMagnitude(movement, 1f);
@@ -103,14 +113,14 @@ public class PlayerController : NetworkBehaviour
             var speed = movementSpeed * (isRunning ? runningSpeedMultiplier : 1F);
 
 
-            Vector3 deltaVelocity = new Vector3(rigidBody.velocity.x, 0f, rigidBody.velocity.z);
+            var velocity = rigidBody.velocity;
+            Vector3 deltaVelocity = new Vector3(velocity.x, 0f, velocity.z);
 
             rigidBody.AddForce(moveVector * speed - deltaVelocity, ForceMode.VelocityChange);
         }
 
         // forces the capsule to stand up
         playerTransform.eulerAngles = new Vector3(0, playerTransform.eulerAngles.y, 0);
-
     }
 
     // Update is called once per frame
@@ -125,7 +135,7 @@ public class PlayerController : NetworkBehaviour
      * <summary>
      *      Called when the move event is triggered within unity
      * </summary>
-     * <param name="value">the <see cref="InputValue"/> giving the move axis values </param>
+     * <param name="ctx">the <see cref="InputAction.CallbackContext"/> giving the move axis values </param>
      */
     public void OnMove(InputAction.CallbackContext ctx)
     {
@@ -152,7 +162,7 @@ public class PlayerController : NetworkBehaviour
      * <summary>
      *      Called when the rotation event is triggered within unity
      * </summary>
-     * <param name="value">the <see cref="InputValue"/> giving the rotation delta </param>
+     * <param name="ctx">the <see cref="InputAction.CallbackContext"/> giving the rotation delta </param>
      */
     public void OnRotation(InputAction.CallbackContext ctx)
     {
@@ -164,6 +174,11 @@ public class PlayerController : NetworkBehaviour
         cameraController.AddedAngle -= rotation.y * sensitivity;
     }
 
+    /**
+     * <summary>
+     *      Called when the jump event is triggered within unity
+     * </summary>
+     */
     public void OnJump()
     {
         if (!IsLocalPlayer)
@@ -173,6 +188,9 @@ public class PlayerController : NetworkBehaviour
             rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
 
+    /**
+     * <summary>called when run button is toggled</summary>
+     */
     public void OnRun(InputAction.CallbackContext ctx)
     {
         if (!IsLocalPlayer)
@@ -222,14 +240,13 @@ public class PlayerController : NetworkBehaviour
         }
         else if (IsDashing)
         {
-            
             dashStartedSince += Time.deltaTime;
 
-            // a function : [0;1] => [0;1] with f(0) = 0 and f(1) = 0
+            // a function : [0;1] => [0;1] with f(1) = 0
             // it acts as a smoothing function for the velocity change
-            Func<float, float> kernelFunction = x => Mathf.Exp(-5 * (float)Math.Pow(2*x - 1, 2));
+            Func<float, float> kernelFunction = x => Mathf.Exp(-5 * (float) Math.Pow(2 * x - 1, 2));
 
-            Vector3 velocity = dashDirection * (kernelFunction(dashStartedSince/ dashDuration) * dashForce);
+            Vector3 velocity = dashDirection * (kernelFunction(dashStartedSince / dashDuration) * dashForce);
             rigidBody.AddForce(velocity - rigidBody.velocity, ForceMode.VelocityChange);
         }
     }
