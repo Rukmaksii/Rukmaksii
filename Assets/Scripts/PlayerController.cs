@@ -21,6 +21,12 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private float sensitivity = .1F;
 
+
+
+    private bool isRunning = false;
+
+    public bool IsRunning => isRunning;
+    
     protected CameraController cameraController;
 
     protected GameController gameController;
