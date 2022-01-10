@@ -21,7 +21,7 @@ public class PlayerController : NetworkBehaviour
     /**
      * <value>the speed multiplier when running</value>
      */
-    [SerializeField] private float runningSpeedMultiplier = 1.5f;
+    [SerializeField] private float runningSpeedMultiplier = 2f;
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private float sensitivity = .1F;
 

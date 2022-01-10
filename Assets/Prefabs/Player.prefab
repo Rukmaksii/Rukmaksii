@@ -227,7 +227,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 5
-  runningSpeedMultiplier: 1.5
+  runningSpeedMultiplier: 2
   jumpForce: 5
   sensitivity: 0.1
 --- !u!114 &1260994430873029613
