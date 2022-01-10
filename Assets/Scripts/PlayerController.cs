@@ -18,6 +18,10 @@ public class PlayerController : NetworkBehaviour
 {
     // Constants to be set by unity
     [SerializeField] private float movementSpeed = 5F;
+    /**
+     * <value>the speed multiplier when running</value>
+     */
+    [SerializeField] private float runningSpeedMultiplier = 1.5f;
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private float sensitivity = .1F;
 
@@ -75,7 +79,10 @@ public class PlayerController : NetworkBehaviour
         {
             Vector3 moveVector = Vector3.ClampMagnitude(movement, 1f);
             moveVector = transform.TransformVector(moveVector);
-            rigidBody.MovePosition(playerTransform.position + moveVector * Time.deltaTime * movementSpeed);
+
+            var speed = movementSpeed * (isRunning ? runningSpeedMultiplier : 1F);
+            
+            rigidBody.MovePosition(playerTransform.position + moveVector * Time.deltaTime * speed);
         }
 
         // forces the capsule to stand up
@@ -96,11 +103,11 @@ public class PlayerController : NetworkBehaviour
      * </summary>
      * <param name="value">the <see cref="InputValue"/> giving the move axis values </param>
      */
-    public void OnMove(InputValue value)
+    public void OnMove(InputAction.CallbackContext ctx)
     {
         if (!IsLocalPlayer)
             return;
-        Vector2 direction = value.Get<Vector2>();
+        Vector2 direction = ctx.ReadValue<Vector2>();
 
         movement.x = direction.x;
         movement.z = direction.y;
@@ -113,11 +120,11 @@ public class PlayerController : NetworkBehaviour
      * </summary>
      * <param name="value">the <see cref="InputValue"/> giving the rotation delta </param>
      */
-    public void OnRotation(InputValue value)
+    public void OnRotation(InputAction.CallbackContext ctx)
     {
         if (!IsLocalPlayer)
             return;
-        Vector2 rotation = value.Get<Vector2>();
+        Vector2 rotation = ctx.ReadValue<Vector2>();
         transform.Rotate(Vector3.up, rotation.x * sensitivity);
 
         cameraController.AddedAngle -= rotation.y * sensitivity;
@@ -130,6 +137,14 @@ public class PlayerController : NetworkBehaviour
         
         if(isGrounded)
             rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+    }
+
+    public void OnRun(InputAction.CallbackContext ctx)
+    {
+        if (!IsLocalPlayer)
+            return;
+
+        isRunning = ctx.performed;
     }
 
     private void OnCollisionEnter(Collision collision)
