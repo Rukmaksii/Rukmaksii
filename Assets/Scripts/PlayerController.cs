@@ -17,20 +17,21 @@ using Vector3 = UnityEngine.Vector3;
 public class PlayerController : NetworkBehaviour
 {
     // Constants to be set by unity
-    [SerializeField] private float movementSpeed = 5F;
+    [SerializeField] private float movementSpeed = 10F;
+
     /**
      * <value>the speed multiplier when running</value>
      */
     [SerializeField] private float runningSpeedMultiplier = 2f;
+
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private float sensitivity = .1F;
-
 
 
     private bool isRunning = false;
 
     public bool IsRunning => isRunning;
-    
+
     protected CameraController cameraController;
 
     protected GameController gameController;
@@ -52,15 +53,27 @@ public class PlayerController : NetworkBehaviour
     protected bool isGrounded = false;
 
 
+    private Vector3 dashDirection;
+
+    /**
+     * <value>the duration of the dash in seconds</value>
+     */
+    [SerializeField] protected float dashDuration = 0.2F;
+    [SerializeField] protected float dashForce = 40f;
+    
+    private float dashStartedSince = -1f;
+
+
+    public bool IsDashing => dashStartedSince > 0 && dashStartedSince <= dashDuration;
+
     void Start()
     {
         GameObject playerCamera = GameObject.FindGameObjectWithTag("Player Camera");
         cameraController = playerCamera.GetComponent<CameraController>();
         cameraController.OnPlayerMove(camRotationAnchor, transform);
-        
+
         GameObject gameManager = GameObject.FindGameObjectWithTag("GameController");
         gameController = gameManager.GetComponent<GameController>();
-
     }
 
     void Awake()
@@ -72,21 +85,28 @@ public class PlayerController : NetworkBehaviour
     {
         if (!IsLocalPlayer)
             return;
-        
+
         var playerTransform = transform;
 
-        if (movement != Vector3.zero)
+        // dash has to be handled before movement
+        handleDash();
+        
+        if (movement != Vector3.zero && !IsDashing)
         {
             Vector3 moveVector = Vector3.ClampMagnitude(movement, 1f);
             moveVector = transform.TransformVector(moveVector);
 
             var speed = movementSpeed * (isRunning ? runningSpeedMultiplier : 1F);
-            
-            rigidBody.MovePosition(playerTransform.position + moveVector * Time.deltaTime * speed);
+
+
+            Vector3 deltaVelocity = new Vector3(rigidBody.velocity.x, 0f, rigidBody.velocity.z);
+
+            rigidBody.AddForce(moveVector * speed - deltaVelocity, ForceMode.VelocityChange);
         }
 
         // forces the capsule to stand up
         playerTransform.eulerAngles = new Vector3(0, playerTransform.eulerAngles.y, 0);
+
     }
 
     // Update is called once per frame
@@ -107,13 +127,23 @@ public class PlayerController : NetworkBehaviour
     {
         if (!IsLocalPlayer)
             return;
-        Vector2 direction = ctx.ReadValue<Vector2>();
 
-        movement.x = direction.x;
-        movement.z = direction.y;
+        if (ctx.performed)
+        {
+            Vector2 direction = ctx.ReadValue<Vector2>();
+
+            movement.x = direction.x;
+            movement.z = direction.y;
+        }
+        else
+        {
+            var velocity = rigidBody.velocity;
+            rigidBody.AddForce(-new Vector3(velocity.x, 0, velocity.z), ForceMode.VelocityChange);
+            movement = Vector3.zero;
+        }
     }
 
-    
+
     /**
      * <summary>
      *      Called when the rotation event is triggered within unity
@@ -122,7 +152,7 @@ public class PlayerController : NetworkBehaviour
      */
     public void OnRotation(InputAction.CallbackContext ctx)
     {
-        if (!IsLocalPlayer)
+        if (!IsLocalPlayer || cameraController == null)
             return;
         Vector2 rotation = ctx.ReadValue<Vector2>();
         transform.Rotate(Vector3.up, rotation.x * sensitivity);
@@ -134,8 +164,8 @@ public class PlayerController : NetworkBehaviour
     {
         if (!IsLocalPlayer)
             return;
-        
-        if(isGrounded)
+
+        if (isGrounded)
             rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
 
@@ -149,18 +179,17 @@ public class PlayerController : NetworkBehaviour
 
     public void OnDash(InputAction.CallbackContext ctx)
     {
-        if (!IsLocalPlayer)
+        if (!IsLocalPlayer || dashStartedSince > 0)
             return;
 
-        Vector3 dashDirection = Vector3.ClampMagnitude(rigidBody.velocity, 1f);
+        dashStartedSince = Time.deltaTime;
+
+        dashDirection = Vector3.ClampMagnitude(rigidBody.velocity, 1f);
 
         if (dashDirection == Vector3.zero)
         {
             dashDirection = transform.TransformDirection(Vector3.forward);
         }
-
-        rigidBody.AddForce(dashDirection * 20f, ForceMode.Acceleration);
-
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -173,5 +202,24 @@ public class PlayerController : NetworkBehaviour
     {
         if (other.gameObject.CompareTag("Ground"))
             isGrounded = false;
+    }
+
+
+    private void handleDash()
+    {
+        if (dashDirection == Vector3.zero)
+            return;
+
+        if (dashStartedSince > dashDuration)
+        {
+            dashStartedSince = 0;
+            dashDirection = Vector3.zero;
+            rigidBody.velocity = Vector3.zero;
+        }
+        else if (IsDashing)
+        {
+            dashStartedSince += Time.deltaTime;
+            rigidBody.AddForce(dashDirection * dashForce - rigidBody.velocity, ForceMode.VelocityChange);
+        }
     }
 }
