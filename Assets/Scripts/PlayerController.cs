@@ -14,6 +14,7 @@ using Vector3 = UnityEngine.Vector3;
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(NetworkObject))]
 [RequireComponent(typeof(ClientNetworkTransform))]
+[RequireComponent(typeof(CooldownManager))]
 public class PlayerController : NetworkBehaviour
 {
     // Constants to be set by unity
@@ -33,6 +34,7 @@ public class PlayerController : NetworkBehaviour
     public bool IsRunning => isRunning;
 
     protected CameraController cameraController;
+    protected CooldownManager cdManager;
 
     protected GameController gameController;
 
@@ -74,6 +76,8 @@ public class PlayerController : NetworkBehaviour
 
         GameObject gameManager = GameObject.FindGameObjectWithTag("GameController");
         gameController = gameManager.GetComponent<GameController>();
+
+        cdManager = gameObject.AddComponent<CooldownManager>();
     }
 
     void Awake()
@@ -179,7 +183,7 @@ public class PlayerController : NetworkBehaviour
 
     public void OnDash(InputAction.CallbackContext ctx)
     {
-        if (!IsLocalPlayer || dashStartedSince > 0)
+        if (!IsLocalPlayer || !cdManager.RequestDash())
             return;
 
         dashStartedSince = Time.deltaTime;
