@@ -147,6 +147,12 @@ public class PlayerController : NetworkBehaviour
         isRunning = ctx.performed;
     }
 
+    public void OnDash(InputAction.CallbackContext ctx)
+    {
+        if (!IsLocalPlayer)
+            return;
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
