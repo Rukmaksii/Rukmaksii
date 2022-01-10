@@ -23,6 +23,8 @@ public class PlayerController : NetworkBehaviour
 
     protected CameraController cameraController;
 
+    protected GameController gameController;
+
     // the world space point the camera will rotate around
     protected Vector3 camRotationAnchor
     {
@@ -45,6 +47,10 @@ public class PlayerController : NetworkBehaviour
         GameObject playerCamera = GameObject.FindGameObjectWithTag("Player Camera");
         cameraController = playerCamera.GetComponent<CameraController>();
         cameraController.OnPlayerMove(camRotationAnchor, transform);
+        
+        GameObject gameManager = GameObject.FindGameObjectWithTag("GameController");
+        gameController = gameManager.GetComponent<GameController>();
+
     }
 
     void Awake()
