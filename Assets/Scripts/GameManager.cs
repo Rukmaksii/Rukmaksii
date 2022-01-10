@@ -11,8 +11,10 @@ enum GameState
     Ended
 }
 
-public class GameManagerScript : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
+    
+    private List<PlayerController> players = new List<PlayerController>();
 
     // Start is called before the first frame update
     void Start()
