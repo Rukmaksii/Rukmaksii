@@ -60,8 +60,8 @@ public class PlayerController : NetworkBehaviour
     /**
      * <value>the duration of the dash in seconds</value>
      */
-    [SerializeField] protected float dashDuration = 0.2F;
-    [SerializeField] protected float dashForce = 40f;
+    [SerializeField] protected float dashDuration = 0.3F;
+    [SerializeField] protected float dashForce = 80f;
     
     private float dashStartedSince = -1f;
 
@@ -222,8 +222,15 @@ public class PlayerController : NetworkBehaviour
         }
         else if (IsDashing)
         {
+            
             dashStartedSince += Time.deltaTime;
-            rigidBody.AddForce(dashDirection * dashForce - rigidBody.velocity, ForceMode.VelocityChange);
+
+            // a function : [0;1] => [0;1] with f(0) = 0 and f(1) = 0
+            // it acts as a smoothing function for the velocity change
+            Func<float, float> kernelFunction = x => Mathf.Exp(-5 * (float)Math.Pow(2*x - 1, 2));
+
+            Vector3 velocity = dashDirection * (kernelFunction(dashStartedSince/ dashDuration) * dashForce);
+            rigidBody.AddForce(velocity - rigidBody.velocity, ForceMode.VelocityChange);
         }
     }
 }
