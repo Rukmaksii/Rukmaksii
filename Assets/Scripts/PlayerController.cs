@@ -151,6 +151,16 @@ public class PlayerController : NetworkBehaviour
     {
         if (!IsLocalPlayer)
             return;
+
+        Vector3 dashDirection = Vector3.ClampMagnitude(rigidBody.velocity, 1f);
+
+        if (dashDirection == Vector3.zero)
+        {
+            dashDirection = transform.TransformDirection(Vector3.forward);
+        }
+
+        rigidBody.AddForce(dashDirection * 20f, ForceMode.Acceleration);
+
     }
 
     private void OnCollisionEnter(Collision collision)
