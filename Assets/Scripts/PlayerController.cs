@@ -1,4 +1,5 @@
 using System;
+using DefaultNamespace;
 using Unity.Netcode;
 using Unity.Netcode.Samples;
 using UnityEngine;
@@ -32,6 +33,8 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private float sensitivity = .1F;
 
 
+    protected Jetpack jetpack;
+
     private bool isRunning;
 
     public bool IsRunning => isRunning;
@@ -57,9 +60,11 @@ public class PlayerController : NetworkBehaviour
     private Vector3 movement = Vector3.zero;
 
     protected Rigidbody rigidBody;
+    public Rigidbody RigidBody => rigidBody;
 
     protected bool isGrounded;
 
+    public bool IsGrounded => isGrounded;
 
     private Vector3 dashDirection;
 
@@ -80,6 +85,7 @@ public class PlayerController : NetworkBehaviour
 
     void Start()
     {
+        this.jetpack = new Jetpack(this, 20f);
         GameObject playerCamera = GameObject.FindGameObjectWithTag("Player Camera");
         cameraController = playerCamera.GetComponent<CameraController>();
         cameraController.OnPlayerMove(camRotationAnchor, transform);
@@ -204,7 +210,7 @@ public class PlayerController : NetworkBehaviour
         if (!IsLocalPlayer || !cdManager.RequestDash())
             return;
 
-        dashStartedSince = Time.deltaTime;
+        dashStartedSince = Time.fixedDeltaTime;
 
         dashDirection = Vector3.ClampMagnitude(rigidBody.velocity, 1f);
 
@@ -240,7 +246,7 @@ public class PlayerController : NetworkBehaviour
         }
         else if (IsDashing)
         {
-            dashStartedSince += Time.deltaTime;
+            dashStartedSince += Time.fixedDeltaTime;
 
             // a function : [0;1] => [0;1] with f(1) = 0
             // it acts as a smoothing function for the velocity change
