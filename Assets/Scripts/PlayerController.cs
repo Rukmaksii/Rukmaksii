@@ -36,6 +36,8 @@ public class PlayerController : NetworkBehaviour
 
     protected Jetpack jetpack;
 
+    public Jetpack Jetpack => jetpack;
+
     private bool isRunning;
 
     public bool IsRunning => isRunning;
@@ -144,9 +146,8 @@ public class PlayerController : NetworkBehaviour
             Vector3 moveVector = Vector3.ClampMagnitude(movement, 1f);
             moveVector = Vector3.ClampMagnitude(moveVector + yDirection * Vector3.up, 1f);
             moveVector = transform.TransformVector(moveVector);
-            
-            this.jetpack.Direction = moveVector;
 
+            this.jetpack.Direction = moveVector;
         }
 
 
@@ -218,6 +219,7 @@ public class PlayerController : NetworkBehaviour
 
         if (ctx.interaction is MultiTapInteraction && ctx.performed)
         {
+            this.yDirection = 0;
             this.jetpack.IsFlying = !this.jetpack.IsFlying;
         }
         else if (this.jetpack.IsFlying && ctx.interaction is HoldInteraction)
@@ -266,6 +268,7 @@ public class PlayerController : NetworkBehaviour
             return;
 
         isRunning = ctx.performed;
+        this.jetpack.IsSwift = isRunning;
     }
 
     public void OnDash(InputAction.CallbackContext ctx)

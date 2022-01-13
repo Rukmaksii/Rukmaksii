@@ -42,16 +42,12 @@ public class Jetpack : MonoBehaviour
     /**
          * <value>the direction in world space to go to (magnitude should be under 1)</value>
          */
-
     private Vector3 _direction = Vector3.zero;
+
     public Vector3 Direction
     {
         get => _direction;
-        set
-        {
-            _direction = Vector3.ClampMagnitude(value, 1f);
-        }
-        
+        set { _direction = Vector3.ClampMagnitude(value, 1f); }
     }
 
     /**
@@ -93,8 +89,17 @@ public class Jetpack : MonoBehaviour
         }
 
         if (IsFlying && isReady)
+        {
+            var velocity = Direction * jetpackForce;
+
+            if (IsSwift)
+            {
+                velocity *= enhancedSpeedMultiplier;
+            }
+
             // TODO : smooth out the velocity changes
-            this.Player.RigidBody.velocity = Direction * jetpackForce;
+            this.Player.RigidBody.velocity = velocity;
+        }
     }
 
 
@@ -114,7 +119,8 @@ public class Jetpack : MonoBehaviour
         }
         else
         {
-            if (currentFuelUse - Time.fixedDeltaTime < 0)
+            float fuelConsumption = Time.fixedDeltaTime * (IsSwift ? enhancedSpeedMultiplier : 1f);
+            if (currentFuelUse - fuelConsumption < 0)
             {
                 currentFuelUse = 0;
                 this.IsFlying = false;
@@ -122,7 +128,7 @@ public class Jetpack : MonoBehaviour
             }
             else
             {
-                currentFuelUse -= Time.fixedDeltaTime;
+                currentFuelUse -= fuelConsumption;
             }
         }
     }
