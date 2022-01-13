@@ -259,6 +259,24 @@ public class PlayerController : NetworkBehaviour
             rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
 
+    public void OnLowerJetpack(InputAction.CallbackContext ctx)
+    {
+        if (!IsLocalPlayer)
+            return;
+
+        if (ctx.interaction is HoldInteraction)
+        {
+            if (ctx.performed)
+            {
+                yDirection = -1;
+            }
+            else if (ctx.canceled)
+            {
+                yDirection = 0;
+            }
+        }
+    }
+
     /**
      * <summary>called when run button is toggled</summary>
      */

@@ -27,7 +27,7 @@
                     "id": "f14d5b64-0e77-40ab-b57b-4b415868b0df",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "MultiTap,Hold"
+                    "interactions": "Hold,MultiTap"
                 },
                 {
                     "name": "run",
@@ -44,6 +44,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "lowerJetpack",
+                    "type": "Button",
+                    "id": "d83352b5-3a93-40e6-a196-b92ac07de1e8",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold"
                 }
             ],
             "bindings": [
@@ -198,6 +206,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ebdb1519-192a-4501-88d9-756bd98a5b63",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "lowerJetpack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
