@@ -1,5 +1,4 @@
 using System;
-using DefaultNamespace;
 using Unity.Netcode;
 using Unity.Netcode.Samples;
 using UnityEngine;
@@ -27,6 +26,7 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private float runningSpeedMultiplier = 2f;
 
     [SerializeField] private float jumpForce = 5f;
+
     /**
      * <value>the mouse sensitivity</value>
      */
@@ -85,7 +85,11 @@ public class PlayerController : NetworkBehaviour
 
     void Start()
     {
-        this.jetpack = new Jetpack(this, 20f);
+        this.jetpack = gameObject.AddComponent<Jetpack>();
+        this.jetpack.Player = this;
+
+        this.jetpack.FuelDuration = 20f;
+
         GameObject playerCamera = GameObject.FindGameObjectWithTag("Player Camera");
         cameraController = playerCamera.GetComponent<CameraController>();
         cameraController.OnPlayerMove(camRotationAnchor, transform);
@@ -116,13 +120,17 @@ public class PlayerController : NetworkBehaviour
             Vector3 moveVector = Vector3.ClampMagnitude(movement, 1f);
             moveVector = transform.TransformVector(moveVector);
 
-            var speed = movementSpeed * (isRunning ? runningSpeedMultiplier : 1F);
-
-
             var velocity = rigidBody.velocity;
-            Vector3 deltaVelocity = new Vector3(velocity.x, 0f, velocity.z);
 
-            rigidBody.AddForce(moveVector * speed - deltaVelocity, ForceMode.VelocityChange);
+            if (!this.jetpack.IsFlying)
+            {
+                var speed = movementSpeed * (isRunning ? runningSpeedMultiplier : 1F);
+
+
+                Vector3 deltaVelocity = new Vector3(velocity.x, 0f, velocity.z);
+
+                rigidBody.AddForce(moveVector * speed - deltaVelocity, ForceMode.VelocityChange);
+            }
         }
 
         // forces the capsule to stand up
@@ -192,6 +200,16 @@ public class PlayerController : NetworkBehaviour
 
         if (isGrounded)
             rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+
+        this.jetpack.IsFlying = true;
+        if (this.jetpack.Direction.magnitude > 0)
+        {
+            this.jetpack.Direction = Vector3.zero;
+        }
+        else
+        {
+            this.jetpack.Direction = Vector3.up;
+        }
     }
 
     /**

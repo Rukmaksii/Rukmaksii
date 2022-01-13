@@ -1,70 +1,120 @@
 ﻿using UnityEngine;
 
-namespace DefaultNamespace
+public class Jetpack : MonoBehaviour
 {
-    public class Jetpack
-    {
-        
-        public static readonly float RELOAD_MULTIPLIER = 2.5f;
+    /**
+    * <value>the multiplier for the fuel reload</value>
+    */
+    [SerializeField] private float reloadMultiplier = 2.5f;
 
-        private PlayerController player;
-        
-        /**
+    public PlayerController Player { get; set; }
+
+    /**
          * <value>the max duration of the flight</value>
          */
-        private readonly float fuelDuration;
-        
-        /**
+    public float FuelDuration;
+
+    /**
          * <value>the remaining time of use.</value>
          */
-        private float currentFuelUse;
-        
-        /**
-         * <value>the force that will be applied to the player by the jetpack</value>
-         */
-        private float jetpackForce = 5f;
+    private float currentFuelUse;
 
-        public float FuelConsumption => currentFuelUse / fuelDuration;
-
-        public Jetpack(PlayerController player, float fuelDuration)
+    public bool IsFlying
+    {
+        get => !this.Player.RigidBody.useGravity;
+        set
         {
-            this.player = player;
-            this.fuelDuration = fuelDuration;
-            currentFuelUse = this.fuelDuration;
-        }
-
-        public void Update(float time)
-        {
-            float reloadTime = RELOAD_MULTIPLIER * time;
-            // should reload the 
-            if (this.player.RigidBody.useGravity)
+            Debug.Log($"set use gravity to {this.Player.RigidBody.useGravity}");
+            if (value == true)
             {
-                if (currentFuelUse + reloadTime > fuelDuration)
+                if (this.CanTakeOff)
                 {
-                    currentFuelUse = fuelDuration;
-                }
-                else
-                {
-                    currentFuelUse += reloadTime;
+                    this.Player.RigidBody.useGravity = false;
                 }
             }
             else
             {
-                if (currentFuelUse - time < 0)
-                {
-                    currentFuelUse = 0;
-                }
-                else
-                {
-                    currentFuelUse -= time;
-                }
+                this.Player.RigidBody.useGravity = true;
             }
-            
+        }
+    }
+
+
+    /**
+         * <value>the direction in world space to go to (magnitude should be under 1)</value>
+         */
+    public Vector3 Direction { get; set; }
+
+    /**
+         * <value>the force that will be applied to the Player by the jetpack</value>
+         */
+    [SerializeField] private float jetpackForce = 5f;
+
+    /**
+         * <value>the minimum amount of fuel required to start the engines</value>
+         */
+    [SerializeField] private float minRequiredFuel = 1f;
+
+    [SerializeField] private float maxNormalSpeed = 20f;
+
+    /**
+     * <value>the speed multiplier when the <see cref="Jetpack.IsSwift"/> flag is set</value>
+     */
+    [SerializeField] private float enhancedSpeedMultiplier = 2f;
+
+    /**
+     * <value>a flag allowing the player to go quicker (consuming more fuel) </value>
+     */
+    public bool IsSwift { get; set; }
+
+    public float FuelConsumption => currentFuelUse / FuelDuration;
+
+    private bool isReady = false;
+
+    public bool CanTakeOff => FuelConsumption >= minRequiredFuel;
+
+
+    public void FixedUpdate()
+    {
+        HandleFuel();
+
+        if (!isReady)
+        {
+            isReady = CanTakeOff;
         }
 
-        public void Fly(Vector3 direction)
+        if (IsFlying && isReady)
+            // TODO : smooth out the velocity changes
+            this.Player.RigidBody.velocity = Direction * jetpackForce;
+    }
+
+
+    private void HandleFuel()
+    {
+        float reloadTime = reloadMultiplier * Time.fixedDeltaTime;
+        if (!this.IsFlying)
         {
-            this.player.RigidBody.AddForce(direction * jetpackForce, ForceMode.Impulse);
+            if (currentFuelUse + reloadTime > FuelDuration)
+            {
+                currentFuelUse = FuelDuration;
+            }
+            else
+            {
+                currentFuelUse += reloadTime;
+            }
+        }
+        else
+        {
+            if (currentFuelUse - Time.fixedDeltaTime < 0)
+            {
+                currentFuelUse = 0;
+                this.IsFlying = false;
+                this.isReady = false;
+            }
+            else
+            {
+                currentFuelUse -= Time.fixedDeltaTime;
+            }
         }
     }
 }
