@@ -24,7 +24,6 @@ public class Jetpack : MonoBehaviour
         get => !this.Player.RigidBody.useGravity;
         set
         {
-            Debug.Log($"set use gravity to {this.Player.RigidBody.useGravity}");
             if (value == true)
             {
                 if (this.CanTakeOff)
@@ -43,7 +42,17 @@ public class Jetpack : MonoBehaviour
     /**
          * <value>the direction in world space to go to (magnitude should be under 1)</value>
          */
-    public Vector3 Direction { get; set; }
+
+    private Vector3 _direction = Vector3.zero;
+    public Vector3 Direction
+    {
+        get => _direction;
+        set
+        {
+            _direction = Vector3.ClampMagnitude(value, 1f);
+        }
+        
+    }
 
     /**
          * <value>the force that will be applied to the Player by the jetpack</value>
@@ -53,7 +62,7 @@ public class Jetpack : MonoBehaviour
     /**
          * <value>the minimum amount of fuel required to start the engines</value>
          */
-    [SerializeField] private float minRequiredFuel = 1f;
+    [SerializeField] private float minRequiredFuel = 0.25f;
 
     [SerializeField] private float maxNormalSpeed = 20f;
 

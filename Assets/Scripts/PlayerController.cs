@@ -60,6 +60,11 @@ public class PlayerController : NetworkBehaviour
      */
     private Vector3 movement = Vector3.zero;
 
+    /**
+     * <value>the y direction for the <see cref="jetpack"/>, -1 => down, 1 => up, 0 => unchanged </value>
+     */
+    private int yDirection = 0;
+
     protected Rigidbody rigidBody;
     public Rigidbody RigidBody => rigidBody;
 
@@ -134,6 +139,17 @@ public class PlayerController : NetworkBehaviour
             }
         }
 
+        if (this.jetpack.IsFlying)
+        {
+            Vector3 moveVector = Vector3.ClampMagnitude(movement, 1f);
+            moveVector = Vector3.ClampMagnitude(moveVector + yDirection * Vector3.up, 1f);
+            moveVector = transform.TransformVector(moveVector);
+            
+            this.jetpack.Direction = moveVector;
+
+        }
+
+
         // forces the capsule to stand up
         playerTransform.eulerAngles = new Vector3(0, playerTransform.eulerAngles.y, 0);
     }
@@ -199,16 +215,40 @@ public class PlayerController : NetworkBehaviour
         if (!IsLocalPlayer)
             return;
 
+
         if (ctx.interaction is MultiTapInteraction && ctx.performed)
         {
             this.jetpack.IsFlying = !this.jetpack.IsFlying;
-            this.jetpack.Direction = Vector3.up;
+        }
+        else if (this.jetpack.IsFlying && ctx.interaction is HoldInteraction)
+        {
+            if (ctx.performed)
+            {
+                yDirection = 1;
+            }
+            else if (ctx.canceled)
+            {
+                yDirection = 0;
+            }
         }
         else
         {
-            Jump();
+            if (!this.jetpack.IsFlying)
+            {
+                Jump();
+            }
+            else
+            {
+                if (ctx.performed)
+                {
+                    yDirection = 1;
+                }
+                else if (ctx.canceled)
+                {
+                    yDirection = 0;
+                }
+            }
         }
-
     }
 
     private void Jump()
