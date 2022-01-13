@@ -3,6 +3,7 @@ using Unity.Netcode;
 using Unity.Netcode.Samples;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Interactions;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
 
@@ -193,23 +194,27 @@ public class PlayerController : NetworkBehaviour
      *      Called when the jump event is triggered within unity
      * </summary>
      */
-    public void OnJump()
+    public void OnJump(InputAction.CallbackContext ctx)
     {
         if (!IsLocalPlayer)
             return;
 
-        if (isGrounded)
-            rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-
-        this.jetpack.IsFlying = true;
-        if (this.jetpack.Direction.magnitude > 0)
+        if (ctx.interaction is MultiTapInteraction && ctx.performed)
         {
-            this.jetpack.Direction = Vector3.zero;
+            this.jetpack.IsFlying = !this.jetpack.IsFlying;
+            this.jetpack.Direction = Vector3.up;
         }
         else
         {
-            this.jetpack.Direction = Vector3.up;
+            Jump();
         }
+
+    }
+
+    private void Jump()
+    {
+        if (isGrounded)
+            rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
 
     /**

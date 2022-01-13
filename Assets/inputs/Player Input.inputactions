@@ -27,7 +27,7 @@
                     "id": "f14d5b64-0e77-40ab-b57b-4b415868b0df",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "MultiTap"
                 },
                 {
                     "name": "run",
