@@ -216,7 +216,11 @@ public class PlayerController : NetworkBehaviour
      */
     void TakeDamage(int damage)
     {
-        currentHealth -= damage;
+        if (currentHealth - damage < 0)
+            currentHealth = 0;
+        else
+            currentHealth -= damage;
+
     }
 
     /**
