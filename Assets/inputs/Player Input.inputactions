@@ -225,6 +225,17 @@
                     "action": "lowerJetpack",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7dcb8f5b-0dcd-4dba-8e32-48230affb103",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "fire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
