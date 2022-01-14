@@ -83,7 +83,14 @@ public class PlayerController : NetworkBehaviour
 
     [SerializeField] protected float dashForce = 80f;
 
+    /**
+     * <value>maximum player health</value>
+     */
     [SerializeField] protected int maxHealth = 100;
+
+    /**
+     * <value>current player health</value>
+     */
     [SerializeField] protected int currentHealth;
 
     public HUDController healthbar;
@@ -111,27 +118,9 @@ public class PlayerController : NetworkBehaviour
 
         cdManager = gameObject.AddComponent<CooldownManager>();
 
+        // setting up the player health
         currentHealth = maxHealth;
         healthbar.SetMaxHealth(maxHealth);
-    }
-
-    public void Bleed()
-    {
-        TakeDamage(10);
-    }
-    public void Heal()
-    {
-        currentHealth = 100;
-        TakeDamage(0);
-    }
-    void TakeDamage(int damage)
-    {
-        currentHealth -= damage;
-
-        if (currentHealth < 0)
-            healthbar.SetHealth(0);
-        else
-            healthbar.SetHealth(currentHealth);
     }
 
     void Awake()
@@ -339,6 +328,38 @@ public class PlayerController : NetworkBehaviour
             isGrounded = false;
     }
 
+    /**
+     * <summary>
+     *      Removes health from the player
+     * </summary>
+     * <param name="damage">int for amount of damage taken</param>
+     */
+    void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+
+        if (currentHealth < 0)
+            healthbar.SetHealth(0);
+        else
+            healthbar.SetHealth(currentHealth);
+    }
+
+    /**
+     * <summary>Removes 10 health points for testing purposes</summary>
+     */
+    public void Bleed()
+    {
+        TakeDamage(10);
+    }
+
+    /**
+     * <summary>Heals the player back up</summary>
+     */
+    public void Heal()
+    {
+        currentHealth = maxHealth;
+        TakeDamage(0);
+    }
 
     private void handleDash()
     {

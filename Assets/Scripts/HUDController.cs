@@ -10,14 +10,26 @@ public class HUDController : MonoBehaviour
 
     public Text healthCounter;
 
+    /**
+     * <summary>
+     *      Sets the player's health
+     * </summary>
+     * <param name="health">int for the max health</param>
+     */
     public void SetMaxHealth(int health)
     {
         slider.maxValue = health;
-        
+
         slider.value = health;
         healthCounter.text = "" + health;
     }
 
+    /**
+     * <summary>
+     *      Sets the player's current health
+     * </summary>
+     * <param name="health">int for the current health</param>
+     */
     public void SetHealth(int health)
     {
         slider.value = health;
