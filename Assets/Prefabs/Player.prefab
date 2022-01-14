@@ -704,7 +704,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 869.4652, y: -459.02216}
+  m_AnchoredPosition: {x: 872, y: -470}
   m_SizeDelta: {x: 149.0696, y: 109.9557}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4638458686764802452
@@ -865,6 +865,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slider: {fileID: 7043849506592801376}
+  healthCounter: {fileID: 675642613633527313}
 --- !u!1 &5966796794552090759
 GameObject:
   m_ObjectHideFlags: 0
@@ -877,7 +878,7 @@ GameObject:
   - component: {fileID: 3890713172390906500}
   - component: {fileID: 675642613633527313}
   m_Layer: 5
-  m_Name: health
+  m_Name: healthCounter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
