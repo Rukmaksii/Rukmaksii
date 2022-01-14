@@ -11,7 +11,8 @@
                     "id": "9108e460-699d-4cdd-b9ea-9977c8f705be",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "rotation",
@@ -19,7 +20,8 @@
                     "id": "31f2789c-9d85-4dea-a873-88c7524a5953",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "jump",
@@ -35,7 +37,8 @@
                     "id": "b0427709-4b95-411a-99b1-c383c509850a",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "dash",

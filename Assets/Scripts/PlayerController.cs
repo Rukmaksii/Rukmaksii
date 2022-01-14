@@ -83,11 +83,15 @@ public class PlayerController : NetworkBehaviour
 
     [SerializeField] protected float dashForce = 80f;
 
+    [SerializeField] protected int maxHealth = 100;
+    [SerializeField] protected int currentHealth;
+
+    public HUDController healthbar;
+
     /**
      * <value>the time in seconds since the dash has been called</value>
      */
     private float dashStartedSince = -1f;
-
 
     public bool IsDashing => dashStartedSince > 0 && dashStartedSince <= dashDuration;
 
@@ -106,6 +110,24 @@ public class PlayerController : NetworkBehaviour
         gameController = gameManager.GetComponent<GameController>();
 
         cdManager = gameObject.AddComponent<CooldownManager>();
+
+        currentHealth = maxHealth;
+        healthbar.SetMaxHealth(maxHealth);
+    }
+
+    public void Bleed()
+    {
+        TakeDamage(10);
+    }
+    public void Heal()
+    {
+        currentHealth = 100;
+        TakeDamage(0);
+    }
+    void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+        healthbar.SetHealth(currentHealth);
     }
 
     void Awake()
