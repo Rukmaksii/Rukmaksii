@@ -667,6 +667,11 @@ GameObject:
   m_Component:
   - component: {fileID: 1473464342}
   - component: {fileID: 1473464343}
+  - component: {fileID: 1473464348}
+  - component: {fileID: 1473464347}
+  - component: {fileID: 1473464346}
+  - component: {fileID: 1473464345}
+  - component: {fileID: 1473464344}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: GameController
@@ -707,6 +712,10 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
 --- !u!64 &1503162097
 MeshCollider:
+  uiPrefab: {fileID: 6371553158960861218, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
+  healthbar: {fileID: 1821076053289487703, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
+--- !u!114 &1473464344
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -910,6 +919,93 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 924d2e4550d4ce1408e7cb68883e1b19, type: 3}
+=======
+  m_GameObject: {fileID: 1473464341}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2530865ef4c15304c8f9ca5df74dca71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementSpeed: 10
+  runningSpeedMultiplier: 2
+  jumpForce: 5
+  sensitivity: 0.1
+  dashDuration: 0.3
+  dashForce: 80
+  maxHealth: 100
+--- !u!114 &1473464345
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1473464341}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be3bac1b53fc8314fb97804fe3acc2c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dashCooldown: 3
+--- !u!114 &1473464346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1473464341}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54c9647dc784a46bca664910f182491e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 1
+  SyncScaleY: 1
+  SyncScaleZ: 1
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  InLocalSpace: 0
+  Interpolate: 1
+  CanCommitToTransform: 0
+--- !u!114 &1473464347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1473464341}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 146349942
+  AlwaysReplicateAsRoot: 0
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+--- !u!54 &1473464348
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1473464341}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+>>>>>>> 25c3962 (fixes healthbar in HUD)
 --- !u!1001 &1899361267
 PrefabInstance:
   m_ObjectHideFlags: 0

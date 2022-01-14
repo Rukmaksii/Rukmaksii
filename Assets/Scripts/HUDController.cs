@@ -6,10 +6,33 @@ using UnityEngine.UI;
 public class HUDController : MonoBehaviour
 {
 
-    public Slider slider;
+    [SerializeField] protected Slider slider;
 
-    public Text healthCounter;
+    [SerializeField] protected Text healthCounter;
 
+    private GameController gameController;
+    
+    public Image Crosshair;
+
+    private PlayerController controller;
+
+    public void SetController(PlayerController _controller)
+    {
+        controller = _controller;
+    }
+
+    void Start()
+    {
+        GameObject gameManager = GameObject.FindGameObjectWithTag("GameController");
+        gameController = gameManager.GetComponent<GameController>();
+    }
+    void Update()
+    {
+        if (gameController.LocalPlayer == null)
+            return;
+        SetHealth(gameController.LocalPlayer.GetCurrentHealth());
+    }
+    
     /**
      * <summary>
      *      Sets the player's health
@@ -34,5 +57,11 @@ public class HUDController : MonoBehaviour
     {
         slider.value = health;
         healthCounter.text = "" + health;
+    }
+    
+    public void SetFuelAmount(int fuel)
+    {
+        slider.value = fuel;
+        healthCounter.text = "" + fuel;
     }
 }

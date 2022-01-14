@@ -91,10 +91,13 @@ public class PlayerController : NetworkBehaviour
     /**
      * <value>current player health</value>
      */
-    [SerializeField] protected int currentHealth;
+    protected int currentHealth;
 
-    public HUDController healthbar;
-
+    public int GetCurrentHealth()
+    {
+        return currentHealth;
+    }
+    
     /**
      * <value>the time in seconds since the dash has been called</value>
      */
@@ -115,12 +118,13 @@ public class PlayerController : NetworkBehaviour
 
         GameObject gameManager = GameObject.FindGameObjectWithTag("GameController");
         gameController = gameManager.GetComponent<GameController>();
-
+        
+        if (IsLocalPlayer)
+            gameController.BindPlayer(this);
+        
         cdManager = gameObject.AddComponent<CooldownManager>();
 
-        // setting up the player health
         currentHealth = maxHealth;
-        healthbar.SetMaxHealth(maxHealth);
     }
 
     void Awake()
@@ -204,7 +208,33 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
+    /**
+     * <summary>
+     *      Removes health from the player
+     * </summary>
+     * <param name="damage">int for amount of damage taken</param>
+     */
+    void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+    }
 
+    /**
+     * <summary>Removes 10 health points for testing purposes</summary>
+     */
+    public void Bleed()
+    {
+        TakeDamage(10);
+    }
+
+    /**
+     * <summary>Heals the player back up</summary>
+     */
+    public void Heal()
+    {
+        currentHealth = maxHealth;
+        TakeDamage(0);
+    }
     /**
      * <summary>
      *      Called when the rotation event is triggered within unity
@@ -326,39 +356,6 @@ public class PlayerController : NetworkBehaviour
     {
         if (other.gameObject.CompareTag("Ground"))
             isGrounded = false;
-    }
-
-    /**
-     * <summary>
-     *      Removes health from the player
-     * </summary>
-     * <param name="damage">int for amount of damage taken</param>
-     */
-    void TakeDamage(int damage)
-    {
-        currentHealth -= damage;
-
-        if (currentHealth < 0)
-            healthbar.SetHealth(0);
-        else
-            healthbar.SetHealth(currentHealth);
-    }
-
-    /**
-     * <summary>Removes 10 health points for testing purposes</summary>
-     */
-    public void Bleed()
-    {
-        TakeDamage(10);
-    }
-
-    /**
-     * <summary>Heals the player back up</summary>
-     */
-    public void Heal()
-    {
-        currentHealth = maxHealth;
-        TakeDamage(0);
     }
 
     private void handleDash()
