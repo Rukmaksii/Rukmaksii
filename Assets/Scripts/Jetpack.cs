@@ -60,7 +60,10 @@ public class Jetpack : MonoBehaviour
          */
     [SerializeField] private float minRequiredFuel = 0.25f;
 
-    [SerializeField] private float maxNormalSpeed = 20f;
+    /**
+     * <value>the max height the player can reach flying</value>
+     */
+    [SerializeField] private float maxHeight = 70f;
 
     /**
      * <value>the speed multiplier when the <see cref="Jetpack.IsSwift"/> flag is set</value>
@@ -91,6 +94,11 @@ public class Jetpack : MonoBehaviour
         if (IsFlying && isReady)
         {
             var velocity = Direction * jetpackForce;
+            if (this.Player.transform.position.y >= maxHeight)
+            {
+                velocity.y = 0;
+
+            }
 
             if (IsSwift)
             {
