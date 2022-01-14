@@ -74,6 +74,8 @@ public class CameraController : MonoBehaviour
      */
     private Camera cam;
 
+    public Camera Camera => cam;
+
 
     void Start()
     {

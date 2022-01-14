@@ -382,4 +382,25 @@ public class PlayerController : NetworkBehaviour
             rigidBody.AddForce(velocity - rigidBody.velocity, ForceMode.VelocityChange);
         }
     }
+
+    /**
+     * <summary>a method to get the <see cref="GameObject"/> in the line sight</summary>
+     */
+    private GameObject getObjectInSight()
+    {
+        Vector2 crosshairPosition = new Vector2(0.5f, 0.5f);
+
+        Vector3 origin = cameraController.Camera.ViewportToWorldPoint(crosshairPosition);
+
+        RaycastHit hit;
+
+        // TODO : add weapon range accordingly to weapon
+        float weaponRange = 30f;
+
+        if (!Physics.Raycast(origin, cameraController.Camera.transform.forward, out hit, weaponRange))
+
+            return null;
+
+        return hit.collider.gameObject;
+    }
 }
