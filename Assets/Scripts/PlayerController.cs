@@ -74,6 +74,10 @@ public class PlayerController : NetworkBehaviour
 
     public bool IsGrounded => isGrounded;
 
+
+    protected bool isShooting = false;
+    public bool IsShooting => isShooting;
+
     private Vector3 dashDirection;
 
     /**
@@ -83,23 +87,20 @@ public class PlayerController : NetworkBehaviour
 
     [SerializeField] protected float dashForce = 80f;
 
-    /**
-     * <value>maximum player health</value>
-     */
-    [SerializeField] protected int maxHealth = 100;
-
     public int MaxHealth => maxHealth;
-    
+
     /**
      * <value>current player health</value>
      */
-    protected int currentHealth;
+    [SerializeField] protected int maxHealth = 100;
+
+    [SerializeField] protected NetworkVariable<int> currentHealth { get; } = new NetworkVariable<int>(1);
 
     public int GetCurrentHealth()
     {
-        return currentHealth;
+        return currentHealth.Value;
     }
-    
+
     /**
      * <value>the time in seconds since the dash has been called</value>
      */
@@ -120,13 +121,11 @@ public class PlayerController : NetworkBehaviour
 
         GameObject gameManager = GameObject.FindGameObjectWithTag("GameController");
         gameController = gameManager.GetComponent<GameController>();
-        
+
         if (IsLocalPlayer)
             gameController.BindPlayer(this);
-        
-        cdManager = gameObject.AddComponent<CooldownManager>();
 
-        currentHealth = maxHealth;
+        cdManager = gameObject.AddComponent<CooldownManager>();
     }
 
     void Awake()
@@ -183,7 +182,8 @@ public class PlayerController : NetworkBehaviour
             return;
         cameraController.OnPlayerMove(camRotationAnchor, transform);
 
-        if (Input.GetKeyDown(KeyCode.B))
+        /*
+         if (Input.GetKeyDown(KeyCode.B))
         {
             TakeDamage(10);
         }
@@ -192,7 +192,7 @@ public class PlayerController : NetworkBehaviour
         {
             currentHealth = maxHealth;
             TakeDamage(0);
-        }
+        }*/
     }
 
     /**
@@ -221,21 +221,7 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
-    /**
-     * <summary>
-     *      Removes health from the player
-     * </summary>
-     * <param name="damage">int for amount of damage taken</param>
-     */
-    void TakeDamage(int damage)
-    {
-        if (currentHealth - damage < 0)
-            currentHealth = 0;
-        else
-            currentHealth -= damage;
 
-    }
-    
     /**
      * <summary>
      *      Called when the rotation event is triggered within unity
@@ -338,6 +324,67 @@ public class PlayerController : NetworkBehaviour
             isGrounded = false;
     }
 
+    /**
+         * <summary>
+         *      Removes health from the player
+         * </summary>
+         * <param name="damage">int for amount of damage taken</param>
+         */
+    public bool TakeDamage(int damage)
+    {
+        /*Debug.Log($"remaining Health : {currentHealth}");
+        if (damage >= currentHealth.Value)
+        {
+            //UpdateHealthServerRpc(0, this.OwnerClientId);
+            return false;
+        }
+        else
+        {
+            //UpdateHealthServerRpc(currentHealth.Value - damage, this.OwnerClientId);
+            return true;
+        }*/
+
+        return true;
+    }
+
+
+    public void OnFire(InputAction.CallbackContext ctx)
+    {
+        isShooting = ctx.ReadValueAsButton();
+    }
+
+    /**
+     * <summary>shoots at from the middle of the screen to where looked at</summary>
+     * <returns>true if an damageable object has been shot</returns>
+     */
+    private bool Shoot()
+    {
+        GameObject hit;
+        if ((hit = getObjectInSight()) == null)
+            return false;
+
+        if (hit.CompareTag("Player"))
+        {
+            PlayerController player = hit.GetComponent<PlayerController>();
+            if (player == null)
+            {
+                return false;
+            }
+
+
+            int weaponDamage = 10;
+
+            player.TakeDamage(weaponDamage);
+        }
+        else
+        {
+            // none of the tags has been found
+            return false;
+        }
+
+        return true;
+    }
+
     private void handleDash()
     {
         if (dashDirection == Vector3.zero)
@@ -382,4 +429,11 @@ public class PlayerController : NetworkBehaviour
 
         return hit.collider.gameObject;
     }
+
+
+    /*[ServerRpc(RequireOwnership = false)]
+    public void UpdateHealthServerRpc(int newHealth, ulong playerId)
+    {
+        // this.currentHealth.Value = newHealth;
+    }*/
 }
