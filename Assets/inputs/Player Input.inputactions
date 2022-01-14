@@ -29,7 +29,8 @@
                     "id": "f14d5b64-0e77-40ab-b57b-4b415868b0df",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Hold,MultiTap"
+                    "interactions": "Hold,MultiTap",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "run",
@@ -46,7 +47,8 @@
                     "id": "f5d7bd30-9dea-44cf-b04f-149be8ce5951",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "lowerJetpack",
@@ -54,7 +56,26 @@
                     "id": "d83352b5-3a93-40e6-a196-b92ac07de1e8",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "bleed",
+                    "type": "Button",
+                    "id": "954b3fbf-3860-451e-93ca-6b7668e0f054",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "heal",
+                    "type": "Button",
+                    "id": "2de3f0a1-9af2-4a95-9352-54ef5b5520af",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -220,6 +241,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "lowerJetpack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f2bd91b1-27ad-4381-baa8-f8656c1151fa",
+                    "path": "<Keyboard>/b",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "bleed",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6c895e17-8c34-4b02-b135-48c49c6fb05f",
+                    "path": "<Keyboard>/h",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "heal",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
