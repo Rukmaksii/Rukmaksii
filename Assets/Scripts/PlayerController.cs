@@ -127,7 +127,11 @@ public class PlayerController : NetworkBehaviour
     void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        healthbar.SetHealth(currentHealth);
+
+        if (currentHealth < 0)
+            healthbar.SetHealth(0);
+        else
+            healthbar.SetHealth(currentHealth);
     }
 
     void Awake()
