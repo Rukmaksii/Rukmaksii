@@ -1,8 +1,5 @@
 using System;
-<<<<<<< HEAD
 using System.Collections;
-=======
->>>>>>> 5f47522 (add monster and detection range)
 using Unity.Netcode;
 using Unity.Netcode.Samples;
 using UnityEngine;
@@ -15,7 +12,6 @@ using Vector3 = UnityEngine.Vector3;
 public class monsterAI : MonoBehaviour
 {
     [Range(2, 100)] public float detectDistance = 10; //distance de detection du joueur
-<<<<<<< HEAD
     public float distanceAttack = 2.4f; //distance à laquelle le monstre peut attaquer
     private Vector3 InitialPos; //position d'origine du monstre
     //public GameObject col; //collider servant de machoir pour le monstre (ce qui va faire des dégats)
@@ -66,8 +62,6 @@ public class monsterAI : MonoBehaviour
             agent.destination = InitialPos;
         }
     }
-=======
->>>>>>> 5f47522 (add monster and detection range)
 
 
     private void OnDrawGizmosSelected() // permet de voir la sphere du champ de detection du monstre
