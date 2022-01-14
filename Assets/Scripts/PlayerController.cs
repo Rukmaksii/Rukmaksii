@@ -182,6 +182,17 @@ public class PlayerController : NetworkBehaviour
         if (!IsLocalPlayer)
             return;
         cameraController.OnPlayerMove(camRotationAnchor, transform);
+
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            TakeDamage(10);
+        }
+
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            currentHealth = maxHealth;
+            TakeDamage(0);
+        }
     }
 
     /**
@@ -224,23 +235,7 @@ public class PlayerController : NetworkBehaviour
             currentHealth -= damage;
 
     }
-
-    /**
-     * <summary>Removes 10 health points for testing purposes</summary>
-     */
-    public void Bleed()
-    {
-        TakeDamage(10);
-    }
-
-    /**
-     * <summary>Heals the player back up</summary>
-     */
-    public void Heal()
-    {
-        currentHealth = maxHealth;
-        TakeDamage(0);
-    }
+    
     /**
      * <summary>
      *      Called when the rotation event is triggered within unity
