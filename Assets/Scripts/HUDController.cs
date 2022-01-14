@@ -6,31 +6,30 @@ using UnityEngine.UI;
 public class HUDController : MonoBehaviour
 {
 
-    [SerializeField] protected Slider slider;
-
+    [SerializeField] protected Slider healthSlider;
     [SerializeField] protected Text healthCounter;
 
+    [SerializeField] protected Slider fuelSlider;
+    [SerializeField] protected Text fuelCounter;
+    
     private GameController gameController;
     
     public Image Crosshair;
-
-    private PlayerController controller;
-
-    public void SetController(PlayerController _controller)
-    {
-        controller = _controller;
-    }
 
     void Start()
     {
         GameObject gameManager = GameObject.FindGameObjectWithTag("GameController");
         gameController = gameManager.GetComponent<GameController>();
+        
+        SetMaxHealth(100);
+        SetMaxFuel(100);
     }
     void Update()
     {
         if (gameController.LocalPlayer == null)
             return;
         SetHealth(gameController.LocalPlayer.GetCurrentHealth());
+        SetFuelAmount(gameController.LocalPlayer.Jetpack.FuelConsumption);
     }
     
     /**
@@ -41,10 +40,18 @@ public class HUDController : MonoBehaviour
      */
     public void SetMaxHealth(int health)
     {
-        slider.maxValue = health;
+        healthSlider.maxValue = health;
 
-        slider.value = health;
+        healthSlider.value = health;
         healthCounter.text = "" + health;
+    }
+    
+    public void SetMaxFuel(int health)
+    {
+        fuelSlider.maxValue = health;
+
+        fuelSlider.value = health;
+        fuelCounter.text = "" + health;
     }
 
     /**
@@ -55,13 +62,13 @@ public class HUDController : MonoBehaviour
      */
     public void SetHealth(int health)
     {
-        slider.value = health;
+        healthSlider.value = health;
         healthCounter.text = "" + health;
     }
     
-    public void SetFuelAmount(int fuel)
+    public void SetFuelAmount(float fuel)
     {
-        slider.value = fuel;
-        healthCounter.text = "" + fuel;
+        fuelSlider.value = fuel*100;
+        fuelCounter.text = "" + Mathf.Floor(fuel*100);
     }
 }

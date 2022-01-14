@@ -438,9 +438,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e34307c521fab8ef0b03e46773f4a646, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slider: {fileID: 1967068319604493425}
+  healthSlider: {fileID: 1967068319604493425}
   healthCounter: {fileID: 8061552449330322065}
-  gameManager: {fileID: 0}
+  fuelSlider: {fileID: 4210972621101830364}
+  fuelCounter: {fileID: 8257083342124883080}
   Crosshair: {fileID: 238933129528760577}
 --- !u!1 &6755304173120000148
 GameObject:

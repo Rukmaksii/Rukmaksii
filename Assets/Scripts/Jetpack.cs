@@ -75,8 +75,11 @@ public class Jetpack : MonoBehaviour
      */
     public bool IsSwift { get; set; }
 
+    /**
+     * <value>a float between 0 and 1 the percentage of fuel used</value>
+     */
     public float FuelConsumption => currentFuelUse / FuelDuration;
-
+    
     private bool isReady = false;
 
     public bool CanTakeOff => FuelConsumption >= minRequiredFuel;

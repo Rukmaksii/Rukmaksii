@@ -11,8 +11,6 @@ enum GameState
     Ended
 }
 
-[RequireComponent(typeof(PlayerController))]
-
 public class GameController : MonoBehaviour
 {
     
@@ -37,10 +35,5 @@ public class GameController : MonoBehaviour
         playerUIInstance.name = uiPrefab.name;
         
         playerUIInstance.GetComponent<Canvas>().worldCamera = Camera.current;
-
-        HUDController ui = playerUIInstance.GetComponent<HUDController>();
-        if (ui == null)
-            Debug.LogError(("no ui"));
-        ui.SetController(GetComponent<PlayerController>());
     }
 }

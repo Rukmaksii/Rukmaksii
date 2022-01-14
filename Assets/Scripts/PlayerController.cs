@@ -88,6 +88,8 @@ public class PlayerController : NetworkBehaviour
      */
     [SerializeField] protected int maxHealth = 100;
 
+    public int MaxHealth => maxHealth;
+    
     /**
      * <value>current player health</value>
      */
