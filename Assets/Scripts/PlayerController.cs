@@ -264,14 +264,7 @@ public class PlayerController : NetworkBehaviour
 
         if (this.jetpack.IsFlying)
         {
-            if (ctx.ReadValueAsButton())
-            {
-                yDirection = 1;
-            }
-            else
-            {
-                yDirection = 0;
-            }
+            yDirection = ctx.ReadValueAsButton() ? 1 : 0;
         }
 
         if (ctx.interaction is MultiTapInteraction && ctx.performed)
@@ -279,23 +272,9 @@ public class PlayerController : NetworkBehaviour
             this.yDirection = 0;
             this.jetpack.IsFlying = !this.jetpack.IsFlying;
         }
-        /*else if (this.jetpack.IsFlying && ctx.interaction is HoldInteraction)
+        else if (!this.jetpack.IsFlying)
         {
-            if (ctx.performed)
-            {
-                yDirection = 1;
-            }
-            else if (ctx.canceled)
-            {
-                yDirection = 0;
-            }
-        }*/
-        else
-        {
-            if (!this.jetpack.IsFlying)
-            {
-                Jump();
-            }
+            Jump();
         }
     }
 
