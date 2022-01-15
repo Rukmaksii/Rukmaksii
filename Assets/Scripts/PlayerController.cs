@@ -126,7 +126,7 @@ public class PlayerController : NetworkBehaviour
             gameController.BindPlayer(this);
 
         cdManager = gameObject.AddComponent<CooldownManager>();
-        
+
         UpdateHealthServerRpc(maxHealth, OwnerClientId);
     }
 
@@ -172,9 +172,14 @@ public class PlayerController : NetworkBehaviour
             this.jetpack.Direction = moveVector;
         }
 
+        if (isShooting)
+        {
+            Shoot();
+        }
+
 
         // forces the capsule to stand up
-        playerTransform.eulerAngles = new Vector3(0, playerTransform.eulerAngles.y, 0);
+        // playerTransform.eulerAngles = new Vector3(0, playerTransform.eulerAngles.y, 0);
     }
 
     // Update is called once per frame
@@ -184,7 +189,7 @@ public class PlayerController : NetworkBehaviour
             return;
         cameraController.OnPlayerMove(camRotationAnchor, transform);
 
-        /*
+        
          if (Input.GetKeyDown(KeyCode.B))
         {
             TakeDamage(10);
@@ -192,9 +197,8 @@ public class PlayerController : NetworkBehaviour
 
         if (Input.GetKeyDown(KeyCode.H))
         {
-            currentHealth = maxHealth;
-            TakeDamage(0);
-        }*/
+            UpdateHealthServerRpc(maxHealth, OwnerClientId);
+        }
     }
 
     /**
@@ -345,7 +349,6 @@ public class PlayerController : NetworkBehaviour
             UpdateHealthServerRpc(currentHealth.Value - damage, this.OwnerClientId);
             return true;
         }
-
     }
 
 
@@ -360,6 +363,7 @@ public class PlayerController : NetworkBehaviour
      */
     private bool Shoot()
     {
+        Debug.Log("shooting");
         GameObject hit;
         if ((hit = getObjectInSight()) == null)
             return false;
@@ -423,6 +427,8 @@ public class PlayerController : NetworkBehaviour
 
         // TODO : add weapon range accordingly to weapon
         float weaponRange = 30f;
+        
+        Debug.DrawRay(origin, cameraController.Camera.transform.forward * weaponRange);
 
         if (!Physics.Raycast(origin, cameraController.Camera.transform.forward, out hit, weaponRange))
 
