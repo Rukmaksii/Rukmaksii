@@ -369,7 +369,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: 2358ff39-efcc-4a14-a3b6-91e164d28d60
+    m_ActionId: a0c5b3b3-c4f2-4ecd-87e3-24519d55415d
     m_ActionName: Player/fire[/Mouse/leftButton]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
