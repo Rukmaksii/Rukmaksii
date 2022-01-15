@@ -126,6 +126,8 @@ public class PlayerController : NetworkBehaviour
             gameController.BindPlayer(this);
 
         cdManager = gameObject.AddComponent<CooldownManager>();
+        
+        UpdateHealthServerRpc(maxHealth, OwnerClientId);
     }
 
     void Awake()
@@ -332,19 +334,18 @@ public class PlayerController : NetworkBehaviour
          */
     public bool TakeDamage(int damage)
     {
-        /*Debug.Log($"remaining Health : {currentHealth}");
+        Debug.Log($"remaining Health : {currentHealth}");
         if (damage >= currentHealth.Value)
         {
-            //UpdateHealthServerRpc(0, this.OwnerClientId);
+            UpdateHealthServerRpc(0, this.OwnerClientId);
             return false;
         }
         else
         {
-            //UpdateHealthServerRpc(currentHealth.Value - damage, this.OwnerClientId);
+            UpdateHealthServerRpc(currentHealth.Value - damage, this.OwnerClientId);
             return true;
-        }*/
+        }
 
-        return true;
     }
 
 
@@ -431,9 +432,12 @@ public class PlayerController : NetworkBehaviour
     }
 
 
-    /*[ServerRpc(RequireOwnership = false)]
+    [ServerRpc(RequireOwnership = false)]
     public void UpdateHealthServerRpc(int newHealth, ulong playerId)
     {
-        // this.currentHealth.Value = newHealth;
-    }*/
+        PlayerController damagedPlayer = NetworkManager.Singleton.ConnectedClients[playerId].PlayerObject
+            .GetComponent<PlayerController>();
+
+        damagedPlayer.currentHealth.Value = newHealth;
+    }
 }
