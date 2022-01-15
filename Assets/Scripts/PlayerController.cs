@@ -174,12 +174,7 @@ public class PlayerController : NetworkBehaviour
 
         if (isShooting)
         {
-            Debug.Log("shooting");
             Shoot();
-        }
-        else
-        {
-            Debug.Log("not shooting");
         }
 
 
@@ -194,8 +189,8 @@ public class PlayerController : NetworkBehaviour
             return;
         cameraController.OnPlayerMove(camRotationAnchor, transform);
 
-        
-         if (Input.GetKeyDown(KeyCode.B))
+
+        if (Input.GetKeyDown(KeyCode.B))
         {
             TakeDamage(10);
         }
@@ -358,7 +353,6 @@ public class PlayerController : NetworkBehaviour
 
     public void OnFire(InputAction.CallbackContext ctx)
     {
-        Debug.Log($"ctx value: {ctx.performed}");
         isShooting = ctx.ReadValueAsButton();
     }
 
@@ -369,13 +363,10 @@ public class PlayerController : NetworkBehaviour
     private bool Shoot()
     {
         GameObject hit;
-        
-        Debug.Log("shot!");
+
         if ((hit = getObjectInSight()) == null)
             return false;
 
-        Debug.Log("hit!");
-        Debug.Log(hit.tag);
         if (hit.CompareTag("Player"))
         {
             PlayerController player = hit.GetComponent<PlayerController>();
@@ -391,7 +382,6 @@ public class PlayerController : NetworkBehaviour
         }
         else
         {
-            Debug.Log("not found");
             // none of the tags has been found
             return false;
         }
@@ -436,8 +426,7 @@ public class PlayerController : NetworkBehaviour
 
         // TODO : add weapon range accordingly to weapon
         float weaponRange = 30f;
-        
-        Debug.DrawRay(origin, cameraController.Camera.transform.forward * weaponRange, Color.blue);
+
 
         if (!Physics.Raycast(origin, cameraController.Camera.transform.forward, out hit, weaponRange))
 
