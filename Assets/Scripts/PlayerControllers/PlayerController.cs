@@ -122,6 +122,9 @@ namespace PlayerControllers
 
         void Start()
         {
+            this.weapon = gameObject.AddComponent<TestGun>();
+            this.weapon.Player = this;
+            
             this.jetpack = gameObject.AddComponent<Jetpack>();
             this.jetpack.Player = this;
 

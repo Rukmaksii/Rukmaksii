@@ -66,11 +66,16 @@ namespace Weapons
      */
         private bool hasBeenFiring = false;
 
+        void Start()
+        {
+            currentAmmo = MaxAmmo;
+        }
+
 
         // Update is called once per frame
         void FixedUpdate()
         {
-            if (currentAmmo == 0)
+            if (currentAmmo == 0 && !isReloading)
             {
                 Reload();
             }
@@ -88,6 +93,7 @@ namespace Weapons
             }
             else
             {
+                Debug.Log("reloading");
                 if (remainingReloadTime <= 0)
                 {
                     isReloading = false;
@@ -123,6 +129,7 @@ namespace Weapons
         public void Reload()
         {
             this.isReloading = true;
+            remainingReloadTime = ReloadTime;
         }
 
         /**
@@ -132,6 +139,8 @@ namespace Weapons
      */
         private bool Shoot()
         {
+            Debug.Log("shooting");
+            currentAmmo--;
             GameObject hit;
 
             if ((hit = this.Player.GetObjectInSight(this.Range)) == null)
