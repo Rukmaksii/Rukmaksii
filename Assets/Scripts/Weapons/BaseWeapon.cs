@@ -9,6 +9,8 @@ namespace Weapons
 {
     public abstract class BaseWeapon : MonoBehaviour, IWeapon
     {
+
+        public abstract WeaponType Type { get; }
         public PlayerController Player { get; set; }
 
         public abstract float Range { get; }
