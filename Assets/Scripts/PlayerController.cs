@@ -180,12 +180,6 @@ public class PlayerController : NetworkBehaviour
             this.jetpack.Direction = moveVector;
         }
 
-        if (isShooting)
-        {
-            this.weapon.Fire();
-        }
-
-
         // forces the capsule to stand up
         // playerTransform.eulerAngles = new Vector3(0, playerTransform.eulerAngles.y, 0);
     }

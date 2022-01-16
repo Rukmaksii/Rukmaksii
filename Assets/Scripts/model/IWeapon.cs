@@ -11,8 +11,6 @@
     
     public interface IWeapon
     {
-        public bool Fire();
-
         public void Reload();
     }
 }

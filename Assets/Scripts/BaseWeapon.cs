@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using model;
 using UnityEngine;
 
-public abstract class BaseWeapon : MonoBehaviour, IWeapon
+public class BaseWeapon : MonoBehaviour, IWeapon
 {
     public PlayerController Player { get; set; }
 
@@ -14,8 +14,17 @@ public abstract class BaseWeapon : MonoBehaviour, IWeapon
     [SerializeField] protected int damage;
     public int Damage => damage;
 
+    /**
+     * <value>the time between each bullet row</value>
+     */
     [SerializeField] protected float cooldown;
+
     public float Cooldown => cooldown;
+
+    /**
+     * <value>the remaining time of the <see cref="cooldown"/></value>
+     */
+    protected float remainingCD = 0f;
 
     [SerializeField] protected int maxAmmo;
     public int MaxAmmo => maxAmmo;
@@ -53,10 +62,46 @@ public abstract class BaseWeapon : MonoBehaviour, IWeapon
      */
     protected float betweenBulletsCurrentCD;
 
+    protected bool isReloading = false;
+    
+    /**
+     * <summary>a flag used for multi bullets in a row, true if the player triggered fire and released before the end of the bullet row</summary>
+     */
+    private bool hasBeenFiring = false;
+
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (currentAmmo == 0)
+        {
+            Reload();
+        }
+
+        if (!isReloading)
+        {
+            if (sentBulletsInRow > 1)
+            {
+                // handleMultiBulletFire();
+            }
+            else
+            {
+                handleSingleBulletFire();
+            }
+        }
+        else
+        {
+            if (remainingReloadTime <= 0)
+            {
+                isReloading = false;
+                remainingReloadTime = 0;
+                currentAmmo = maxAmmo;
+            }
+            else
+            {
+                remainingReloadTime -= Time.fixedDeltaTime;
+            }
+        }
     }
 
 
@@ -65,17 +110,22 @@ public abstract class BaseWeapon : MonoBehaviour, IWeapon
      */
     void handleSingleBulletFire()
     {
-        // it is assumed that sentBulletsInRow is 1
-    }
+        if (remainingCD > 0)
+        {
+            remainingCD -= Time.fixedDeltaTime;
+            return;
+        }
 
-    public bool Fire()
-    {
-        throw new System.NotImplementedException();
+        if (this.Player.IsShooting)
+        {
+            Shoot();
+            remainingCD = cooldown;
+        }
     }
 
     public void Reload()
     {
-        throw new System.NotImplementedException();
+        this.isReloading = true;
     }
 
     /**
@@ -97,7 +147,6 @@ public abstract class BaseWeapon : MonoBehaviour, IWeapon
             {
                 return false;
             }
-
 
 
             enemyPlayer.TakeDamage(this.damage);
