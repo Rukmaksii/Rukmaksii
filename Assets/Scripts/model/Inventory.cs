@@ -5,16 +5,52 @@ namespace model
 {
     public class Inventory
     {
-        private PlayerController Player;
+        /**
+         * <value>the bound player <seealso cref="PlayerController"/></value>
+         */
+        private readonly PlayerController Player;
 
-        public Jetpack Jetpack { get; set; }
+        /**
+         * <value>the <see cref="Jetpack"/> bound to the <see cref="Player"/></value>
+         */
 
+        private Jetpack _jetpack;
+        
+        public Jetpack Jetpack
+        {
+            get => _jetpack;
+            set
+            {
+                _jetpack = value;
+                _jetpack.Player = Player;
+            } 
+        }
+
+        /**
+         * <value>the close range weapon</value>
+         */
         private BaseWeapon closeRangeWeapon;
+        
+        /**
+         * <value>the heavy weapon</value>
+         */
         private BaseWeapon heavyWeapon;
+        
+        /**
+         * <value>the light weapon</value>
+         */
         private BaseWeapon lightWeapon;
 
-        private WeaponType selectedType;
+        /**
+         * <value>the <see cref="WeaponType"/> of the currently selected weapon</value>
+         * <remarks>set to <see cref="WeaponType.CloseRange"/> as it is assumed the close range weapon will never be null</remarks>
+         */
+        private WeaponType selectedType = WeaponType.CloseRange;
 
+        /**
+         * <value>the currently selected weapon</value>
+         * <remarks>should not be null as at least <see cref="closeRangeWeapon"/> should not be null</remarks>
+         */
         public BaseWeapon CurrentWeapon
         {
             get
@@ -57,15 +93,19 @@ namespace model
                 return availableWeapon;
             }
         }
-
+        
         public Inventory(PlayerController player)
         {
             this.Player = player;
         }
 
 
+        /**
+         * <summary>adds a weapon to the inventory replacing the old weapon of the same <see cref="WeaponType"/> if existing</summary>
+         */
         public void AddWeapon(BaseWeapon newWeapon)
         {
+            newWeapon.Player = Player;
             switch (newWeapon.Type)
             {
                 case WeaponType.Heavy:
@@ -80,7 +120,10 @@ namespace model
             }
         }
         
-        
+        /**
+         * <summary>changes the currently selected weapon if existing</summary>
+         * <returns>false if the provided <see cref="WeaponType"/> not be found</returns>
+         */
         public bool SwitchWeapon(WeaponType type)
         {
             bool switched = false;

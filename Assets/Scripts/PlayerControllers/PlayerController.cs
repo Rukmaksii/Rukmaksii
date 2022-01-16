@@ -1,4 +1,5 @@
 using System;
+using model;
 using Unity.Netcode;
 using Unity.Netcode.Samples;
 using UnityEngine;
@@ -6,7 +7,6 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
-
 using Weapons;
 
 namespace PlayerControllers
@@ -37,10 +37,6 @@ namespace PlayerControllers
      */
         [SerializeField] private float sensitivity = .1F;
 
-
-        protected Jetpack jetpack;
-
-        public Jetpack Jetpack => jetpack;
 
         private bool isRunning;
 
@@ -87,8 +83,8 @@ namespace PlayerControllers
         private Vector3 dashDirection;
 
 
-        // TODO : create inventory with weapons instead of hardcoded weapon
-        private BaseWeapon weapon;
+        protected Inventory inventory;
+        public Jetpack Jetpack => inventory.Jetpack;
 
         /**
      * <value>the duration of the dash in seconds</value>
@@ -122,13 +118,11 @@ namespace PlayerControllers
 
         void Start()
         {
-            this.weapon = gameObject.AddComponent<TestGun>();
-            this.weapon.Player = this;
-            
-            this.jetpack = gameObject.AddComponent<Jetpack>();
-            this.jetpack.Player = this;
+            this.inventory = new Inventory(this);
+            this.inventory.AddWeapon(gameObject.AddComponent<TestGun>());
 
-            this.jetpack.FuelDuration = 20f;
+            this.inventory.Jetpack = gameObject.AddComponent<Jetpack>();
+            this.inventory.Jetpack.FuelDuration = 20f;
 
             GameObject playerCamera = GameObject.FindGameObjectWithTag("Player Camera");
             cameraController = playerCamera.GetComponent<CameraController>();
@@ -167,7 +161,7 @@ namespace PlayerControllers
 
                 var velocity = rigidBody.velocity;
 
-                if (!this.jetpack.IsFlying)
+                if (!this.inventory.Jetpack.IsFlying)
                 {
                     var speed = movementSpeed * (isRunning ? runningSpeedMultiplier : 1F);
 
@@ -178,13 +172,13 @@ namespace PlayerControllers
                 }
             }
 
-            if (this.jetpack.IsFlying)
+            if (this.inventory.Jetpack.IsFlying)
             {
                 Vector3 moveVector = Vector3.ClampMagnitude(movement, 1f);
                 moveVector = Vector3.ClampMagnitude(moveVector + yDirection * Vector3.up, 1f);
                 moveVector = transform.TransformVector(moveVector);
 
-                this.jetpack.Direction = moveVector;
+                this.inventory.Jetpack.Direction = moveVector;
             }
 
             // forces the capsule to stand up
@@ -263,7 +257,7 @@ namespace PlayerControllers
             if (!IsLocalPlayer)
                 return;
 
-            if (this.jetpack.IsFlying)
+            if (this.Jetpack.IsFlying)
             {
                 yDirection = ctx.ReadValueAsButton() ? 1 : 0;
             }
@@ -271,9 +265,9 @@ namespace PlayerControllers
             if (ctx.interaction is MultiTapInteraction && ctx.performed)
             {
                 this.yDirection = 0;
-                this.jetpack.IsFlying = !this.jetpack.IsFlying;
+                this.Jetpack.IsFlying = !this.Jetpack.IsFlying;
             }
-            else if (!this.jetpack.IsFlying)
+            else if (!this.Jetpack.IsFlying)
             {
                 Jump();
             }
@@ -309,7 +303,7 @@ namespace PlayerControllers
                 return;
 
             isRunning = ctx.performed;
-            this.jetpack.IsSwift = isRunning;
+            this.Jetpack.IsSwift = isRunning;
         }
 
         public void OnDash(InputAction.CallbackContext ctx)
