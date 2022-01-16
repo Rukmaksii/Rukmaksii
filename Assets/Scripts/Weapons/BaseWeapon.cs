@@ -7,54 +7,47 @@ using UnityEngine;
 
 namespace Weapons
 {
-    public class BaseWeapon : MonoBehaviour, IWeapon
+    public abstract class BaseWeapon : MonoBehaviour, IWeapon
     {
         public PlayerController Player { get; set; }
 
-        [SerializeField] protected float range;
+        public abstract float Range { get; }
 
-        public float Range => range;
-
-        [SerializeField] protected int damage;
-        public int Damage => damage;
+        public abstract int Damage { get; }
 
         /**
      * <value>the time between each bullet row</value>
      */
-        [SerializeField] protected float cooldown;
-
-        public float Cooldown => cooldown;
+        public abstract float Cooldown { get; }
 
         /**
-     * <value>the remaining time of the <see cref="cooldown"/></value>
+     * <value>the remaining time of the <see cref="Cooldown"/></value>
      */
         protected float remainingCD = 0f;
 
-        [SerializeField] protected int maxAmmo;
-        public int MaxAmmo => maxAmmo;
+        public abstract int MaxAmmo { get; }
 
         protected int currentAmmo;
         public int CurrentAmmo => currentAmmo;
 
-        [SerializeField] protected float reloadTime;
-        public float ReloadTime => reloadTime;
+        public abstract float ReloadTime { get; }
 
         protected float remainingReloadTime;
 
         /**
      * <value>the current percentage of the reload </value>
      */
-        public float ReloadRate => remainingReloadTime / reloadTime;
+        public float ReloadRate => remainingReloadTime / ReloadTime;
 
         /**
      * <value>the number of bullet fired each time the fire is called </value>
      */
-        [SerializeField] protected int sentBulletsInRow;
+        public abstract int BulletsInRow { get; }
 
         /**
-     * <value>the time in seconds between each bullet in a bullet row (when <see cref="sentBulletsInRow"/> is bigger than 1)</value>
+     * <value>the time in seconds between each bullet in a bullet row (when <see cref="BulletsInRow"/> is bigger than 1)</value>
      */
-        [SerializeField] protected float bulletsInRowSpacing;
+        public abstract float BulletsInRowSpacing { get; }
 
         /**
      * <value>the number of remaining bullets to send in a bullet row</value>
@@ -84,7 +77,7 @@ namespace Weapons
 
             if (!isReloading)
             {
-                if (sentBulletsInRow > 1)
+                if (BulletsInRow > 1)
                 {
                     // handleMultiBulletFire();
                 }
@@ -99,7 +92,7 @@ namespace Weapons
                 {
                     isReloading = false;
                     remainingReloadTime = 0;
-                    currentAmmo = maxAmmo;
+                    currentAmmo = MaxAmmo;
                 }
                 else
                 {
@@ -110,7 +103,7 @@ namespace Weapons
 
 
         /**
-     * <summary>handles the cooldown process between fire when <see cref="sentBulletsInRow"/> is 1</summary>
+     * <summary>handles the cooldown process between fire when <see cref="BulletsInRow"/> is 1</summary>
      */
         void handleSingleBulletFire()
         {
@@ -123,7 +116,7 @@ namespace Weapons
             if (this.Player.IsShooting)
             {
                 Shoot();
-                remainingCD = cooldown;
+                remainingCD = Cooldown;
             }
         }
 
@@ -141,7 +134,7 @@ namespace Weapons
         {
             GameObject hit;
 
-            if ((hit = this.Player.GetObjectInSight(this.range)) == null)
+            if ((hit = this.Player.GetObjectInSight(this.Range)) == null)
                 return false;
 
             if (hit.CompareTag("Player"))
@@ -153,7 +146,7 @@ namespace Weapons
                 }
 
 
-                enemyPlayer.TakeDamage(this.damage);
+                enemyPlayer.TakeDamage(this.Damage);
             }
             else
             {
