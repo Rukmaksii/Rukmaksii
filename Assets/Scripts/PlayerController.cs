@@ -43,6 +43,8 @@ public class PlayerController : NetworkBehaviour
     public bool IsRunning => isRunning;
 
     protected CameraController cameraController;
+    public CameraController CameraController;
+
     protected CooldownManager cdManager;
 
     protected GameController gameController;
@@ -80,6 +82,10 @@ public class PlayerController : NetworkBehaviour
 
     private Vector3 dashDirection;
 
+
+    // TODO : create inventory with weapons instead of hardcoded weapon
+    private BaseWeapon weapon;
+
     /**
      * <value>the duration of the dash in seconds</value>
      */
@@ -89,16 +95,18 @@ public class PlayerController : NetworkBehaviour
 
     public int MaxHealth => maxHealth;
 
+
+    [SerializeField] protected int maxHealth = 100;
+
     /**
      * <value>current player health</value>
      */
-    [SerializeField] protected int maxHealth = 100;
-
-    [SerializeField] protected NetworkVariable<int> currentHealth { get; } = new NetworkVariable<int>(1);
+    [SerializeField]
+    public NetworkVariable<int> CurrentHealth { get; } = new NetworkVariable<int>(1);
 
     public int GetCurrentHealth()
     {
-        return currentHealth.Value;
+        return CurrentHealth.Value;
     }
 
     /**
@@ -174,7 +182,7 @@ public class PlayerController : NetworkBehaviour
 
         if (isShooting)
         {
-            Shoot();
+            this.weapon.Fire();
         }
 
 
@@ -338,14 +346,14 @@ public class PlayerController : NetworkBehaviour
          */
     public bool TakeDamage(int damage)
     {
-        if (damage >= currentHealth.Value)
+        if (damage >= CurrentHealth.Value)
         {
             UpdateHealthServerRpc(0, this.OwnerClientId);
             return false;
         }
         else
         {
-            UpdateHealthServerRpc(currentHealth.Value - damage, this.OwnerClientId);
+            UpdateHealthServerRpc(CurrentHealth.Value - damage, this.OwnerClientId);
             return true;
         }
     }
@@ -356,38 +364,6 @@ public class PlayerController : NetworkBehaviour
         isShooting = ctx.ReadValueAsButton();
     }
 
-    /**
-     * <summary>shoots at from the middle of the screen to where looked at</summary>
-     * <returns>true if an damageable object has been shot</returns>
-     */
-    private bool Shoot()
-    {
-        GameObject hit;
-
-        if ((hit = getObjectInSight()) == null)
-            return false;
-
-        if (hit.CompareTag("Player"))
-        {
-            PlayerController player = hit.GetComponent<PlayerController>();
-            if (player == null)
-            {
-                return false;
-            }
-
-
-            int weaponDamage = 10;
-
-            player.TakeDamage(weaponDamage);
-        }
-        else
-        {
-            // none of the tags has been found
-            return false;
-        }
-
-        return true;
-    }
 
     private void handleDash()
     {
@@ -416,17 +392,13 @@ public class PlayerController : NetworkBehaviour
     /**
      * <summary>a method to get the <see cref="GameObject"/> in the line sight</summary>
      */
-    private GameObject getObjectInSight()
+    public GameObject GetObjectInSight(float weaponRange)
     {
         Vector2 crosshairPosition = new Vector2(0.5f, 0.5f);
 
         Vector3 origin = cameraController.Camera.ViewportToWorldPoint(crosshairPosition);
 
         RaycastHit hit;
-
-        // TODO : add weapon range accordingly to weapon
-        float weaponRange = 30f;
-
 
         if (!Physics.Raycast(origin, cameraController.Camera.transform.forward, out hit, weaponRange))
 
@@ -442,6 +414,6 @@ public class PlayerController : NetworkBehaviour
         PlayerController damagedPlayer = NetworkManager.Singleton.ConnectedClients[playerId].PlayerObject
             .GetComponent<PlayerController>();
 
-        damagedPlayer.currentHealth.Value = newHealth;
+        damagedPlayer.CurrentHealth.Value = newHealth;
     }
 }

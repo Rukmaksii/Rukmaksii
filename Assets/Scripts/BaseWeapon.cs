@@ -5,26 +5,27 @@ using UnityEngine;
 
 public abstract class BaseWeapon : MonoBehaviour, IWeapon
 {
+    public PlayerController Player { get; set; }
 
     [SerializeField] protected float range;
 
     public float Range => range;
-    
-    [SerializeField] protected float damage;
-    public float Damage => damage;
-    
+
+    [SerializeField] protected int damage;
+    public int Damage => damage;
+
     [SerializeField] protected float cooldown;
     public float Cooldown => cooldown;
-    
+
     [SerializeField] protected int maxAmmo;
     public int MaxAmmo => maxAmmo;
-    
+
     protected int currentAmmo;
     public int CurrentAmmo => currentAmmo;
 
     [SerializeField] protected float reloadTime;
     public float ReloadTime => reloadTime;
-    
+
     protected float remainingReloadTime;
 
     /**
@@ -51,12 +52,11 @@ public abstract class BaseWeapon : MonoBehaviour, IWeapon
      * <value>the current remaining time between the previous bullet and the next bullet in the bullet row</value>
      */
     protected float betweenBulletsCurrentCD;
-    
-    
+
+
     // Update is called once per frame
     void FixedUpdate()
     {
-        
     }
 
 
@@ -65,8 +65,7 @@ public abstract class BaseWeapon : MonoBehaviour, IWeapon
      */
     void handleSingleBulletFire()
     {
-      // it is assumed that sentBulletsInRow is 1
-      
+        // it is assumed that sentBulletsInRow is 1
     }
 
     public bool Fire()
@@ -77,5 +76,38 @@ public abstract class BaseWeapon : MonoBehaviour, IWeapon
     public void Reload()
     {
         throw new System.NotImplementedException();
+    }
+
+    /**
+     * <summary>shoots at from the middle of the screen to where looked at</summary>
+     * <remarks>shoots 1 bullet</remarks>
+     * <returns>true if an damageable object has been shot</returns>
+     */
+    private bool Shoot()
+    {
+        GameObject hit;
+
+        if ((hit = this.Player.GetObjectInSight(this.range)) == null)
+            return false;
+
+        if (hit.CompareTag("Player"))
+        {
+            PlayerController enemyPlayer = hit.GetComponent<PlayerController>();
+            if (enemyPlayer == null)
+            {
+                return false;
+            }
+
+
+
+            enemyPlayer.TakeDamage(this.damage);
+        }
+        else
+        {
+            // none of the tags has been found
+            return false;
+        }
+
+        return true;
     }
 }
