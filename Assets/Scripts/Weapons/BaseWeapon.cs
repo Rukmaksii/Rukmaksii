@@ -9,7 +9,6 @@ namespace Weapons
 {
     public abstract class BaseWeapon : MonoBehaviour, IWeapon
     {
-
         public abstract WeaponType Type { get; }
         public PlayerController Player { get; set; }
 
@@ -62,11 +61,7 @@ namespace Weapons
         protected float betweenBulletsCurrentCD;
 
         protected bool isReloading = false;
-
-        /**
-     * <summary>a flag used for multi bullets in a row, true if the player triggered fire and released before the end of the bullet row</summary>
-     */
-        private bool hasBeenFiring = false;
+        protected bool isShooting = false;
 
         void Start()
         {
@@ -118,14 +113,18 @@ namespace Weapons
             if (remainingCD > 0)
             {
                 remainingCD -= Time.fixedDeltaTime;
-                return;
             }
-
-            if (this.Player.IsShooting)
+            else if (isShooting)
             {
                 Shoot();
                 remainingCD = Cooldown;
+                isShooting = false;
             }
+        }
+
+        public void Fire()
+        {
+            isShooting = true;
         }
 
         public void Reload()
