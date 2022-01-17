@@ -8,6 +8,7 @@ using UnityEngine.InputSystem.Interactions;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
 using Weapons;
+using GameManagers;
 
 namespace PlayerControllers
 {
