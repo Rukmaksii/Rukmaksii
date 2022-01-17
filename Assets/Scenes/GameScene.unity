@@ -487,9 +487,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1112646623}
-  - component: {fileID: 1112646622}
   - component: {fileID: 1112646621}
   - component: {fileID: 1112646624}
+  - component: {fileID: 1112646622}
   m_Layer: 0
   m_Name: ConnectionManager
   m_TagString: Untagged
@@ -525,7 +525,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1112646620}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 593a2fe42fa9d37498c96f9a383b6521, type: 3}
+  m_Script: {fileID: 11500000, guid: 8667e9977b634289b9e730205f326e50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   DontDestroy: 1
@@ -533,7 +533,7 @@ MonoBehaviour:
   LogLevel: 1
   NetworkConfig:
     ProtocolVersion: 0
-    NetworkTransport: {fileID: 1112646621}
+    NetworkTransport: {fileID: 0}
     PlayerPrefab: {fileID: 1800387450937859543, guid: ddd7cfbbbb0dbb44f81ebb725ce41458, type: 3}
     NetworkPrefabs: []
     TickRate: 30
