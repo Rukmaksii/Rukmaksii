@@ -114,12 +114,13 @@ namespace Weapons
             {
                 remainingCD -= Time.fixedDeltaTime;
             }
-            else if (isShooting)
+            else if (isShooting && Player.IsShooting)
             {
                 Shoot();
                 remainingCD = Cooldown;
-                isShooting = false;
             }
+
+            isShooting = false;
         }
 
         public void Fire()
