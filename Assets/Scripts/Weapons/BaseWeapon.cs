@@ -10,7 +10,7 @@ namespace Weapons
     public abstract class BaseWeapon : MonoBehaviour, IWeapon
     {
         public abstract WeaponType Type { get; }
-        public PlayerController Player { get; set; }
+        public BasePlayer Player { get; set; }
 
         public abstract float Range { get; }
 
@@ -150,7 +150,7 @@ namespace Weapons
 
             if (hit.CompareTag("Player"))
             {
-                PlayerController enemyPlayer = hit.GetComponent<PlayerController>();
+                BasePlayer enemyPlayer = hit.GetComponent<BasePlayer>();
                 if (enemyPlayer == null)
                 {
                     return false;

@@ -6,9 +6,9 @@ namespace model
     public class Inventory
     {
         /**
-         * <value>the bound player <seealso cref="PlayerController"/></value>
+         * <value>the bound player <seealso cref="BasePlayer"/></value>
          */
-        private readonly PlayerController Player;
+        private readonly BasePlayer Player;
 
         /**
          * <value>the <see cref="Jetpack"/> bound to the <see cref="Player"/></value>
@@ -94,7 +94,7 @@ namespace model
             }
         }
         
-        public Inventory(PlayerController player)
+        public Inventory(BasePlayer player)
         {
             this.Player = player;
         }

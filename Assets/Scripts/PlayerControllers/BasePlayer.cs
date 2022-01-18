@@ -21,7 +21,7 @@ namespace PlayerControllers
     [RequireComponent(typeof(NetworkObject))]
     [RequireComponent(typeof(ClientNetworkTransform))]
     [RequireComponent(typeof(CooldownManager))]
-    public abstract class PlayerController : NetworkBehaviour
+    public abstract class BasePlayer : NetworkBehaviour
     {
         
         public abstract string ClassName { get; }
@@ -410,8 +410,8 @@ namespace PlayerControllers
         [ServerRpc(RequireOwnership = false)]
         public void UpdateHealthServerRpc(int newHealth, ulong playerId)
         {
-            PlayerController damagedPlayer = NetworkManager.Singleton.ConnectedClients[playerId].PlayerObject
-                .GetComponent<PlayerController>();
+            BasePlayer damagedPlayer = NetworkManager.Singleton.ConnectedClients[playerId].PlayerObject
+                .GetComponent<BasePlayer>();
 
             damagedPlayer.CurrentHealth.Value = newHealth;
         }

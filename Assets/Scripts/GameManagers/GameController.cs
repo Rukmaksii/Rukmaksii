@@ -15,16 +15,16 @@ namespace GameManagers
 
     public class GameController : MonoBehaviour
     {
-        private List<PlayerController> players = new List<PlayerController>();
+        private List<BasePlayer> players = new List<BasePlayer>();
 
         [SerializeField] protected GameObject uiPrefab;
         private GameObject playerUIInstance;
 
-        private PlayerController localPlayer;
+        private BasePlayer localPlayer;
 
-        public PlayerController LocalPlayer => localPlayer;
+        public BasePlayer LocalPlayer => localPlayer;
 
-        public void BindPlayer(PlayerController player)
+        public void BindPlayer(BasePlayer player)
         {
             localPlayer = player;
             players.Append(player);

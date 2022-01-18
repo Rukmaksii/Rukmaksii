@@ -9,7 +9,7 @@ namespace PlayerControllers
     */
         [SerializeField] private float reloadMultiplier = 2.5f;
 
-        public PlayerController Player { get; set; }
+        public BasePlayer Player { get; set; }
 
         /**
          * <value>the max duration of the flight</value>
