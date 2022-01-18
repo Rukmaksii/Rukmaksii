@@ -21,17 +21,18 @@ namespace PlayerControllers
     [RequireComponent(typeof(NetworkObject))]
     [RequireComponent(typeof(ClientNetworkTransform))]
     [RequireComponent(typeof(CooldownManager))]
-    public class PlayerController : NetworkBehaviour
+    public abstract class PlayerController : NetworkBehaviour
     {
-        // Constants to be set by unity
-        [SerializeField] private float movementSpeed = 10F;
+        
+        public abstract string ClassName { get; }
+        protected virtual float movementSpeed { get; } = 20f;
 
         /**
      * <value>the speed multiplier when running</value>
      */
-        [SerializeField] private float runningSpeedMultiplier = 2f;
+        protected virtual float runningSpeedMultiplier { get; set; } = 2f;
 
-        [SerializeField] private float jumpForce = 5f;
+        protected virtual float jumpForce { get; set; }= 5f;
 
         /**
      * <value>the mouse sensitivity</value>
@@ -43,7 +44,7 @@ namespace PlayerControllers
 
         public bool IsRunning => isRunning;
 
-        protected CameraController cameraController;
+        private CameraController cameraController;
         public CameraController CameraController;
 
         protected CooldownManager cdManager;
@@ -66,19 +67,19 @@ namespace PlayerControllers
         private Vector3 movement = Vector3.zero;
 
         /**
-     * <value>the y direction for the <see cref="jetpack"/>, -1 => down, 1 => up, 0 => unchanged </value>
+     * <value>the y direction for the <see cref="Jetpack"/>, -1 => down, 1 => up, 0 => unchanged </value>
      */
         private int yDirection = 0;
 
-        protected Rigidbody rigidBody;
+        private Rigidbody rigidBody;
         public Rigidbody RigidBody => rigidBody;
 
-        protected bool isGrounded;
+        private bool isGrounded;
 
         public bool IsGrounded => isGrounded;
 
 
-        protected bool isShooting = false;
+        private bool isShooting = false;
         public bool IsShooting => isShooting;
 
         private Vector3 dashDirection;
@@ -90,20 +91,19 @@ namespace PlayerControllers
         /**
      * <value>the duration of the dash in seconds</value>
      */
-        [SerializeField] protected float dashDuration = 0.3F;
+        protected virtual float dashDuration { get; set; } = 0.3F;
 
-        [SerializeField] protected float dashForce = 80f;
+        protected virtual float dashForce { get; set; }= 80f;
 
         public int MaxHealth => maxHealth;
 
 
-        [SerializeField] protected int maxHealth = 100;
+        protected abstract int maxHealth { get; }
 
         /**
      * <value>current player health</value>
      */
-        [SerializeField]
-        public NetworkVariable<int> CurrentHealth { get; } = new NetworkVariable<int>(1);
+        protected NetworkVariable<int> CurrentHealth { get; } = new NetworkVariable<int>(1);
 
         public int GetCurrentHealth()
         {
