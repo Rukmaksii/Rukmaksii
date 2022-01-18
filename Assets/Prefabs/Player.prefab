@@ -224,16 +224,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1800387450937859543}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2530865ef4c15304c8f9ca5df74dca71, type: 3}
+  m_Script: {fileID: 11500000, guid: bf537d700516492d9ac0360ed2afc0f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 5
-  runningSpeedMultiplier: 2
-  jumpForce: 5
   sensitivity: 0.1
-  dashDuration: 0.3
-  dashForce: 80
-  maxHealth: 100
+  CameraController: {fileID: 0}
 --- !u!114 &1260994430873029613
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -44,7 +44,10 @@ namespace PlayerControllers
 
         public bool IsRunning => isRunning;
 
+        
         private CameraController cameraController;
+        
+        [HideInInspector]
         public CameraController CameraController;
 
         protected CooldownManager cdManager;
