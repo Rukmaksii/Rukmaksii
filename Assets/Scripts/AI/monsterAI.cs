@@ -18,7 +18,8 @@ public class monsterAI : MonoBehaviour
     private Transform joueur; //référence vers le(s) joueur(s)
     private bool canAttack = true; //le monstre peut attaquer ou non
     public NavMeshAgent agent;
-    public float dist;
+    private float dist;
+    private float mindist = 1000f;
 
 
     private void Start()
@@ -30,31 +31,25 @@ public class monsterAI : MonoBehaviour
 
     private void Update()
     {
-        float mindist = 1000f;
         if (gameObject != null)
         {
-            foreach (GameObject human in GameObject.FindObjectsOfType(typeof(GameObject)))
+            foreach (Transform players in GameObject.FindGameObjectWithTag("Player").transform)
             {
-                if (human.tag == "Player")
+                dist = Vector3.Distance(transform.position, players.position);
+                if (dist < mindist)
                 {
-                    dist = Vector3.Distance(transform.position, human.transform.position);
-                    if (dist < mindist)
-                    {
-                        mindist = dist;
-                        joueur = human;
-                    }
+                    mindist = dist;
+                    joueur = players;
                 }
             }
         }
-
-
-
         float distance = Vector3.Distance(transform.position, joueur.position); //distance entre le monstre et le joueur
         if (distance < detectDistance && distance > distanceAttack) //le joueur est visible mais pas à distance d'attaque
         {
             //le monstre pourchasse le joueur
             agent.destination = joueur.position;
         }
+        
 
         if (distance <= distanceAttack && canAttack) //le joueur est à distance d'attaque
         {
