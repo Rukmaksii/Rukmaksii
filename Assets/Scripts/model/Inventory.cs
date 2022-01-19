@@ -1,4 +1,7 @@
-﻿using PlayerControllers;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Items;
+using PlayerControllers;
 using Weapons;
 
 namespace model
@@ -157,6 +160,21 @@ namespace model
             }
 
             return switched;
+        }
+
+        private List<BaseItem> itemsList;
+
+        /**
+         * <summary>adds an item to the inventory if it isn't already in it
+         * if the item has a passive, it activates it</summary>
+         */
+        public void AddItem(BaseItem newItem)
+        {
+            newItem.Player = Player;
+            if (!itemsList.Contains(newItem))
+            {
+                itemsList.Add(newItem);
+            }
         }
     }
 }

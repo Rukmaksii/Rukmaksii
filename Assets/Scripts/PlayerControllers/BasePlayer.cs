@@ -9,6 +9,7 @@ using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
 using Weapons;
 using GameManagers;
+using Items;
 
 namespace PlayerControllers
 {
@@ -86,8 +87,8 @@ namespace PlayerControllers
         public bool IsShooting => isShooting;
 
         private Vector3 dashDirection;
-
-
+        
+        
         protected Inventory inventory;
         public Jetpack Jetpack => inventory.Jetpack;
 
@@ -131,6 +132,8 @@ namespace PlayerControllers
 
             this.inventory.Jetpack = gameObject.AddComponent<Jetpack>();
             this.inventory.Jetpack.FuelDuration = 20f;
+            
+            this.inventory.AddItem(gameObject.AddComponent<FuelBooster>());
 
             GameObject playerCamera = GameObject.FindGameObjectWithTag("Player Camera");
             cameraController = playerCamera.GetComponent<CameraController>();
