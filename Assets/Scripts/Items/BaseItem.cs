@@ -14,14 +14,14 @@ namespace Items
         
         public BasePlayer Player { get; set; }
 
+        public abstract string Name { get; }
+
         void Start()
         {
-            throw new NotImplementedException();
         }
 
         private void FixedUpdate()
         {
-            throw new NotImplementedException();
         }
     }
 }

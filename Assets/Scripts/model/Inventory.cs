@@ -174,6 +174,15 @@ namespace model
             if (!itemsList.Contains(newItem))
             {
                 itemsList.Add(newItem);
+
+                switch (newItem.Name)
+                {
+                    case "FuelBooster" :
+                        Player.Jetpack.FuelDuration = 5f;
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }
