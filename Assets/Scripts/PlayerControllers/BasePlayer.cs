@@ -125,22 +125,25 @@ namespace PlayerControllers
         public float GetDashCooldown => cdManager.DashCooldown;
         public float GetDashedSince => cdManager.DashedSince;
         
+        // default value for fuel duration
+        public float DefaultFuelDuration { get; } = 20f;
+        
         void Start()
         {
             this.inventory = new Inventory(this);
             this.inventory.AddWeapon(gameObject.AddComponent<TestGun>());
-
-            this.inventory.Jetpack = gameObject.AddComponent<Jetpack>();
-            this.inventory.Jetpack.FuelDuration = 20f;
             
-            this.inventory.AddItem(gameObject.AddComponent<FuelBooster>());
-
+            this.inventory.Jetpack = gameObject.AddComponent<Jetpack>();
+            this.inventory.Jetpack.FuelDuration = DefaultFuelDuration;
+            
             GameObject playerCamera = GameObject.FindGameObjectWithTag("Player Camera");
             cameraController = playerCamera.GetComponent<CameraController>();
             cameraController.OnPlayerMove(camRotationAnchor, transform);
 
             GameObject gameManager = GameObject.FindGameObjectWithTag("GameController");
             gameController = gameManager.GetComponent<GameController>();
+            
+            this.inventory.AddItem(gameObject.AddComponent<FuelBooster>());
 
             if (IsLocalPlayer)
                 gameController.BindPlayer(this);

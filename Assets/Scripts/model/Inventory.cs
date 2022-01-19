@@ -162,7 +162,7 @@ namespace model
             return switched;
         }
 
-        private List<BaseItem> itemsList;
+        private List<BaseItem> itemsList = new List<BaseItem>();
 
         /**
          * <summary>adds an item to the inventory if it isn't already in it
@@ -170,7 +170,6 @@ namespace model
          */
         public void AddItem(BaseItem newItem)
         {
-            newItem.Player = Player;
             if (!itemsList.Contains(newItem))
             {
                 itemsList.Add(newItem);
@@ -178,7 +177,28 @@ namespace model
                 switch (newItem.Name)
                 {
                     case "FuelBooster" :
-                        Player.Jetpack.FuelDuration = 5f;
+                        Player.Jetpack.FuelDuration = 1f;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        
+        /**
+         * <summary>adds an item to the inventory if it isn't already in it
+         * if the item has a passive, it activates it</summary>
+         */
+        public void RemoveItem(BaseItem itemToRem)
+        {
+            if (itemsList.Contains(itemToRem))
+            {
+                itemsList.Remove(itemToRem);
+
+                switch (itemToRem.Name)
+                {
+                    case "FuelBooster" :
+                        itemToRem.RemovePassive();
                         break;
                     default:
                         break;

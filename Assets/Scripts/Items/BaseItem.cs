@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Items
 {
-    public abstract class BaseItem : MonoBehaviour, IItem
+    public abstract class BaseItem : MonoBehaviour, IItems
     {
         public abstract ItemType Type { get; }
         
@@ -16,12 +16,12 @@ namespace Items
 
         public abstract string Name { get; }
 
-        void Start()
-        {
-        }
+        public abstract void InitializePassive();
 
-        private void FixedUpdate()
-        {
-        }
+        public abstract void RemovePassive();
+
+        public abstract  void Consume();
+
+        public abstract void Use();
     }
 }

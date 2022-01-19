@@ -9,9 +9,11 @@
     }
     
     
-    public interface IItem
+    public interface IItems
     {
-        // public void Consume();
-        // public void Use();
+        public void InitializePassive();
+        public void RemovePassive();
+        public void Consume();
+        public void Use();
     }
 }
