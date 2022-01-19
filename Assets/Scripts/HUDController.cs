@@ -13,6 +13,8 @@ public class HUDController : MonoBehaviour
     [SerializeField] protected Slider fuelSlider;
     [SerializeField] protected Text fuelCounter;
     
+    [SerializeField] protected Text dashCooldown;
+    
     private GameController gameController;
     
     public Image Crosshair;
@@ -31,6 +33,7 @@ public class HUDController : MonoBehaviour
             return;
         SetHealth(gameController.LocalPlayer.GetCurrentHealth());
         SetFuelAmount(gameController.LocalPlayer.Jetpack.FuelConsumption);
+        dashCooldown.text = "" + gameController.LocalPlayer.GetDashCooldown();
     }
     
     /**

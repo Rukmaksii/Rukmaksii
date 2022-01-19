@@ -22,6 +22,11 @@ public class CooldownManager : MonoBehaviour
         }
     }
 
+    public float RequestDashCooldown()
+    {
+        return dashedSince;
+    }
+    
     public bool RequestDash()
     {
         if (dashTriggered)

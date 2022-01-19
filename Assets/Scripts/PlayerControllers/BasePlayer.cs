@@ -328,6 +328,11 @@ namespace PlayerControllers
             }
         }
 
+        public float GetDashCooldown()
+        {
+            return cdManager.RequestDashCooldown();
+        }
+
         private void OnCollisionEnter(Collision collision)
         {
             if (collision.gameObject.CompareTag("Ground"))

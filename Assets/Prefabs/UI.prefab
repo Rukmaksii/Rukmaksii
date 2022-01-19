@@ -705,6 +705,7 @@ MonoBehaviour:
   healthCounter: {fileID: 8061552449330322065}
   fuelSlider: {fileID: 4210972621101830364}
   fuelCounter: {fileID: 8257083342124883080}
+  dashCooldown: {fileID: 1560518556489829865}
   Crosshair: {fileID: 238933129528760577}
 --- !u!1 &6755304173120000148
 GameObject:
