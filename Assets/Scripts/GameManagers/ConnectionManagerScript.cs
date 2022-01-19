@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using PlayerControllers;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -6,7 +7,41 @@ namespace GameManagers
 {
     public class ConnectionManagerScript : MonoBehaviour
     {
+        [SerializeField] private ConnectionScriptableObject connectionData;
         [SerializeField] private List<GameObject> classPrefabs = new List<GameObject>();
+
+
+        void Start()
+        {
+
+            // kept for local tests
+            // TODO : remove this line and OnGui
+            if (connectionData.Data == null)
+                return;
+            
+            GameObject playerPrefab = classPrefabs.Find(go =>
+                go.GetComponent<BasePlayer>().ClassName == connectionData.Data.ClassName);
+
+            // TODO : class prefabs are not empty
+            if (playerPrefab == null)
+                playerPrefab = classPrefabs[0];
+
+            NetworkManager.Singleton.NetworkConfig.PlayerPrefab = playerPrefab;
+
+            switch (connectionData.Data.ConnectionType)
+            {
+                case "host":
+                default:
+                    NetworkManager.Singleton.StartHost();
+                    break;
+                case "client":
+                    NetworkManager.Singleton.StartClient();
+                    break;
+                case "server":
+                    NetworkManager.Singleton.StartServer();
+                    break;
+            }
+        }
 
         private void OnGUI()
         {

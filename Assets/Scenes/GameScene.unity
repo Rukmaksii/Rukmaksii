@@ -582,6 +582,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6366e0b8930330439f0664ecfdbbe9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  connectionData: {fileID: 11400000, guid: 51f4e5ed14290eb4db05031d297551b9, type: 2}
   classPrefabs:
   - {fileID: 1800387450937859543, guid: ddd7cfbbbb0dbb44f81ebb725ce41458, type: 3}
 --- !u!1001 &1145712261

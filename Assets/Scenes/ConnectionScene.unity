@@ -1948,6 +1948,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   connectionType: {fileID: 1516933140}
   chosenClass: {fileID: 558455479}
+  connectionData: {fileID: 11400000, guid: 51f4e5ed14290eb4db05031d297551b9, type: 2}
 --- !u!1 &1433109988
 GameObject:
   m_ObjectHideFlags: 0
