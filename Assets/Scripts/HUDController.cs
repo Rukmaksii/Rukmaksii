@@ -13,7 +13,7 @@ public class HUDController : MonoBehaviour
     [SerializeField] protected Slider fuelSlider;
     [SerializeField] protected Text fuelCounter;
     
-    [SerializeField] protected Text dashCooldown;
+    [SerializeField] protected Slider dashCooldown;
     
     private GameController gameController;
     
@@ -33,7 +33,7 @@ public class HUDController : MonoBehaviour
             return;
         SetHealth(gameController.LocalPlayer.GetCurrentHealth());
         SetFuelAmount(gameController.LocalPlayer.Jetpack.FuelConsumption);
-        dashCooldown.text = "" + gameController.LocalPlayer.GetDashCooldown();
+        SetDashCooldown(gameController.LocalPlayer.GetDashedSince, gameController.LocalPlayer.GetDashCooldown);
     }
     
     /**
@@ -74,5 +74,15 @@ public class HUDController : MonoBehaviour
     {
         fuelSlider.value = fuel*100;
         fuelCounter.text = "" + Mathf.Floor(fuel*100);
+    }
+    
+    public void SetDashCooldown(float dashCd, float maxDashCd)
+    {
+        float value;
+        if (dashCd == 0)
+            value = 0;
+        else
+            value = 1 - dashCd / maxDashCd;
+        dashCooldown.value = value;
     }
 }

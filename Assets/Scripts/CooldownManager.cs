@@ -7,7 +7,9 @@ public class CooldownManager : MonoBehaviour
     private bool dashTriggered;
     private float dashedSince;
 
-
+    public float DashCooldown => dashCooldown;
+    public float DashedSince => dashedSince;
+    
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -25,6 +27,11 @@ public class CooldownManager : MonoBehaviour
     public float RequestDashCooldown()
     {
         return dashedSince;
+    }
+    
+    public float RequestMaxDashCooldown()
+    {
+        return dashCooldown;
     }
     
     public bool RequestDash()

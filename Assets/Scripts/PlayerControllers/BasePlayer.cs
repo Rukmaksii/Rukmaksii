@@ -114,12 +114,16 @@ namespace PlayerControllers
         }
 
         /**
-     * <value>the time in seconds since the dash has been called</value>
-     */
+        * <value>the time in seconds since the dash has been called</value>
+        */
         private float dashStartedSince = -1f;
 
         public bool IsDashing => dashStartedSince > 0 && dashStartedSince <= dashDuration;
 
+        // getters for respectively the default dash cooldown and the time since last dash
+        public float GetDashCooldown => cdManager.DashCooldown;
+        public float GetDashedSince => cdManager.DashedSince;
+        
         void Start()
         {
             this.inventory = new Inventory(this);
@@ -326,11 +330,6 @@ namespace PlayerControllers
             {
                 dashDirection = transform.TransformDirection(Vector3.forward);
             }
-        }
-
-        public float GetDashCooldown()
-        {
-            return cdManager.RequestDashCooldown();
         }
 
         private void OnCollisionEnter(Collision collision)
