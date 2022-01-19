@@ -31,6 +31,7 @@ public class HUDController : MonoBehaviour
     {
         if (gameController.LocalPlayer == null)
             return;
+        
         SetHealth(gameController.LocalPlayer.GetCurrentHealth());
         SetFuelAmount(gameController.LocalPlayer.Jetpack.FuelConsumption);
         SetDashCooldown(gameController.LocalPlayer.GetDashedSince, gameController.LocalPlayer.GetDashCooldown);
@@ -59,9 +60,7 @@ public class HUDController : MonoBehaviour
     }
 
     /**
-     * <summary>
-     *      Sets the player's current health
-     * </summary>
+     * <summary>sets the player's current health </summary>
      * <param name="health">int for the current health</param>
      */
     public void SetHealth(int health)
@@ -70,12 +69,21 @@ public class HUDController : MonoBehaviour
         healthCounter.text = "" + health;
     }
     
+    /**
+     * <summary>sets the player's current fuel level </summary>
+     * <param name="fuel">float for the current fuel level</param>
+     */
     public void SetFuelAmount(float fuel)
     {
         fuelSlider.value = fuel*100;
         fuelCounter.text = "" + Mathf.Floor(fuel*100);
     }
     
+    /**
+     * <summary>sets the player's current dash cooldown </summary>
+     * <param name="dashCd">float for the time since last dash</param>
+     * <param name="maxDashCd">float for the base dash cooldown</param>
+     */
     public void SetDashCooldown(float dashCd, float maxDashCd)
     {
         float value;
