@@ -1,9 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using PlayerControllers;
 using model;
 using UnityEngine;
-
 
 namespace Weapons
 {
@@ -11,7 +11,7 @@ namespace Weapons
     {
         public abstract WeaponType Type { get; }
         public BasePlayer Player { get; set; }
-
+        
         public abstract float Range { get; }
 
         public abstract int Damage { get; }
@@ -56,18 +56,27 @@ namespace Weapons
         protected int remainingBulletsInRow;
 
         /**
-     * <value>the current remaining time between the previous bullet and the next bullet in the bullet row</value>
-     */
+        * <value>the current remaining time between the previous bullet and the next bullet in the bullet row</value>
+        */
         protected float betweenBulletsCurrentCD;
 
         protected bool isReloading = false;
         protected bool isShooting = false;
-
+        
+        /** <value>whether the hit marker should be displayed or not</value> */
+        private bool hitMarkerDisplayed;
+        /** <value>the time since the hit marker is displayed</value> */
+        private float hitMarkerSince;
+        /** <value>the duration the hit marker is displayed</value> */
+        private float hitMarkerDuration = 0.2f;
+        
+        /** <summary>action for when a player hits a target and if it is a player</summary> */
+        public static event Action<bool> playerShot;
+        
         void Start()
         {
             currentAmmo = MaxAmmo;
         }
-
 
         // Update is called once per frame
         void FixedUpdate()
@@ -99,6 +108,17 @@ namespace Weapons
                 else
                 {
                     remainingReloadTime -= Time.fixedDeltaTime;
+                }
+            }
+
+            if (hitMarkerDisplayed)
+            {
+                hitMarkerSince += Time.deltaTime;
+                if (hitMarkerSince > hitMarkerDuration)
+                {
+                    hitMarkerDisplayed = false;
+                    hitMarkerSince = 0;
+                    playerShot?.Invoke(false);
                 }
             }
         }
@@ -134,10 +154,10 @@ namespace Weapons
         }
 
         /**
-     * <summary>shoots at from the middle of the screen to where looked at</summary>
-     * <remarks>shoots 1 bullet</remarks>
-     * <returns>true if an damageable object has been shot</returns>
-     */
+         * <summary>shoots at from the middle of the screen to where looked at</summary>
+         * <remarks>shoots 1 bullet</remarks>
+         * <returns>true if an damageable object has been shot</returns>
+         */
         private bool Shoot()
         {
             currentAmmo--;
@@ -154,8 +174,10 @@ namespace Weapons
                     return false;
                 }
 
-
                 enemyPlayer.TakeDamage(this.Damage);
+
+                hitMarkerDisplayed = true;
+                playerShot?.Invoke(true);
             }
             else
             {

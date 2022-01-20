@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using GameManagers;
+using Weapons;
 
 public class HUDController : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class HUDController : MonoBehaviour
     
     [SerializeField] protected Text ammoCounter;
 
+    [SerializeField] protected GameObject hitMarker;
+    
     private GameController gameController;
     
     public Image Crosshair;
@@ -28,6 +31,9 @@ public class HUDController : MonoBehaviour
         
         SetMaxHealth(100);
         SetMaxFuel(100);
+
+        ShowHitMarker(false);
+        BaseWeapon.playerShot += ShowHitMarker;
     }
     void Update()
     {
@@ -104,5 +110,21 @@ public class HUDController : MonoBehaviour
     public void SetAmmoCounter(int ammo)
     {
         ammoCounter.text = $"{ammo}/∞";
+    }
+
+    /**
+     * <summary>shows the hitmarker on the hud a few milliseconds</summary>
+     * <param name="status">bool for whether the hit marker should be shown or not</param>
+     */
+    public void ShowHitMarker(bool status)
+    {
+        if (!status)
+        {
+            hitMarker.SetActive(false);
+        }
+        else
+        {
+            hitMarker.SetActive(true);
+        }
     }
 }

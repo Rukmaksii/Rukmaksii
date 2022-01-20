@@ -1,3 +1,4 @@
+using PlayerControllers;
 using UnityEngine;
 
 public class CooldownManager : MonoBehaviour
@@ -23,7 +24,7 @@ public class CooldownManager : MonoBehaviour
             }
         }
     }
-
+    
     public float RequestDashCooldown()
     {
         return dashedSince;
