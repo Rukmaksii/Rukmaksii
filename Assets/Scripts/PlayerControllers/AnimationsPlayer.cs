@@ -18,49 +18,25 @@ public class AnimationsPlayer : MonoBehaviour
     void Update()
     {
         Vector3 velocity = Vector3.ClampMagnitude(player.RigidBody.transform.InverseTransformDirection(player.RigidBody.velocity), 1f);
-
-        if (velocity.y >= 0.3) //jump
-        {
-            playerAnimator.SetBool("jump", true);
-        }
-        else
-        {
-            playerAnimator.SetBool("jump", false);
-        }
         if (velocity.z >= 0.7) //forward
         {
-            playerAnimator.SetBool("forward", true);
-            playerAnimator.SetBool("backward", false);
-            playerAnimator.SetBool("left", false);
-            playerAnimator.SetBool("right", false);
+            playerAnimator.SetBool("isMoving", true);
         }
         else if (velocity.z <= -0.7) //backward
         {
-            playerAnimator.SetBool("backward", true);
-            playerAnimator.SetBool("forward", false);
-            playerAnimator.SetBool("left", false);
-            playerAnimator.SetBool("right", false);
+            playerAnimator.SetBool("isMoving", true);
         }
         else if (velocity.x < -0.7) //left
         {
-            playerAnimator.SetBool("left", true);
-            playerAnimator.SetBool("forward", false);
-            playerAnimator.SetBool("backward", false);
-            playerAnimator.SetBool("right", false);
+            playerAnimator.SetBool("isMoving", true);
         }
         else if (velocity.x > 0.7) //right
         {
-            playerAnimator.SetBool("right", true);
-            playerAnimator.SetBool("forward", false);
-            playerAnimator.SetBool("backward", false);
-            playerAnimator.SetBool("left", false);
+            playerAnimator.SetBool("isMoving", true);
         }
         else
         {
-            playerAnimator.SetBool("forward", false);
-            playerAnimator.SetBool("backward", false);
-            playerAnimator.SetBool("left", false);
-            playerAnimator.SetBool("right", false);
+            playerAnimator.SetBool("isMoving", false);
         }
 
         if (player.IsRunning)
