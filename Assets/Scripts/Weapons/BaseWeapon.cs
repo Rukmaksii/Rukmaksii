@@ -90,7 +90,6 @@ namespace Weapons
             }
             else
             {
-                Debug.Log("reloading");
                 if (remainingReloadTime <= 0)
                 {
                     isReloading = false;
@@ -141,7 +140,6 @@ namespace Weapons
      */
         private bool Shoot()
         {
-            Debug.Log("shooting");
             currentAmmo--;
             GameObject hit;
 
