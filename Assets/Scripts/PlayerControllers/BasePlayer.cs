@@ -94,9 +94,12 @@ namespace PlayerControllers
         public Inventory Inventory => inventory;
         public Jetpack Jetpack => inventory.Jetpack;
 
+        [SerializeField] protected GameObject deathScreenPrefab;
+        private GameObject deathScreen;
+        
         /**
-     * <value>the duration of the dash in seconds</value>
-     */
+        * <value>the duration of the dash in seconds</value>
+        */
         protected virtual float dashDuration { get; set; } = 0.3F;
 
         protected virtual float dashForce { get; set; }= 80f;
@@ -151,6 +154,11 @@ namespace PlayerControllers
             cdManager = gameObject.AddComponent<CooldownManager>();
 
             UpdateHealthServerRpc(maxHealth, OwnerClientId);
+            
+            deathScreen = Instantiate(deathScreenPrefab);
+            deathScreen.name = deathScreenPrefab.name;
+            deathScreen.GetComponent<Canvas>().worldCamera = Camera.current;
+            deathScreen.SetActive(false);
         }
 
         void Awake()
@@ -217,7 +225,8 @@ namespace PlayerControllers
 
             if (Input.GetKeyDown(KeyCode.H))
             {
-                UpdateHealthServerRpc(maxHealth, OwnerClientId);
+                deathScreen.SetActive(false);
+                UpdateHealthServerRpc(maxHealth, this.OwnerClientId);
             }
             
             if (Input.GetKeyDown(KeyCode.G))
@@ -370,6 +379,7 @@ namespace PlayerControllers
         {
             if (damage >= CurrentHealth.Value)
             {
+                deathScreen.SetActive(true);
                 UpdateHealthServerRpc(0, this.OwnerClientId);
                 return false;
             }
