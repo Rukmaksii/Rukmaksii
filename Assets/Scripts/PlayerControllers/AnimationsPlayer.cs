@@ -17,19 +17,20 @@ public class AnimationsPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.Z))
+        Vector3 velocity = Vector3.ClampMagnitude(player.RigidBody.transform.InverseTransformDirection(player.RigidBody.velocity), 1f);
+        if (velocity.z >= 0.7) //forward
         {
             playerAnimator.SetBool("isMoving", true);
         }
-        else if (Input.GetKey(KeyCode.S))
+        else if (velocity.z <= -0.7) //backward
         {
             playerAnimator.SetBool("isMoving", true);
         }
-        else if (Input.GetKey(KeyCode.Q))
+        else if (velocity.x < -0.7) //left
         {
             playerAnimator.SetBool("isMoving", true);
         }
-        else if (Input.GetKey(KeyCode.D))
+        else if (velocity.x > 0.7) //right
         {
             playerAnimator.SetBool("isMoving", true);
         }
