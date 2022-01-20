@@ -2,6 +2,7 @@
 using System.Linq;
 using Items;
 using PlayerControllers;
+using UnityEngine;
 using Weapons;
 
 namespace model
@@ -170,18 +171,11 @@ namespace model
          */
         public void AddItem(BaseItem newItem)
         {
+            newItem.Player = Player;
             if (!itemsList.Contains(newItem))
             {
                 itemsList.Add(newItem);
-
-                switch (newItem.Name)
-                {
-                    case "FuelBooster" :
-                        Player.Jetpack.FuelDuration = 1f;
-                        break;
-                    default:
-                        break;
-                }
+                newItem.InitializePassive();
             }
         }
         
@@ -191,19 +185,10 @@ namespace model
          */
         public void RemoveItem(BaseItem itemToRem)
         {
-            if (itemsList.Contains(itemToRem))
-            {
-                itemsList.Remove(itemToRem);
+            itemToRem.Player = Player;
 
-                switch (itemToRem.Name)
-                {
-                    case "FuelBooster" :
-                        itemToRem.RemovePassive();
-                        break;
-                    default:
-                        break;
-                }
-            }
+            itemsList.Remove(itemToRem);
+            itemToRem.RemovePassive();
         }
     }
 }

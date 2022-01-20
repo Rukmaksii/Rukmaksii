@@ -143,8 +143,6 @@ namespace PlayerControllers
             GameObject gameManager = GameObject.FindGameObjectWithTag("GameController");
             gameController = gameManager.GetComponent<GameController>();
             
-            this.inventory.AddItem(gameObject.AddComponent<FuelBooster>());
-
             if (IsLocalPlayer)
                 gameController.BindPlayer(this);
 
@@ -218,6 +216,16 @@ namespace PlayerControllers
             if (Input.GetKeyDown(KeyCode.H))
             {
                 UpdateHealthServerRpc(maxHealth, OwnerClientId);
+            }
+            
+            if (Input.GetKeyDown(KeyCode.G))
+            {
+                this.inventory.AddItem(gameObject.AddComponent<FuelBooster>());
+            }
+            
+            if (Input.GetKeyDown(KeyCode.J))
+            {
+                this.inventory.RemoveItem(gameObject.AddComponent<FuelBooster>());
             }
         }
 

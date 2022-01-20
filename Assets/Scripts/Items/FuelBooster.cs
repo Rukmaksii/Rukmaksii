@@ -16,7 +16,7 @@ namespace Items
 
         public override void RemovePassive()
         {
-            Player.Jetpack.FuelDuration = Player.DefaultFuelDuration;
+            Player.Jetpack.FuelDuration = 20f;
         }
 
         public override  void Consume()
