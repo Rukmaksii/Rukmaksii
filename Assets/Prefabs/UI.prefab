@@ -788,6 +788,7 @@ MonoBehaviour:
   fuelSlider: {fileID: 4210972621101830364}
   fuelCounter: {fileID: 8257083342124883080}
   dashCooldown: {fileID: 8278509730644391835}
+  ammoCounter: {fileID: 8817012441736039901}
   Crosshair: {fileID: 238933129528760577}
 --- !u!1 &6755304173120000148
 GameObject:

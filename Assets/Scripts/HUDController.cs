@@ -15,6 +15,8 @@ public class HUDController : MonoBehaviour
     
     [SerializeField] protected Slider dashCooldown;
     
+    [SerializeField] protected Text ammoCounter;
+
     private GameController gameController;
     
     public Image Crosshair;
@@ -35,6 +37,7 @@ public class HUDController : MonoBehaviour
         SetHealth(gameController.LocalPlayer.GetCurrentHealth());
         SetFuelAmount(gameController.LocalPlayer.Jetpack.FuelConsumption);
         SetDashCooldown(gameController.LocalPlayer.GetDashedSince, gameController.LocalPlayer.GetDashCooldown);
+        SetAmmoCounter(gameController.LocalPlayer.Inventory.CurrentWeapon.CurrentAmmo);
     }
     
     /**
@@ -48,15 +51,15 @@ public class HUDController : MonoBehaviour
         healthSlider.maxValue = health;
 
         healthSlider.value = health;
-        healthCounter.text = "" + health;
+        healthCounter.text = $"{health}";
     }
     
-    public void SetMaxFuel(int health)
+    public void SetMaxFuel(int fuel)
     {
-        fuelSlider.maxValue = health;
+        fuelSlider.maxValue = fuel;
 
-        fuelSlider.value = health;
-        fuelCounter.text = "" + health;
+        fuelSlider.value = fuel;
+        fuelCounter.text = $"{fuel}";
     }
 
     /**
@@ -66,7 +69,7 @@ public class HUDController : MonoBehaviour
     public void SetHealth(int health)
     {
         healthSlider.value = health;
-        healthCounter.text = "" + health;
+        healthCounter.text = $"{health}";
     }
     
     /**
@@ -76,7 +79,7 @@ public class HUDController : MonoBehaviour
     public void SetFuelAmount(float fuel)
     {
         fuelSlider.value = fuel*100;
-        fuelCounter.text = "" + Mathf.Floor(fuel*100);
+        fuelCounter.text = $"{Mathf.Floor(fuel*100)}";
     }
     
     /**
@@ -92,5 +95,14 @@ public class HUDController : MonoBehaviour
         else
             value = 1 - dashCd / maxDashCd;
         dashCooldown.value = value;
+    }
+    
+    /**
+     * <summary>sets the player's current ammo count</summary>
+     * <param name="ammo">int for the number of ammunitions remaining</param>
+     */
+    public void SetAmmoCounter(int ammo)
+    {
+        ammoCounter.text = $"{ammo}/∞";
     }
 }

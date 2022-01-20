@@ -90,6 +90,8 @@ namespace PlayerControllers
         
         
         protected Inventory inventory;
+
+        public Inventory Inventory => inventory;
         public Jetpack Jetpack => inventory.Jetpack;
 
         /**
