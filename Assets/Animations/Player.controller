@@ -42,12 +42,6 @@ AnimatorStateTransition:
   - m_ConditionMode: 2
     m_ConditionEvent: isRunning
     m_EventTreshold: 0
-<<<<<<< HEAD
-  - m_ConditionMode: 2
-    m_ConditionEvent: isBackward
-    m_EventTreshold: 0
-=======
->>>>>>> f03c7cc (adds keybound to add and rem fuelbooster)
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 2371452977499710579}
   m_Solo: 0
@@ -75,22 +69,14 @@ AnimatorController:
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
-    m_DefaultBool: 0
-<<<<<<< HEAD
+    m_DefaultBool: 1
     m_Controller: {fileID: 0}
-=======
-    m_Controller: {fileID: 9100000}
->>>>>>> f03c7cc (adds keybound to add and rem fuelbooster)
   - m_Name: isWalking
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
-    m_DefaultBool: 1
-<<<<<<< HEAD
+    m_DefaultBool: 0
     m_Controller: {fileID: 0}
-=======
-    m_Controller: {fileID: 9100000}
->>>>>>> f03c7cc (adds keybound to add and rem fuelbooster)
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -174,12 +160,6 @@ AnimatorStateTransition:
   - m_ConditionMode: 2
     m_ConditionEvent: isWalking
     m_EventTreshold: 0
-<<<<<<< HEAD
-  - m_ConditionMode: 2
-    m_ConditionEvent: isBackward
-    m_EventTreshold: 0
-=======
->>>>>>> f03c7cc (adds keybound to add and rem fuelbooster)
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 2028080747642053055}
   m_Solo: 0
@@ -236,12 +216,6 @@ AnimatorStateTransition:
   - m_ConditionMode: 2
     m_ConditionEvent: isWalking
     m_EventTreshold: 0
-<<<<<<< HEAD
-  - m_ConditionMode: 2
-    m_ConditionEvent: isBackward
-    m_EventTreshold: 0
-=======
->>>>>>> f03c7cc (adds keybound to add and rem fuelbooster)
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 2028080747642053055}
   m_Solo: 0
@@ -270,12 +244,6 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: isWalking
     m_EventTreshold: 0
-<<<<<<< HEAD
-  - m_ConditionMode: 2
-    m_ConditionEvent: isBackward
-    m_EventTreshold: 0
-=======
->>>>>>> f03c7cc (adds keybound to add and rem fuelbooster)
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 2371452977499710579}
   m_Solo: 0
@@ -302,12 +270,6 @@ AnimatorStateTransition:
     m_ConditionEvent: isRunning
     m_EventTreshold: 0
   - m_ConditionMode: 2
-<<<<<<< HEAD
-    m_ConditionEvent: isBackward
-    m_EventTreshold: 0
-  - m_ConditionMode: 2
-=======
->>>>>>> f03c7cc (adds keybound to add and rem fuelbooster)
     m_ConditionEvent: isWalking
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
@@ -338,12 +300,6 @@ AnimatorStateTransition:
   - m_ConditionMode: 2
     m_ConditionEvent: isWalking
     m_EventTreshold: 0
-<<<<<<< HEAD
-  - m_ConditionMode: 2
-    m_ConditionEvent: isBackward
-    m_EventTreshold: 0
-=======
->>>>>>> f03c7cc (adds keybound to add and rem fuelbooster)
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 3992860479607837592}
   m_Solo: 0
