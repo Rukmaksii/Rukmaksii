@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using Unity.Netcode;
-using Unity.Netcode.Samples;
+//using Unity.Netcode.Samples;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
@@ -9,7 +9,7 @@ using UnityEngine.InputSystem.Interactions;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
 
-public class MonsterAI : MonoBehaviour
+public class MonsterAI : NetworkBehaviour
 {
     [Range(2, 100)] public float detectDistance = 10; //distance de detection du joueur
     public float distanceAttack = 2.4f; //distance à laquelle le monstre peut attaquer
@@ -33,34 +33,40 @@ public class MonsterAI : MonoBehaviour
     {
         if (gameObject != null)
         {
-            foreach (Transform players in GameObject.FindGameObjectWithTag("Player").transform)
+            foreach (var players in GameObject.FindGameObjectsWithTag("Player"))
             {
-                dist = Vector3.Distance(transform.position, players.position);
+                dist = Vector3.Distance(transform.position, players.transform.position);
                 if (dist < mindist)
                 {
                     mindist = dist;
-                    joueur = players;
+                    joueur = players.transform;
                 }
             }
         }
-        float distance = Vector3.Distance(transform.position, joueur.position); //distance entre le monstre et le joueur
-        if (distance < detectDistance && distance > distanceAttack) //le joueur est visible mais pas à distance d'attaque
+
+        if (joueur != null)
         {
-            //le monstre pourchasse le joueur
-            agent.destination = joueur.position;
-        }
+            float distance = Vector3.Distance(transform.position, joueur.position); //distance entre le monstre et le joueur
+            if (distance < detectDistance && distance > distanceAttack) //le joueur est visible mais pas à distance d'attaque
+            {
+                //le monstre pourchasse le joueur
+                agent.destination = joueur.position;
+            }
         
 
-        if (distance <= distanceAttack && canAttack) //le joueur est à distance d'attaque
-        {
-            //le monstre attaque le joueur
-        }
+            if (distance <= distanceAttack && canAttack) //le joueur est à distance d'attaque
+            {
+                //le monstre attaque le joueur
+            }
 
-        if (distance > detectDistance) //le joueur n'est plus visible
-        {
-            //le monstre retourne à son point de départ ou rode dans les parages
-            agent.destination = InitialPos;
+            if (distance > detectDistance) //le joueur n'est plus visible
+            {
+                //le monstre retourne à son point de départ ou rode dans les parages
+                agent.destination = InitialPos;
+            }
         }
+        
+        
     }
 
 

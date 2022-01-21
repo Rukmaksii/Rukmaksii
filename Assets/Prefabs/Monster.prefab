@@ -1278,7 +1278,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 346a62748b523448096878873907e332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectDistance: 10
+  detectDistance: 20
   distanceAttack: 2.4
   agent: {fileID: 7409105868286347175}
 --- !u!195 &7409105868286347175
