@@ -222,11 +222,6 @@ namespace PlayerControllers
                 UnityEngine.SceneManagement.SceneManager.LoadScene("DeathScreen");
             }
 
-            if (Input.GetKeyDown(KeyCode.B))
-            {
-                TakeDamage(20);
-            }
-            
             // TODO : remove test controls
             /*if (Input.GetKeyDown(KeyCode.G))
             {
