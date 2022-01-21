@@ -43,7 +43,7 @@ namespace PlayerControllers
 
         private bool isRunning;
 
-        public bool IsRunning => isRunning && movement.x > 0 && movement.z == 0;
+        public bool IsRunning => isRunning && movement.z >= Mathf.Abs(movement.x);
 
         
         private CameraController cameraController;
@@ -185,7 +185,7 @@ namespace PlayerControllers
 
                 if (!this.inventory.Jetpack.IsFlying)
                 {
-                    var speed = movementSpeed * (isRunning ? runningSpeedMultiplier : 1F);
+                    var speed = movementSpeed * (IsRunning ? runningSpeedMultiplier : 1F);
 
 
                     Vector3 deltaVelocity = new Vector3(velocity.x, 0f, velocity.z);
