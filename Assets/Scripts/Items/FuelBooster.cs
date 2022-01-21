@@ -13,35 +13,31 @@ namespace Items
 
         private float newFuelValue;
 
-        public override void Start()
+        void Start()
         {
             oldFuelValue = Player.Jetpack.FuelDuration;
             newFuelValue = 1f;
             Player.Jetpack.FuelDuration = newFuelValue;
         }
         
-        public override void Update()
-        {
-        }
 
-        public override void OnDestroy()
-        {
-            Player.Jetpack.FuelDuration = oldFuelValue;
-        }
+        private float intialFuelDuration;
 
         public override void OnStartPassive()
         {
-            throw new NotImplementedException();
+            intialFuelDuration = Player.Jetpack.FuelDuration;
+            Player.Jetpack.FuelDuration = 1f;
         }
 
         public override void OnPassiveCalled()
         {
-            throw new NotImplementedException();
+           // does nothing 
         }
 
         public override void OnRemovePassive()
         {
-            throw new NotImplementedException();
+            Player.Jetpack.FuelDuration = this.intialFuelDuration;
         }
+
     }
 }
