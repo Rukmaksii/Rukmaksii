@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -163,6 +163,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -8677153602402066902, guid: edbe904d3f30c5642ba4b86ee96c8e78, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 168926882
+      objectReference: {fileID: 0}
     - target: {fileID: 6175308780001544475, guid: edbe904d3f30c5642ba4b86ee96c8e78, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -767,7 +771,7 @@ MonoBehaviour:
   MessageBufferSize: 5120
   MaxConnections: 100
   MaxSentMessageQueueSize: 128
-  ConnectAddress: 127.0.0.1
+  ConnectAddress: 10.3.138.83
   ConnectPort: 7777
   ServerListenPort: 7777
   MessageSendMode: 0
@@ -996,8 +1000,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 312741fd80465cd42b3ce805cac8da61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponPrefabs:
-  - {fileID: 4838366531625206939}
   uiPrefab: {fileID: 6371553158960861218, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
 --- !u!1 &1503162093 stripped
 GameObject:
@@ -1400,8 +1402,3 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cdfcc14a598d813418f26286e60cc961, type: 3}
---- !u!1 &4838366531625206939 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1832220214755728926, guid: cdfcc14a598d813418f26286e60cc961, type: 3}
-  m_PrefabInstance: {fileID: 4838366531625206938}
-  m_PrefabAsset: {fileID: 0}
