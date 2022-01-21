@@ -191,7 +191,7 @@ namespace model
          */
         public void RemoveItem(BaseItem item)
         {
-            foreach (BaseItem element in itemsList)
+            /*foreach (BaseItem element in itemsList)
             {
                 if (item.Type == element.Type)
                 {
@@ -199,7 +199,7 @@ namespace model
                     Object.Destroy(element.gameObject);
                     break;
                 }
-            }
+            }*/
         }
     }
 }

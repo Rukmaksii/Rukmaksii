@@ -6,7 +6,6 @@ namespace Items
 {
     public class FuelBooster : BaseItem
     {
-        public override ItemType Type { get; } = ItemType.Passive;
         public override string Name { get; } = "FuelBooster";
 
         // storing the old fuel value
@@ -28,6 +27,21 @@ namespace Items
         public override void OnDestroy()
         {
             Player.Jetpack.FuelDuration = oldFuelValue;
+        }
+
+        public override void OnStartPassive()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void OnPassiveCalled()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void OnRemovePassive()
+        {
+            throw new NotImplementedException();
         }
     }
 }
