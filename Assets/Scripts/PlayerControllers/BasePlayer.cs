@@ -127,8 +127,8 @@ namespace PlayerControllers
         public bool IsDashing => dashStartedSince > 0 && dashStartedSince <= dashDuration;
 
         // getters for respectively the default dash cooldown and the time since last dash
-        public float GetDashCooldown => cdManager.DashCooldown;
-        public float GetDashedSince => cdManager.DashedSince;
+        public float DashCooldown => cdManager.DashCooldown;
+        public float DashedSince => cdManager.DashedSince;
         
         // default value for fuel duration
         public float DefaultFuelDuration { get; } = 20f;
