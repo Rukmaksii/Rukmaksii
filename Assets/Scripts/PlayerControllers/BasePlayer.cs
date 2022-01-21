@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using model;
 using Unity.Netcode;
 using Unity.Netcode.Samples;
@@ -138,9 +139,9 @@ namespace PlayerControllers
             
             this.inventory = new Inventory(this);
 
-            GameObject testWeaponPrefab = GameObject.Find("TestGunPrefab");
+            GameObject testWeaponPrefab = gameController.WeaponPrefabs.Find(go => go.name == "TestRiflePrefab");
             Debug.Log(testWeaponPrefab);
-            
+
             this.inventory.AddWeapon(Instantiate(testWeaponPrefab).GetComponent<BaseWeapon>());
 
             this.inventory.Jetpack = gameObject.AddComponent<Jetpack>();
