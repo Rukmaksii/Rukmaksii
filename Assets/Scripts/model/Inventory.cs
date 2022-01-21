@@ -17,9 +17,8 @@ namespace model
         /**
          * <value>the <see cref="Jetpack"/> bound to the <see cref="Player"/></value>
          */
-
         private Jetpack _jetpack;
-        
+
         public Jetpack Jetpack
         {
             get => _jetpack;
@@ -27,19 +26,19 @@ namespace model
             {
                 _jetpack = value;
                 _jetpack.Player = Player;
-            } 
+            }
         }
 
         /**
          * <value>the close range weapon</value>
          */
         private BaseWeapon closeRangeWeapon;
-        
+
         /**
          * <value>the heavy weapon</value>
          */
         private BaseWeapon heavyWeapon;
-        
+
         /**
          * <value>the light weapon</value>
          */
@@ -97,7 +96,7 @@ namespace model
                 return availableWeapon;
             }
         }
-        
+
         public Inventory(BasePlayer player)
         {
             this.Player = player;
@@ -113,17 +112,23 @@ namespace model
             switch (newWeapon.Type)
             {
                 case WeaponType.Heavy:
+                    if (heavyWeapon != null)
+                        Object.Destroy(heavyWeapon.gameObject);
                     heavyWeapon = newWeapon;
                     break;
                 case WeaponType.Light:
+                    if (lightWeapon != null)
+                        Object.Destroy(lightWeapon.gameObject);
                     lightWeapon = newWeapon;
                     break;
                 case WeaponType.CloseRange:
+                    if(closeRangeWeapon)
+                        Object.Destroy(closeRangeWeapon);
                     closeRangeWeapon = newWeapon;
                     break;
             }
         }
-        
+
         /**
          * <summary>changes the currently selected weapon if existing</summary>
          * <returns>false if the provided <see cref="WeaponType"/> not be found</returns>
@@ -178,7 +183,7 @@ namespace model
                 newItem.InitializePassive();
             }
         }
-        
+
         /**
          * <summary>adds an item to the inventory if it isn't already in it
          * if the item has a passive, it activates it</summary>
