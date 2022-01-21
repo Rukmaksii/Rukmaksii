@@ -113,10 +113,7 @@ namespace PlayerControllers
      */
         protected NetworkVariable<int> CurrentHealth { get; } = new NetworkVariable<int>(1);
 
-        public int GetCurrentHealth()
-        {
-            return CurrentHealth.Value;
-        }
+        public int CurrentHealthValue => CurrentHealth.Value;
 
         /**
         * <value>the time in seconds since the dash has been called</value>
@@ -220,7 +217,16 @@ namespace PlayerControllers
                 return;
             cameraController.OnPlayerMove(camRotationAnchor, transform);
 
+            if (CurrentHealth.Value == 0)
+            {
+                UnityEngine.SceneManagement.SceneManager.LoadScene("DeathScreen");
+            }
 
+            if (Input.GetKeyDown(KeyCode.B))
+            {
+                TakeDamage(20);
+            }
+            
             // TODO : remove test controls
             /*if (Input.GetKeyDown(KeyCode.G))
             {
@@ -373,7 +379,6 @@ namespace PlayerControllers
         {
             if (damage >= CurrentHealth.Value)
             {
-                deathScreen.SetActive(true);
                 UpdateHealthServerRpc(0, this.OwnerClientId);
                 return false;
             }
@@ -383,7 +388,6 @@ namespace PlayerControllers
                 return true;
             }
         }
-
 
         public void OnFire(InputAction.CallbackContext ctx)
         {

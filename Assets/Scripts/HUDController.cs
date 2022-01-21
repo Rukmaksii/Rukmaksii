@@ -40,7 +40,7 @@ public class HUDController : MonoBehaviour
         if (gameController.LocalPlayer == null)
             return;
         
-        SetHealth(gameController.LocalPlayer.GetCurrentHealth());
+        SetHealth(gameController.LocalPlayer.CurrentHealthValue);
         SetFuelAmount(gameController.LocalPlayer.Jetpack.FuelConsumption);
         SetDashCooldown(gameController.LocalPlayer.DashedSince, gameController.LocalPlayer.DashCooldown);
         SetAmmoCounter(gameController.LocalPlayer.Inventory.CurrentWeapon.CurrentAmmo);
