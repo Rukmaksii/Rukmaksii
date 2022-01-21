@@ -43,7 +43,7 @@ namespace PlayerControllers
 
         private bool isRunning;
 
-        public bool IsRunning => isRunning;
+        public bool IsRunning => isRunning && movement.x > 0 && movement.z == 0;
 
         
         private CameraController cameraController;
@@ -339,7 +339,6 @@ namespace PlayerControllers
                 return;
 
             isRunning = ctx.performed;
-            this.Jetpack.IsSwift = isRunning;
         }
 
         public void OnDash(InputAction.CallbackContext ctx)

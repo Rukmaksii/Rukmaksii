@@ -75,7 +75,7 @@ namespace PlayerControllers
         /**
      * <value>a flag allowing the player to go quicker (consuming more fuel) </value>
      */
-        public bool IsSwift { get; set; }
+        public bool IsSwift => Player.IsRunning;
 
         /**
      * <value>a float between 0 and 1 the percentage of fuel used</value>
