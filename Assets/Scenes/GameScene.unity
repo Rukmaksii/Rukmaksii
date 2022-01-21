@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657815, g: 0.49641192, b: 0.57481617, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -122,7 +122,7 @@ NavMeshSettings:
     preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 0}
+  m_NavMeshData: {fileID: 23800000, guid: fea9e565da5764aeb9552b7c7500c18c, type: 2}
 --- !u!1 &120983311
 GameObject:
   m_ObjectHideFlags: 0
@@ -137,7 +137,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &120983312
 Transform:
@@ -251,6 +251,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: world_border
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 26443c14b6c97c4489f3279d695633ec, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 26443c14b6c97c4489f3279d695633ec, type: 3}
 --- !u!1 &366584470 stripped
@@ -336,6 +340,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: base_blue
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 9b9fd771c7fdd8f47916ec892f083d0a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9b9fd771c7fdd8f47916ec892f083d0a, type: 3}
 --- !u!1 &543919885
@@ -352,7 +360,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &543919886
 Transform:
@@ -408,7 +416,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &623313042
 Transform:
@@ -578,6 +586,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 924d2e4550d4ce1408e7cb68883e1b19, type: 3}
       propertyPath: m_Name
       value: tower_middle
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 924d2e4550d4ce1408e7cb68883e1b19, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 924d2e4550d4ce1408e7cb68883e1b19, type: 3}
@@ -830,6 +842,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: base_red
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 9b9fd771c7fdd8f47916ec892f083d0a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9b9fd771c7fdd8f47916ec892f083d0a, type: 3}
 --- !u!1 &1233663677 stripped
@@ -962,7 +978,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1555882659
 Transform:
@@ -1039,6 +1055,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: tower (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 924d2e4550d4ce1408e7cb68883e1b19, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 924d2e4550d4ce1408e7cb68883e1b19, type: 3}
 --- !u!1001 &1705265889
@@ -1106,7 +1126,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 4952f78cf8f31d74eba07541620dd040, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 0
+      value: 4294967295
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4952f78cf8f31d74eba07541620dd040, type: 3}
@@ -1168,6 +1188,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 924d2e4550d4ce1408e7cb68883e1b19, type: 3}
       propertyPath: m_Name
       value: tower (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 924d2e4550d4ce1408e7cb68883e1b19, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 924d2e4550d4ce1408e7cb68883e1b19, type: 3}

@@ -1193,6 +1193,8 @@ GameObject:
   - component: {fileID: 5924946981566760898}
   - component: {fileID: 5924946981566760899}
   - component: {fileID: 5924946981566760900}
+  - component: {fileID: -3025514310170848085}
+  - component: {fileID: 7409105868286347175}
   m_Layer: 0
   m_Name: Monster
   m_TagString: Untagged
@@ -1264,6 +1266,43 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &-3025514310170848085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6843441952451957665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 346a62748b523448096878873907e332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectDistance: 10
+  distanceAttack: 2.4
+  agent: {fileID: 7409105868286347175}
+--- !u!195 &7409105868286347175
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6843441952451957665}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &6922155825153842425
 GameObject:
   m_ObjectHideFlags: 0
