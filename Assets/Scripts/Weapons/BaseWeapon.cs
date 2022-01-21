@@ -139,7 +139,7 @@ namespace Weapons
                 betweenBulletsCurrentCD -= Time.fixedTime;
             } else if (isShooting)
             {
-                if (remainingBulletsInRow >= 0)
+                if (remainingBulletsInRow > 0)
                 {
                     remainingBulletsInRow--;
                     Shoot();
