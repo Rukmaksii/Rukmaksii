@@ -9,10 +9,9 @@ namespace Weapons
 {
     public abstract class BaseWeapon : MonoBehaviour, IWeapon
     {
-
         public abstract WeaponType Type { get; }
         public BasePlayer Player { get; set; }
-        
+
         public abstract float Range { get; }
 
         public abstract int Damage { get; }
@@ -63,17 +62,19 @@ namespace Weapons
 
         protected bool isReloading = false;
         protected bool isShooting = false;
-        
+
         /** <value>whether the hit marker should be displayed or not</value> */
         private bool hitMarkerDisplayed;
+
         /** <value>the time since the hit marker is displayed</value> */
         private float hitMarkerSince;
+
         /** <value>the duration the hit marker is displayed</value> */
         private float hitMarkerDuration = 0.2f;
-        
+
         /** <summary>action for when a player hits a target and if it is a player</summary> */
         public static event Action<bool> playerShot;
-        
+
         void Start()
         {
             currentAmmo = MaxAmmo;
@@ -91,7 +92,7 @@ namespace Weapons
             {
                 if (BulletsInRow > 1)
                 {
-                    // handleMultiBulletFire();
+                    handleMultiBulletFire();
                 }
                 else
                 {
@@ -120,6 +121,36 @@ namespace Weapons
                     hitMarkerDisplayed = false;
                     hitMarkerSince = 0;
                     playerShot?.Invoke(false);
+                }
+            }
+        }
+
+        void handleMultiBulletFire()
+        {
+            if (remainingCD > 0)
+            {
+                remainingCD -= Time.fixedDeltaTime;
+                isShooting = false;
+                return;
+            }
+
+            if (betweenBulletsCurrentCD > 0)
+            {
+                betweenBulletsCurrentCD -= Time.fixedTime;
+            } else if (isShooting)
+            {
+                if (remainingBulletsInRow >= 0)
+                {
+                    remainingBulletsInRow--;
+                    Shoot();
+                    betweenBulletsCurrentCD = BulletsInRowSpacing;
+                }
+                else
+                {
+                    remainingCD = Cooldown;
+                    remainingBulletsInRow = BulletsInRow;
+                    betweenBulletsCurrentCD = BulletsInRowSpacing;
+                    isShooting = false;
                 }
             }
         }
