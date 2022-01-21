@@ -220,26 +220,18 @@ namespace PlayerControllers
             cameraController.OnPlayerMove(camRotationAnchor, transform);
 
 
-            if (Input.GetKeyDown(KeyCode.B))
+            // TODO : remove test controls
+            /*if (Input.GetKeyDown(KeyCode.G))
             {
-                TakeDamage(10);
-            }
-
-            if (Input.GetKeyDown(KeyCode.H))
-            {
-                deathScreen.SetActive(false);
-                UpdateHealthServerRpc(maxHealth, this.OwnerClientId);
-            }
-
-            if (Input.GetKeyDown(KeyCode.G))
-            {
-                this.inventory.AddItem(gameObject.AddComponent<FuelBooster>());
+                GameObject fuelBooster  = GameObject.Find("FuelBoosterItem");
+                
+                this.inventory.AddItem(Instantiate(fuelBooster).GetComponent<FuelBooster>());
             }
 
             if (Input.GetKeyDown(KeyCode.J))
             {
                 this.inventory.RemoveItem(gameObject.AddComponent<FuelBooster>());
-            }
+            }*/
         }
 
         /**
