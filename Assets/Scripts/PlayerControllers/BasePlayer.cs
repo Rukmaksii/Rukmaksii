@@ -24,7 +24,6 @@ namespace PlayerControllers
     [RequireComponent(typeof(CooldownManager))]
     public abstract class BasePlayer : NetworkBehaviour
     {
-        
         public abstract string ClassName { get; }
         protected virtual float movementSpeed { get; } = 20f;
 
@@ -33,7 +32,7 @@ namespace PlayerControllers
      */
         protected virtual float runningSpeedMultiplier { get; set; } = 2f;
 
-        protected virtual float jumpForce { get; set; }= 5f;
+        protected virtual float jumpForce { get; set; } = 5f;
 
         /**
      * <value>the mouse sensitivity</value>
@@ -45,11 +44,10 @@ namespace PlayerControllers
 
         public bool IsRunning => isRunning && movement.z >= Mathf.Abs(movement.x);
 
-        
+
         private CameraController cameraController;
-        
-        [HideInInspector]
-        public CameraController CameraController;
+
+        [HideInInspector] public CameraController CameraController;
 
         protected CooldownManager cdManager;
 
@@ -87,8 +85,8 @@ namespace PlayerControllers
         public bool IsShooting => isShooting;
 
         private Vector3 dashDirection;
-        
-        
+
+
         protected Inventory inventory;
 
         public Inventory Inventory => inventory;
@@ -96,13 +94,13 @@ namespace PlayerControllers
 
         [SerializeField] protected GameObject deathScreenPrefab;
         private GameObject deathScreen;
-        
+
         /**
         * <value>the duration of the dash in seconds</value>
         */
         protected virtual float dashDuration { get; set; } = 0.3F;
 
-        protected virtual float dashForce { get; set; }= 80f;
+        protected virtual float dashForce { get; set; } = 80f;
 
         public int MaxHealth => maxHealth;
 
@@ -129,32 +127,36 @@ namespace PlayerControllers
         // getters for respectively the default dash cooldown and the time since last dash
         public float DashCooldown => cdManager.DashCooldown;
         public float DashedSince => cdManager.DashedSince;
-        
+
         // default value for fuel duration
         public float DefaultFuelDuration { get; } = 20f;
-        
+
         void Start()
         {
-            this.inventory = new Inventory(this);
-            this.inventory.AddWeapon(gameObject.AddComponent<TestGun>());
+            GameObject gameManager = GameObject.FindGameObjectWithTag("GameController");
+            gameController = gameManager.GetComponent<GameController>();
             
+            this.inventory = new Inventory(this);
+
+            GameObject testWeaponPrefab = GameObject.Find("TestGunPrefab");
+            Debug.Log(testWeaponPrefab);
+            
+            this.inventory.AddWeapon(Instantiate(testWeaponPrefab).GetComponent<BaseWeapon>());
+
             this.inventory.Jetpack = gameObject.AddComponent<Jetpack>();
             this.inventory.Jetpack.FuelDuration = DefaultFuelDuration;
-            
+
             GameObject playerCamera = GameObject.FindGameObjectWithTag("Player Camera");
             cameraController = playerCamera.GetComponent<CameraController>();
             cameraController.OnPlayerMove(camRotationAnchor, transform);
 
-            GameObject gameManager = GameObject.FindGameObjectWithTag("GameController");
-            gameController = gameManager.GetComponent<GameController>();
-            
             if (IsLocalPlayer)
                 gameController.BindPlayer(this);
 
             cdManager = gameObject.AddComponent<CooldownManager>();
 
             UpdateHealthServerRpc(maxHealth, OwnerClientId);
-            
+
             deathScreen = Instantiate(deathScreenPrefab);
             deathScreen.name = deathScreenPrefab.name;
             deathScreen.GetComponent<Canvas>().worldCamera = Camera.current;
@@ -202,8 +204,8 @@ namespace PlayerControllers
 
                 this.inventory.Jetpack.Direction = moveVector;
             }
-            
-            if(isShooting)
+
+            if (isShooting)
                 this.inventory.CurrentWeapon.Fire();
 
             // forces the capsule to stand up
@@ -228,12 +230,12 @@ namespace PlayerControllers
                 deathScreen.SetActive(false);
                 UpdateHealthServerRpc(maxHealth, this.OwnerClientId);
             }
-            
+
             if (Input.GetKeyDown(KeyCode.G))
             {
                 this.inventory.AddItem(gameObject.AddComponent<FuelBooster>());
             }
-            
+
             if (Input.GetKeyDown(KeyCode.J))
             {
                 this.inventory.RemoveItem(gameObject.AddComponent<FuelBooster>());
