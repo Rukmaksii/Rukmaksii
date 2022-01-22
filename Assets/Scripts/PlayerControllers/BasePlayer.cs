@@ -225,23 +225,24 @@ namespace PlayerControllers
             // TODO : remove test controls
             /*if (Input.GetKeyDown(KeyCode.G))
             {
-                GameObject fuelBooster  = GameObject.Find("FuelBoosterItem");
-                
+                GameObject fuelBooster  = gameController.ItemPrefabs.Find(go => go.name == "FuelBoosterItem");
+                Debug.Log(fuelBooster);
                 this.inventory.AddItem(Instantiate(fuelBooster).GetComponent<FuelBooster>());
             }
 
             if (Input.GetKeyDown(KeyCode.J))
             {
-                this.inventory.RemoveItem(gameObject.AddComponent<FuelBooster>());
+                GameObject fuelBooster  = gameController.ItemPrefabs.Find(go => go.name == "FuelBoosterItem");
+                this.inventory.RemoveItem(fuelBooster.GetComponent<FuelBooster>());
             }*/
         }
 
         /**
-     * <summary>
-     *      Called when the move event is triggered within unity
-     * </summary>
-     * <param name="ctx">the <see cref="InputAction.CallbackContext"/> giving the move axis values </param>
-     */
+         * <summary>
+         *      Called when the move event is triggered within unity
+         * </summary>
+         * <param name="ctx">the <see cref="InputAction.CallbackContext"/> giving the move axis values </param>
+         */
         public void OnMove(InputAction.CallbackContext ctx)
         {
             if (!IsLocalPlayer)

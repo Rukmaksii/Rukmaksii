@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Items;
 using PlayerControllers;
 using UnityEngine;
@@ -174,13 +175,12 @@ namespace model
          * <summary>adds an item to the inventory if it isn't already in it
          * if the item has a passive, it activates it</summary>
          */
-        public void AddItem(BaseItem newItem)
+        public void AddItem(BaseItem item)
         {
-            newItem.Player = Player;
-            if (!itemsList.Contains(newItem))
+            item.Player = Player;
+            if (!itemsList.Contains(item))
             {
-                itemsList.Add(newItem);
-                newItem.InitializePassive();
+                itemsList.Add(item);
             }
         }
 
@@ -188,12 +188,17 @@ namespace model
          * <summary>adds an item to the inventory if it isn't already in it
          * if the item has a passive, it activates it</summary>
          */
-        public void RemoveItem(BaseItem itemToRem)
+        public void RemoveItem(BaseItem item)
         {
-            itemToRem.Player = Player;
-
-            itemsList.Remove(itemToRem);
-            itemToRem.RemovePassive();
+            foreach (BaseItem element in itemsList)
+            {
+                if (item.Type == element.Type)
+                {
+                    itemsList.Remove(element);
+                    Object.Destroy(element.gameObject);
+                    break;
+                }
+            }
         }
     }
 }

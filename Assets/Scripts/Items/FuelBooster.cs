@@ -1,4 +1,5 @@
-﻿using model;
+﻿using System;
+using model;
 using UnityEngine;
 
 namespace Items
@@ -6,27 +7,26 @@ namespace Items
     public class FuelBooster : BaseItem
     {
         public override ItemType Type { get; } = ItemType.Passive;
-
         public override string Name { get; } = "FuelBooster";
 
-        public override void InitializePassive()
+        private float oldFuelValue = 10f;
+
+        private float newFuelValue;
+
+        public override void Start()
         {
-            Player.Jetpack.FuelDuration = 1f;
+            oldFuelValue = Player.Jetpack.FuelDuration;
+            newFuelValue = 1f;
+            Player.Jetpack.FuelDuration = newFuelValue;
+        }
+        
+        public override void Update()
+        {
         }
 
-        public override void RemovePassive()
+        public override void OnDestroy()
         {
-            Player.Jetpack.FuelDuration = 20f;
-        }
-
-        public override  void Consume()
-        {
-            // not a consumable
-        }
-
-        public override void Use()
-        {
-            // not a used item
+            Player.Jetpack.FuelDuration = oldFuelValue;
         }
     }
 }

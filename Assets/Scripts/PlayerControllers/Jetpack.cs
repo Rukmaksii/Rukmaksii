@@ -14,8 +14,14 @@ namespace PlayerControllers
         /**
          * <value>the max duration of the flight</value>
          */
-        public float FuelDuration;
+        private float fuelDuration;
 
+        public float FuelDuration
+        {
+            get => fuelDuration;
+            set => fuelDuration = value;
+        }
+        
         /**
          * <value>the remaining time of use.</value>
          */
@@ -80,7 +86,7 @@ namespace PlayerControllers
         /**
      * <value>a float between 0 and 1 the percentage of fuel used</value>
      */
-        public float FuelConsumption => currentFuelUse / FuelDuration;
+        public float FuelConsumption => currentFuelUse / fuelDuration;
 
         private bool isReady = false;
 
@@ -120,9 +126,9 @@ namespace PlayerControllers
             float reloadTime = reloadMultiplier * Time.fixedDeltaTime;
             if (!this.IsFlying)
             {
-                if (currentFuelUse + reloadTime > FuelDuration)
+                if (currentFuelUse + reloadTime > fuelDuration)
                 {
-                    currentFuelUse = FuelDuration;
+                    currentFuelUse = fuelDuration;
                 }
                 else
                 {

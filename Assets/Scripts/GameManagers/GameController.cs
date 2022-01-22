@@ -20,6 +20,10 @@ namespace GameManagers
         [SerializeField] private List<GameObject> weaponPrefabs = new List<GameObject>();
 
         public List<GameObject> WeaponPrefabs => weaponPrefabs;
+        
+        [SerializeField] private List<GameObject> itemPrefabs = new List<GameObject>();
+
+        public List<GameObject> ItemPrefabs => itemPrefabs;
 
         [SerializeField] protected GameObject uiPrefab;
         private GameObject playerUIInstance;
