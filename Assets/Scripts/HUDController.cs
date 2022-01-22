@@ -43,7 +43,7 @@ public class HUDController : MonoBehaviour
         SetHealth(gameController.LocalPlayer.CurrentHealthValue);
         SetFuelAmount(gameController.LocalPlayer.Jetpack.FuelConsumption);
         SetDashCooldown(gameController.LocalPlayer.DashedSince, gameController.LocalPlayer.DashCooldown);
-        SetAmmoCounter(gameController.LocalPlayer.Inventory.CurrentWeapon.CurrentAmmo);
+        SetAmmoCounter(gameController.LocalPlayer.Inventory.CurrentWeapon.CurrentAmmo,gameController.LocalPlayer.Inventory.CurrentWeapon.MaxAmmo);
     }
     
     /**
@@ -105,15 +105,16 @@ public class HUDController : MonoBehaviour
     
     /**
      * <summary>sets the player's current ammo count</summary>
-     * <param name="ammo">int for the number of ammunitions remaining</param>
+     * <param name="ammo">int for the number of ammunition remaining</param>
+     * <param name="maxAmmo">int for the max number of ammunition</param>
      */
-    public void SetAmmoCounter(int ammo)
+    public void SetAmmoCounter(int ammo, int maxAmmo)
     {
-        ammoCounter.text = $"{ammo}/∞";
+        ammoCounter.text = $"{ammo}/{maxAmmo}";
     }
 
     /**
-     * <summary>shows the hitmarker on the hud a few milliseconds</summary>
+     * <summary>displays and hides the hit marker on the screen</summary>
      * <param name="status">bool for whether the hit marker should be shown or not</param>
      */
     public void ShowHitMarker(bool status)
