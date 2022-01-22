@@ -3,7 +3,6 @@
 
     public enum ItemType
     {
-        Consumable,
         Active,
         Passive
     }

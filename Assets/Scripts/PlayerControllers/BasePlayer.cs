@@ -265,11 +265,11 @@ namespace PlayerControllers
 
 
         /**
-     * <summary>
-     *      Called when the rotation event is triggered within unity
-     * </summary>
-     * <param name="ctx">the <see cref="InputAction.CallbackContext"/> giving the rotation delta </param>
-     */
+         * <summary>
+         *      Called when the rotation event is triggered within unity
+         * </summary>
+         * <param name="ctx">the <see cref="InputAction.CallbackContext"/> giving the rotation delta </param>
+         */
         public void OnRotation(InputAction.CallbackContext ctx)
         {
             if (!IsLocalPlayer || cameraController == null)
@@ -281,10 +281,10 @@ namespace PlayerControllers
         }
 
         /**
-     * <summary>
-     *      Called when the jump event is triggered within unity
-     * </summary>
-     */
+         * <summary>
+         *      Called when the jump event is triggered within unity
+         * </summary>
+         */
         public void OnJump(InputAction.CallbackContext ctx)
         {
             if (!IsLocalPlayer)
@@ -328,8 +328,8 @@ namespace PlayerControllers
         }
 
         /**
-     * <summary>called when run button is toggled</summary>
-     */
+         * <summary>called when run button is toggled</summary>
+         */
         public void OnRun(InputAction.CallbackContext ctx)
         {
             if (!IsLocalPlayer)
@@ -416,8 +416,8 @@ namespace PlayerControllers
         }
 
         /**
-     * <summary>a method to get the <see cref="GameObject"/> in the line sight</summary>
-     */
+         * <summary>a method to get the <see cref="GameObject"/> in the line sight</summary>
+         */
         public GameObject GetObjectInSight(float weaponRange)
         {
             Vector2 crosshairPosition = new Vector2(0.5f, 0.5f);

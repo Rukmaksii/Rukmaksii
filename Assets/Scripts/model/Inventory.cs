@@ -172,8 +172,8 @@ namespace model
         private List<BaseItem> itemsList = new List<BaseItem>();
 
         /**
-         * <summary>adds an item to the inventory if it isn't already in it
-         * if the item has a passive, it activates it</summary>
+         * <summary>adds an instantiated item to the inventory</summary>
+         * <param name="item">a BaseItem to be added</param>
          */
         public void AddItem(BaseItem item)
         {
@@ -185,8 +185,9 @@ namespace model
         }
 
         /**
-         * <summary>adds an item to the inventory if it isn't already in it
-         * if the item has a passive, it activates it</summary>
+         * <summary>if the item is in the inventory, it removes it
+         * also it destroys the item from the scene</summary>
+         * <param name="item">a BaseItem to be removed</param>
          */
         public void RemoveItem(BaseItem item)
         {

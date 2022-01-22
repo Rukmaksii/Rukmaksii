@@ -9,6 +9,7 @@ namespace Items
         public override ItemType Type { get; } = ItemType.Passive;
         public override string Name { get; } = "FuelBooster";
 
+        // storing the old fuel value
         private float oldFuelValue = 10f;
 
         private float newFuelValue;
