@@ -1003,6 +1003,8 @@ MonoBehaviour:
   weaponPrefabs:
   - {fileID: 1703911258719353816, guid: 5c2634991af77dd4a9e5f7d3b889489a, type: 3}
   - {fileID: 1832220214755728926, guid: cdfcc14a598d813418f26286e60cc961, type: 3}
+  itemPrefabs:
+  - {fileID: 5389904766975277859, guid: 9fde8f6081cd8e04a9350c6346afd875, type: 3}
   uiPrefab: {fileID: 6371553158960861218, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
 --- !u!1 &1503162093 stripped
 GameObject:
