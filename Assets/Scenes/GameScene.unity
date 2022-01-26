@@ -1271,12 +1271,16 @@ PrefabInstance:
       value: PlayerCamera
       objectReference: {fileID: 0}
     - target: {fileID: 1563196920304608971, guid: 12753b32a91009243a64647d5e8a635f, type: 3}
+      propertyPath: offset.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1563196920304608971, guid: 12753b32a91009243a64647d5e8a635f, type: 3}
       propertyPath: offset.y
-      value: 1
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 1563196920304608971, guid: 12753b32a91009243a64647d5e8a635f, type: 3}
       propertyPath: offset.z
-      value: -2
+      value: -2.2
       objectReference: {fileID: 0}
     - target: {fileID: 1692979137761755435, guid: 12753b32a91009243a64647d5e8a635f, type: 3}
       propertyPath: m_RootOrder
