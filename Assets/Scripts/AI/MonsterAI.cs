@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using Unity.Netcode;
-//using Unity.Netcode.Samples;
+using Unity.Netcode.Samples;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
@@ -33,6 +33,7 @@ public class MonsterAI : NetworkBehaviour
     {
         if (gameObject != null)
         {
+            Debug.Log("recherche du joueur");
             foreach (var players in GameObject.FindGameObjectsWithTag("Player"))
             {
                 dist = Vector3.Distance(transform.position, players.transform.position);
@@ -46,11 +47,18 @@ public class MonsterAI : NetworkBehaviour
 
         if (joueur != null)
         {
+            Debug.Log("Joueur trouvé!!!");
             float distance = Vector3.Distance(transform.position, joueur.position); //distance entre le monstre et le joueur
             if (distance < detectDistance && distance > distanceAttack) //le joueur est visible mais pas à distance d'attaque
             {
+                NavMeshPath path = new NavMeshPath();
+                agent.CalculatePath(joueur.position, path);
                 //le monstre pourchasse le joueur
-                agent.destination = joueur.position;
+                if (path.status == NavMeshPathStatus.PathComplete)
+                {
+                    agent.SetPath(path);
+                }
+                Debug.Log($"position du joueur {joueur.position} destination {agent.destination} initial pos {InitialPos}");
             }
         
 
@@ -65,8 +73,8 @@ public class MonsterAI : NetworkBehaviour
                 agent.destination = InitialPos;
             }
         }
-        
-        
+
+
     }
 
 
