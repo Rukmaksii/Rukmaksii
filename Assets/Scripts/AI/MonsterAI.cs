@@ -33,7 +33,7 @@ public class MonsterAI : NetworkBehaviour
     {
         if (gameObject != null)
         {
-            Debug.Log("recherche du joueur");
+            //Debug.Log("recherche du joueur");
             foreach (var players in GameObject.FindGameObjectsWithTag("Player"))
             {
                 dist = Vector3.Distance(transform.position, players.transform.position);
@@ -47,7 +47,7 @@ public class MonsterAI : NetworkBehaviour
 
         if (joueur != null)
         {
-            Debug.Log("Joueur trouvé!!!");
+            //Debug.Log("Joueur trouvé!!!");
             float distance = Vector3.Distance(transform.position, joueur.position); //distance entre le monstre et le joueur
             if (distance < detectDistance && distance > distanceAttack) //le joueur est visible mais pas à distance d'attaque
             {
@@ -58,7 +58,7 @@ public class MonsterAI : NetworkBehaviour
                 {
                     agent.SetPath(path);
                 }
-                Debug.Log($"position du joueur {joueur.position} destination {agent.destination} initial pos {InitialPos}");
+                //Debug.Log($"position du joueur {joueur.position} destination {agent.destination} initial pos {InitialPos}");
             }
         
 
