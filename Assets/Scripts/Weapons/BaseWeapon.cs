@@ -65,6 +65,8 @@ namespace Weapons
         protected bool isReloading = false;
         protected bool isShooting = false;
 
+        public bool IsReloading => isReloading;
+        
         /** <value>whether the hit marker should be displayed or not</value> */
         private bool hitMarkerDisplayed;
 
