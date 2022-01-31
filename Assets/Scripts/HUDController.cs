@@ -20,6 +20,11 @@ public class HUDController : MonoBehaviour
 
     [SerializeField] protected GameObject hitMarker;
     
+    [SerializeField] protected Image weaponPlaceHolder;
+    
+    [SerializeField] protected Sprite rifle;
+    [SerializeField] protected Sprite handgun;
+    
     private GameController gameController;
     
     public Image Crosshair;
@@ -39,7 +44,21 @@ public class HUDController : MonoBehaviour
     {
         if (gameController.LocalPlayer == null)
             return;
-        
+
+        // display the correct weapon on the HUD
+        switch (gameController.LocalPlayer.Inventory.CurrentWeapon.Name)
+        {
+            case "rifle":
+                weaponPlaceHolder.sprite = rifle;
+                break;
+            case "handgun":
+                weaponPlaceHolder.sprite = handgun;
+                break;
+            default:
+                weaponPlaceHolder.sprite = handgun;
+                break;
+        }
+
         SetHealth(gameController.LocalPlayer.CurrentHealthValue);
         SetFuelAmount(gameController.LocalPlayer.Jetpack.FuelConsumption);
         SetDashCooldown(gameController.LocalPlayer.DashedSince, gameController.LocalPlayer.DashCooldown);

@@ -15,6 +15,8 @@ namespace Weapons
         public abstract float Range { get; }
 
         public abstract int Damage { get; }
+        
+        public abstract string Name { get; }
 
         /**
      * <value>the time between each bullet row</value>

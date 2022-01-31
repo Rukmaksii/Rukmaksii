@@ -12,5 +12,6 @@ namespace Weapons
         public override float ReloadTime { get; } = 5f;
         public override int BulletsInRow { get; } = 5;
         public override float BulletsInRowSpacing { get; } = 0.1f;
+        public override string Name { get; } = "rifle";
     }
 }

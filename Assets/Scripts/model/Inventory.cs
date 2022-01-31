@@ -45,6 +45,10 @@ namespace model
          */
         private BaseWeapon lightWeapon;
 
+        public BaseWeapon HeavyWeapon => heavyWeapon;
+        public BaseWeapon CloseRangeWeapon => closeRangeWeapon;
+        public BaseWeapon LightWeapon => lightWeapon;
+
         /**
          * <value>the <see cref="WeaponType"/> of the currently selected weapon</value>
          * <remarks>set to <see cref="WeaponType.CloseRange"/> as it is assumed the close range weapon will never be null</remarks>
