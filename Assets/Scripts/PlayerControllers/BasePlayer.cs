@@ -15,7 +15,7 @@ namespace PlayerControllers
  *      The controller class for any player spawned in the game
  * </summary>
  */
-    [RequireComponent(typeof(Rigidbody))]
+    [RequireComponent(typeof(CharacterController))]
     [RequireComponent(typeof(NetworkObject))]
     [RequireComponent(typeof(CooldownManager))]
     public abstract class BasePlayer : NetworkBehaviour
@@ -202,28 +202,33 @@ namespace PlayerControllers
         // Update is called once per frame
         private void Update()
         {
-            if (!IsLocalPlayer)
-                return;
-            cameraController.OnPlayerMove(camRotationAnchor, transform);
+            if(IsServer)
+                UpdateServer();
+            if(IsClient)
+                UpdateClient();
+        }
 
-            if (CurrentHealth.Value == 0)
+        /**
+         * <summary>the function is called in <see cref="FixedUpdate"/> if instance is server</summary>
+         */
+        private void UpdateServer()
+        {
+        }
+
+        /**
+         * <summary>the function is called in <see cref="FixedUpdate"/> if instance is a client</summary>
+         */
+        private void UpdateClient()
+        {
+            if (IsLocalPlayer)
             {
-                SceneManager.LoadScene("DeathScreen");
+
+                cameraController.OnPlayerMove(camRotationAnchor, transform);
+                if (CurrentHealth.Value == 0)
+                {
+                    UnityEngine.SceneManagement.SceneManager.LoadScene("DeathScreen");
+                }
             }
-
-            // TODO : remove test controls
-            /*if (Input.GetKeyDown(KeyCode.G))
-            {
-                GameObject fuelBooster  = gameController.ItemPrefabs.Find(go => go.name == "FuelBoosterItem");
-                Debug.Log(fuelBooster);
-                this.inventory.AddItem(Instantiate(fuelBooster).GetComponent<FuelBooster>());
-            }
-
-            if (Input.GetKeyDown(KeyCode.J))
-            {
-                GameObject fuelBooster  = gameController.ItemPrefabs.Find(go => go.name == "FuelBoosterItem");
-                this.inventory.RemoveItem(fuelBooster.GetComponent<FuelBooster>());
-            }*/
         }
 
         /**
