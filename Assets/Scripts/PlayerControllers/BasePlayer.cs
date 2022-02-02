@@ -220,6 +220,7 @@ namespace PlayerControllers
          */
         private void UpdateClient()
         {
+            _movement = syncedMovement.Value;
             if (IsLocalPlayer)
             {
 
@@ -246,14 +247,13 @@ namespace PlayerControllers
             {
                 Vector2 direction = ctx.ReadValue<Vector2>();
 
-                _movement.x = direction.x;
-                _movement.z = direction.y;
+               UpdateMovementServerRpc(new Vector3(direction.x, syncedMovement.Value.y, direction.y)); 
             }
             else
             {
                 var velocity = rigidBody.velocity;
                 rigidBody.AddForce(-new Vector3(velocity.x, 0, velocity.z), ForceMode.VelocityChange);
-                _movement = Vector3.zero;
+                UpdateMovementServerRpc(Vector3.zero);
             }
         }
 
