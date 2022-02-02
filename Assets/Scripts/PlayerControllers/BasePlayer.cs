@@ -1,16 +1,12 @@
 using System;
-using System.Collections.Generic;
+using GameManagers;
 using model;
 using Unity.Netcode;
-using Unity.Netcode.Samples;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
-using Vector2 = UnityEngine.Vector2;
-using Vector3 = UnityEngine.Vector3;
+using UnityEngine.SceneManagement;
 using Weapons;
-using GameManagers;
-using Items;
 
 namespace PlayerControllers
 {
@@ -21,7 +17,6 @@ namespace PlayerControllers
  */
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(NetworkObject))]
-    [RequireComponent(typeof(ClientNetworkTransform))]
     [RequireComponent(typeof(CooldownManager))]
     public abstract class BasePlayer : NetworkBehaviour
     {
@@ -43,7 +38,7 @@ namespace PlayerControllers
 
         private bool isRunning;
 
-        public bool IsRunning => isRunning && movement.z >= Mathf.Abs(movement.x);
+        public bool IsRunning => isRunning && _movement.z >= Mathf.Abs(_movement.x);
 
 
         private CameraController cameraController;
@@ -64,8 +59,12 @@ namespace PlayerControllers
             }
         }
 
-        /** <value>the current movement requested to be made</value> */
-        private Vector3 movement = Vector3.zero;
+        /**
+     * <value>the current _movement requested to be made</value>
+     */
+        private Vector3 _movement = Vector3.zero;
+
+        private readonly NetworkVariable<Vector3> syncedMovement = new NetworkVariable<Vector3>(Vector3.zero);
 
         /** <value>the y direction for the <see cref="Jetpack"/>, -1 => down, 1 => up, 0 => unchanged </value> */
         private int yDirection = 0;
@@ -125,7 +124,7 @@ namespace PlayerControllers
         {
             GameObject gameManager = GameObject.FindGameObjectWithTag("GameController");
             gameController = gameManager.GetComponent<GameController>();
-            
+
             this.inventory = new Inventory(this);
 
             GameObject testWeaponPrefab = gameController.WeaponPrefabs.Find(go => go.name == "TestAutoPrefab");
@@ -163,12 +162,12 @@ namespace PlayerControllers
 
             var playerTransform = transform;
 
-            // dash has to be handled before movement
+            // dash has to be handled before _movement
             handleDash();
 
-            if (movement != Vector3.zero && !IsDashing)
+            if (_movement != Vector3.zero && !IsDashing)
             {
-                Vector3 moveVector = Vector3.ClampMagnitude(movement, 1f);
+                Vector3 moveVector = Vector3.ClampMagnitude(_movement, 1f);
                 moveVector = transform.TransformVector(moveVector);
 
                 var velocity = rigidBody.velocity;
@@ -186,7 +185,7 @@ namespace PlayerControllers
 
             if (this.inventory.Jetpack.IsFlying)
             {
-                Vector3 moveVector = Vector3.ClampMagnitude(movement, 1f);
+                Vector3 moveVector = Vector3.ClampMagnitude(_movement, 1f);
                 moveVector = Vector3.ClampMagnitude(moveVector + yDirection * Vector3.up, 1f);
                 moveVector = transform.TransformVector(moveVector);
 
@@ -209,7 +208,7 @@ namespace PlayerControllers
 
             if (CurrentHealth.Value == 0)
             {
-                UnityEngine.SceneManagement.SceneManager.LoadScene("DeathScreen");
+                SceneManager.LoadScene("DeathScreen");
             }
 
             // TODO : remove test controls
@@ -242,14 +241,14 @@ namespace PlayerControllers
             {
                 Vector2 direction = ctx.ReadValue<Vector2>();
 
-                movement.x = direction.x;
-                movement.z = direction.y;
+                _movement.x = direction.x;
+                _movement.z = direction.y;
             }
             else
             {
                 var velocity = rigidBody.velocity;
                 rigidBody.AddForce(-new Vector3(velocity.x, 0, velocity.z), ForceMode.VelocityChange);
-                movement = Vector3.zero;
+                _movement = Vector3.zero;
             }
         }
 
@@ -431,6 +430,12 @@ namespace PlayerControllers
                 .GetComponent<BasePlayer>();
 
             damagedPlayer.CurrentHealth.Value = newHealth;
+        }
+
+        [ServerRpc]
+        public void UpdateMovementServerRpc(Vector3 movement)
+        {
+            syncedMovement.Value = movement;
         }
     }
 }
