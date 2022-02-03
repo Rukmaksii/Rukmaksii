@@ -269,7 +269,7 @@ namespace PlayerControllers
             if (!IsLocalPlayer || cameraController == null)
                 return;
             Vector2 rotation = ctx.ReadValue<Vector2>();
-            transform.Rotate(Vector3.up, rotation.x * sensitivity);
+            UpdateRotationServerRpc(Vector3.up, rotation.x * sensitivity);
 
             cameraController.AddedAngle -= rotation.y * sensitivity;
         }
@@ -441,6 +441,12 @@ namespace PlayerControllers
         public void UpdateMovementServerRpc(Vector3 _movement)
         {
             movement.Value = _movement;
+        }
+
+        [ServerRpc]
+        public void UpdateRotationServerRpc(Vector3 direction, float angle)
+        {
+            transform.Rotate(direction, angle);
         }
     }
 }
