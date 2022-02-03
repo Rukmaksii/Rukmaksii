@@ -1196,7 +1196,8 @@ GameObject:
   - component: {fileID: -3025514310170848085}
   - component: {fileID: 7409105868286347175}
   - component: {fileID: -8677153602402066902}
-  - component: {fileID: 794787597279047009}
+  - component: {fileID: 787241680553691568}
+  - component: {fileID: 6966245944067788489}
   m_Layer: 0
   m_Name: Monster
   m_TagString: Untagged
@@ -1321,7 +1322,7 @@ MonoBehaviour:
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &794787597279047009
+--- !u!114 &787241680553691568
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1330,7 +1331,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6843441952451957665}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 54c9647dc784a46bca664910f182491e, type: 3}
+  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   SyncPositionX: 1
@@ -1348,6 +1349,18 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   CanCommitToTransform: 0
+--- !u!114 &6966245944067788489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6843441952451957665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6922155825153842425
 GameObject:
   m_ObjectHideFlags: 0
