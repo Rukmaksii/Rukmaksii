@@ -195,6 +195,11 @@ namespace PlayerControllers
             // playerTransform.eulerAngles = new Vector3(0, playerTransform.eulerAngles.y, 0);
         }
 
+        private void ServerFixedUpdate()
+        {
+            
+        }
+
         // Update is called once per frame
         private void Update()
         {
@@ -216,7 +221,6 @@ namespace PlayerControllers
          */
         private void UpdateClient()
         {
-            movement.Value = movement.Value;
             if (IsLocalPlayer)
             {
 
