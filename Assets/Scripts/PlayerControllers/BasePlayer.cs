@@ -38,7 +38,7 @@ namespace PlayerControllers
 
         private bool isRunning;
 
-        public bool IsRunning => isRunning && _movement.z >= Mathf.Abs(_movement.x);
+        public bool IsRunning => isRunning && movement.Value.z >= Mathf.Abs(movement.Value.x);
 
 
         private CameraController cameraController;
@@ -60,11 +60,9 @@ namespace PlayerControllers
         }
 
         /**
-     * <value>the current _movement requested to be made</value>
+     * <value>the current movement.Value requested to be made</value>
      */
-        private Vector3 _movement = Vector3.zero;
-
-        private readonly NetworkVariable<Vector3> syncedMovement = new NetworkVariable<Vector3>(Vector3.zero);
+        private readonly NetworkVariable<Vector3> movement = new NetworkVariable<Vector3>(Vector3.zero);
 
         /** <value>the y direction for the <see cref="Jetpack"/>, -1 => down, 1 => up, 0 => unchanged </value> */
         private int yDirection = 0;
@@ -157,17 +155,15 @@ namespace PlayerControllers
 
         void FixedUpdate()
         {
-            if (!IsLocalPlayer)
-                return;
+            //if (!IsLocalPlayer)
+            //    return;
 
-            var playerTransform = transform;
-
-            // dash has to be handled before _movement
+            // dash has to be handled before movement.Value
             handleDash();
 
-            if (_movement != Vector3.zero && !IsDashing)
+            if (movement.Value != Vector3.zero && !IsDashing)
             {
-                Vector3 moveVector = Vector3.ClampMagnitude(_movement, 1f);
+                Vector3 moveVector = Vector3.ClampMagnitude(movement.Value, 1f);
                 moveVector = transform.TransformVector(moveVector);
 
                 var velocity = rigidBody.velocity;
@@ -185,7 +181,7 @@ namespace PlayerControllers
 
             if (this.inventory.Jetpack.IsFlying)
             {
-                Vector3 moveVector = Vector3.ClampMagnitude(_movement, 1f);
+                Vector3 moveVector = Vector3.ClampMagnitude(movement.Value, 1f);
                 moveVector = Vector3.ClampMagnitude(moveVector + yDirection * Vector3.up, 1f);
                 moveVector = transform.TransformVector(moveVector);
 
@@ -202,9 +198,9 @@ namespace PlayerControllers
         // Update is called once per frame
         private void Update()
         {
-            if(IsServer)
+            if (IsServer)
                 UpdateServer();
-            if(IsClient)
+            if (IsClient)
                 UpdateClient();
         }
 
@@ -220,14 +216,14 @@ namespace PlayerControllers
          */
         private void UpdateClient()
         {
-            _movement = syncedMovement.Value;
+            movement.Value = movement.Value;
             if (IsLocalPlayer)
             {
 
                 cameraController.OnPlayerMove(camRotationAnchor, transform);
                 if (CurrentHealth.Value == 0)
                 {
-                    UnityEngine.SceneManagement.SceneManager.LoadScene("DeathScreen");
+                    SceneManager.LoadScene("DeathScreen");
                 }
             }
         }
@@ -247,7 +243,7 @@ namespace PlayerControllers
             {
                 Vector2 direction = ctx.ReadValue<Vector2>();
 
-               UpdateMovementServerRpc(new Vector3(direction.x, syncedMovement.Value.y, direction.y)); 
+                UpdateMovementServerRpc(new Vector3(direction.x, movement.Value.y, direction.y));
             }
             else
             {
@@ -438,9 +434,9 @@ namespace PlayerControllers
         }
 
         [ServerRpc]
-        public void UpdateMovementServerRpc(Vector3 movement)
+        public void UpdateMovementServerRpc(Vector3 _movement)
         {
-            syncedMovement.Value = movement;
+            movement.Value = _movement;
         }
     }
 }

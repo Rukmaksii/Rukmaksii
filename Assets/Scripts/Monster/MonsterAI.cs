@@ -1,14 +1,8 @@
-using System;
 using System.Collections;
 using PlayerControllers;
 using Unity.Netcode;
-//using UnityEditor.AssetImporters;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Interactions;
-using Vector2 = UnityEngine.Vector2;
-using Vector3 = UnityEngine.Vector3;
 
 public class MonsterAI : NetworkBehaviour
 {
