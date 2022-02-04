@@ -29,15 +29,15 @@ namespace PlayerControllers
         protected virtual float movementSpeed { get; } = 20f;
 
         /**
-     * <value>the speed multiplier when running</value>
-     */
+        * <value>the speed multiplier when running</value>
+        */
         protected virtual float runningSpeedMultiplier { get; set; } = 2f;
 
         protected virtual float jumpForce { get; set; } = 5f;
 
         /**
-     * <value>the mouse sensitivity</value>
-     */
+        * <value>the mouse sensitivity</value>
+        */
         [SerializeField] private float sensitivity = .1F;
 
 
@@ -64,14 +64,10 @@ namespace PlayerControllers
             }
         }
 
-        /**
-     * <value>the current movement requested to be made</value>
-     */
+        /** <value>the current movement requested to be made</value> */
         private Vector3 movement = Vector3.zero;
 
-        /**
-     * <value>the y direction for the <see cref="Jetpack"/>, -1 => down, 1 => up, 0 => unchanged </value>
-     */
+        /** <value>the y direction for the <see cref="Jetpack"/>, -1 => down, 1 => up, 0 => unchanged </value> */
         private int yDirection = 0;
 
         private Rigidbody rigidBody;
@@ -96,9 +92,7 @@ namespace PlayerControllers
         [SerializeField] protected GameObject deathScreenPrefab;
         private GameObject deathScreen;
 
-        /**
-        * <value>the duration of the dash in seconds</value>
-        */
+        /** <value>the duration of the dash in seconds</value> */
         protected virtual float dashDuration { get; set; } = 0.3F;
 
         protected virtual float dashForce { get; set; } = 80f;
@@ -108,9 +102,7 @@ namespace PlayerControllers
 
         protected abstract int maxHealth { get; }
 
-        /**
-     * <value>current player health</value>
-     */
+        /** <value>current player health</value> */
         protected NetworkVariable<int> CurrentHealth { get; } = new NetworkVariable<int>(1);
 
         public int CurrentHealthValue => CurrentHealth.Value;

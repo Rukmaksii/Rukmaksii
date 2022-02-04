@@ -13,8 +13,13 @@ public class ObjectiveController : MonoBehaviour
         Captured
     }
     
+    /** <value>the material used for neutral point</value> */
     [SerializeField] private Material baseMaterial;
+    
+    /** <value>the material used for captured point</value> */
     [SerializeField] private Material capturedMaterial;
+    
+    /** <value>the GameObject used to trigger capture</value> */
     [SerializeField] private GameObject captureArea;
     
     /** <value>the capture progress</value> */

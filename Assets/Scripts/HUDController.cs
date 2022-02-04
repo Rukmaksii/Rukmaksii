@@ -74,15 +74,11 @@ public class HUDController : MonoBehaviour
 
         // updating the capture circle UI if the player is on a point
         if (capturePoint != null)
-        {
             capturingState.fillAmount = capturePoint.Progress/capturePoint.MaxProgress;
-        }
     }
     
     /**
-     * <summary>
-     *      Sets the player's health
-     * </summary>
+     * <summary> Sets the player's health </summary>
      * <param name="health">int for the max health</param>
      */
     public void SetMaxHealth(int health)
