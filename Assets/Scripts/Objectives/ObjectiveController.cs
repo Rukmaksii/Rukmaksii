@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class ObjectiveController : MonoBehaviour
 {
+    private float progress = 0f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,5 +21,9 @@ public class ObjectiveController : MonoBehaviour
 
     private void OnTriggerEnter(Collider collider)
     {
+        if (collider.tag == "Player")
+        {
+            Debug.Log("Entered");
+        }
     }
 }
