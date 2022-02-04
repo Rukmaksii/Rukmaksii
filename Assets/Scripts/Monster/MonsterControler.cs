@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class MonsterControler : NetworkBehaviour
 {
-    private int vie = 50;
+    private int life = 50;
 
-    public int Vie => vie;
+    public int Life => life;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +22,6 @@ public class MonsterControler : NetworkBehaviour
 
     public void TakeDamage(int damage)
     {
-        vie -= damage;
+        life -= damage;
     }
 }
