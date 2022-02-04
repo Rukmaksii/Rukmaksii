@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
+using PlayerControllers;
 using Unity.Netcode;
 using Unity.Netcode.Samples;
+using UnityEditor.AssetImporters;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
@@ -15,7 +17,7 @@ public class MonsterAI : NetworkBehaviour
     public float distanceAttack = 2.4f; //distance à laquelle le monstre peut attaquer
     private Vector3 InitialPos; //position d'origine du monstre
     //public GameObject col; //collider servant de machoir pour le monstre (ce qui va faire des dégats)
-    private Transform joueur; //référence vers le(s) joueur(s)
+    private GameObject joueur; //référence vers le(s) joueur(s)
     private bool canAttack = true; //le monstre peut attaquer ou non
     public NavMeshAgent agent;
     private float dist;
@@ -40,7 +42,7 @@ public class MonsterAI : NetworkBehaviour
                 if (dist < mindist)
                 {
                     mindist = dist;
-                    joueur = players.transform;
+                    joueur = players;
                 }
             }
         }
@@ -48,11 +50,11 @@ public class MonsterAI : NetworkBehaviour
         if (joueur != null)
         {
             //Debug.Log("Joueur trouvé!!!");
-            float distance = Vector3.Distance(transform.position, joueur.position); //distance entre le monstre et le joueur
+            float distance = Vector3.Distance(transform.position, joueur.transform.position); //distance entre le monstre et le joueur
             if (distance < detectDistance && distance > distanceAttack) //le joueur est visible mais pas à distance d'attaque
             {
                 NavMeshPath path = new NavMeshPath();
-                agent.CalculatePath(joueur.position, path);
+                agent.CalculatePath(joueur.transform.position, path);
                 //le monstre pourchasse le joueur
                 if (path.status == NavMeshPathStatus.PathComplete)
                 {
@@ -65,6 +67,9 @@ public class MonsterAI : NetworkBehaviour
             if (distance <= distanceAttack && canAttack) //le joueur est à distance d'attaque
             {
                 //le monstre attaque le joueur
+                canAttack = false;
+                joueur.GetComponent<BasePlayer>().TakeDamage(5);
+                StartCoroutine(Wait());
             }
 
             if (distance > detectDistance) //le joueur n'est plus visible
@@ -73,11 +78,14 @@ public class MonsterAI : NetworkBehaviour
                 agent.destination = InitialPos;
             }
         }
-
-
+    }
+    private IEnumerator Wait()
+    {
+        yield return new WaitForSeconds(1);
+        canAttack = true;
     }
 
-
+   
     private void OnDrawGizmosSelected() // permet de voir la sphere du champ de detection du monstre
     {
         Gizmos.color = Color.blue;
