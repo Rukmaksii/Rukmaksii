@@ -1281,7 +1281,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   detectDistance: 20
-  distanceAttack: 2.4
+  distanceAttack: 5
   agent: {fileID: 7409105868286347175}
 --- !u!195 &7409105868286347175
 NavMeshAgent:
