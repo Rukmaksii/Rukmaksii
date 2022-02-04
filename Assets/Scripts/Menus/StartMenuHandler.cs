@@ -12,7 +12,6 @@ namespace Menus
         [SerializeField] private GameObject mainMenu;
         [SerializeField] private GameObject selectMenu;
         
-        [SerializeField] private Dropdown connectionType;
         [SerializeField] private Dropdown chosenClass;
 
         [SerializeField] private ConnectionScriptableObject connectionData;
