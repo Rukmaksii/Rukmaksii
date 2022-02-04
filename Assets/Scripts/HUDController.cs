@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using GameManagers;
+using PlayerControllers;
 using Weapons;
 
 public class HUDController : MonoBehaviour
@@ -22,8 +23,12 @@ public class HUDController : MonoBehaviour
     
     [SerializeField] protected Image weaponPlaceHolder;
     
+    [SerializeField] protected Image capturingState;
+    
     [SerializeField] protected Sprite rifle;
     [SerializeField] protected Sprite handgun;
+
+    private ObjectiveController capturePoint;
     
     private GameController gameController;
     
@@ -39,6 +44,9 @@ public class HUDController : MonoBehaviour
 
         ShowHitMarker(false);
         BaseWeapon.playerShot += ShowHitMarker;
+        ObjectiveController.OnPlayerInteract += UpdateCaptureState;
+        
+        capturingState.enabled = false;
     }
     void Update()
     {
@@ -63,6 +71,11 @@ public class HUDController : MonoBehaviour
         SetFuelAmount(gameController.LocalPlayer.Jetpack.FuelConsumption);
         SetDashCooldown(gameController.LocalPlayer.DashedSince, gameController.LocalPlayer.DashCooldown);
         SetAmmoCounter(gameController.LocalPlayer.Inventory.CurrentWeapon.CurrentAmmo,gameController.LocalPlayer.Inventory.CurrentWeapon.MaxAmmo);
+
+        if (capturePoint != null)
+        {
+            capturingState.fillAmount = capturePoint.Progress/4;
+        }
     }
     
     /**
@@ -146,5 +159,20 @@ public class HUDController : MonoBehaviour
         {
             hitMarker.SetActive(true);
         }
+    }
+
+    public void UpdateCaptureState(ObjectiveController area,BasePlayer player, bool state)
+    {
+        if (state)
+        {
+            capturePoint = area;
+            capturingState.enabled = true;
+        }
+        else
+        {
+            capturePoint = null;
+            capturingState.enabled = false;
+        }
+        
     }
 }
