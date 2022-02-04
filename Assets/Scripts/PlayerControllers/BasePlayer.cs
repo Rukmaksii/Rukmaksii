@@ -43,7 +43,7 @@ namespace PlayerControllers
 
         private CameraController cameraController;
 
-        [HideInInspector] public CameraController CameraController;
+        public CameraController CameraController => cameraController;
 
         protected CooldownManager cdManager;
 
@@ -175,7 +175,7 @@ namespace PlayerControllers
 
                     Vector3 deltaVelocity = new Vector3(velocity.x, 0f, velocity.z);
 
-                    rigidBody.AddForce(moveVector * speed - deltaVelocity, ForceMode.VelocityChange);
+                    AddForceServerRpc(moveVector * speed - deltaVelocity, ForceMode.VelocityChange);
                 }
             }
 
@@ -197,7 +197,6 @@ namespace PlayerControllers
 
         private void ServerFixedUpdate()
         {
-            
         }
 
         // Update is called once per frame
@@ -252,7 +251,7 @@ namespace PlayerControllers
             else
             {
                 var velocity = rigidBody.velocity;
-                rigidBody.AddForce(-new Vector3(velocity.x, 0, velocity.z), ForceMode.VelocityChange);
+                AddForceServerRpc(-new Vector3(velocity.x, 0, velocity.z), ForceMode.VelocityChange);
                 UpdateMovementServerRpc(Vector3.zero);
             }
         }
@@ -303,7 +302,7 @@ namespace PlayerControllers
         private void Jump()
         {
             if (isGrounded)
-                rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+                AddForceServerRpc(Vector3.up * jumpForce, ForceMode.Impulse);
         }
 
         public void OnLowerJetpack(InputAction.CallbackContext ctx)
@@ -405,7 +404,7 @@ namespace PlayerControllers
                 Func<float, float> kernelFunction = x => Mathf.Exp(-5 * (float) Math.Pow(2 * x - 1, 2));
 
                 Vector3 velocity = dashDirection * (kernelFunction(dashStartedSince / dashDuration) * dashForce);
-                rigidBody.AddForce(velocity - rigidBody.velocity, ForceMode.VelocityChange);
+                AddForceServerRpc(velocity - rigidBody.velocity, ForceMode.VelocityChange);
             }
         }
 
@@ -447,6 +446,12 @@ namespace PlayerControllers
         public void UpdateRotationServerRpc(Vector3 direction, float angle)
         {
             transform.Rotate(direction, angle);
+        }
+
+        [ServerRpc]
+        public void AddForceServerRpc(Vector3 force, ForceMode mode)
+        {
+            rigidBody.AddForce(force, mode);
         }
     }
 }

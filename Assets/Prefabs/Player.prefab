@@ -18,8 +18,12 @@ GameObject:
   - component: {fileID: 3920095576119914280}
   - component: {fileID: -3643805315155486261}
   - component: {fileID: 534924990588498623}
+<<<<<<< HEAD
   - component: {fileID: 7109548235485717348}
   - component: {fileID: 96504878337522661}
+=======
+  - component: {fileID: 8926730840971066554}
+>>>>>>> fc9b103 (adds AddForceServerRpc)
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
