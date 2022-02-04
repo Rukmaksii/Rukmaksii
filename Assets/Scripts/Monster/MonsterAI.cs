@@ -13,8 +13,8 @@ using Vector3 = UnityEngine.Vector3;
 
 public class MonsterAI : NetworkBehaviour
 {
-    [Range(2, 100)] public float detectDistance = 10; //distance de detection du joueur
-    public float distanceAttack = 2.4f; //distance à laquelle le monstre peut attaquer
+    [Range(2, 100)] public float detectDistance = 20; //distance de detection du joueur
+    public float distanceAttack = 5f; //distance à laquelle le monstre peut attaquer
     private Vector3 InitialPos; //position d'origine du monstre
     //public GameObject col; //collider servant de machoir pour le monstre (ce qui va faire des dégats)
     private GameObject joueur; //référence vers le(s) joueur(s)
