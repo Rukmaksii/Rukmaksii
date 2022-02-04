@@ -23,6 +23,7 @@ namespace Menus
         {
         }
 
+        /*
         public void OnPlay()
         {
             connectionData.Data = new ConnectionData();
@@ -54,6 +55,32 @@ namespace Menus
 
 
             UnityEngine.SceneManagement.SceneManager.LoadScene("GameScene");
+        }
+        */
+
+        public void OnPlay()
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene("GameScene");
+        }
+        
+        public void OnSingleplayer()
+        {
+            connectionData.Data.ConnectionType = "host";
+        }
+        
+        public void OnMultiplayer()
+        {
+            connectionData.Data.ConnectionType = "client";
+        }
+        
+        public void OnOptions()
+        {
+            // TODO
+        }
+        
+        public void OnQuit()
+        {
+            Application.Quit();
         }
     }
 }
