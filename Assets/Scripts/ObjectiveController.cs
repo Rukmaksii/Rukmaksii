@@ -17,16 +17,26 @@ public class ObjectiveController : MonoBehaviour
     [SerializeField] private Material capturedMaterial;
     [SerializeField] private GameObject captureArea;
     
+    /** <value>the capture progress</value> */
     private float progress = 0f;
+    
+    /** <value>the progress needed to capture a point</value> */
+    private float maxProgress = 5;
+    
+    /** <value>the progress speed</value> */
     private float progressSpeed = 1f;
+    
+    /** <value>the state of an objective, whether Neutral or Captured</value> */
     private State state;
     
+    /** <value>the list of all players on an objective</value> */
     private List<BasePlayer> capturingPlayersList = new List<BasePlayer>();
 
     public float Progress => progress;
+    public float MaxProgress => maxProgress;
 
     public List<BasePlayer> CapturingPlayersList => capturingPlayersList;
-
+    
     public static event Action<ObjectiveController,BasePlayer,bool> OnPlayerInteract;
     public static event Action<bool> OnCaptured;
     
@@ -45,7 +55,7 @@ public class ObjectiveController : MonoBehaviour
         
             progress += playersCapturing * progressSpeed * Time.deltaTime;
             
-            if (progress > 4)
+            if (progress > maxProgress)
             {
                 state = State.Captured;
                 Debug.Log("Point captured!");

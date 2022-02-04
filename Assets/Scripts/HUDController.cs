@@ -44,7 +44,7 @@ public class HUDController : MonoBehaviour
 
         ShowHitMarker(false);
         BaseWeapon.playerShot += ShowHitMarker;
-        ObjectiveController.OnPlayerInteract += UpdateCaptureState;
+        ObjectiveController.OnPlayerInteract += DisplayCaptureState;
         
         capturingState.enabled = false;
     }
@@ -72,9 +72,10 @@ public class HUDController : MonoBehaviour
         SetDashCooldown(gameController.LocalPlayer.DashedSince, gameController.LocalPlayer.DashCooldown);
         SetAmmoCounter(gameController.LocalPlayer.Inventory.CurrentWeapon.CurrentAmmo,gameController.LocalPlayer.Inventory.CurrentWeapon.MaxAmmo);
 
+        // updating the capture circle UI if the player is on a point
         if (capturePoint != null)
         {
-            capturingState.fillAmount = capturePoint.Progress/4;
+            capturingState.fillAmount = capturePoint.Progress/capturePoint.MaxProgress;
         }
     }
     
@@ -161,7 +162,13 @@ public class HUDController : MonoBehaviour
         }
     }
 
-    public void UpdateCaptureState(ObjectiveController area,BasePlayer player, bool state)
+    /**
+     * <summary>displays and hides the circle for capturing an objective</summary>
+     * <param name="area">ObjectiveController for the objective being captured</param>
+     * <param name="player">BasePlayer for the player capturing it</param>
+     * <param name="state">bool for whether the player enters or leaves the objective</param>
+     */
+    public void DisplayCaptureState(ObjectiveController area,BasePlayer player, bool state)
     {
         if (state)
         {
