@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/Scripts/Minions.meta
-guid: 8326e95385a3b498a94fbcbc58c356b6
-========
-guid: 8653c3bb477e5314aa1f8edb7405ebc4
->>>>>>>> fe85399 (removes client network tr'ansform):Assets/Scripts/1.0.0-pre.5.meta
+guid: c5813cb322afd4b9e847832406b5ddd7
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
