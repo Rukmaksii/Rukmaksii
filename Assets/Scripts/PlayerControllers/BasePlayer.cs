@@ -128,7 +128,7 @@ namespace PlayerControllers
             
             this.inventory = new Inventory(this);
 
-            GameObject testWeaponPrefab = gameController.WeaponPrefabs.Find(go => go.name == "TestGunPrefab");
+            GameObject testWeaponPrefab = gameController.WeaponPrefabs.Find(go => go.name == "TestAutoPrefab");
             this.inventory.AddWeapon(Instantiate(testWeaponPrefab).GetComponent<BaseWeapon>());
 
             this.inventory.Jetpack = gameObject.AddComponent<Jetpack>();
