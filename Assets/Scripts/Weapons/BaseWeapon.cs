@@ -77,7 +77,7 @@ namespace Weapons
         private float hitMarkerDuration = 0.2f;
 
         /** <summary>action for when a player hits a target and if it is a player</summary> */
-        public static event Action<bool> playerShot;
+        public static event Action<bool> targetHit;
 
         void Start()
         {
@@ -124,7 +124,7 @@ namespace Weapons
                 {
                     hitMarkerDisplayed = false;
                     hitMarkerSince = 0;
-                    playerShot?.Invoke(false);
+                    targetHit?.Invoke(false);
                 }
             }
         }
@@ -213,12 +213,15 @@ namespace Weapons
                 enemyPlayer.TakeDamage(this.Damage);
 
                 hitMarkerDisplayed = true;
-                playerShot?.Invoke(true);
+                targetHit?.Invoke(true);
             }
             else if (hit.CompareTag("Destructible"))
             {
                 DestructibleController destructible = hit.GetComponent<DestructibleController>();
                 destructible.Health -= 20;
+                
+                hitMarkerDisplayed = true;
+                targetHit?.Invoke(true);
             }
             else
             {

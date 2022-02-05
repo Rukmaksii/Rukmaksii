@@ -43,7 +43,7 @@ public class HUDController : MonoBehaviour
         SetMaxFuel(100);
 
         ShowHitMarker(false);
-        BaseWeapon.playerShot += ShowHitMarker;
+        BaseWeapon.targetHit += ShowHitMarker;
         ObjectiveController.OnPlayerInteract += DisplayCaptureState;
         
         capturingState.enabled = false;
