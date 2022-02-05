@@ -17,7 +17,8 @@ public class AnimationsPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 velocity = Vector3.ClampMagnitude(player.RigidBody.transform.InverseTransformDirection(player.RigidBody.velocity), 1f);
+        // TODO : remove comment
+        Vector3 velocity = /*Vector3.ClampMagnitude(player.RigidBody.transform.InverseTransformDirection(player.RigidBody.velocity), 1f)*/ Vector3.forward;
 
         if (velocity.y >= 0.3) //jump
         {

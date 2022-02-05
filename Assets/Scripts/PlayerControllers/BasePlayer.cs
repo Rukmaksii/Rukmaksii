@@ -64,11 +64,14 @@ namespace PlayerControllers
      */
         private readonly NetworkVariable<Vector3> movement = new NetworkVariable<Vector3>(Vector3.zero);
 
+        public Vector3 Movement => movement.Value;
+
         /** <value>the y direction for the <see cref="Jetpack"/>, -1 => down, 1 => up, 0 => unchanged </value> */
         private int yDirection = 0;
 
-        private Rigidbody rigidBody;
-        public Rigidbody RigidBody => rigidBody;
+        private CharacterController controller;
+
+        public Rigidbody RigidBody;
 
         private bool isGrounded;
 
@@ -128,8 +131,9 @@ namespace PlayerControllers
             GameObject testWeaponPrefab = gameController.WeaponPrefabs.Find(go => go.name == "TestAutoPrefab");
             this.inventory.AddWeapon(Instantiate(testWeaponPrefab).GetComponent<BaseWeapon>());
 
-            this.inventory.Jetpack = gameObject.AddComponent<Jetpack>();
-            this.inventory.Jetpack.FuelDuration = DefaultFuelDuration;
+            // TODO : uncomment
+            // this.inventory.Jetpack = gameObject.AddComponent<Jetpack>();
+            // this.inventory.Jetpack.FuelDuration = DefaultFuelDuration;
 
             GameObject playerCamera = GameObject.FindGameObjectWithTag("Player Camera");
             cameraController = playerCamera.GetComponent<CameraController>();
@@ -141,6 +145,7 @@ namespace PlayerControllers
             cdManager = gameObject.AddComponent<CooldownManager>();
 
             UpdateHealthServerRpc(maxHealth, OwnerClientId);
+            controller = gameObject.GetComponent<CharacterController>();
 
             deathScreen = Instantiate(deathScreenPrefab);
             deathScreen.name = deathScreenPrefab.name;
@@ -150,53 +155,46 @@ namespace PlayerControllers
 
         void Awake()
         {
-            rigidBody = GetComponent<Rigidbody>();
         }
 
         void FixedUpdate()
         {
-            //if (!IsLocalPlayer)
-            //    return;
+            if (IsServer)
+                ServerFixedUpdate();
 
-            // dash has to be handled before movement.Value
-            handleDash();
-
-            if (movement.Value != Vector3.zero && !IsDashing)
+            if (IsClient && IsLocalPlayer)
             {
-                Vector3 moveVector = Vector3.ClampMagnitude(movement.Value, 1f);
-                moveVector = transform.TransformVector(moveVector);
-
-                var velocity = rigidBody.velocity;
-
-                if (!this.inventory.Jetpack.IsFlying)
+                /*if (this.inventory.Jetpack.IsFlying)
                 {
-                    var speed = movementSpeed * (IsRunning ? runningSpeedMultiplier : 1F);
+                    Vector3 moveVector = Vector3.ClampMagnitude(movement.Value + yDirection * Vector3.up, 1f);
+                    moveVector = transform.TransformVector(moveVector);
 
-
-                    Vector3 deltaVelocity = new Vector3(velocity.x, 0f, velocity.z);
-
-                    AddForceServerRpc(moveVector * speed - deltaVelocity, ForceMode.VelocityChange);
+                    this.inventory.Jetpack.Direction = moveVector;
                 }
-            }
 
-            if (this.inventory.Jetpack.IsFlying)
-            {
-                Vector3 moveVector = Vector3.ClampMagnitude(movement.Value, 1f);
-                moveVector = Vector3.ClampMagnitude(moveVector + yDirection * Vector3.up, 1f);
-                moveVector = transform.TransformVector(moveVector);
+                if (isShooting)
+                    this.inventory.CurrentWeapon.Fire();
+            */}
 
-                this.inventory.Jetpack.Direction = moveVector;
-            }
-
-            if (isShooting)
-                this.inventory.CurrentWeapon.Fire();
-
-            // forces the capsule to stand up
-            // playerTransform.eulerAngles = new Vector3(0, playerTransform.eulerAngles.y, 0);
         }
 
         private void ServerFixedUpdate()
         {
+            handleDash();
+            if (movement.Value.magnitude > 0f)
+            {
+                Vector3 moveVector = Vector3.ClampMagnitude(movement.Value, 1f);
+                moveVector = transform.TransformVector(moveVector);
+
+                if (true || !this.inventory.Jetpack.IsFlying)
+                {
+                    var speed = movementSpeed * (IsRunning ? runningSpeedMultiplier : 1F);
+                    controller.SimpleMove(moveVector * speed);
+                }
+            } else if (IsDashing)
+            {
+                
+            }
         }
 
         // Update is called once per frame
@@ -222,7 +220,6 @@ namespace PlayerControllers
         {
             if (IsLocalPlayer)
             {
-
                 cameraController.OnPlayerMove(camRotationAnchor, transform);
                 if (CurrentHealth.Value == 0)
                 {
@@ -250,8 +247,6 @@ namespace PlayerControllers
             }
             else
             {
-                var velocity = rigidBody.velocity;
-                AddForceServerRpc(-new Vector3(velocity.x, 0, velocity.z), ForceMode.VelocityChange);
                 UpdateMovementServerRpc(Vector3.zero);
             }
         }
@@ -302,7 +297,7 @@ namespace PlayerControllers
         private void Jump()
         {
             if (isGrounded)
-                AddForceServerRpc(Vector3.up * jumpForce, ForceMode.Impulse);
+                Debug.Log("jumping!");
         }
 
         public void OnLowerJetpack(InputAction.CallbackContext ctx)
@@ -338,12 +333,14 @@ namespace PlayerControllers
 
             dashStartedSince = Time.fixedDeltaTime;
 
-            dashDirection = Vector3.ClampMagnitude(rigidBody.velocity, 1f);
+            dashDirection = Vector3.ClampMagnitude(movement.Value + yDirection * Vector3.up, 1f);
 
             if (dashDirection == Vector3.zero)
             {
-                dashDirection = transform.TransformDirection(Vector3.forward);
+                dashDirection = Vector3.forward;
             }
+
+            dashDirection = transform.TransformDirection(dashDirection);
         }
 
         private void OnCollisionEnter(Collision collision)
@@ -393,7 +390,6 @@ namespace PlayerControllers
             {
                 dashStartedSince = 0;
                 dashDirection = Vector3.zero;
-                rigidBody.velocity = Vector3.zero;
             }
             else if (IsDashing)
             {
@@ -404,7 +400,7 @@ namespace PlayerControllers
                 Func<float, float> kernelFunction = x => Mathf.Exp(-5 * (float) Math.Pow(2 * x - 1, 2));
 
                 Vector3 velocity = dashDirection * (kernelFunction(dashStartedSince / dashDuration) * dashForce);
-                AddForceServerRpc(velocity - rigidBody.velocity, ForceMode.VelocityChange);
+                controller.SimpleMove(velocity);
             }
         }
 
@@ -446,12 +442,6 @@ namespace PlayerControllers
         public void UpdateRotationServerRpc(Vector3 direction, float angle)
         {
             transform.Rotate(direction, angle);
-        }
-
-        [ServerRpc]
-        public void AddForceServerRpc(Vector3 force, ForceMode mode)
-        {
-            rigidBody.AddForce(force, mode);
         }
     }
 }
