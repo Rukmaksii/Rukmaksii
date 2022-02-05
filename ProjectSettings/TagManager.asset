@@ -9,6 +9,7 @@ TagManager:
   - PlayerHUD
   - FuelBoosterItem
   - CaptureArea
+  - Destructible
   layers:
   - Default
   - TransparentFX
