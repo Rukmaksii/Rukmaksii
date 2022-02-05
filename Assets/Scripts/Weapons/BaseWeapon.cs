@@ -219,7 +219,6 @@ namespace Weapons
             {
                 DestructibleController destructible = hit.GetComponent<DestructibleController>();
                 destructible.Health -= 20;
-                Debug.Log("Hit a destructible object");
             }
             else
             {
