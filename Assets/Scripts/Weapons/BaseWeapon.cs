@@ -215,6 +215,12 @@ namespace Weapons
                 hitMarkerDisplayed = true;
                 playerShot?.Invoke(true);
             }
+            else if (hit.CompareTag("Destructible"))
+            {
+                DestructibleController destructible = hit.GetComponent<DestructibleController>();
+                destructible.Health -= 20;
+                Debug.Log("Hit a destructible object");
+            }
             else
             {
                 // none of the tags has been found
