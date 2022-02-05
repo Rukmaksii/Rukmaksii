@@ -166,16 +166,18 @@ public class HUDController : MonoBehaviour
      */
     public void DisplayCaptureState(ObjectiveController area,BasePlayer player, bool state)
     {
-        if (state)
+        if (player == gameController.LocalPlayer)
         {
-            capturePoint = area;
-            capturingState.enabled = true;
+            if (state)
+            {
+                capturePoint = area;
+                capturingState.enabled = true;
+            }
+            else
+            {
+                capturePoint = null;
+                capturingState.enabled = false;
+            }
         }
-        else
-        {
-            capturePoint = null;
-            capturingState.enabled = false;
-        }
-        
     }
 }
