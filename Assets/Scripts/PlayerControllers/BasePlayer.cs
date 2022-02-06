@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 using Weapons;
 
 namespace PlayerControllers
@@ -15,6 +16,7 @@ namespace PlayerControllers
  *      The controller class for any player spawned in the game
  * </summary>
  */
+    [RequireComponent(typeof(Collider))]
     [RequireComponent(typeof(CharacterController))]
     [RequireComponent(typeof(NetworkObject))]
     [RequireComponent(typeof(CooldownManager))]
@@ -59,10 +61,18 @@ namespace PlayerControllers
             }
         }
 
+        [SerializeField] private float gravity = -9.81f;
+
         /**
      * <value>the current movement.Value requested to be made</value>
+         * <remarks>it stores in y the vertical velocity</remarks>
      */
         private readonly NetworkVariable<Vector3> movement = new NetworkVariable<Vector3>(Vector3.zero);
+
+        /**
+         * <value>a aching value for <see cref="movement"/></value>
+         */
+        private Vector3 _movement = Vector3.zero;
 
         public Vector3 Movement => movement.Value;
 
@@ -73,9 +83,22 @@ namespace PlayerControllers
 
         public Rigidbody RigidBody;
 
-        private bool isGrounded;
 
-        public bool IsGrounded => isGrounded;
+        public bool IsGrounded
+        {
+            get
+            {
+                RaycastHit hit;
+                Vector3 initPos = transform.position + controller.center;
+                if (Physics.SphereCast(initPos, controller.height / 2, Vector3.down, out hit, 10))
+                {
+                    return hit.distance <= 0.2f && hit.collider.gameObject.CompareTag("Ground");
+                }
+
+
+                return false;
+            }
+        }
 
 
         private bool isShooting = false;
@@ -151,31 +174,17 @@ namespace PlayerControllers
             deathScreen.name = deathScreenPrefab.name;
             deathScreen.GetComponent<Canvas>().worldCamera = Camera.current;
             deathScreen.SetActive(false);
+
+            movement.OnValueChanged += OnMovementChanged;
+        }
+
+        void OnMovementChanged(Vector3 oldVal, Vector3 newVal)
+        {
+            this._movement = newVal;
         }
 
         void Awake()
         {
-        }
-
-        void FixedUpdate()
-        {
-            if (IsServer)
-                ServerFixedUpdate();
-
-            if (IsClient && IsLocalPlayer)
-            {
-                /*if (this.inventory.Jetpack.IsFlying)
-                {
-                    Vector3 moveVector = Vector3.ClampMagnitude(movement.Value + yDirection * Vector3.up, 1f);
-                    moveVector = transform.TransformVector(moveVector);
-
-                    this.inventory.Jetpack.Direction = moveVector;
-                }
-
-                if (isShooting)
-                    this.inventory.CurrentWeapon.Fire();
-            */}
-
         }
 
         private void ServerFixedUpdate()
@@ -191,9 +200,9 @@ namespace PlayerControllers
                     var speed = movementSpeed * (IsRunning ? runningSpeedMultiplier : 1F);
                     controller.SimpleMove(moveVector * speed);
                 }
-            } else if (IsDashing)
+            }
+            else if (IsDashing)
             {
-                
             }
         }
 
@@ -211,6 +220,17 @@ namespace PlayerControllers
          */
         private void UpdateServer()
         {
+            handleDash();
+            var velocity = _movement;
+            velocity.y += gravity * Time.deltaTime;
+            if (IsGrounded && velocity.y < 0f)
+                velocity.y = 0;
+            
+            Debug.Log($"velocity is {velocity}");
+            this.movement.Value = velocity;
+
+
+            controller.Move(transform.TransformDirection(movement.Value) * Time.deltaTime);
         }
 
         /**
@@ -241,13 +261,15 @@ namespace PlayerControllers
 
             if (ctx.performed)
             {
-                Vector2 direction = ctx.ReadValue<Vector2>();
+                Vector2 direction = ctx.ReadValue<Vector2>() * movementSpeed;
+                if (isRunning)
+                    direction *= runningSpeedMultiplier;
 
-                UpdateMovementServerRpc(new Vector3(direction.x, movement.Value.y, direction.y));
+                UpdateMovementServerRpc(new Vector3(direction.x, _movement.y, direction.y));
             }
             else
             {
-                UpdateMovementServerRpc(Vector3.zero);
+                UpdateMovementServerRpc(new Vector3(0, _movement.y, 0));
             }
         }
 
@@ -278,7 +300,7 @@ namespace PlayerControllers
             if (!IsLocalPlayer)
                 return;
 
-            if (this.Jetpack.IsFlying)
+            /*if (this.Jetpack.IsFlying)
             {
                 yDirection = ctx.ReadValueAsButton() ? 1 : 0;
             }
@@ -291,13 +313,14 @@ namespace PlayerControllers
             else if (!this.Jetpack.IsFlying)
             {
                 Jump();
-            }
+            }*/
+            Jump();
         }
 
         private void Jump()
         {
-            if (isGrounded)
-                Debug.Log("jumping!");
+            if (IsGrounded)
+                UpdateMovementServerRpc(new Vector3(_movement.x, jumpForce, _movement.y));
         }
 
         public void OnLowerJetpack(InputAction.CallbackContext ctx)
@@ -333,7 +356,7 @@ namespace PlayerControllers
 
             dashStartedSince = Time.fixedDeltaTime;
 
-            dashDirection = Vector3.ClampMagnitude(movement.Value + yDirection * Vector3.up, 1f);
+            dashDirection = Vector3.ClampMagnitude(_movement + yDirection * Vector3.up, 1f);
 
             if (dashDirection == Vector3.zero)
             {
@@ -341,18 +364,6 @@ namespace PlayerControllers
             }
 
             dashDirection = transform.TransformDirection(dashDirection);
-        }
-
-        private void OnCollisionEnter(Collision collision)
-        {
-            if (collision.gameObject.CompareTag("Ground"))
-                isGrounded = true;
-        }
-
-        private void OnCollisionExit(Collision other)
-        {
-            if (other.gameObject.CompareTag("Ground"))
-                isGrounded = false;
         }
 
         /**
@@ -393,13 +404,14 @@ namespace PlayerControllers
             }
             else if (IsDashing)
             {
-                dashStartedSince += Time.fixedDeltaTime;
+                dashStartedSince += Time.deltaTime;
 
                 // a function : [0;1] => [0;1] with f(1) = 0
                 // it acts as a smoothing function for the velocity change
                 Func<float, float> kernelFunction = x => Mathf.Exp(-5 * (float) Math.Pow(2 * x - 1, 2));
 
-                Vector3 velocity = dashDirection * (kernelFunction(dashStartedSince / dashDuration) * dashForce);
+                Vector3 velocity = dashDirection * (kernelFunction(dashStartedSince / dashDuration) * dashForce) *
+                                   movementSpeed;
                 controller.SimpleMove(velocity);
             }
         }
@@ -435,6 +447,7 @@ namespace PlayerControllers
         [ServerRpc]
         public void UpdateMovementServerRpc(Vector3 _movement)
         {
+            Debug.Log($"new movement: {_movement}");
             movement.Value = _movement;
         }
 

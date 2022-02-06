@@ -18,6 +18,8 @@ GameObject:
   - component: {fileID: 3920095576119914280}
   - component: {fileID: -3643805315155486261}
   - component: {fileID: 534924990588498623}
+  - component: {fileID: 7109548235485717348}
+  - component: {fileID: 96504878337522661}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -132,7 +134,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sensitivity: 0.1
-  CameraController: {fileID: 0}
+  gravity: -9.81
+  RigidBody: {fileID: 0}
   deathScreenPrefab: {fileID: 1499698901574752855, guid: d3dc5c1c781e5ea1299fe7f2164dc726, type: 3}
 --- !u!114 &1260994430873029613
 MonoBehaviour:
