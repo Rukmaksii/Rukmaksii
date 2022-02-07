@@ -5,12 +5,22 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
+using UnityEngine.PlayerLoop;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using Weapons;
 
 namespace PlayerControllers
 {
+
+
+    enum PlayerFlags
+    {
+        MOVING = 1,
+        RUNNING = 2 * MOVING,
+        FLYING = 2 * RUNNING
+    }
+
     /**
  * <summary>
  *      The controller class for any player spawned in the game
@@ -38,9 +48,7 @@ namespace PlayerControllers
         [SerializeField] private float sensitivity = .1F;
 
 
-        private bool isRunning;
-
-        public bool IsRunning => isRunning && movement.Value.z >= Mathf.Abs(movement.Value.x);
+        public bool IsRunning => this.HasFlag(PlayerFlags.RUNNING) && movement.Value.z >= Mathf.Abs(movement.Value.x);
 
 
         private CameraController cameraController;
@@ -69,10 +77,6 @@ namespace PlayerControllers
      */
         private readonly NetworkVariable<Vector3> movement = new NetworkVariable<Vector3>(Vector3.zero);
 
-        /**
-         * <value>a aching value for <see cref="movement"/></value>
-         */
-        private Vector3 _movement = Vector3.zero;
 
         public Vector3 Movement => movement.Value;
 
@@ -126,7 +130,9 @@ namespace PlayerControllers
         protected abstract int maxHealth { get; }
 
         /** <value>current player health</value> */
-        protected NetworkVariable<int> CurrentHealth { get; } = new NetworkVariable<int>(1);
+        private NetworkVariable<int> CurrentHealth { get; } = new NetworkVariable<int>(1);
+
+        private NetworkVariable<int> flags = new NetworkVariable<int>(0);
 
         public int CurrentHealthValue => CurrentHealth.Value;
 
@@ -143,6 +149,28 @@ namespace PlayerControllers
 
         // default value for fuel duration
         public float DefaultFuelDuration { get; } = 20f;
+
+        private bool HasFlag(PlayerFlags flag)
+        {
+            int value = (int)flag;
+            return HasFlag(value);
+        }
+
+        private bool HasFlags(params PlayerFlags[] flags)
+        {
+            int value = 0;
+            foreach (PlayerFlags fl in flags)
+            {
+                value |= (int) fl;
+            }
+
+            return HasFlag(value);
+        }
+
+        private bool HasFlag(int flag)
+        {
+            return (this.flags.Value & flag) == flag;
+        }
 
         void Start()
         {
@@ -175,35 +203,10 @@ namespace PlayerControllers
             deathScreen.GetComponent<Canvas>().worldCamera = Camera.current;
             deathScreen.SetActive(false);
 
-            movement.OnValueChanged += OnMovementChanged;
-        }
-
-        void OnMovementChanged(Vector3 oldVal, Vector3 newVal)
-        {
-            this._movement = newVal;
         }
 
         void Awake()
         {
-        }
-
-        private void ServerFixedUpdate()
-        {
-            handleDash();
-            if (movement.Value.magnitude > 0f)
-            {
-                Vector3 moveVector = Vector3.ClampMagnitude(movement.Value, 1f);
-                moveVector = transform.TransformVector(moveVector);
-
-                if (true || !this.inventory.Jetpack.IsFlying)
-                {
-                    var speed = movementSpeed * (IsRunning ? runningSpeedMultiplier : 1F);
-                    controller.SimpleMove(moveVector * speed);
-                }
-            }
-            else if (IsDashing)
-            {
-            }
         }
 
         // Update is called once per frame
@@ -221,16 +224,17 @@ namespace PlayerControllers
         private void UpdateServer()
         {
             handleDash();
-            var velocity = _movement;
+            var velocity = Movement;
             velocity.y += gravity * Time.deltaTime;
             if (IsGrounded && velocity.y < 0f)
                 velocity.y = 0;
             
-            Debug.Log($"velocity is {velocity}");
             this.movement.Value = velocity;
 
+            if (IsRunning)
+                velocity *= runningSpeedMultiplier;
 
-            controller.Move(transform.TransformDirection(movement.Value) * Time.deltaTime);
+            controller.Move(transform.TransformDirection(velocity) * Time.deltaTime);
         }
 
         /**
@@ -261,15 +265,14 @@ namespace PlayerControllers
 
             if (ctx.performed)
             {
-                Vector2 direction = ctx.ReadValue<Vector2>() * movementSpeed;
-                if (isRunning)
-                    direction *= runningSpeedMultiplier;
+                Vector2 direction = ctx.ReadValue<Vector2>();
+                Vector3 moveVector = new Vector3(direction.x * movementSpeed, Movement.y, direction.y * movementSpeed);
 
-                UpdateMovementServerRpc(new Vector3(direction.x, _movement.y, direction.y));
+                UpdateMovementServerRpc(moveVector);
             }
             else
             {
-                UpdateMovementServerRpc(new Vector3(0, _movement.y, 0));
+                UpdateMovementServerRpc(new Vector3(0, Movement.y, 0));
             }
         }
 
@@ -320,7 +323,11 @@ namespace PlayerControllers
         private void Jump()
         {
             if (IsGrounded)
-                UpdateMovementServerRpc(new Vector3(_movement.x, jumpForce, _movement.y));
+            {
+                var move = Movement;
+                move.y = jumpForce;
+                UpdateMovementServerRpc(move);
+            }
         }
 
         public void OnLowerJetpack(InputAction.CallbackContext ctx)
@@ -346,7 +353,7 @@ namespace PlayerControllers
             if (!IsLocalPlayer)
                 return;
 
-            isRunning = ctx.performed;
+            UpdateFlagsServerRpc(PlayerFlags.RUNNING, ctx.performed);
         }
 
         public void OnDash(InputAction.CallbackContext ctx)
@@ -356,7 +363,7 @@ namespace PlayerControllers
 
             dashStartedSince = Time.fixedDeltaTime;
 
-            dashDirection = Vector3.ClampMagnitude(_movement + yDirection * Vector3.up, 1f);
+            dashDirection = Vector3.ClampMagnitude(Movement + yDirection * Vector3.up, 1f);
 
             if (dashDirection == Vector3.zero)
             {
@@ -445,16 +452,31 @@ namespace PlayerControllers
         }
 
         [ServerRpc]
-        public void UpdateMovementServerRpc(Vector3 _movement)
+        public void UpdateMovementServerRpc(Vector3 movement)
         {
-            Debug.Log($"new movement: {_movement}");
-            movement.Value = _movement;
+            this.movement.Value = movement;
         }
 
         [ServerRpc]
         public void UpdateRotationServerRpc(Vector3 direction, float angle)
         {
             transform.Rotate(direction, angle);
+        }
+
+        [ServerRpc]
+        private void UpdateFlagsServerRpc(PlayerFlags flag, bool add = true)
+        {
+            int value = flags.Value;
+            
+            if (add)
+            {
+                value |= (int) flag;
+            }
+            else
+            {
+                value &= (int) ~flag;
+            }
+            this.flags.Value = value;
         }
     }
 }
