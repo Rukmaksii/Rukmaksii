@@ -12,13 +12,12 @@ using Weapons;
 
 namespace PlayerControllers
 {
-
-
     enum PlayerFlags
     {
         MOVING = 1,
         RUNNING = 2 * MOVING,
-        FLYING = 2 * RUNNING
+        FLYING = 2 * RUNNING,
+        SHOOTING = 2 * FLYING
     }
 
     /**
@@ -85,8 +84,6 @@ namespace PlayerControllers
 
         private CharacterController controller;
 
-        public Rigidbody RigidBody;
-
 
         public bool IsGrounded
         {
@@ -102,6 +99,12 @@ namespace PlayerControllers
 
                 return false;
             }
+        }
+
+        public bool IsFlying
+        {
+            get => HasFlag(PlayerFlags.FLYING);
+            set => UpdateFlagsServerRpc(PlayerFlags.FLYING, value);
         }
 
 
@@ -152,7 +155,7 @@ namespace PlayerControllers
 
         private bool HasFlag(PlayerFlags flag)
         {
-            int value = (int)flag;
+            int value = (int) flag;
             return HasFlag(value);
         }
 
@@ -182,9 +185,8 @@ namespace PlayerControllers
             GameObject testWeaponPrefab = gameController.WeaponPrefabs.Find(go => go.name == "TestAutoPrefab");
             this.inventory.AddWeapon(Instantiate(testWeaponPrefab).GetComponent<BaseWeapon>());
 
-            // TODO : uncomment
-            // this.inventory.Jetpack = gameObject.AddComponent<Jetpack>();
-            // this.inventory.Jetpack.FuelDuration = DefaultFuelDuration;
+            inventory.Jetpack = gameObject.AddComponent<Jetpack>();
+            inventory.Jetpack.FuelDuration = DefaultFuelDuration;
 
             GameObject playerCamera = GameObject.FindGameObjectWithTag("Player Camera");
             cameraController = playerCamera.GetComponent<CameraController>();
@@ -202,7 +204,6 @@ namespace PlayerControllers
             deathScreen.name = deathScreenPrefab.name;
             deathScreen.GetComponent<Canvas>().worldCamera = Camera.current;
             deathScreen.SetActive(false);
-
         }
 
         void Awake()
@@ -224,17 +225,25 @@ namespace PlayerControllers
         private void UpdateServer()
         {
             handleDash();
-            var velocity = Movement;
-            velocity.y += gravity * Time.deltaTime;
-            if (IsGrounded && velocity.y < 0f)
-                velocity.y = 0;
-            
-            this.movement.Value = velocity;
 
-            if (IsRunning)
-                velocity *= runningSpeedMultiplier;
+            Vector3 velocity = Movement;
+            if (!IsFlying)
+            {
+                velocity.y += gravity * Time.deltaTime;
+                if (IsGrounded && velocity.y < 0f)
+                    velocity.y = 0;
 
-            controller.Move(transform.TransformDirection(velocity) * Time.deltaTime);
+                this.movement.Value = velocity;
+
+                if (IsRunning)
+                    velocity *= runningSpeedMultiplier;
+
+                controller.Move(transform.TransformDirection(velocity) * Time.deltaTime);
+            }
+            else
+            {
+                controller.Move(transform.TransformDirection(this.Jetpack.Velocity) * Time.deltaTime);
+            }
         }
 
         /**
@@ -263,16 +272,19 @@ namespace PlayerControllers
             if (!IsLocalPlayer)
                 return;
 
+            float multiplier = IsFlying ? 1f : movementSpeed;
+
             if (ctx.performed)
             {
                 Vector2 direction = ctx.ReadValue<Vector2>();
-                Vector3 moveVector = new Vector3(direction.x * movementSpeed, Movement.y, direction.y * movementSpeed);
+                Vector3 moveVector = new Vector3(direction.x * multiplier, Movement.y, direction.y * multiplier);
 
                 UpdateMovementServerRpc(moveVector);
             }
             else
             {
-                UpdateMovementServerRpc(new Vector3(0, Movement.y, 0));
+                var moveVector = new Vector3(0, Movement.y, 0);
+                UpdateMovementServerRpc(moveVector);
             }
         }
 
@@ -303,21 +315,20 @@ namespace PlayerControllers
             if (!IsLocalPlayer)
                 return;
 
-            /*if (this.Jetpack.IsFlying)
+            if (this.Jetpack.IsFlying)
             {
-                yDirection = ctx.ReadValueAsButton() ? 1 : 0;
+                UpdateMovementServerRpc(new Vector3(Movement.x, ctx.performed ? 1 : 0, Movement.z));
             }
 
             if (ctx.interaction is MultiTapInteraction && ctx.performed)
             {
-                this.yDirection = 0;
+                UpdateMovementServerRpc(new Vector3(Movement.x, 0, Movement.z));
                 this.Jetpack.IsFlying = !this.Jetpack.IsFlying;
             }
             else if (!this.Jetpack.IsFlying)
             {
                 Jump();
-            }*/
-            Jump();
+            }
         }
 
         private void Jump()
@@ -467,7 +478,7 @@ namespace PlayerControllers
         private void UpdateFlagsServerRpc(PlayerFlags flag, bool add = true)
         {
             int value = flags.Value;
-            
+
             if (add)
             {
                 value |= (int) flag;
@@ -476,6 +487,7 @@ namespace PlayerControllers
             {
                 value &= (int) ~flag;
             }
+
             this.flags.Value = value;
         }
     }

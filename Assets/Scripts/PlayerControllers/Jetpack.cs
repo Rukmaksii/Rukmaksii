@@ -21,7 +21,7 @@ namespace PlayerControllers
             get => fuelDuration;
             set => fuelDuration = value;
         }
-        
+
         /**
          * <value>the remaining time of use.</value>
          */
@@ -29,21 +29,8 @@ namespace PlayerControllers
 
         public bool IsFlying
         {
-            get => !this.Player.RigidBody.useGravity;
-            set
-            {
-                if (value == true)
-                {
-                    if (this.CanTakeOff)
-                    {
-                        this.Player.RigidBody.useGravity = false;
-                    }
-                }
-                else
-                {
-                    this.Player.RigidBody.useGravity = true;
-                }
-            }
+            get => this.Player.IsFlying;
+            set => Player.IsFlying = value && CanTakeOff;
         }
 
 
@@ -55,7 +42,7 @@ namespace PlayerControllers
         public Vector3 Direction
         {
             get => _direction;
-            set { _direction = Vector3.ClampMagnitude(value, 1f); }
+            set => _direction = Vector3.ClampMagnitude(value, 1f);
         }
 
         /**
@@ -93,6 +80,20 @@ namespace PlayerControllers
         public bool CanTakeOff => FuelConsumption >= minRequiredFuel;
 
 
+        public Vector3 Velocity
+        {
+            get
+            {
+                Vector3 direction = Vector3.ClampMagnitude(Player.Movement, 1f);
+                float multiplier = jetpackForce;
+                if (IsSwift)
+                    multiplier *= enhancedSpeedMultiplier;
+
+                return direction * multiplier;
+            }
+        }
+
+
         public void FixedUpdate()
         {
             HandleFuel();
@@ -100,23 +101,6 @@ namespace PlayerControllers
             if (!isReady)
             {
                 isReady = CanTakeOff;
-            }
-
-            if (IsFlying && isReady)
-            {
-                var velocity = Direction * jetpackForce;
-                if (this.Player.transform.position.y >= maxHeight)
-                {
-                    velocity.y = 0;
-                }
-
-                if (IsSwift)
-                {
-                    velocity *= enhancedSpeedMultiplier;
-                }
-
-                // TODO : smooth out the velocity changes
-                this.Player.RigidBody.velocity = velocity;
             }
         }
 
