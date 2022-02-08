@@ -94,9 +94,9 @@ namespace PlayerControllers
             {
                 RaycastHit hit;
                 Vector3 initPos = transform.position + controller.center;
-                if (Physics.SphereCast(initPos, controller.height / 2, Vector3.down, out hit, 10))
+                if (Physics.SphereCast(initPos, controller.height / 2, Vector3.down, out hit, 1))
                 {
-                    return hit.distance <= 0.2f && hit.collider.gameObject.CompareTag("Ground");
+                    return hit.distance <= 0.2f && hit.collider.CompareTag("Ground");
                 }
 
 
@@ -239,7 +239,9 @@ namespace PlayerControllers
                 yVelocity += gravity * Time.deltaTime;
                 if (IsGrounded && yVelocity < 0f)
                     yVelocity = 0;
-
+                
+                if (Movement.y > 0)
+                    Jump();
                 float multiplier = movementSpeed;
                 if (IsRunning)
                     multiplier *= runningSpeedMultiplier;
@@ -326,29 +328,29 @@ namespace PlayerControllers
             if (!IsLocalPlayer)
                 return;
 
-            if (this.Jetpack.IsFlying)
-            {
-                UpdateMovementServerRpc(new Vector3(Movement.x, ctx.performed ? 1 : 0, Movement.z));
-            }
+            var moveVector = Movement;
 
             if (ctx.interaction is MultiTapInteraction && ctx.performed)
             {
-                UpdateMovementServerRpc(new Vector3(Movement.x, 0, Movement.z));
+                moveVector.y = 0;
                 this.Jetpack.IsFlying = !this.Jetpack.IsFlying;
             }
-            else if (!this.Jetpack.IsFlying)
+            else if(!(ctx.interaction is MultiTapInteraction))
             {
-                Jump();
+                moveVector.y = ctx.started || ctx.performed ? 1 : 0;
             }
+
+            UpdateMovementServerRpc(moveVector);
         }
 
+        /**
+         * <summary>Server-Side handler for jump function</summary>
+         */
         private void Jump()
         {
             if (IsGrounded)
             {
-                var move = Movement;
-                move.y = jumpForce;
-                UpdateMovementServerRpc(move);
+                yVelocity = jumpForce;
             }
         }
 
@@ -419,12 +421,14 @@ namespace PlayerControllers
 
         private void handleDash()
         {
-            if (IsDashing && dashStartedSince > dashDuration)
+            if (!IsDashing)
+                return;
+            if (dashStartedSince > dashDuration)
             {
                 dashStartedSince = 0;
                 IsDashing = false;
             }
-            else if (IsDashing)
+            else
             {
                 var dashDirection = Movement;
                 if (dashDirection == Vector3.zero)
