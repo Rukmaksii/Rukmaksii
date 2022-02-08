@@ -17,7 +17,8 @@ namespace PlayerControllers
         MOVING = 1,
         RUNNING = 2 * MOVING,
         FLYING = 2 * RUNNING,
-        SHOOTING = 2 * FLYING
+        SHOOTING = 2 * FLYING,
+        DASHING = 2 * SHOOTING
     }
 
     /**
@@ -108,8 +109,11 @@ namespace PlayerControllers
         }
 
 
-        private bool isShooting = false;
-        public bool IsShooting => isShooting;
+        public bool IsShooting
+        {
+            get => HasFlag(PlayerFlags.SHOOTING);
+            set => UpdateFlagsServerRpc(PlayerFlags.SHOOTING, value);
+        }
 
         private Vector3 dashDirection;
 
@@ -144,7 +148,11 @@ namespace PlayerControllers
         */
         private float dashStartedSince = -1f;
 
-        public bool IsDashing => dashStartedSince > 0 && dashStartedSince <= dashDuration;
+        public bool IsDashing
+        {
+            get => HasFlag(PlayerFlags.DASHING);
+            set => UpdateFlagsServerRpc(PlayerFlags.DASHING, value);
+        }
 
         // getters for respectively the default dash cooldown and the time since last dash
         public float DashCooldown => cdManager.DashCooldown;
@@ -244,6 +252,9 @@ namespace PlayerControllers
             {
                 controller.Move(transform.TransformDirection(this.Jetpack.Velocity) * Time.deltaTime);
             }
+            
+            if(IsShooting)
+                this.inventory.CurrentWeapon.Fire();
         }
 
         /**
@@ -406,7 +417,7 @@ namespace PlayerControllers
 
         public void OnFire(InputAction.CallbackContext ctx)
         {
-            isShooting = ctx.ReadValueAsButton();
+            IsShooting = ctx.ReadValueAsButton();
         }
 
 
@@ -418,6 +429,7 @@ namespace PlayerControllers
             if (dashStartedSince > dashDuration)
             {
                 dashStartedSince = 0;
+                IsDashing = false;
                 dashDirection = Vector3.zero;
             }
             else if (IsDashing)
