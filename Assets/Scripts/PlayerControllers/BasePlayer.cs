@@ -72,16 +72,18 @@ namespace PlayerControllers
         [SerializeField] private float gravity = -9.81f;
 
         /**
-     * <value>the current movement.Value requested to be made</value>
-         * <remarks>it stores in y the vertical velocity</remarks>
+     * <value>stores the x,y,z inputs of the player</value>
      */
         private readonly NetworkVariable<Vector3> movement = new NetworkVariable<Vector3>(Vector3.zero);
 
+        /**
+         * <value>the yVelocity of the player</value>
+         * <remarks>this velocity is only accessible to and used by the server</remarks>
+         */
+        private float yVelocity = 0f;
+
 
         public Vector3 Movement => movement.Value;
-
-        /** <value>the y direction for the <see cref="Jetpack"/>, -1 => down, 1 => up, 0 => unchanged </value> */
-        private int yDirection = 0;
 
         private CharacterController controller;
 
@@ -114,8 +116,6 @@ namespace PlayerControllers
             get => HasFlag(PlayerFlags.SHOOTING);
             set => UpdateFlagsServerRpc(PlayerFlags.SHOOTING, value);
         }
-
-        private Vector3 dashDirection;
 
 
         protected Inventory inventory;
@@ -234,17 +234,19 @@ namespace PlayerControllers
         {
             handleDash();
 
-            Vector3 velocity = Movement;
             if (!IsFlying)
             {
-                velocity.y += gravity * Time.deltaTime;
-                if (IsGrounded && velocity.y < 0f)
-                    velocity.y = 0;
+                yVelocity += gravity * Time.deltaTime;
+                if (IsGrounded && yVelocity < 0f)
+                    yVelocity = 0;
 
-                this.movement.Value = velocity;
-
+                float multiplier = movementSpeed;
                 if (IsRunning)
-                    velocity *= runningSpeedMultiplier;
+                    multiplier *= runningSpeedMultiplier;
+
+                Vector3 velocity = Movement * multiplier;
+                // y axis direction only concerns jetpack
+                velocity.y = yVelocity;
 
                 controller.Move(transform.TransformDirection(velocity) * Time.deltaTime);
             }
@@ -252,8 +254,8 @@ namespace PlayerControllers
             {
                 controller.Move(transform.TransformDirection(this.Jetpack.Velocity) * Time.deltaTime);
             }
-            
-            if(IsShooting)
+
+            if (IsShooting)
                 this.inventory.CurrentWeapon.Fire();
         }
 
@@ -283,12 +285,10 @@ namespace PlayerControllers
             if (!IsLocalPlayer)
                 return;
 
-            float multiplier = IsFlying ? 1f : movementSpeed;
-
             if (ctx.performed)
             {
                 Vector2 direction = ctx.ReadValue<Vector2>();
-                Vector3 moveVector = new Vector3(direction.x * multiplier, Movement.y, direction.y * multiplier);
+                Vector3 moveVector = new Vector3(direction.x, Movement.y, direction.y);
 
                 UpdateMovementServerRpc(moveVector);
             }
@@ -357,14 +357,19 @@ namespace PlayerControllers
             if (!IsLocalPlayer)
                 return;
 
+            var currentMovement = Movement;
             if (ctx.performed)
             {
-                yDirection = -1;
+                currentMovement.y = -1;
             }
             else if (ctx.canceled)
             {
-                yDirection = 0;
+                currentMovement.y = 0;
             }
+
+            // ServerRpc methods operate not changes if values are unchanged 
+            // if(currentMovement != Movement)
+            UpdateMovementServerRpc(currentMovement);
         }
 
         /**
@@ -383,16 +388,7 @@ namespace PlayerControllers
             if (!IsLocalPlayer || !cdManager.RequestDash())
                 return;
 
-            dashStartedSince = Time.fixedDeltaTime;
-
-            dashDirection = Vector3.ClampMagnitude(Movement + yDirection * Vector3.up, 1f);
-
-            if (dashDirection == Vector3.zero)
-            {
-                dashDirection = Vector3.forward;
-            }
-
-            dashDirection = transform.TransformDirection(dashDirection);
+            IsDashing = true;
         }
 
         /**
@@ -423,25 +419,25 @@ namespace PlayerControllers
 
         private void handleDash()
         {
-            if (dashDirection == Vector3.zero)
-                return;
-
-            if (dashStartedSince > dashDuration)
+            if (IsDashing && dashStartedSince > dashDuration)
             {
                 dashStartedSince = 0;
                 IsDashing = false;
-                dashDirection = Vector3.zero;
             }
             else if (IsDashing)
             {
+                var dashDirection = Movement;
+                if (dashDirection == Vector3.zero)
+                    dashDirection = Vector3.forward;
+
                 dashStartedSince += Time.deltaTime;
 
                 // a function : [0;1] => [0;1] with f(1) = 0
                 // it acts as a smoothing function for the velocity change
                 Func<float, float> kernelFunction = x => Mathf.Exp(-5 * (float) Math.Pow(2 * x - 1, 2));
 
-                Vector3 velocity = dashDirection * (kernelFunction(dashStartedSince / dashDuration) * dashForce) *
-                                   movementSpeed;
+                Vector3 velocity = transform.TransformDirection(dashDirection) *
+                                   (kernelFunction(dashStartedSince / dashDuration) * dashForce);
                 controller.SimpleMove(velocity);
             }
         }
@@ -486,7 +482,8 @@ namespace PlayerControllers
             transform.Rotate(direction, angle);
         }
 
-        [ServerRpc]
+        // ownership ain't required since server has to be able to change the flags
+        [ServerRpc(RequireOwnership = false)]
         private void UpdateFlagsServerRpc(PlayerFlags flag, bool add = true)
         {
             int value = flags.Value;
@@ -501,6 +498,14 @@ namespace PlayerControllers
             }
 
             this.flags.Value = value;
+
+            // flag specific settings
+            switch (flag)
+            {
+                case PlayerFlags.DASHING:
+                    dashStartedSince = 0;
+                    break;
+            }
         }
     }
 }
