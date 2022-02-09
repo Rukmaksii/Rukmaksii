@@ -510,6 +510,9 @@ namespace PlayerControllers
                 case PlayerFlags.DASHING:
                     dashStartedSince = 0;
                     break;
+                case PlayerFlags.FLYING:
+                    yVelocity = 0;
+                    break;
             }
         }
     }
