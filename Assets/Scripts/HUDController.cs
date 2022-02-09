@@ -1,53 +1,51 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
 using GameManagers;
 using PlayerControllers;
+using UnityEngine;
+using UnityEngine.UI;
 using Weapons;
 
 public class HUDController : MonoBehaviour
 {
-
     [SerializeField] protected Slider healthSlider;
     [SerializeField] protected Text healthCounter;
 
     [SerializeField] protected Slider fuelSlider;
     [SerializeField] protected Text fuelCounter;
-    
+
     [SerializeField] protected Slider dashCooldown;
-    
+
     [SerializeField] protected Text ammoCounter;
 
     [SerializeField] protected GameObject hitMarker;
-    
+
     [SerializeField] protected Image weaponPlaceHolder;
-    
+
     [SerializeField] protected Image capturingState;
-    
+
     [SerializeField] protected Sprite rifle;
     [SerializeField] protected Sprite handgun;
 
     private ObjectiveController capturePoint;
-    
+
     private GameController gameController;
-    
+
     public Image Crosshair;
 
     void Start()
     {
         GameObject gameManager = GameObject.FindGameObjectWithTag("GameController");
         gameController = gameManager.GetComponent<GameController>();
-        
+
         SetMaxHealth(100);
         SetMaxFuel(100);
 
         ShowHitMarker(false);
         BaseWeapon.targetHit += ShowHitMarker;
         ObjectiveController.OnPlayerInteract += DisplayCaptureState;
-        
+
         capturingState.enabled = false;
     }
+
     void Update()
     {
         if (gameController.LocalPlayer == null)
@@ -70,13 +68,14 @@ public class HUDController : MonoBehaviour
         SetHealth(gameController.LocalPlayer.CurrentHealthValue);
         SetFuelAmount(gameController.LocalPlayer.Jetpack.FuelConsumption);
         SetDashCooldown(gameController.LocalPlayer.DashedSince, gameController.LocalPlayer.DashCooldown);
-        SetAmmoCounter(gameController.LocalPlayer.Inventory.CurrentWeapon.CurrentAmmo,gameController.LocalPlayer.Inventory.CurrentWeapon.MaxAmmo);
+        SetAmmoCounter(gameController.LocalPlayer.Inventory.CurrentWeapon.CurrentAmmo,
+            gameController.LocalPlayer.Inventory.CurrentWeapon.MaxAmmo);
 
         // updating the capture circle UI if the player is on a point
         if (capturePoint != null)
-            capturingState.fillAmount = capturePoint.Progress/capturePoint.MaxProgress;
+            capturingState.fillAmount = capturePoint.Progress / capturePoint.MaxProgress;
     }
-    
+
     /**
      * <summary> Sets the player's health </summary>
      * <param name="health">int for the max health</param>
@@ -88,7 +87,7 @@ public class HUDController : MonoBehaviour
         healthSlider.value = health;
         healthCounter.text = $"{health}";
     }
-    
+
     public void SetMaxFuel(int fuel)
     {
         fuelSlider.maxValue = fuel;
@@ -106,17 +105,17 @@ public class HUDController : MonoBehaviour
         healthSlider.value = health;
         healthCounter.text = $"{health}";
     }
-    
+
     /**
      * <summary>sets the player's current fuel level </summary>
      * <param name="fuel">float for the current fuel level</param>
      */
     public void SetFuelAmount(float fuel)
     {
-        fuelSlider.value = fuel*100;
-        fuelCounter.text = $"{Mathf.Floor(fuel*100)}";
+        fuelSlider.value = fuel * 100;
+        fuelCounter.text = $"{Mathf.Floor(fuel * 100)}";
     }
-    
+
     /**
      * <summary>sets the player's current dash cooldown </summary>
      * <param name="dashCd">float for the time since last dash</param>
@@ -131,7 +130,7 @@ public class HUDController : MonoBehaviour
             value = 1 - dashCd / maxDashCd;
         dashCooldown.value = value;
     }
-    
+
     /**
      * <summary>sets the player's current ammo count</summary>
      * <param name="ammo">int for the number of ammunition remaining</param>
@@ -164,7 +163,7 @@ public class HUDController : MonoBehaviour
      * <param name="player">BasePlayer for the player capturing it</param>
      * <param name="state">bool for whether the player enters or leaves the objective</param>
      */
-    public void DisplayCaptureState(ObjectiveController area,BasePlayer player, bool state)
+    public void DisplayCaptureState(ObjectiveController area, BasePlayer player, bool state)
     {
         if (player == gameController.LocalPlayer)
         {

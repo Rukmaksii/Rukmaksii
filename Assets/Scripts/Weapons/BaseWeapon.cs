@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using PlayerControllers;
 using model;
+using PlayerControllers;
 using UnityEngine;
 
 namespace Weapons
@@ -15,7 +13,7 @@ namespace Weapons
         public abstract float Range { get; }
 
         public abstract int Damage { get; }
-        
+
         public abstract string Name { get; }
 
         /**
@@ -66,7 +64,7 @@ namespace Weapons
         protected bool isShooting = false;
 
         public bool IsReloading => isReloading;
-        
+
         /** <value>whether the hit marker should be displayed or not</value> */
         private bool hitMarkerDisplayed;
 
@@ -141,7 +139,8 @@ namespace Weapons
             if (betweenBulletsCurrentCD > 0)
             {
                 betweenBulletsCurrentCD -= Time.fixedTime;
-            } else if (isShooting)
+            }
+            else if (isShooting)
             {
                 if (remainingBulletsInRow > 0)
                 {

@@ -7,7 +7,6 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
 using UnityEngine.PlayerLoop;
 using UnityEngine.SceneManagement;
-using UnityEngine.UIElements;
 using Weapons;
 
 namespace PlayerControllers
@@ -239,7 +238,7 @@ namespace PlayerControllers
                 yVelocity += gravity * Time.deltaTime;
                 if (IsGrounded && yVelocity < 0f)
                     yVelocity = 0;
-                
+
                 if (Movement.y > 0)
                     Jump();
                 float multiplier = movementSpeed;
@@ -256,9 +255,6 @@ namespace PlayerControllers
             {
                 controller.Move(transform.TransformDirection(this.Jetpack.Velocity) * Time.deltaTime);
             }
-
-            if (IsShooting)
-                this.inventory.CurrentWeapon.Fire();
         }
 
         /**
@@ -266,14 +262,17 @@ namespace PlayerControllers
          */
         private void UpdateClient()
         {
-            if (IsLocalPlayer)
+            if (!IsLocalPlayer)
+                return;
+
+            cameraController.OnPlayerMove(camRotationAnchor, transform);
+            if (CurrentHealth.Value == 0)
             {
-                cameraController.OnPlayerMove(camRotationAnchor, transform);
-                if (CurrentHealth.Value == 0)
-                {
-                    SceneManager.LoadScene("DeathScreen");
-                }
+                SceneManager.LoadScene("DeathScreen");
             }
+
+            if (IsShooting)
+                this.inventory.CurrentWeapon.Fire();
         }
 
         /**
@@ -335,7 +334,7 @@ namespace PlayerControllers
                 moveVector.y = 0;
                 this.Jetpack.IsFlying = !this.Jetpack.IsFlying;
             }
-            else if(!(ctx.interaction is MultiTapInteraction))
+            else if (!(ctx.interaction is MultiTapInteraction))
             {
                 moveVector.y = ctx.started || ctx.performed ? 1 : 0;
             }
