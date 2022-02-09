@@ -199,7 +199,7 @@ namespace PlayerControllers
             cameraController = playerCamera.GetComponent<CameraController>();
             cameraController.OnPlayerMove(camRotationAnchor, transform);
 
-            if (IsLocalPlayer)
+            if (IsOwner)
                 gameController.BindPlayer(this);
 
             cdManager = gameObject.AddComponent<CooldownManager>();
@@ -262,7 +262,7 @@ namespace PlayerControllers
          */
         private void UpdateClient()
         {
-            if (!IsLocalPlayer)
+            if (!IsOwner)
                 return;
 
             cameraController.OnPlayerMove(camRotationAnchor, transform);
@@ -283,7 +283,7 @@ namespace PlayerControllers
          */
         public void OnMove(InputAction.CallbackContext ctx)
         {
-            if (!IsLocalPlayer)
+            if (!IsOwner)
                 return;
 
             if (ctx.performed)
@@ -309,7 +309,7 @@ namespace PlayerControllers
          */
         public void OnRotation(InputAction.CallbackContext ctx)
         {
-            if (!IsLocalPlayer || cameraController == null)
+            if (!IsOwner || cameraController == null)
                 return;
             Vector2 rotation = ctx.ReadValue<Vector2>();
             UpdateRotationServerRpc(Vector3.up, rotation.x * sensitivity);
@@ -324,7 +324,7 @@ namespace PlayerControllers
          */
         public void OnJump(InputAction.CallbackContext ctx)
         {
-            if (!IsLocalPlayer)
+            if (!IsOwner)
                 return;
 
             var moveVector = Movement;
@@ -355,7 +355,7 @@ namespace PlayerControllers
 
         public void OnLowerJetpack(InputAction.CallbackContext ctx)
         {
-            if (!IsLocalPlayer)
+            if (!IsOwner)
                 return;
 
             var currentMovement = Movement;
@@ -378,7 +378,7 @@ namespace PlayerControllers
          */
         public void OnRun(InputAction.CallbackContext ctx)
         {
-            if (!IsLocalPlayer)
+            if (!IsOwner)
                 return;
 
             UpdateFlagsServerRpc(PlayerFlags.RUNNING, ctx.performed);
@@ -386,7 +386,7 @@ namespace PlayerControllers
 
         public void OnDash(InputAction.CallbackContext ctx)
         {
-            if (!IsLocalPlayer || !cdManager.RequestDash())
+            if (!IsOwner || !cdManager.RequestDash())
                 return;
 
             IsDashing = true;
@@ -414,6 +414,8 @@ namespace PlayerControllers
 
         public void OnFire(InputAction.CallbackContext ctx)
         {
+            if (!IsOwner)
+                return;
             IsShooting = ctx.ReadValueAsButton();
         }
 
