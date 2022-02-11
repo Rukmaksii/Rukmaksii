@@ -158,7 +158,7 @@ namespace PlayerControllers
         /** <value>the duration of the dash in seconds</value> */
         protected virtual float dashDuration { get; set; } = 0.3F;
 
-        protected virtual float dashForce { get; set; } = 80f;
+        protected virtual float dashForce { get; set; } = 30f;
 
         public int MaxHealth => maxHealth;
 
@@ -186,6 +186,8 @@ namespace PlayerControllers
         // getters for respectively the default dash cooldown and the time since last dash
         public float DashCooldown => cdManager.DashCooldown;
         public float DashedSince => cdManager.DashedSince;
+
+        private Vector3 _dashDirection = Vector3.zero;
 
         // default value for fuel duration
         public float DefaultFuelDuration { get; } = 20f;
@@ -467,19 +469,13 @@ namespace PlayerControllers
             }
             else
             {
-                var dashDirection = Movement;
-                if (dashDirection == Vector3.zero)
-                    dashDirection = Vector3.forward;
-
                 dashStartedSince += Time.deltaTime;
 
                 // a function : [0;1] => [0;1] with f(1) = 0
                 // it acts as a smoothing function for the velocity change
-                Func<float, float> kernelFunction = x => Mathf.Exp(-5 * (float)Math.Pow(2 * x - 1, 2));
+                // Func<float, float> kernelFunction = x => Mathf.Exp(-5 * (float)Math.Pow(2 * x - 1, 2));
 
-                Vector3 velocity = transform.TransformDirection(dashDirection) *
-                                   (kernelFunction(dashStartedSince / dashDuration) * dashForce);
-                controller.SimpleMove(velocity);
+                controller.Move(_dashDirection * Time.deltaTime);
             }
         }
 
@@ -545,6 +541,10 @@ namespace PlayerControllers
             {
                 case PlayerFlags.DASHING:
                     dashStartedSince = 0;
+                    Vector3 moveVector = Movement;
+                    if(moveVector == Vector3.zero)
+                        moveVector = Vector3.forward;
+                    _dashDirection = transform.TransformDirection(moveVector) * dashForce;
                     break;
                 case PlayerFlags.FLYING:
                     yVelocity = 0;
