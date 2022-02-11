@@ -47,7 +47,7 @@ namespace PlayerControllers
         [SerializeField] private float sensitivity = .1F;
 
 
-        public bool IsRunning => this.HasFlag(PlayerFlags.RUNNING) && movement.Value.z >= Mathf.Abs(movement.Value.x);
+        public bool IsRunning => this.HasFlag(PlayerFlags.MOVING) && this.HasFlag(PlayerFlags.RUNNING) && movement.Value.z >= Mathf.Abs(movement.Value.x);
 
 
         private CameraController cameraController;
@@ -80,6 +80,36 @@ namespace PlayerControllers
          * <remarks>this velocity is only accessible to and used by the server</remarks>
          */
         private float yVelocity = 0f;
+
+        /**
+         * <value>the local velocity of the player</value>
+         * <remarks>the velocity vector is only available on the server</remarks>
+         */
+        public Vector3 Velocity
+        {
+            get
+            {
+                if (!IsServer)
+                {
+                    throw new NullReferenceException("Velocity is only available on the server");
+                }
+                if (IsFlying)
+                {
+                    return Jetpack.Velocity;
+                }
+                else
+                {
+                    float multiplier = movementSpeed;
+                    if (IsRunning)
+                    {
+                        multiplier *= runningSpeedMultiplier;
+                    }
+                    Vector3 res = Movement * multiplier;
+                    res.y = yVelocity;
+                    return res;
+                }
+            }
+        }
 
 
         public Vector3 Movement => movement.Value;
@@ -162,7 +192,7 @@ namespace PlayerControllers
 
         private bool HasFlag(PlayerFlags flag)
         {
-            int value = (int) flag;
+            int value = (int)flag;
             return HasFlag(value);
         }
 
@@ -171,7 +201,7 @@ namespace PlayerControllers
             int value = 0;
             foreach (PlayerFlags fl in flags)
             {
-                value |= (int) fl;
+                value |= (int)fl;
             }
 
             return HasFlag(value);
@@ -211,6 +241,7 @@ namespace PlayerControllers
             deathScreen.name = deathScreenPrefab.name;
             deathScreen.GetComponent<Canvas>().worldCamera = Camera.current;
             deathScreen.SetActive(false);
+            this.movement.OnValueChanged += onMovementChange;
         }
 
         void Awake()
@@ -256,6 +287,11 @@ namespace PlayerControllers
                 controller.Move(transform.TransformDirection(this.Jetpack.Velocity) * Time.deltaTime);
             }
         }
+
+        private void onMovementChange(Vector3 old, Vector3 newMovement)
+        {
+            UpdateFlagsServerRpc(PlayerFlags.MOVING, newMovement != Vector3.zero);
+        } 
 
         /**
          * <summary>the function is called in <see cref="FixedUpdate"/> if instance is a client</summary>
@@ -439,7 +475,7 @@ namespace PlayerControllers
 
                 // a function : [0;1] => [0;1] with f(1) = 0
                 // it acts as a smoothing function for the velocity change
-                Func<float, float> kernelFunction = x => Mathf.Exp(-5 * (float) Math.Pow(2 * x - 1, 2));
+                Func<float, float> kernelFunction = x => Mathf.Exp(-5 * (float)Math.Pow(2 * x - 1, 2));
 
                 Vector3 velocity = transform.TransformDirection(dashDirection) *
                                    (kernelFunction(dashStartedSince / dashDuration) * dashForce);
@@ -495,11 +531,11 @@ namespace PlayerControllers
 
             if (add)
             {
-                value |= (int) flag;
+                value |= (int)flag;
             }
             else
             {
-                value &= (int) ~flag;
+                value &= (int)~flag;
             }
 
             this.flags.Value = value;
