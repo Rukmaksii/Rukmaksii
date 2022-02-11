@@ -135,7 +135,7 @@ namespace PlayerControllers
 
         public bool IsFlying
         {
-            get => HasFlag(PlayerFlags.FLYING);
+            get => HasFlag(PlayerFlags.FLYING) && !IsGrounded;
             set => UpdateFlagsServerRpc(PlayerFlags.FLYING, value);
         }
 
