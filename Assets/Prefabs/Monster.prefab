@@ -1193,14 +1193,13 @@ GameObject:
   - component: {fileID: 5924946981566760898}
   - component: {fileID: 5924946981566760899}
   - component: {fileID: 5924946981566760900}
-  - component: {fileID: -3025514310170848085}
-  - component: {fileID: 7409105868286347175}
+  - component: {fileID: 4596695589419647195}
   - component: {fileID: -8677153602402066902}
   - component: {fileID: 787241680553691568}
   - component: {fileID: 6966245944067788489}
   m_Layer: 0
   m_Name: Monster
-  m_TagString: Untagged
+  m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1229,8 +1228,8 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6843441952451957665}
   serializedVersion: 2
-  m_Mass: 100
-  m_Drag: 0
+  m_Mass: 1e+9
+  m_Drag: 5
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -1269,7 +1268,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &-3025514310170848085
+--- !u!114 &4596695589419647195
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1278,34 +1277,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 6843441952451957665}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 346a62748b523448096878873907e332, type: 3}
+  m_Script: {fileID: 11500000, guid: 3f8ee66557937455a80b1e2cd57703c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectDistance: 20
-  distanceAttack: 5
-  agent: {fileID: 7409105868286347175}
---- !u!195 &7409105868286347175
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6843441952451957665}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 8
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
 --- !u!114 &-8677153602402066902
 MonoBehaviour:
   m_ObjectHideFlags: 0
