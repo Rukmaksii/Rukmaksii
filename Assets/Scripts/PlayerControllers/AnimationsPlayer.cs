@@ -18,7 +18,6 @@ public class AnimationsPlayer : MonoBehaviour
     void Update()
     {
         Vector3 velocity = player.Velocity;
-        Debug.Log(playerAnimator.GetBool("isSprinting"));
 
         if (velocity.y >= 0.3) //jump
         {
