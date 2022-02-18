@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using model;
 using UnityEngine;
 using PlayerControllers;
 
@@ -25,6 +26,9 @@ namespace GameManagers
 
         public List<GameObject> ItemPrefabs => itemPrefabs;
 
+        [SerializeField] private ConnectionScriptableObject connectionData;
+        public ConnectionData Parameters => connectionData.Data;
+        
         [SerializeField] protected GameObject uiPrefab;
         private GameObject playerUIInstance;
 

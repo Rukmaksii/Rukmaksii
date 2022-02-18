@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using PlayerControllers;
+using Unity.Netcode;
 using UnityEngine;
 
-public class AnimationsPlayer : MonoBehaviour
+public class AnimationsPlayer : NetworkBehaviour
 {
     private Animator playerAnimator;
 
@@ -19,6 +20,8 @@ public class AnimationsPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!IsServer)
+            return;
         Vector3 velocity = player.Velocity;
         playerAnimator.SetBool("fly", player.IsFlying);
         

@@ -47,7 +47,8 @@ namespace PlayerControllers
         [SerializeField] private float sensitivity = .1F;
 
 
-        public bool IsRunning => this.HasFlag(PlayerFlags.MOVING) && this.HasFlag(PlayerFlags.RUNNING) && movement.Value.z >= Mathf.Abs(movement.Value.x);
+        public bool IsRunning => this.HasFlag(PlayerFlags.MOVING) && this.HasFlag(PlayerFlags.RUNNING) &&
+                                 movement.Value.z >= Mathf.Abs(movement.Value.x);
 
 
         private CameraController cameraController;
@@ -93,6 +94,7 @@ namespace PlayerControllers
                 {
                     throw new NullReferenceException("Velocity is only available on the server");
                 }
+
                 if (IsFlying)
                 {
                     return Jetpack.Velocity;
@@ -104,6 +106,7 @@ namespace PlayerControllers
                     {
                         multiplier *= runningSpeedMultiplier;
                     }
+
                     Vector3 res = Movement * multiplier;
                     res.y = yVelocity;
                     return res;
@@ -168,7 +171,7 @@ namespace PlayerControllers
         /** <value>current player health</value> */
         private NetworkVariable<int> CurrentHealth { get; } = new NetworkVariable<int>(1);
 
-        public NetworkVariable<int> TeamId { get; } = new NetworkVariable<int>();
+        private NetworkVariable<int> teamId; 
 
         private NetworkVariable<int> flags = new NetworkVariable<int>(0);
 
@@ -196,7 +199,7 @@ namespace PlayerControllers
 
         private bool HasFlag(PlayerFlags flag)
         {
-            int value = (int)flag;
+            int value = (int) flag;
             return HasFlag(value);
         }
 
@@ -205,7 +208,7 @@ namespace PlayerControllers
             int value = 0;
             foreach (PlayerFlags fl in flags)
             {
-                value |= (int)fl;
+                value |= (int) fl;
             }
 
             return HasFlag(value);
@@ -246,6 +249,11 @@ namespace PlayerControllers
             deathScreen.GetComponent<Canvas>().worldCamera = Camera.current;
             deathScreen.SetActive(false);
             this.movement.OnValueChanged += onMovementChange;
+
+            Debug.Log($"{gameController.Parameters.TeamId}");
+
+            if (IsOwner)
+                this.teamId = new NetworkVariable<int>(gameController.Parameters.TeamId);
         }
 
         void Awake()
@@ -263,7 +271,8 @@ namespace PlayerControllers
 
         public bool CanDamage(BasePlayer other)
         {
-            return other.TeamId.Value != TeamId.Value;
+            Debug.Log($"enemy team {other.teamId.Value}, my team: {teamId.Value}");
+            return other.teamId.Value != teamId.Value;
         }
 
         /**
@@ -300,7 +309,7 @@ namespace PlayerControllers
         private void onMovementChange(Vector3 old, Vector3 newMovement)
         {
             UpdateFlagsServerRpc(PlayerFlags.MOVING, newMovement != Vector3.zero);
-        } 
+        }
 
         /**
          * <summary>the function is called in <see cref="FixedUpdate"/> if instance is a client</summary>
@@ -534,11 +543,11 @@ namespace PlayerControllers
 
             if (add)
             {
-                value |= (int)flag;
+                value |= (int) flag;
             }
             else
             {
-                value &= (int)~flag;
+                value &= (int) ~flag;
             }
 
             this.flags.Value = value;
@@ -549,7 +558,7 @@ namespace PlayerControllers
                 case PlayerFlags.DASHING:
                     dashStartedSince = 0;
                     Vector3 moveVector = Movement;
-                    if(moveVector == Vector3.zero)
+                    if (moveVector == Vector3.zero)
                         moveVector = Vector3.forward;
                     _dashDirection = transform.TransformDirection(moveVector) * dashForce;
                     break;

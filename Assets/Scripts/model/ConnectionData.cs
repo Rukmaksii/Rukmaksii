@@ -14,5 +14,10 @@
          */
         public string ConnectionType = "host";
 
+        /**
+         * <value>the team of the logged in player</value>
+         */
+        public int TeamId = 0;
+
     }
 }
