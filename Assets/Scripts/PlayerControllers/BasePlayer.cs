@@ -168,6 +168,8 @@ namespace PlayerControllers
         /** <value>current player health</value> */
         private NetworkVariable<int> CurrentHealth { get; } = new NetworkVariable<int>(1);
 
+        public NetworkVariable<int> TeamId { get; } = new NetworkVariable<int>();
+
         private NetworkVariable<int> flags = new NetworkVariable<int>(0);
 
         public int CurrentHealthValue => CurrentHealth.Value;
@@ -257,6 +259,11 @@ namespace PlayerControllers
                 UpdateServer();
             if (IsClient)
                 UpdateClient();
+        }
+
+        public bool CanDamage(BasePlayer other)
+        {
+            return other.TeamId.Value != TeamId.Value;
         }
 
         /**

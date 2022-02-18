@@ -204,7 +204,7 @@ namespace Weapons
             if (hit.CompareTag("Player"))
             {
                 BasePlayer enemyPlayer = hit.GetComponent<BasePlayer>();
-                if (enemyPlayer == null)
+                if (enemyPlayer == null || !Player.CanDamage(enemyPlayer))
                 {
                     return false;
                 }
