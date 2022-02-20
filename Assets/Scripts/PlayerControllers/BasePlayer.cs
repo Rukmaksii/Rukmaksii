@@ -171,7 +171,7 @@ namespace PlayerControllers
         /** <value>current player health</value> */
         private NetworkVariable<int> CurrentHealth { get; } = new NetworkVariable<int>(1);
 
-        private NetworkVariable<int> teamId; 
+        private NetworkVariable<int> teamId;
 
         private NetworkVariable<int> flags = new NetworkVariable<int>(0);
 
@@ -250,10 +250,9 @@ namespace PlayerControllers
             deathScreen.SetActive(false);
             this.movement.OnValueChanged += onMovementChange;
 
-            Debug.Log($"{gameController.Parameters.TeamId}");
-
-            if (IsOwner)
-                this.teamId = new NetworkVariable<int>(gameController.Parameters.TeamId);
+            if (IsClient && IsLocalPlayer)
+                this.teamId =
+                    new NetworkVariable<int>(gameController.Parameters.IsReady ? gameController.Parameters.TeamId : 0);
         }
 
         void Awake()
@@ -390,7 +389,7 @@ namespace PlayerControllers
             }
             else if (!(ctx.interaction is MultiTapInteraction))
             {
-                moveVector.y = ctx.started || ctx.performed ? 1 : 0;
+                moveVector.y = (ctx.started || ctx.performed) && !ctx.canceled ? 1 : 0;
             }
 
             UpdateMovementServerRpc(moveVector);

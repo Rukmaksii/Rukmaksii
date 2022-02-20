@@ -17,7 +17,7 @@ namespace GameManagers
 
             // kept for local tests
             // TODO : remove this line and OnGui
-            if (connectionData.Data == null)
+            if (!connectionData.Data.IsReady)
                 return;
             
             GameObject playerPrefab = classPrefabs.Find(go =>
