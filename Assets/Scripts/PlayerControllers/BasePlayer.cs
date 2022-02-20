@@ -236,8 +236,6 @@ namespace PlayerControllers
             cameraController = playerCamera.GetComponent<CameraController>();
             cameraController.OnPlayerMove(camRotationAnchor, transform);
 
-            if (IsOwner)
-                gameController.BindPlayer(this);
 
             cdManager = gameObject.AddComponent<CooldownManager>();
 
@@ -248,11 +246,16 @@ namespace PlayerControllers
             deathScreen.name = deathScreenPrefab.name;
             deathScreen.GetComponent<Canvas>().worldCamera = Camera.current;
             deathScreen.SetActive(false);
-            this.movement.OnValueChanged += onMovementChange;
 
-            if (IsClient && IsLocalPlayer)
+            if (IsOwner)
+            {
+                gameController.BindPlayer(this);
+
+                this.movement.OnValueChanged += onMovementChange;
+
                 this.teamId =
                     new NetworkVariable<int>(gameController.Parameters.IsReady ? gameController.Parameters.TeamId : 0);
+            }
         }
 
         void Awake()
@@ -281,19 +284,21 @@ namespace PlayerControllers
         {
             handleDash();
 
+            var moveVector = movement.Value;
+            Debug.Log($"movement for player {OwnerClientId} is {moveVector}");
             if (!IsFlying)
             {
                 yVelocity += gravity * Time.deltaTime;
                 if (IsGrounded && yVelocity < 0f)
                     yVelocity = 0;
 
-                if (Movement.y > 0)
+                if (moveVector.y > 0)
                     Jump();
                 float multiplier = movementSpeed;
                 if (IsRunning)
                     multiplier *= runningSpeedMultiplier;
 
-                Vector3 velocity = Movement * multiplier;
+                Vector3 velocity = moveVector * multiplier;
                 // y axis direction only concerns jetpack
                 velocity.y = yVelocity;
 
@@ -387,7 +392,7 @@ namespace PlayerControllers
                 moveVector.y = 0;
                 this.Jetpack.IsFlying = !this.Jetpack.IsFlying;
             }
-            else if (!(ctx.interaction is MultiTapInteraction))
+            else 
             {
                 moveVector.y = (ctx.started || ctx.performed) && !ctx.canceled ? 1 : 0;
             }
