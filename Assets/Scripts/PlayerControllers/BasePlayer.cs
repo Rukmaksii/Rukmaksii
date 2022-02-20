@@ -5,7 +5,6 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
-using UnityEngine.PlayerLoop;
 using UnityEngine.SceneManagement;
 using Weapons;
 
@@ -265,15 +264,18 @@ namespace PlayerControllers
         // Update is called once per frame
         private void Update()
         {
-            if (IsServer)
-                UpdateServer();
             if (IsClient)
                 UpdateClient();
         }
 
+        private void FixedUpdate()
+        {
+            if (IsServer)
+                UpdateServer();
+        }
+
         public bool CanDamage(BasePlayer other)
         {
-            Debug.Log($"enemy team {other.teamId.Value}, my team: {teamId.Value}");
             return other.teamId.Value != teamId.Value;
         }
 
@@ -282,13 +284,14 @@ namespace PlayerControllers
          */
         private void UpdateServer()
         {
-            handleDash();
+            var _deltaTime = Time.fixedDeltaTime;
 
+            handleDash(_deltaTime);
             var moveVector = movement.Value;
             Debug.Log($"movement for player {OwnerClientId} is {moveVector}");
             if (!IsFlying)
             {
-                yVelocity += gravity * Time.deltaTime;
+                yVelocity += gravity * _deltaTime;
                 if (IsGrounded && yVelocity < 0f)
                     yVelocity = 0;
 
@@ -302,11 +305,11 @@ namespace PlayerControllers
                 // y axis direction only concerns jetpack
                 velocity.y = yVelocity;
 
-                controller.Move(transform.TransformDirection(velocity) * Time.deltaTime);
+                controller.Move(transform.TransformDirection(velocity) * _deltaTime);
             }
             else
             {
-                controller.Move(transform.TransformDirection(this.Jetpack.Velocity) * Time.deltaTime);
+                controller.Move(transform.TransformDirection(this.Jetpack.Velocity) * _deltaTime);
             }
         }
 
@@ -392,7 +395,7 @@ namespace PlayerControllers
                 moveVector.y = 0;
                 this.Jetpack.IsFlying = !this.Jetpack.IsFlying;
             }
-            else 
+            else
             {
                 moveVector.y = (ctx.started || ctx.performed) && !ctx.canceled ? 1 : 0;
             }
@@ -478,24 +481,24 @@ namespace PlayerControllers
         }
 
 
-        private void handleDash()
+        private void handleDash(float _deltaTime)
         {
             if (!IsDashing)
                 return;
             if (dashStartedSince > dashDuration)
             {
                 dashStartedSince = 0;
-                IsDashing = false;
+                this.IsDashing = false;
             }
             else
             {
-                dashStartedSince += Time.deltaTime;
+                dashStartedSince += _deltaTime;
 
                 // a function : [0;1] => [0;1] with f(1) = 0
                 // it acts as a smoothing function for the velocity change
                 // Func<float, float> kernelFunction = x => Mathf.Exp(-5 * (float)Math.Pow(2 * x - 1, 2));
 
-                controller.Move(_dashDirection * Time.deltaTime);
+                controller.Move(_dashDirection * _deltaTime);
             }
         }
 
