@@ -250,8 +250,6 @@ namespace PlayerControllers
             {
                 gameController.BindPlayer(this);
 
-                this.movement.OnValueChanged += onMovementChange;
-
                 this.teamId =
                     new NetworkVariable<int>(gameController.Parameters.IsReady ? gameController.Parameters.TeamId : 0);
             }
@@ -266,10 +264,6 @@ namespace PlayerControllers
         {
             if (IsClient)
                 UpdateClient();
-        }
-
-        private void FixedUpdate()
-        {
             if (IsServer)
                 UpdateServer();
         }
@@ -280,15 +274,14 @@ namespace PlayerControllers
         }
 
         /**
-         * <summary>the function is called in <see cref="FixedUpdate"/> if instance is server</summary>
+         * <summary>the function is called in <see cref="Update"/> if instance is server</summary>
          */
         private void UpdateServer()
         {
-            var _deltaTime = Time.fixedDeltaTime;
+            var _deltaTime = Time.deltaTime;
 
             handleDash(_deltaTime);
             var moveVector = movement.Value;
-            Debug.Log($"movement for player {OwnerClientId} is {moveVector}");
             if (!IsFlying)
             {
                 yVelocity += gravity * _deltaTime;
@@ -297,25 +290,9 @@ namespace PlayerControllers
 
                 if (moveVector.y > 0)
                     Jump();
-                float multiplier = movementSpeed;
-                if (IsRunning)
-                    multiplier *= runningSpeedMultiplier;
-
-                Vector3 velocity = moveVector * multiplier;
-                // y axis direction only concerns jetpack
-                velocity.y = yVelocity;
-
-                controller.Move(transform.TransformDirection(velocity) * _deltaTime);
             }
-            else
-            {
-                controller.Move(transform.TransformDirection(this.Jetpack.Velocity) * _deltaTime);
-            }
-        }
 
-        private void onMovementChange(Vector3 old, Vector3 newMovement)
-        {
-            UpdateFlagsServerRpc(PlayerFlags.MOVING, newMovement != Vector3.zero);
+            controller.Move(transform.TransformDirection(this.Velocity) * _deltaTime);
         }
 
         /**
@@ -442,6 +419,7 @@ namespace PlayerControllers
             if (!IsOwner)
                 return;
 
+
             UpdateFlagsServerRpc(PlayerFlags.RUNNING, ctx.performed);
         }
 
@@ -487,7 +465,6 @@ namespace PlayerControllers
                 return;
             if (dashStartedSince > dashDuration)
             {
-                dashStartedSince = 0;
                 this.IsDashing = false;
             }
             else
@@ -533,6 +510,7 @@ namespace PlayerControllers
         [ServerRpc]
         public void UpdateMovementServerRpc(Vector3 movement)
         {
+            UpdateFlagsServerRpc(PlayerFlags.MOVING, movement.magnitude > 0);
             this.movement.Value = movement;
         }
 
