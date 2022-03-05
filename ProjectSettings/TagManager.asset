@@ -10,6 +10,8 @@ TagManager:
   - FuelBoosterItem
   - CaptureArea
   - Destructible
+  - Monster
+  - Minion
   layers:
   - Default
   - TransparentFX
