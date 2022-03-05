@@ -245,7 +245,6 @@ namespace PlayerControllers
             deathScreen.name = deathScreenPrefab.name;
             deathScreen.GetComponent<Canvas>().worldCamera = Camera.current;
             deathScreen.SetActive(false);
-            this.movement.OnValueChanged += onMovementChange;
 
             if (IsClient && IsLocalPlayer)
                 this.teamId =
