@@ -411,6 +411,13 @@ namespace PlayerControllers
             UpdateMovementServerRpc(currentMovement);
         }
 
+        public void OnReload(InputAction.CallbackContext _)
+        {
+            BaseWeapon weapon = inventory.CurrentWeapon;
+            if (weapon.CurrentAmmo < weapon.MaxAmmo)
+                inventory.CurrentWeapon.Reload();
+        }
+
         /**
          * <summary>called when run button is toggled</summary>
          */
