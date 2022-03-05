@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using Items;
 using PlayerControllers;
 using UnityEngine;
@@ -127,7 +125,7 @@ namespace model
                     lightWeapon = newWeapon;
                     break;
                 case WeaponType.CloseRange:
-                    if(closeRangeWeapon)
+                    if (closeRangeWeapon)
                         Object.Destroy(closeRangeWeapon);
                     closeRangeWeapon = newWeapon;
                     break;
@@ -168,6 +166,32 @@ namespace model
                     }
 
                     break;
+            }
+
+            return switched;
+        }
+
+        public bool NextWeapon()
+        {
+            int offset = (int) CurrentWeapon.Type;
+            bool switched = false;
+            for (int i = 1; i < 3 && !switched; i++)
+            {
+                WeaponType t = (WeaponType) ((offset + i) % 3);
+                switched = SwitchWeapon(t);
+            }
+
+            return switched;
+        }
+
+        public bool PreviousWeapon()
+        {
+            int offset = (int) CurrentWeapon.Type;
+            bool switched = false;
+            for (int i = 2; i > 0 && !switched; i--)
+            {
+                WeaponType t = (WeaponType) ((offset + i) % 3);
+                switched = SwitchWeapon(t);
             }
 
             return switched;

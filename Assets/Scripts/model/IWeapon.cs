@@ -3,9 +3,9 @@
 
     public enum WeaponType
     {
-        CloseRange,
-        Light,
-        Heavy
+        CloseRange = 0,
+        Light = 1,
+        Heavy = 2
     }
     
     
