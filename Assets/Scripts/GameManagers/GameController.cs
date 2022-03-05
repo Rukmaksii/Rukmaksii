@@ -6,6 +6,7 @@ using model;
 using UnityEngine;
 using PlayerControllers;
 using UnityEngine.AI;
+using Unity.Netcode;
 
 
 namespace GameManagers
@@ -39,8 +40,8 @@ namespace GameManagers
         private BasePlayer localPlayer;
         
         
-        [SerializeField] protected MonsterControler monster;
-        private MonsterControler monsterinstance;
+        [SerializeField]protected GameObject monster;
+        private GameObject monsterinstance;
 
         public BasePlayer LocalPlayer => localPlayer;
 
@@ -65,13 +66,16 @@ namespace GameManagers
         IEnumerator waitagent()
         {
             yield return new WaitForSeconds(10);
-            monsterinstance = Instantiate(monster);
-            Vector3 sourcePostion = new Vector3( 15, -0.01f, -6 );//The position you want to place your agent
-            NavMeshHit closestHit;
-            NavMesh.SamplePosition(sourcePostion, out closestHit, 500, 2);
-            monsterinstance.transform.position = sourcePostion;
-            yield return new WaitForSeconds(5);
-            monsterinstance.gameObject.AddComponent<NavMeshAgent>();
+            for (int i = 0; i < 4; i++)
+            {
+                monsterinstance = Instantiate(monster);
+                Vector3 sourcePostion = new Vector3(15 * i, -0.01f, -6); //The position you want to place your agent
+                NavMeshHit closestHit;
+                NavMesh.SamplePosition(sourcePostion, out closestHit, 500, 2);
+                monsterinstance.transform.position = sourcePostion;
+                yield return new WaitForSeconds(5);
+                monsterinstance.gameObject.AddComponent<NavMeshAgent>();
+            }
         }
     }
 }

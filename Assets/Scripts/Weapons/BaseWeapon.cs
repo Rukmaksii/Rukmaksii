@@ -222,6 +222,14 @@ namespace Weapons
                 hitMarkerDisplayed = true;
                 targetHit?.Invoke(true);
             }
+            else if (hit.CompareTag("Monster"))
+            {
+                MonstersControler.MonsterControler monster = hit.GetComponent<MonstersControler.MonsterControler>();
+                monster.TakeDamage(10, monster);
+                
+                hitMarkerDisplayed = true;
+                targetHit?.Invoke(true);
+            }
             else
             {
                 // none of the tags has been found
