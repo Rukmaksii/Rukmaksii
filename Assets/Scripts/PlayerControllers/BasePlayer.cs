@@ -413,6 +413,8 @@ namespace PlayerControllers
 
         public void OnReload(InputAction.CallbackContext _)
         {
+            if(!IsOwner)
+                return;
             BaseWeapon weapon = inventory.CurrentWeapon;
             if (weapon.CurrentAmmo < weapon.MaxAmmo)
                 inventory.CurrentWeapon.Reload();
@@ -463,6 +465,12 @@ namespace PlayerControllers
             if (!IsOwner)
                 return;
             IsShooting = ctx.ReadValueAsButton();
+        }
+
+        public void OnWeaponSwitch(InputAction.CallbackContext ctx)
+        {
+            if (!IsOwner)
+                return;
         }
 
 
