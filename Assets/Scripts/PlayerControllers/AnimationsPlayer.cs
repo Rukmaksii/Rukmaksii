@@ -40,6 +40,7 @@ public class AnimationsPlayer : NetworkBehaviour
         playerAnimator.SetBool("isSprinting", player.IsRunning);
 
         playerAnimator.SetBool("jump", velocity.y > 0);
+        
         if (playerAnimator.GetBool("grounded"))
         {
             playerAnimator.SetBool("grounded", GetTimeSinceBool() < 0.5);
@@ -73,6 +74,7 @@ public class AnimationsPlayer : NetworkBehaviour
         }
     }
  
+    //Calculates how much time has the player been in the air
     private float GetTimeSinceBool()
     {
         if (fall)
