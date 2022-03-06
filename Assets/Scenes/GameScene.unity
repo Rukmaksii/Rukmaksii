@@ -229,7 +229,7 @@ Terrain:
   serializedVersion: 6
   m_TerrainData: {fileID: 15600000, guid: 4f9a8f2acfc50214b844de90f960ca62, type: 2}
   m_TreeDistance: 5000
-  m_TreeBillboardDistance: 50
+  m_TreeBillboardDistance: 1979
   m_TreeCrossFadeLength: 5
   m_TreeMaximumFullLODCount: 50
   m_DetailObjectDistance: 80
@@ -1430,10 +1430,7 @@ MonoBehaviour:
   - {fileID: 5389904766975277859, guid: 9fde8f6081cd8e04a9350c6346afd875, type: 3}
   connectionData: {fileID: 11400000, guid: 51f4e5ed14290eb4db05031d297551b9, type: 2}
   uiPrefab: {fileID: 6371553158960861218, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
-  deathScreenPrefab: {fileID: 1499698901574752855, guid: d3dc5c1c781e5ea1299fe7f2164dc726, type: 3}
-  deathScreen: {fileID: 0}
   monster: {fileID: 6843441952451957665, guid: edbe904d3f30c5642ba4b86ee96c8e78, type: 3}
-  respawnTime: 5
 --- !u!1 &1503162093 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 9b9fd771c7fdd8f47916ec892f083d0a, type: 3}
