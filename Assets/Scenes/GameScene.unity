@@ -1245,6 +1245,18 @@ PrefabInstance:
       propertyPath: offset.z
       value: -2.2
       objectReference: {fileID: 0}
+    - target: {fileID: 1563196920304608971, guid: 12753b32a91009243a64647d5e8a635f, type: 3}
+      propertyPath: baseOffset.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1563196920304608971, guid: 12753b32a91009243a64647d5e8a635f, type: 3}
+      propertyPath: baseOffset.y
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1563196920304608971, guid: 12753b32a91009243a64647d5e8a635f, type: 3}
+      propertyPath: baseOffset.z
+      value: -2.2
+      objectReference: {fileID: 0}
     - target: {fileID: 1692979137761755435, guid: 12753b32a91009243a64647d5e8a635f, type: 3}
       propertyPath: m_RootOrder
       value: 2

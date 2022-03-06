@@ -17,7 +17,7 @@ namespace PlayerControllers
      *      the local offset of the camera
      * </value>
      */
-        [SerializeField] private Vector3 baseOffset = new Vector3(0f, 0, -2f);
+        [SerializeField] private Vector3 baseOffset = new Vector3(.5f, .3f, -2.2f);
 
         private Vector3 offset;
 
@@ -115,7 +115,7 @@ namespace PlayerControllers
 
         public void ResetOffset()
         {
-            this.offset = offset;
+            this.offset = baseOffset;
         }
     }
 }
