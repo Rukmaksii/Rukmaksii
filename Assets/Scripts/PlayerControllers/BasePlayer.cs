@@ -168,9 +168,6 @@ namespace PlayerControllers
         public Inventory Inventory => inventory;
         public Jetpack Jetpack => inventory.Jetpack;
 
-        [SerializeField] protected GameObject deathScreenPrefab;
-        private GameObject deathScreen;
-
         /** <value>the duration of the dash in seconds</value> */
         protected virtual float dashDuration { get; set; } = 0.3F;
 
@@ -257,11 +254,6 @@ namespace PlayerControllers
 
             UpdateHealthServerRpc(maxHealth, OwnerClientId);
             controller = gameObject.GetComponent<CharacterController>();
-
-            deathScreen = Instantiate(deathScreenPrefab);
-            deathScreen.name = deathScreenPrefab.name;
-            deathScreen.GetComponent<Canvas>().worldCamera = Camera.current;
-            deathScreen.SetActive(false);
 
             if (IsOwner)
             {
@@ -469,9 +461,6 @@ namespace PlayerControllers
         {
             if (damage >= CurrentHealth.Value)
             {
-                gameController.OnKilled(this);
-                deathScreen.SetActive(true);
-                
                 UpdateHealthServerRpc(0, this.OwnerClientId);
                 return false;
             }
@@ -504,7 +493,7 @@ namespace PlayerControllers
                 Inventory.RemoveItem(item);
             }
             
-            deathScreen.SetActive(false);
+            gameController.deathScreen.SetActive(false);
         }
         
         public void OnWeaponSwitch(InputAction.CallbackContext ctx)

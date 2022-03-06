@@ -40,6 +40,10 @@ namespace GameManagers
         
         [SerializeField] protected GameObject uiPrefab;
         private GameObject playerUIInstance;
+        
+        [SerializeField] protected GameObject deathScreenPrefab;
+        
+        public GameObject deathScreen;
 
         private BasePlayer localPlayer;
         
@@ -61,8 +65,12 @@ namespace GameManagers
         {
             playerUIInstance = Instantiate(uiPrefab);
             playerUIInstance.name = uiPrefab.name;
-
             playerUIInstance.GetComponent<Canvas>().worldCamera = Camera.current;
+            
+            deathScreen = Instantiate(deathScreenPrefab);
+            deathScreen.name = deathScreenPrefab.name;
+            deathScreen.GetComponent<Canvas>().worldCamera = Camera.current;
+            deathScreen.SetActive(false);
             
             StartCoroutine(waitagent());
         }
@@ -75,6 +83,9 @@ namespace GameManagers
                 BasePlayer basePlayer = player.GetComponent<BasePlayer>();
                 if (basePlayer.CurrentHealthValue <= 0)
                 {
+                    if (basePlayer == LocalPlayer)
+                        deathScreen.SetActive(true);
+                    
                     player.SetActive(false);
 
                     StartCoroutine(RespawnTimer(player));
@@ -84,11 +95,6 @@ namespace GameManagers
                     player.SetActive(true);
                 }
             }
-        }
-
-        public void OnKilled(BasePlayer player)
-        {
-            //
         }
 
         IEnumerator RespawnTimer(GameObject player)
