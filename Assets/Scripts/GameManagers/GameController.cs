@@ -74,17 +74,7 @@ namespace GameManagers
                 if (basePlayer.CurrentHealthValue <= 0)
                 {
                     player.SetActive(false);
-                    /*
-                    CharacterController cc = basePlayer.GetComponent(typeof(CharacterController)) as CharacterController;
-                    cc.enabled = false;
-                    
-                    // respawn position
-                    player.GetComponent<BasePlayer>().UpdatePositionServerRpc(new Vector3(0f, 1f, 0f));
-                    
-                    StartCoroutine(RespawnTimer(player, basePlayer));
-                    */
-                    
-                    Debug.Log("killed");
+
                     StartCoroutine(RespawnTimer(player));
                 }
                 else
