@@ -181,6 +181,9 @@ namespace model
                 switched = SwitchWeapon(t);
             }
 
+
+            Debug.Log($"current weapon: {CurrentWeapon.Type}");
+            Debug.Log($"heavy: {this.heavyWeapon != null}, light: {this.lightWeapon != null}");
             return switched;
         }
 

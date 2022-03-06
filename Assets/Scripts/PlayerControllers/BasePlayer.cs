@@ -225,8 +225,11 @@ namespace PlayerControllers
 
             this.inventory = new Inventory(this);
 
-            GameObject testWeaponPrefab = gameController.WeaponPrefabs.Find(go => go.name == "TestAutoPrefab");
-            this.inventory.AddWeapon(Instantiate(testWeaponPrefab).GetComponent<BaseWeapon>());
+            GameObject autoWeaponPrefab = gameController.WeaponPrefabs.Find(go => go.name == "TestAutoPrefab");
+            this.inventory.AddWeapon(Instantiate(autoWeaponPrefab).GetComponent<BaseWeapon>());
+            
+            GameObject gunWeaponPrefab = gameController.WeaponPrefabs.Find(go => go.name == "TestGunPrefab");
+            this.inventory.AddWeapon(Instantiate(gunWeaponPrefab).GetComponent<BaseWeapon>());
 
             inventory.Jetpack = gameObject.AddComponent<Jetpack>();
             inventory.Jetpack.FuelDuration = DefaultFuelDuration;
@@ -413,7 +416,7 @@ namespace PlayerControllers
 
         public void OnReload(InputAction.CallbackContext _)
         {
-            if(!IsOwner)
+            if (!IsOwner)
                 return;
             BaseWeapon weapon = inventory.CurrentWeapon;
             if (weapon.CurrentAmmo < weapon.MaxAmmo)
@@ -471,6 +474,13 @@ namespace PlayerControllers
         {
             if (!IsOwner)
                 return;
+
+            float value = ctx.ReadValue<float>();
+            bool result = false;
+            if (value > 0)
+                result = inventory.NextWeapon();
+            else if (value < 0)
+                result = inventory.PreviousWeapon();
         }
 
 
