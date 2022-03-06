@@ -170,7 +170,7 @@ namespace PlayerControllers
         /** <value>current player health</value> */
         private NetworkVariable<int> CurrentHealth { get; } = new NetworkVariable<int>(1);
 
-        private NetworkVariable<int> teamId;
+        private NetworkVariable<int> teamId = new NetworkVariable<int>(-1);
 
         private NetworkVariable<int> flags = new NetworkVariable<int>(0);
 
@@ -253,8 +253,7 @@ namespace PlayerControllers
             {
                 gameController.BindPlayer(this);
 
-                this.teamId =
-                    new NetworkVariable<int>(gameController.Parameters.IsReady ? gameController.Parameters.TeamId : 0);
+                UpdateTeamServerRpc(gameController.Parameters.IsReady ? gameController.Parameters.TeamId : 0);
             }
         }
 
@@ -490,7 +489,6 @@ namespace PlayerControllers
             {
                 // TODO : implement 1,2,3 weapon switch control
             }
-            
         }
 
 
@@ -586,6 +584,12 @@ namespace PlayerControllers
                     yVelocity = 0;
                     break;
             }
+        }
+
+        [ServerRpc]
+        private void UpdateTeamServerRpc(int teamId)
+        {
+            this.teamId.Value = teamId;
         }
     }
 }
