@@ -511,7 +511,7 @@ namespace PlayerControllers
             if (!IsOwner)
                 return;
 
-            SetAim(ctx.performed);
+            SetAim(!inventory.CurrentWeapon.IsReloading && ctx.performed);
         }
 
         private void SetAim(bool aim)
