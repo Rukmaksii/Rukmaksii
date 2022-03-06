@@ -227,7 +227,7 @@ namespace PlayerControllers
 
             GameObject autoWeaponPrefab = gameController.WeaponPrefabs.Find(go => go.name == "TestRiflePrefab");
             this.inventory.AddWeapon(Instantiate(autoWeaponPrefab).GetComponent<BaseWeapon>());
-            
+
             GameObject gunWeaponPrefab = gameController.WeaponPrefabs.Find(go => go.name == "TestGunPrefab");
             this.inventory.AddWeapon(Instantiate(gunWeaponPrefab).GetComponent<BaseWeapon>());
 
@@ -476,12 +476,21 @@ namespace PlayerControllers
             if (!IsOwner)
                 return;
 
-            float value = ctx.ReadValue<float>();
-            bool result = false;
-            if (value > 0)
-                result = inventory.NextWeapon();
-            else if (value < 0)
-                result = inventory.PreviousWeapon();
+            // mouse wheel control
+            if (ctx.action.type == InputActionType.PassThrough)
+            {
+                float value = ctx.ReadValue<float>();
+                bool result = false;
+                if (value > 0)
+                    result = inventory.NextWeapon();
+                else if (value < 0)
+                    result = inventory.PreviousWeapon();
+            }
+            else // 1,2,3 control
+            {
+                // TODO : implement 1,2,3 weapon switch control
+            }
+            
         }
 
 
