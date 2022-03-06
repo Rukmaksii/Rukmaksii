@@ -17,7 +17,9 @@ namespace PlayerControllers
      *      the local offset of the camera
      * </value>
      */
-        [SerializeField] private Vector3 offset = new Vector3(0f, 0, -2f);
+        [SerializeField] private Vector3 baseOffset = new Vector3(0f, 0, -2f);
+
+        private Vector3 offset;
 
         /**
      * <value>
@@ -80,6 +82,7 @@ namespace PlayerControllers
 
         void Start()
         {
+            ResetOffset();
             cam = GetComponent<Camera>();
             _addedAngle = baseAngle;
         }
@@ -103,6 +106,16 @@ namespace PlayerControllers
             Vector3 camAngles = playerAngles + Vector3.right * AddedAngle;
 
             camTransform.localEulerAngles = camAngles;
+        }
+
+        public void ChangeOffset(Vector3 offset)
+        {
+            this.offset = offset;
+        }
+
+        public void ResetOffset()
+        {
+            this.offset = offset;
         }
     }
 }
