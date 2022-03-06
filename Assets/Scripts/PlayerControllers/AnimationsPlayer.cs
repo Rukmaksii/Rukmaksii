@@ -33,14 +33,13 @@ public class AnimationsPlayer : NetworkBehaviour
         }
 
         _Enabled = fall;
-        
+
         Vector3 velocity = player.Movement;
         playerAnimator.SetBool("fly", player.IsFlying);
         
         playerAnimator.SetBool("isSprinting", player.IsRunning);
 
         playerAnimator.SetBool("jump", velocity.y > 0);
-        
         if (playerAnimator.GetBool("grounded"))
         {
             playerAnimator.SetBool("grounded", GetTimeSinceBool() < 0.5);
@@ -50,7 +49,7 @@ public class AnimationsPlayer : NetworkBehaviour
             playerAnimator.SetBool("grounded", player.IsGrounded);
 
         }
-
+        
         playerAnimator.SetBool("forward", false);
         playerAnimator.SetBool("backward", false);
         playerAnimator.SetBool("left", false);
