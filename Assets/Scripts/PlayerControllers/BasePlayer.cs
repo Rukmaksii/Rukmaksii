@@ -175,8 +175,6 @@ namespace PlayerControllers
         protected virtual float dashDuration { get; set; } = 0.3F;
 
         protected virtual float dashForce { get; set; } = 30f;
-
-        public bool IsAlive = true;
         
         public int MaxHealth => maxHealth;
 
@@ -288,8 +286,7 @@ namespace PlayerControllers
 
         public bool CanDamage(BasePlayer other)
         {
-            return true;
-            //TODO: correct this: return other.teamId.Value != teamId.Value;
+            return other.teamId.Value != teamId.Value;
         }
 
         /**
