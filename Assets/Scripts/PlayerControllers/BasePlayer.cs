@@ -432,7 +432,10 @@ namespace PlayerControllers
                 return;
             BaseWeapon weapon = inventory.CurrentWeapon;
             if (weapon.CurrentAmmo < weapon.MaxAmmo)
+            {
                 inventory.CurrentWeapon.Reload();
+                SetAim(false);
+            }
         }
 
         /**
@@ -444,9 +447,7 @@ namespace PlayerControllers
                 return;
 
 
-            UpdateFlagsServerRpc(PlayerFlags.RUNNING, ctx.performed);
-            if (!ctx.performed)
-                SetAim(false);
+            UpdateFlagsServerRpc(PlayerFlags.RUNNING, !IsAiming && ctx.performed);
         }
 
         public void OnDash(InputAction.CallbackContext ctx)
