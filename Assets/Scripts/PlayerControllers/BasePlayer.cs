@@ -63,7 +63,7 @@ namespace PlayerControllers
         protected CooldownManager cdManager;
 
         protected GameController gameController;
-
+        
         // the world space point the camera will rotate around
         protected Vector3 camRotationAnchor
         {
@@ -174,6 +174,8 @@ namespace PlayerControllers
 
         protected virtual float dashForce { get; set; } = 30f;
 
+        public static event Action<BasePlayer> PlayerKilled;
+        
         public int MaxHealth => maxHealth;
 
 
@@ -284,7 +286,8 @@ namespace PlayerControllers
 
         public bool CanDamage(BasePlayer other)
         {
-            return other.teamId.Value != teamId.Value;
+            return true;
+            //TODO: correct this: return other.teamId.Value != teamId.Value;
         }
 
         /**
@@ -318,10 +321,8 @@ namespace PlayerControllers
                 return;
 
             UpdateCamera();
-            if (CurrentHealth.Value == 0)
-            {
-                SceneManager.LoadScene("DeathScreen");
-            }
+            
+            cameraController.OnPlayerMove(camRotationAnchor, transform);
 
             if (IsShooting)
                 this.inventory.CurrentWeapon.Fire();
@@ -597,6 +598,12 @@ namespace PlayerControllers
         {
             UpdateFlagsServerRpc(PlayerFlags.MOVING, movement.magnitude > 0);
             this.movement.Value = movement;
+        }
+        
+        [ServerRpc(RequireOwnership = false)]
+        public void UpdatePositionServerRpc(Vector3 position)
+        {
+            transform.position = position;
         }
 
         [ServerRpc]
