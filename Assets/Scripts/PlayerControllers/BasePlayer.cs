@@ -470,6 +470,8 @@ namespace PlayerControllers
             if (damage >= CurrentHealth.Value)
             {
                 gameController.OnKilled(this);
+                deathScreen.SetActive(true);
+                
                 UpdateHealthServerRpc(0, this.OwnerClientId);
                 return false;
             }
@@ -501,6 +503,8 @@ namespace PlayerControllers
             {
                 Inventory.RemoveItem(item);
             }
+            
+            deathScreen.SetActive(false);
         }
         
         public void OnWeaponSwitch(InputAction.CallbackContext ctx)
