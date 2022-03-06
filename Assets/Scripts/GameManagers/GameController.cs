@@ -103,15 +103,20 @@ namespace GameManagers
         {
             BasePlayer basePlayer = player.GetComponent<BasePlayer>();
             yield return new WaitForSeconds(5);
-            player.SetActive(true);
-            basePlayer.UpdateHealthServerRpc(basePlayer.MaxHealth, basePlayer.OwnerClientId);
+
+            if (!player.activeSelf)
+            {
+                
+                player.SetActive(true);
+                basePlayer.UpdateHealthServerRpc(basePlayer.MaxHealth, basePlayer.OwnerClientId);
             
-            CharacterController cc = basePlayer.GetComponent(typeof(CharacterController)) as CharacterController;
-            cc.enabled = false;
+                CharacterController cc = basePlayer.GetComponent(typeof(CharacterController)) as CharacterController;
+                cc.enabled = false;
             
-            basePlayer.OnRespawn();
+                basePlayer.OnRespawn();
             
-            cc.enabled = true;
+                cc.enabled = true;
+            }
         }
         
         IEnumerator waitagent()
