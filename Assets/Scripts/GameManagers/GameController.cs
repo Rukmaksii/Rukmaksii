@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Items;
 using JetBrains.Annotations;
 using model;
 using UnityEngine;
@@ -9,6 +10,7 @@ using PlayerControllers;
 using UnityEngine.AI;
 using Unity.Netcode;
 using UnityEngine.PlayerLoop;
+using UnityEngine.Purchasing;
 
 
 namespace GameManagers
@@ -46,7 +48,7 @@ namespace GameManagers
         private GameObject monsterinstance;
 
         public BasePlayer LocalPlayer => localPlayer;
-
+        
         public void BindPlayer(BasePlayer player)
         {
             localPlayer = player;
@@ -63,37 +65,53 @@ namespace GameManagers
             StartCoroutine(waitagent());
         }
 
-        public void OnKilled(BasePlayer deadPlayer)
+        private void Update()
         {
             GameObject[] playersArray = GameObject.FindGameObjectsWithTag("Player");
             foreach (var player in playersArray)
             {
                 BasePlayer basePlayer = player.GetComponent<BasePlayer>();
-                if (basePlayer.OwnerClientId == deadPlayer.OwnerClientId)
+                if (basePlayer.CurrentHealthValue <= 0)
                 {
-                    // death room position
-                    basePlayer.UpdatePositionServerRpc(new Vector3(0f, -45f, 0f));
+                    player.SetActive(false);
+                    /*
+                    CharacterController cc = basePlayer.GetComponent(typeof(CharacterController)) as CharacterController;
+                    cc.enabled = false;
                     
-                    player.GetComponent<BasePlayer>().UpdateHealthServerRpc(basePlayer.MaxHealth, basePlayer.OwnerClientId);
+                    // respawn position
+                    player.GetComponent<BasePlayer>().UpdatePositionServerRpc(new Vector3(0f, 1f, 0f));
                     
-                    StartCoroutine(respawnTimer(player));
+                    StartCoroutine(RespawnTimer(player, basePlayer));
+                    */
+                    
+                    Debug.Log("killed");
+                    StartCoroutine(RespawnTimer(player));
+                }
+                else
+                {
+                    player.SetActive(true);
                 }
             }
         }
 
-        IEnumerator respawnTimer(GameObject player)
+        public void OnKilled(BasePlayer player)
         {
-            player.SetActive(false);
-            yield return new WaitForSeconds(0.1f);
+            //
+        }
+
+        IEnumerator RespawnTimer(GameObject player)
+        {
+            BasePlayer basePlayer = player.GetComponent<BasePlayer>();
+            yield return new WaitForSeconds(5);
             player.SetActive(true);
-            yield return new WaitForSeconds(0.1f);
-            player.SetActive(false);
-            yield return new WaitForSeconds(3);
-            player.SetActive(true);
-            yield return new WaitForSeconds(0.1f);
+            basePlayer.UpdateHealthServerRpc(basePlayer.MaxHealth, basePlayer.OwnerClientId);
             
-            // respawn position
-            player.GetComponent<BasePlayer>().UpdatePositionServerRpc(new Vector3(0f, 1f, 0f));
+            CharacterController cc = basePlayer.GetComponent(typeof(CharacterController)) as CharacterController;
+            cc.enabled = false;
+            
+            basePlayer.OnRespawn();
+            
+            cc.enabled = true;
         }
         
         IEnumerator waitagent()

@@ -195,6 +195,8 @@ namespace model
 
         private List<BaseItem> itemsList = new List<BaseItem>();
 
+        public List<BaseItem> ItemsList => itemsList;
+
         /**
          * <summary>adds an instantiated item to the inventory</summary>
          * <param name="item">a BaseItem to be added</param>

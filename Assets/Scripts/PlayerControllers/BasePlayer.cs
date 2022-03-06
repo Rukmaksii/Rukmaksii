@@ -1,10 +1,12 @@
 using System;
 using GameManagers;
+using Items;
 using model;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
+using UnityEngine.Purchasing;
 using UnityEngine.SceneManagement;
 using Weapons;
 
@@ -174,7 +176,7 @@ namespace PlayerControllers
 
         protected virtual float dashForce { get; set; } = 30f;
 
-        public static event Action<BasePlayer> PlayerKilled;
+        public bool IsAlive = true;
         
         public int MaxHealth => maxHealth;
 
@@ -321,7 +323,7 @@ namespace PlayerControllers
                 return;
 
             UpdateCamera();
-            
+
             cameraController.OnPlayerMove(camRotationAnchor, transform);
 
             if (IsShooting)
@@ -470,6 +472,7 @@ namespace PlayerControllers
         {
             if (damage >= CurrentHealth.Value)
             {
+                gameController.OnKilled(this);
                 UpdateHealthServerRpc(0, this.OwnerClientId);
                 return false;
             }
@@ -487,6 +490,22 @@ namespace PlayerControllers
             IsShooting = ctx.ReadValueAsButton();
         }
 
+        public void OnRespawn()
+        {
+            this.UpdatePositionServerRpc(new Vector3(0f,0f,0f));
+            
+            GameObject autoWeaponPrefab = gameController.WeaponPrefabs.Find(go => go.name == "TestAutoPrefab");
+            this.inventory.AddWeapon(Instantiate(autoWeaponPrefab).GetComponent<BaseWeapon>());
+
+            GameObject gunWeaponPrefab = gameController.WeaponPrefabs.Find(go => go.name == "TestGunPrefab");
+            this.inventory.AddWeapon(Instantiate(gunWeaponPrefab).GetComponent<BaseWeapon>());
+            
+            foreach (BaseItem item in Inventory.ItemsList)
+            {
+                Inventory.RemoveItem(item);
+            }
+        }
+        
         public void OnWeaponSwitch(InputAction.CallbackContext ctx)
         {
             if (!IsOwner || IsAiming)
@@ -544,7 +563,6 @@ namespace PlayerControllers
             cameraController.OnPlayerMove(camRotationAnchor, transform);
         }
 
-
         private void handleDash(float _deltaTime)
         {
             if (!IsDashing)
@@ -589,7 +607,7 @@ namespace PlayerControllers
         {
             BasePlayer damagedPlayer = NetworkManager.Singleton.ConnectedClients[playerId].PlayerObject
                 .GetComponent<BasePlayer>();
-
+            
             damagedPlayer.CurrentHealth.Value = newHealth;
         }
 
