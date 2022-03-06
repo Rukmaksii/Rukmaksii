@@ -328,7 +328,7 @@ namespace PlayerControllers
          * </summary>
          * <param name="ctx">the <see cref="InputAction.CallbackContext"/> giving the move axis values </param>
          */
-        private void OnMove(InputAction.CallbackContext ctx)
+        public void OnMove(InputAction.CallbackContext ctx)
         {
             if (!IsOwner)
                 return;
@@ -354,7 +354,7 @@ namespace PlayerControllers
          * </summary>
          * <param name="ctx">the <see cref="InputAction.CallbackContext"/> giving the rotation delta </param>
          */
-        private void OnRotation(InputAction.CallbackContext ctx)
+        public void OnRotation(InputAction.CallbackContext ctx)
         {
             if (!IsOwner || cameraController == null)
                 return;
@@ -369,7 +369,7 @@ namespace PlayerControllers
          *      Called when the jump event is triggered within unity
          * </summary>
          */
-        private void OnJump(InputAction.CallbackContext ctx)
+        public void OnJump(InputAction.CallbackContext ctx)
         {
             if (!IsOwner)
                 return;
@@ -401,7 +401,7 @@ namespace PlayerControllers
             }
         }
 
-        private void OnLowerJetpack(InputAction.CallbackContext ctx)
+        public void OnLowerJetpack(InputAction.CallbackContext ctx)
         {
             if (!IsOwner)
                 return;
@@ -421,7 +421,7 @@ namespace PlayerControllers
             UpdateMovementServerRpc(currentMovement);
         }
 
-        private void OnReload(InputAction.CallbackContext _)
+        public void OnReload(InputAction.CallbackContext _)
         {
             if (!IsOwner)
                 return;
@@ -433,7 +433,7 @@ namespace PlayerControllers
         /**
          * <summary>called when run button is toggled</summary>
          */
-        private void OnRun(InputAction.CallbackContext ctx)
+        public void OnRun(InputAction.CallbackContext ctx)
         {
             if (!IsOwner)
                 return;
@@ -442,7 +442,7 @@ namespace PlayerControllers
             UpdateFlagsServerRpc(PlayerFlags.RUNNING, ctx.performed);
         }
 
-        private void OnDash(InputAction.CallbackContext ctx)
+        public void OnDash(InputAction.CallbackContext ctx)
         {
             if (!IsOwner || !cdManager.RequestDash())
                 return;
@@ -470,14 +470,14 @@ namespace PlayerControllers
             }
         }
 
-        private void OnFire(InputAction.CallbackContext ctx)
+        public void OnFire(InputAction.CallbackContext ctx)
         {
             if (!IsOwner)
                 return;
             IsShooting = ctx.ReadValueAsButton();
         }
 
-        private void OnWeaponSwitch(InputAction.CallbackContext ctx)
+        public void OnWeaponSwitch(InputAction.CallbackContext ctx)
         {
             if (!IsOwner || IsAiming)
                 return;
@@ -498,7 +498,7 @@ namespace PlayerControllers
             }
         }
 
-        private void OnAim(InputAction.CallbackContext ctx)
+        public void OnAim(InputAction.CallbackContext ctx)
         {
             if (!IsOwner)
                 return;

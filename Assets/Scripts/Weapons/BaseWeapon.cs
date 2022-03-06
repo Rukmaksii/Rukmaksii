@@ -80,7 +80,7 @@ namespace Weapons
         /**
          * <value>the <see cref="CameraController.offset">camera offset</see> to be set when aiming</value>
          */
-        public virtual Vector3 AimingOffset { get; } = new Vector3(0.3f, 0.1f, -0.5f);
+        public virtual Vector3 AimingOffset { get; } = new Vector3(0.3f, 0.3f, -0.7f);
 
         /**
          * <value>the hud to set when aiming</value>
