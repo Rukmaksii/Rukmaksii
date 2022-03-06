@@ -23,8 +23,7 @@ public class AnimationsPlayer : NetworkBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        Debug.Log(player.IsGrounded + "   " + GetTimeSinceBool());
+    { 
         fall = !player.IsGrounded;
 
         if (fall && !_Enabled)
