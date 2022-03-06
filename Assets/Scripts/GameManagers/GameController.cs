@@ -6,6 +6,7 @@ using Items;
 using JetBrains.Annotations;
 using model;
 using UnityEngine;
+using UnityEngine.UI;
 using PlayerControllers;
 using UnityEngine.AI;
 using Unity.Netcode;
@@ -42,7 +43,7 @@ namespace GameManagers
         private GameObject playerUIInstance;
         
         [SerializeField] protected GameObject deathScreenPrefab;
-        
+
         public GameObject deathScreen;
 
         private BasePlayer localPlayer;
@@ -84,7 +85,11 @@ namespace GameManagers
                 if (basePlayer.CurrentHealthValue <= 0)
                 {
                     if (basePlayer == LocalPlayer)
+                    {
                         deathScreen.SetActive(true);
+                        StartCoroutine(DeathScreenTimer());
+                    }
+
                     
                     player.SetActive(false);
 
@@ -97,6 +102,15 @@ namespace GameManagers
             }
         }
 
+        IEnumerator DeathScreenTimer()
+        {
+            for (int i = respawnTime; i > 0; i--)
+            {
+                deathScreen.GetComponent<Canvas>().GetComponentsInChildren<Text>()[1].text = $"Respawning in {i} seconds";
+                yield return new WaitForSeconds(1);
+            }
+        }
+        
         IEnumerator RespawnTimer(GameObject player)
         {
             BasePlayer basePlayer = player.GetComponent<BasePlayer>();
