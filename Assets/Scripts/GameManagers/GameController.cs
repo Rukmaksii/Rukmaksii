@@ -44,9 +44,11 @@ namespace GameManagers
         private BasePlayer localPlayer;
         
         
-        [SerializeField]protected GameObject monster;
+        [SerializeField] protected GameObject monster;
         private GameObject monsterinstance;
 
+        [SerializeField] private int respawnTime = 5;
+        
         public BasePlayer LocalPlayer => localPlayer;
         
         public void BindPlayer(BasePlayer player)
@@ -92,7 +94,7 @@ namespace GameManagers
         IEnumerator RespawnTimer(GameObject player)
         {
             BasePlayer basePlayer = player.GetComponent<BasePlayer>();
-            yield return new WaitForSeconds(5);
+            yield return new WaitForSeconds(respawnTime);
 
             if (!player.activeSelf)
             {
