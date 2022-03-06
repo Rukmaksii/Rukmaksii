@@ -47,8 +47,13 @@ namespace PlayerControllers
         [SerializeField] private float sensitivity = .1F;
 
 
-        public bool IsRunning => this.HasFlag(PlayerFlags.MOVING) && this.HasFlag(PlayerFlags.RUNNING) &&
-                                 movement.Value.z >= Mathf.Abs(movement.Value.x);
+        public bool IsRunning
+        {
+            get
+                => this.HasFlag(PlayerFlags.MOVING) && this.HasFlag(PlayerFlags.RUNNING) &&
+                   movement.Value.z >= Mathf.Abs(movement.Value.x);
+            private set => UpdateFlagsServerRpc(PlayerFlags.RUNNING, value);
+        }
 
 
         private CameraController cameraController;
@@ -440,6 +445,8 @@ namespace PlayerControllers
 
 
             UpdateFlagsServerRpc(PlayerFlags.RUNNING, ctx.performed);
+            if (!ctx.performed)
+                SetAim(false);
         }
 
         public void OnDash(InputAction.CallbackContext ctx)
@@ -448,6 +455,7 @@ namespace PlayerControllers
                 return;
 
             IsDashing = true;
+            SetAim(false);
         }
 
         /**
@@ -486,11 +494,10 @@ namespace PlayerControllers
             if (ctx.action.type == InputActionType.PassThrough)
             {
                 float value = ctx.ReadValue<float>();
-                bool result = false;
                 if (value > 0)
-                    result = inventory.NextWeapon();
+                    inventory.NextWeapon();
                 else if (value < 0)
-                    result = inventory.PreviousWeapon();
+                    inventory.PreviousWeapon();
             }
             else // 1,2,3 control
             {
@@ -503,12 +510,23 @@ namespace PlayerControllers
             if (!IsOwner)
                 return;
 
+            SetAim(ctx.performed);
+        }
+
+        private void SetAim(bool aim)
+        {
+            if (aim == IsAiming)
+                return;
+
             GameObject hud = inventory.CurrentWeapon.AimingHUD;
-            if(hud != null)
-                hud.SetActive(ctx.performed);
-            
-            if (ctx.performed)
+            if (hud != null)
+                hud.SetActive(aim);
+
+            IsAiming = aim;
+
+            if (aim)
             {
+                IsRunning = false;
                 cameraController.ChangeOffset(inventory.CurrentWeapon.AimingOffset);
                 UpdateCamera();
             }
@@ -516,7 +534,6 @@ namespace PlayerControllers
             {
                 cameraController.ResetOffset();
                 UpdateCamera();
-                
             }
         }
 
