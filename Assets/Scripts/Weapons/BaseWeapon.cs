@@ -184,6 +184,7 @@ namespace Weapons
 
         public void Reload()
         {
+            currentAmmo = 0;
             this.isReloading = true;
             remainingReloadTime = ReloadTime;
         }

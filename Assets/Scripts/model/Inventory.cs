@@ -68,32 +68,28 @@ namespace model
                     {
                         return closeRangeWeapon;
                     }
-                    else
-                    {
-                        availableWeapon = closeRangeWeapon;
-                    }
+
+                    availableWeapon = closeRangeWeapon;
                 }
-                else if (lightWeapon != null)
+
+                if (lightWeapon != null)
                 {
                     if (selectedType == lightWeapon.Type)
                     {
                         return lightWeapon;
                     }
-                    else
-                    {
-                        availableWeapon = lightWeapon;
-                    }
+
+                    availableWeapon = lightWeapon;
                 }
-                else if (heavyWeapon != null)
+
+                if (heavyWeapon != null)
                 {
                     if (selectedType == heavyWeapon.Type)
                     {
                         return heavyWeapon;
                     }
-                    else
-                    {
-                        availableWeapon = heavyWeapon;
-                    }
+
+                    availableWeapon = heavyWeapon;
                 }
 
                 return availableWeapon;
@@ -145,7 +141,7 @@ namespace model
                 case WeaponType.Heavy:
                     if (heavyWeapon != null)
                     {
-                        selectedType = type;
+                        selectedType = WeaponType.Heavy;
                         switched = true;
                     }
 
@@ -153,7 +149,7 @@ namespace model
                 case WeaponType.Light:
                     if (lightWeapon != null)
                     {
-                        selectedType = type;
+                        selectedType = WeaponType.Light;
                         switched = true;
                     }
 
@@ -161,7 +157,7 @@ namespace model
                 case WeaponType.CloseRange:
                     if (closeRangeWeapon != null)
                     {
-                        selectedType = type;
+                        selectedType = WeaponType.CloseRange;
                         switched = true;
                     }
 
@@ -181,9 +177,6 @@ namespace model
                 switched = SwitchWeapon(t);
             }
 
-
-            Debug.Log($"current weapon: {CurrentWeapon.Type}");
-            Debug.Log($"heavy: {this.heavyWeapon != null}, light: {this.lightWeapon != null}");
             return switched;
         }
 

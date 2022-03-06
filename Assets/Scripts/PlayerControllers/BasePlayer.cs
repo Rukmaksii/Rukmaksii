@@ -225,7 +225,7 @@ namespace PlayerControllers
 
             this.inventory = new Inventory(this);
 
-            GameObject autoWeaponPrefab = gameController.WeaponPrefabs.Find(go => go.name == "TestAutoPrefab");
+            GameObject autoWeaponPrefab = gameController.WeaponPrefabs.Find(go => go.name == "TestRiflePrefab");
             this.inventory.AddWeapon(Instantiate(autoWeaponPrefab).GetComponent<BaseWeapon>());
             
             GameObject gunWeaponPrefab = gameController.WeaponPrefabs.Find(go => go.name == "TestGunPrefab");
@@ -367,6 +367,7 @@ namespace PlayerControllers
         {
             if (!IsOwner)
                 return;
+
 
             var moveVector = Movement;
 
