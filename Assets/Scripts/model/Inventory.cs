@@ -171,9 +171,9 @@ namespace model
         {
             int offset = (int) CurrentWeapon.Type;
             bool switched = false;
-            for (int i = 1; i < 3 && !switched; i++)
+            for (int i = offset + 1; i < 3 && !switched; i++)
             {
-                WeaponType t = (WeaponType) ((offset + i) % 3);
+                WeaponType t = (WeaponType) i;
                 switched = SwitchWeapon(t);
             }
 
@@ -184,9 +184,9 @@ namespace model
         {
             int offset = (int) CurrentWeapon.Type;
             bool switched = false;
-            for (int i = 2; i > 0 && !switched; i--)
+            for (int i = offset - 1; i > 0 && !switched; i--)
             {
-                WeaponType t = (WeaponType) ((offset + i) % 3);
+                WeaponType t = (WeaponType) i;
                 switched = SwitchWeapon(t);
             }
 
