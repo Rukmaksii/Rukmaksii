@@ -20,9 +20,7 @@ public class AnimationsPlayer : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!IsServer)
-            return;
-        Vector3 velocity = player.Velocity;
+        Vector3 velocity = player.Movement;
         playerAnimator.SetBool("fly", player.IsFlying);
         
         playerAnimator.SetBool("isSprinting", player.IsRunning);
