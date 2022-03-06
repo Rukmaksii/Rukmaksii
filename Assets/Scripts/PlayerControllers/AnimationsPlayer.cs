@@ -10,6 +10,10 @@ public class AnimationsPlayer : NetworkBehaviour
 
     private BasePlayer player;
 
+    private bool fall;
+    private bool _Enabled;
+    private float TimeFromBoolStart = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,14 +24,33 @@ public class AnimationsPlayer : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(player.IsGrounded + "   " + GetTimeSinceBool());
+        fall = !player.IsGrounded;
+
+        if (fall && !_Enabled)
+        {
+            _Enabled = true;
+            TimeFromBoolStart = Time.realtimeSinceStartup;
+        }
+
+        _Enabled = fall;
+        
         Vector3 velocity = player.Movement;
         playerAnimator.SetBool("fly", player.IsFlying);
         
         playerAnimator.SetBool("isSprinting", player.IsRunning);
 
-        playerAnimator.SetBool("jump", velocity.y >= 0.3);
+        playerAnimator.SetBool("jump", velocity.y > 0);
+        
+        if (playerAnimator.GetBool("grounded"))
+        {
+            playerAnimator.SetBool("grounded", GetTimeSinceBool() < 0.5);
+        }
+        else
+        {
+            playerAnimator.SetBool("grounded", player.IsGrounded);
 
-        playerAnimator.SetBool("grounded", player.IsGrounded);
+        }
 
         playerAnimator.SetBool("forward", false);
         playerAnimator.SetBool("backward", false);
@@ -49,6 +72,18 @@ public class AnimationsPlayer : NetworkBehaviour
         else if (velocity.x > 0.7) //right
         {
             playerAnimator.SetBool("right", true);
+        }
+    }
+ 
+    private float GetTimeSinceBool()
+    {
+        if (fall)
+        {
+            return Time.realtimeSinceStartup - TimeFromBoolStart;
+        }
+        else
+        {
+            return 0;
         }
     }
 }
