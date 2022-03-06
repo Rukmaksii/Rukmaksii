@@ -246,9 +246,13 @@ namespace PlayerControllers
             deathScreen.GetComponent<Canvas>().worldCamera = Camera.current;
             deathScreen.SetActive(false);
 
-            if (IsClient && IsLocalPlayer)
+            if (IsOwner)
+            {
+                gameController.BindPlayer(this);
+
                 this.teamId =
                     new NetworkVariable<int>(gameController.Parameters.IsReady ? gameController.Parameters.TeamId : 0);
+            }
         }
 
         void Awake()
