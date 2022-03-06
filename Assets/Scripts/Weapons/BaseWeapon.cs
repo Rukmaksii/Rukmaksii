@@ -77,6 +77,16 @@ namespace Weapons
         /** <summary>action for when a player hits a target and if it is a player</summary> */
         public static event Action<bool> targetHit;
 
+        /**
+         * <value>the <see cref="CameraController.offset">camera offset</see> to be set when aiming</value>
+         */
+        public virtual Vector3 AimingOffset { get; } = new Vector3(0.3f, 0.1f, -0.5f);
+
+        /**
+         * <value>the hud to set when aiming</value>
+         */
+        public virtual GameObject AimingHUD { get; } = null;
+
         void Start()
         {
             currentAmmo = MaxAmmo;
@@ -219,7 +229,7 @@ namespace Weapons
             {
                 DestructibleController destructible = hit.GetComponent<DestructibleController>();
                 destructible.Health -= 20;
-                
+
                 hitMarkerDisplayed = true;
                 targetHit?.Invoke(true);
             }
@@ -227,7 +237,7 @@ namespace Weapons
             {
                 MonstersControler.MonsterControler monster = hit.GetComponent<MonstersControler.MonsterControler>();
                 monster.TakeDamage(10, monster);
-                
+
                 hitMarkerDisplayed = true;
                 targetHit?.Invoke(true);
             }
@@ -240,4 +250,5 @@ namespace Weapons
             return true;
         }
     }
+    
 }
