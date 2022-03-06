@@ -243,7 +243,7 @@ namespace PlayerControllers
 
             GameObject playerCamera = GameObject.FindGameObjectWithTag("Player Camera");
             cameraController = playerCamera.GetComponent<CameraController>();
-            cameraController.OnPlayerMove(camRotationAnchor, transform);
+            UpdateCamera();
 
 
             cdManager = gameObject.AddComponent<CooldownManager>();
@@ -312,7 +312,7 @@ namespace PlayerControllers
             if (!IsOwner)
                 return;
 
-            cameraController.OnPlayerMove(camRotationAnchor, transform);
+            UpdateCamera();
             if (CurrentHealth.Value == 0)
             {
                 SceneManager.LoadScene("DeathScreen");
@@ -502,6 +502,27 @@ namespace PlayerControllers
         {
             if (!IsOwner)
                 return;
+
+            GameObject hud = inventory.CurrentWeapon.AimingHUD;
+            if(hud != null)
+                hud.SetActive(ctx.performed);
+            
+            if (ctx.performed)
+            {
+                cameraController.ChangeOffset(inventory.CurrentWeapon.AimingOffset);
+                UpdateCamera();
+            }
+            else
+            {
+                cameraController.ResetOffset();
+                UpdateCamera();
+                
+            }
+        }
+
+        private void UpdateCamera()
+        {
+            cameraController.OnPlayerMove(camRotationAnchor, transform);
         }
 
 
