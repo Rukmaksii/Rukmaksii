@@ -66,9 +66,19 @@ namespace Menus
             selectMenu.SetActive(true);
         }
         
+        public void OnHost()
+        {
+            connectionData.Data = new ConnectionData();
+            
+            connectionData.Data.ConnectionType = "host";
+            
+            mainMenu.SetActive(false);
+            selectMenu.SetActive(true);
+        }
+        
         public void OnOptions()
         {
-            // TODO
+            // TODO: add an option tab
             Debug.Log("Entering options menu");
         }
         
