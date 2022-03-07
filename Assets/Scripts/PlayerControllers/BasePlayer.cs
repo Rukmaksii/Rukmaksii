@@ -57,8 +57,8 @@ namespace PlayerControllers
             private set => UpdateFlagsServerRpc(PlayerFlags.RUNNING, value);
         }
 
-        public GameObject currentWeaponModel;
         private GameObject[] weapons;
+        private Transform[] weaponRends;
 
 
         private CameraController cameraController;
@@ -283,7 +283,15 @@ namespace PlayerControllers
             weapons = GameObject.FindGameObjectsWithTag("Weapon");
             foreach (GameObject weaponModel in weapons)
             {
-                weaponModel.SetActive(String.Equals(weaponModel.name, Inventory.CurrentWeapon.Name));
+                weaponModel.GetComponent<MeshRenderer>().enabled = String.Equals(weaponModel.name, Inventory.CurrentWeapon.Name);
+                weaponRends = weaponModel.GetComponentsInChildren<Transform>();
+                foreach (Transform tran in weaponRends)
+                {
+                    if (tran.GetComponent<MeshRenderer>() != null)
+                    {
+                        tran.GetComponent<MeshRenderer>().enabled = String.Equals(weaponModel.name, Inventory.CurrentWeapon.Name);
+                    }
+                }
             }
         }
 
@@ -341,8 +349,6 @@ namespace PlayerControllers
 
             if (IsShooting)
                 this.inventory.CurrentWeapon.Fire();
-            
-            
         }
 
         /**
@@ -539,7 +545,15 @@ namespace PlayerControllers
                 //change currentWeaponModel
                 foreach (GameObject weaponModel in weapons)
                 {
-                    weaponModel.SetActive(String.Equals(weaponModel.name, Inventory.CurrentWeapon.Name));
+                    weaponModel.GetComponent<MeshRenderer>().enabled = String.Equals(weaponModel.name, Inventory.CurrentWeapon.Name);
+                    weaponRends = weaponModel.GetComponentsInChildren<Transform>();
+                    foreach (Transform tran in weaponRends)
+                    {
+                        if (tran.GetComponent<MeshRenderer>() != null)
+                        {
+                            tran.GetComponent<MeshRenderer>().enabled = String.Equals(weaponModel.name, Inventory.CurrentWeapon.Name);
+                        }
+                    }
                 }
             }
             else // 1,2,3 control
