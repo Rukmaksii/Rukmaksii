@@ -191,8 +191,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sensitivity: 0.1
-  gravity: -9.81
-  deathScreenPrefab: {fileID: 1499698901574752855, guid: d3dc5c1c781e5ea1299fe7f2164dc726, type: 3}
+  gravity: -19.62
 --- !u!114 &1260994430873029613
 MonoBehaviour:
   m_ObjectHideFlags: 0

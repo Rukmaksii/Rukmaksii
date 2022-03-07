@@ -22,9 +22,6 @@ public class HUDController : MonoBehaviour
 
     [SerializeField] protected Image capturingState;
 
-    [SerializeField] protected Sprite rifle;
-    [SerializeField] protected Sprite handgun;
-
     private ObjectiveController capturePoint;
 
     private GameController gameController;
