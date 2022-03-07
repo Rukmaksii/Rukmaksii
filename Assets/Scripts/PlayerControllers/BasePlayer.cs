@@ -286,7 +286,7 @@ namespace PlayerControllers
                     spawnPoint = obj.transform.position;
                 }
 
-                Debug.Log($"position: {spawnPoint}");
+                spawnPoint -= GetComponent<CapsuleCollider>().height * Vector3.up;
 
                 UpdatePositionServerRpc(spawnPoint);
                 GameObject playerCamera = GameObject.FindGameObjectWithTag("Player Camera");
