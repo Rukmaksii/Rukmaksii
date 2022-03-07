@@ -73,7 +73,7 @@ namespace GameManagers
             deathScreen.GetComponent<Canvas>().worldCamera = Camera.current;
             deathScreen.SetActive(false);
             
-            StartCoroutine(waitagent());
+            StartCoroutine(Waitagent());
         }
 
         private void Update()
@@ -131,7 +131,7 @@ namespace GameManagers
             }
         }
         
-        IEnumerator waitagent()
+        IEnumerator Waitagent()
         {
             yield return new WaitForSeconds(0);
             for (int i = 0; i < 4; i++)

@@ -51,19 +51,7 @@ public class HUDController : MonoBehaviour
         if (gameController.LocalPlayer == null)
             return;
 
-        // display the correct weapon on the HUD
-        switch (gameController.LocalPlayer.Inventory.CurrentWeapon.Name)
-        {
-            case "rifle":
-                weaponPlaceHolder.sprite = rifle;
-                break;
-            case "handgun":
-                weaponPlaceHolder.sprite = handgun;
-                break;
-            default:
-                weaponPlaceHolder.sprite = handgun;
-                break;
-        }
+        weaponPlaceHolder.sprite = gameController.LocalPlayer.Inventory.CurrentWeapon.sprite;
 
         SetHealth(gameController.LocalPlayer.CurrentHealthValue);
         SetFuelAmount(gameController.LocalPlayer.Jetpack.FuelConsumption);

@@ -7,6 +7,7 @@ namespace Weapons
 {
     public abstract class BaseWeapon : MonoBehaviour, IWeapon
     {
+        [SerializeField] public new Sprite sprite;
         public abstract WeaponType Type { get; }
         public BasePlayer Player { get; set; }
 

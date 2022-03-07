@@ -43,7 +43,7 @@ public class ObjectiveController : MonoBehaviour
     public List<BasePlayer> CapturingPlayersList => capturingPlayersList;
     
     public static event Action<ObjectiveController,BasePlayer,bool> OnPlayerInteract;
-    public static event Action<bool> OnCaptured;
+    // TODO: public static event Action<bool> OnCaptured;
     
     // Start is called before the first frame update
     void Start()
