@@ -262,10 +262,6 @@ namespace PlayerControllers
             inventory.Jetpack = gameObject.AddComponent<Jetpack>();
             inventory.Jetpack.FuelDuration = DefaultFuelDuration;
 
-            GameObject playerCamera = GameObject.FindGameObjectWithTag("Player Camera");
-            cameraController = playerCamera.GetComponent<CameraController>();
-            UpdateCamera();
-
 
             cdManager = gameObject.AddComponent<CooldownManager>();
 
@@ -278,7 +274,25 @@ namespace PlayerControllers
 
                 int teamId = gameController.Parameters.IsReady ? gameController.Parameters.TeamId : 0;
                 UpdateTeamServerRpc(teamId);
-                
+
+                if (teamId == 1)
+                {
+                    GameObject obj = GameObject.FindGameObjectWithTag("SpawnPoint2");
+                    spawnPoint = obj.transform.position;
+                }
+                else
+                {
+                    GameObject obj = GameObject.FindGameObjectWithTag("SpawnPoint1");
+                    spawnPoint = obj.transform.position;
+                }
+
+                Debug.Log($"position: {spawnPoint}");
+
+                UpdatePositionServerRpc(spawnPoint);
+                GameObject playerCamera = GameObject.FindGameObjectWithTag("Player Camera");
+                cameraController = playerCamera.GetComponent<CameraController>();
+                UpdateCamera();
+
 
                 Cursor.lockState = CursorLockMode.Locked;
             }
@@ -302,7 +316,6 @@ namespace PlayerControllers
 
         void Awake()
         {
-            UpdatePositionServerRpc(spawnPoint);
         }
 
         // Update is called once per frame
@@ -658,10 +671,10 @@ namespace PlayerControllers
             this.movement.Value = movement;
         }
 
-        [ServerRpc(RequireOwnership = false)]
+        [ServerRpc]
         public void UpdatePositionServerRpc(Vector3 position)
         {
-            transform.position = position;
+            controller.Move(position);
         }
 
         [ServerRpc]
