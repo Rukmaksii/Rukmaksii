@@ -558,9 +558,9 @@ namespace PlayerControllers
             {
                 float value = ctx.ReadValue<float>();
                 if (value > 0)
-                    inventory.NextWeapon();
-                else if (value < 0)
                     inventory.PreviousWeapon();
+                else if (value < 0)
+                    inventory.NextWeapon();
                 //change currentWeaponModel
                 foreach (GameObject weaponModel in weapons)
                 {
