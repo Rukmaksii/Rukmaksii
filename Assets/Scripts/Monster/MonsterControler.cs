@@ -24,7 +24,7 @@ namespace MonstersControler
 
         IEnumerator wait()
         {
-            yield return new WaitForSeconds(5);
+            yield return new WaitForSeconds(15);
             MonsterAI monsterAI = gameObject.AddComponent(typeof(MonsterAI)) as MonsterAI;
             monsterAI.agent = gameObject.GetComponent<NavMeshAgent>();
         }
