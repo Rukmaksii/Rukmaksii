@@ -23,7 +23,7 @@ public class AnimationsPlayer : NetworkBehaviour
 
     // Update is called once per frame
     void Update()
-    { 
+    {
         fall = !player.IsGrounded;
 
         if (fall && !_Enabled)
@@ -36,26 +36,26 @@ public class AnimationsPlayer : NetworkBehaviour
 
         Vector3 velocity = player.Movement;
         playerAnimator.SetBool("fly", player.IsFlying);
-        
+
         playerAnimator.SetBool("isSprinting", player.IsRunning);
 
         playerAnimator.SetBool("jump", velocity.y > 0);
-        
-        if (playerAnimator.GetBool("grounded"))
+
+        if (playerAnimator.GetBool("grounded") && !playerAnimator.GetBool("jump"))
         {
             playerAnimator.SetBool("grounded", GetTimeSinceBool() < 0.5);
         }
         else
         {
             playerAnimator.SetBool("grounded", player.IsGrounded);
-
         }
-        
+
+
         playerAnimator.SetBool("forward", false);
         playerAnimator.SetBool("backward", false);
         playerAnimator.SetBool("left", false);
         playerAnimator.SetBool("right", false);
-        
+
         if (velocity.z >= 0.7) //forward
         {
             playerAnimator.SetBool("forward", true);
@@ -73,7 +73,7 @@ public class AnimationsPlayer : NetworkBehaviour
             playerAnimator.SetBool("right", true);
         }
     }
- 
+
     //Calculates how much time has the player been in the air
     private float GetTimeSinceBool()
     {
