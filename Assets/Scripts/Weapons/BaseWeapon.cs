@@ -7,7 +7,7 @@ namespace Weapons
 {
     public abstract class BaseWeapon : MonoBehaviour, IWeapon
     {
-        [SerializeField] public new Sprite sprite;
+        [SerializeField] public Sprite sprite;
         public abstract WeaponType Type { get; }
         public BasePlayer Player { get; set; }
 
@@ -37,23 +37,23 @@ namespace Weapons
         protected float remainingReloadTime;
 
         /**
-     * <value>the current percentage of the reload </value>
-     */
+        * <value>the current percentage of the reload </value>
+        */
         public float ReloadRate => remainingReloadTime / ReloadTime;
 
         /**
-     * <value>the number of bullet fired each time the fire is called </value>
-     */
+        * <value>the number of bullet fired each time the fire is called </value>
+        */
         public abstract int BulletsInRow { get; }
 
         /**
-     * <value>the time in seconds between each bullet in a bullet row (when <see cref="BulletsInRow"/> is bigger than 1)</value>
-     */
+        * <value>the time in seconds between each bullet in a bullet row (when <see cref="BulletsInRow"/> is bigger than 1)</value>
+        */
         public abstract float BulletsInRowSpacing { get; }
 
         /**
-     * <value>the number of remaining bullets to send in a bullet row</value>
-     */
+        * <value>the number of remaining bullets to send in a bullet row</value>
+        */
         protected int remainingBulletsInRow;
 
         /**

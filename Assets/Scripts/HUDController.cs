@@ -90,6 +90,7 @@ public class HUDController : MonoBehaviour
      */
     public void SetHealth(int health)
     {
+        healthSlider.maxValue = gameController.LocalPlayer.MaxHealth;
         healthSlider.value = health;
         healthCounter.text = $"{health}";
     }

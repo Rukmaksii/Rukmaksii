@@ -480,7 +480,8 @@ namespace PlayerControllers
 
         public void OnRespawn()
         {
-            this.UpdatePositionServerRpc(new Vector3(0f,0f,0f));
+            // respawn location
+            this.UpdatePositionServerRpc(new Vector3(30f,0f,30f));
             
             GameObject autoWeaponPrefab = gameController.WeaponPrefabs.Find(go => go.name == "TestAutoPrefab");
             this.inventory.AddWeapon(Instantiate(autoWeaponPrefab).GetComponent<BaseWeapon>());
