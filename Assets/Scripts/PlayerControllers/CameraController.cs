@@ -21,6 +21,8 @@ namespace PlayerControllers
 
         private Vector3 offset;
 
+        public Vector3 Offset => offset;
+
         /**
      * <value>
      *      the base angle on the x-axis (pitch) of the camera

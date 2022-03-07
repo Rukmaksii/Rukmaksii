@@ -76,6 +76,20 @@ namespace PlayerControllers
             }
         }
 
+        protected Vector3 fireCastPoint
+        {
+            get
+            {
+                var cld = GetComponent<CapsuleCollider>();
+                Vector2 crosshairPosition = new Vector2(0.5f, 0.5f);
+
+                Vector3 origin = cameraController.Camera.ViewportToWorldPoint(crosshairPosition);
+                origin -= cameraController.Offset;
+                origin += transform.TransformVector(Vector3.forward * cld.radius * 2);
+                return origin;
+            }
+        }
+
         [SerializeField] private float gravity = -9.81f;
 
         /**
@@ -581,13 +595,9 @@ namespace PlayerControllers
          */
         public GameObject GetObjectInSight(float weaponRange)
         {
-            Vector2 crosshairPosition = new Vector2(0.5f, 0.5f);
-
-            Vector3 origin = cameraController.Camera.ViewportToWorldPoint(crosshairPosition);
-
             RaycastHit hit;
 
-            if (!Physics.Raycast(origin, cameraController.Camera.transform.forward, out hit, weaponRange))
+            if (!Physics.Raycast(fireCastPoint, cameraController.Camera.transform.forward, out hit, weaponRange))
 
                 return null;
 
