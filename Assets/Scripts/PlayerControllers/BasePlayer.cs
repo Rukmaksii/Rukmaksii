@@ -65,7 +65,7 @@ namespace PlayerControllers
         protected CooldownManager cdManager;
 
         protected GameController gameController;
-        
+
         // the world space point the camera will rotate around
         protected Vector3 camRotationAnchor
         {
@@ -172,7 +172,7 @@ namespace PlayerControllers
         protected virtual float dashDuration { get; set; } = 0.3F;
 
         protected virtual float dashForce { get; set; } = 30f;
-        
+
         public int MaxHealth => maxHealth;
 
 
@@ -260,6 +260,8 @@ namespace PlayerControllers
                 gameController.BindPlayer(this);
 
                 UpdateTeamServerRpc(gameController.Parameters.IsReady ? gameController.Parameters.TeamId : 0);
+
+                Cursor.lockState = CursorLockMode.Locked;
             }
         }
 
@@ -481,22 +483,22 @@ namespace PlayerControllers
         public void OnRespawn()
         {
             // respawn location
-            this.UpdatePositionServerRpc(new Vector3(30f,0f,30f));
-            
+            this.UpdatePositionServerRpc(new Vector3(30f, 0f, 30f));
+
             GameObject autoWeaponPrefab = gameController.WeaponPrefabs.Find(go => go.name == "TestAutoPrefab");
             this.inventory.AddWeapon(Instantiate(autoWeaponPrefab).GetComponent<BaseWeapon>());
 
             GameObject gunWeaponPrefab = gameController.WeaponPrefabs.Find(go => go.name == "TestGunPrefab");
             this.inventory.AddWeapon(Instantiate(gunWeaponPrefab).GetComponent<BaseWeapon>());
-            
+
             foreach (BaseItem item in Inventory.ItemsList)
             {
                 Inventory.RemoveItem(item);
             }
-            
+
             gameController.deathScreen.SetActive(false);
         }
-        
+
         public void OnWeaponSwitch(InputAction.CallbackContext ctx)
         {
             if (!IsOwner || IsAiming)
@@ -598,7 +600,7 @@ namespace PlayerControllers
         {
             BasePlayer damagedPlayer = NetworkManager.Singleton.ConnectedClients[playerId].PlayerObject
                 .GetComponent<BasePlayer>();
-            
+
             damagedPlayer.CurrentHealth.Value = newHealth;
         }
 
@@ -608,7 +610,7 @@ namespace PlayerControllers
             UpdateFlagsServerRpc(PlayerFlags.MOVING, movement.magnitude > 0);
             this.movement.Value = movement;
         }
-        
+
         [ServerRpc(RequireOwnership = false)]
         public void UpdatePositionServerRpc(Vector3 position)
         {
