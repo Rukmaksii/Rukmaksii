@@ -36,7 +36,6 @@ namespace GameManagers
             switch (connectionData.Data.ConnectionType)
             {
                 case "host":
-                default:
                     NetworkManager.Singleton.StartHost();
                     break;
                 case "client":

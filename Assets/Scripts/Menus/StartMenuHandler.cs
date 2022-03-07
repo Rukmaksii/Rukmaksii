@@ -11,6 +11,7 @@ namespace Menus
     {
         [SerializeField] private GameObject mainMenu;
         [SerializeField] private GameObject selectMenu;
+        [SerializeField] private GameObject serverMenu;
 
         [SerializeField] private Dropdown chosenClass;
         [SerializeField] private Dropdown chosenTeam;
@@ -21,6 +22,7 @@ namespace Menus
         void Start()
         {
             selectMenu.SetActive(false);
+            serverMenu.SetActive(false);
         }
 
         // Update is called once per frame
@@ -59,21 +61,21 @@ namespace Menus
         public void OnMultiplayer()
         {
             connectionData.Data = new ConnectionData();
-            
+
             connectionData.Data.ConnectionType = "client";
             
             mainMenu.SetActive(false);
             selectMenu.SetActive(true);
         }
         
-        public void OnHost()
+        public void OnServer()
         {
             connectionData.Data = new ConnectionData();
             
-            connectionData.Data.ConnectionType = "host";
+            connectionData.Data.ConnectionType = "server";
             
             mainMenu.SetActive(false);
-            selectMenu.SetActive(true);
+            OnPlay();
         }
         
         public void OnOptions()
