@@ -42,7 +42,7 @@ namespace MonstersControler
             {
                 if (monster != null)
                 {
-                    Destroy(monster.gameObject);
+                    monster.gameObject.SetActive(false);
                 }
                 else
                 {
