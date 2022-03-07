@@ -65,11 +65,11 @@ namespace GameManagers
             if (GUILayout.Button("Host"))
             {
                 NetworkManager.Singleton.StartHost();
-                StartCoroutine(waitagent());
             }
             else if (GUILayout.Button("Server"))
             {
                 NetworkManager.Singleton.StartServer();
+                StartCoroutine(waitagent());
             }
 
             else if (GUILayout.Button("Client"))
