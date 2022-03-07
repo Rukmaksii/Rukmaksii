@@ -18,6 +18,23 @@ namespace model
          */
         private Jetpack _jetpack;
 
+        public List<GameObject> Weapons
+        {
+            get
+            {
+                List<GameObject> res = new List<GameObject>();
+                if (closeRangeWeapon != null)
+                    res.Add(closeRangeWeapon.gameObject);
+                if (lightWeapon != null)
+                    res.Add(lightWeapon.gameObject);
+                if (heavyWeapon != null)
+                    res.Add(heavyWeapon.gameObject);
+
+
+                return res;
+            }
+        }
+
         public Jetpack Jetpack
         {
             get => _jetpack;
