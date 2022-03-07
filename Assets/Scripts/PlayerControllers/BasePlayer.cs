@@ -6,8 +6,6 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
-using UnityEngine.Purchasing;
-using UnityEngine.SceneManagement;
 using Weapons;
 
 namespace PlayerControllers
@@ -182,6 +180,8 @@ namespace PlayerControllers
 
         protected Inventory inventory;
 
+        protected Vector3 spawnPoint = Vector3.zero;
+
         public Inventory Inventory => inventory;
         public Jetpack Jetpack => inventory.Jetpack;
 
@@ -276,20 +276,25 @@ namespace PlayerControllers
             {
                 gameController.BindPlayer(this);
 
-                UpdateTeamServerRpc(gameController.Parameters.IsReady ? gameController.Parameters.TeamId : 0);
+                int teamId = gameController.Parameters.IsReady ? gameController.Parameters.TeamId : 0;
+                UpdateTeamServerRpc(teamId);
+                
 
                 Cursor.lockState = CursorLockMode.Locked;
             }
+
             weapons = GameObject.FindGameObjectsWithTag("Weapon");
             foreach (GameObject weaponModel in weapons)
             {
-                weaponModel.GetComponent<MeshRenderer>().enabled = String.Equals(weaponModel.name, Inventory.CurrentWeapon.Name);
+                weaponModel.GetComponent<MeshRenderer>().enabled =
+                    String.Equals(weaponModel.name, Inventory.CurrentWeapon.Name);
                 weaponRends = weaponModel.GetComponentsInChildren<Transform>();
                 foreach (Transform tran in weaponRends)
                 {
                     if (tran.GetComponent<MeshRenderer>() != null)
                     {
-                        tran.GetComponent<MeshRenderer>().enabled = String.Equals(weaponModel.name, Inventory.CurrentWeapon.Name);
+                        tran.GetComponent<MeshRenderer>().enabled =
+                            String.Equals(weaponModel.name, Inventory.CurrentWeapon.Name);
                     }
                 }
             }
@@ -297,6 +302,7 @@ namespace PlayerControllers
 
         void Awake()
         {
+            UpdatePositionServerRpc(spawnPoint);
         }
 
         // Update is called once per frame
@@ -545,13 +551,15 @@ namespace PlayerControllers
                 //change currentWeaponModel
                 foreach (GameObject weaponModel in weapons)
                 {
-                    weaponModel.GetComponent<MeshRenderer>().enabled = String.Equals(weaponModel.name, Inventory.CurrentWeapon.Name);
+                    weaponModel.GetComponent<MeshRenderer>().enabled =
+                        String.Equals(weaponModel.name, Inventory.CurrentWeapon.Name);
                     weaponRends = weaponModel.GetComponentsInChildren<Transform>();
                     foreach (Transform tran in weaponRends)
                     {
                         if (tran.GetComponent<MeshRenderer>() != null)
                         {
-                            tran.GetComponent<MeshRenderer>().enabled = String.Equals(weaponModel.name, Inventory.CurrentWeapon.Name);
+                            tran.GetComponent<MeshRenderer>().enabled =
+                                String.Equals(weaponModel.name, Inventory.CurrentWeapon.Name);
                         }
                     }
                 }
