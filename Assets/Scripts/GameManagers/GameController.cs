@@ -49,9 +49,6 @@ namespace GameManagers
         private BasePlayer localPlayer;
         
         
-        [SerializeField] protected GameObject monster;
-        private GameObject monsterinstance;
-
         [SerializeField] private int respawnTime = 5;
         
         public BasePlayer LocalPlayer => localPlayer;
@@ -67,13 +64,11 @@ namespace GameManagers
             playerUIInstance = Instantiate(uiPrefab);
             playerUIInstance.name = uiPrefab.name;
             playerUIInstance.GetComponent<Canvas>().worldCamera = Camera.current;
-            
+
             deathScreen = Instantiate(deathScreenPrefab);
             deathScreen.name = deathScreenPrefab.name;
             deathScreen.GetComponent<Canvas>().worldCamera = Camera.current;
             deathScreen.SetActive(false);
-            
-            StartCoroutine(Waitagent());
         }
 
         private void Update()
@@ -101,7 +96,6 @@ namespace GameManagers
                 }
             }
         }
-
         IEnumerator DeathScreenTimer()
         {
             for (int i = respawnTime; i > 0; i--)
@@ -128,21 +122,6 @@ namespace GameManagers
                 basePlayer.OnRespawn();
             
                 cc.enabled = true;
-            }
-        }
-        
-        IEnumerator Waitagent()
-        {
-            yield return new WaitForSeconds(0);
-            for (int i = 0; i < 4; i++)
-            {
-                monsterinstance = Instantiate(monster);
-                Vector3 sourcePostion = new Vector3(15 * i, -25, -20); //The position you want to place your agent
-                NavMeshHit closestHit;
-                NavMesh.SamplePosition(sourcePostion, out closestHit, 500, 2);
-                monsterinstance.transform.position = sourcePostion;
-                yield return new WaitForSeconds(15);
-                monsterinstance.gameObject.AddComponent<NavMeshAgent>();
             }
         }
     }

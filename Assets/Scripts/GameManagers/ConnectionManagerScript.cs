@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using System.Collections;
 using model;
 using PlayerControllers;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace GameManagers
 {
@@ -11,6 +13,8 @@ namespace GameManagers
         [SerializeField] private ConnectionScriptableObject connectionData;
         [SerializeField] private List<GameObject> classPrefabs = new List<GameObject>();
 
+        [SerializeField]protected GameObject monster;
+        private GameObject monsterinstance;
 
         void Start()
         {
@@ -61,6 +65,7 @@ namespace GameManagers
             if (GUILayout.Button("Host"))
             {
                 NetworkManager.Singleton.StartHost();
+                StartCoroutine(waitagent());
             }
             else if (GUILayout.Button("Server"))
             {
@@ -69,6 +74,21 @@ namespace GameManagers
 
             else if (GUILayout.Button("Client"))
                 NetworkManager.Singleton.StartClient();
+        }
+        
+        IEnumerator waitagent()
+        {
+            yield return new WaitForSeconds(10);
+            for (int i = 0; i < 4; i++)
+            {
+                monsterinstance = Instantiate(monster);
+                Vector3 sourcePostion = new Vector3(15 * i, -0.01f, -6); //The position you want to place your agent
+                NavMeshHit closestHit;
+                NavMesh.SamplePosition(sourcePostion, out closestHit, 500, 2);
+                monsterinstance.transform.position = sourcePostion;
+                yield return new WaitForSeconds(5);
+                monsterinstance.gameObject.AddComponent<NavMeshAgent>();
+            }
         }
     }
 }
