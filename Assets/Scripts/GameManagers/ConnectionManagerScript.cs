@@ -82,7 +82,7 @@ namespace GameManagers
             for (int i = 0; i < 4; i++)
             {
                 monsterinstance = Instantiate(monster);
-                Vector3 sourcePostion = new Vector3(15 * i, -0.01f, -6); //The position you want to place your agent
+                Vector3 sourcePostion = new Vector3(15 * i, -39, -10); //The position you want to place your agent
                 NavMeshHit closestHit;
                 NavMesh.SamplePosition(sourcePostion, out closestHit, 500, 2);
                 monsterinstance.transform.position = sourcePostion;
