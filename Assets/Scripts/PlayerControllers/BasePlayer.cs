@@ -57,6 +57,9 @@ namespace PlayerControllers
             private set => UpdateFlagsServerRpc(PlayerFlags.RUNNING, value);
         }
 
+        public GameObject currentWeaponModel;
+        private GameObject[] weapons;
+
 
         private CameraController cameraController;
 
@@ -277,6 +280,11 @@ namespace PlayerControllers
 
                 Cursor.lockState = CursorLockMode.Locked;
             }
+            weapons = GameObject.FindGameObjectsWithTag("Weapon");
+            foreach (GameObject weaponModel in weapons)
+            {
+                weaponModel.SetActive(String.Equals(weaponModel.name, Inventory.CurrentWeapon.Name));
+            }
         }
 
         void Awake()
@@ -333,6 +341,8 @@ namespace PlayerControllers
 
             if (IsShooting)
                 this.inventory.CurrentWeapon.Fire();
+            
+            
         }
 
         /**
@@ -526,6 +536,11 @@ namespace PlayerControllers
                     inventory.NextWeapon();
                 else if (value < 0)
                     inventory.PreviousWeapon();
+                //change currentWeaponModel
+                foreach (GameObject weaponModel in weapons)
+                {
+                    weaponModel.SetActive(String.Equals(weaponModel.name, Inventory.CurrentWeapon.Name));
+                }
             }
             else // 1,2,3 control
             {

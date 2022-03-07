@@ -12,6 +12,7 @@ TagManager:
   - Destructible
   - Monster
   - Minion
+  - Weapon
   layers:
   - Default
   - TransparentFX
