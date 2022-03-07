@@ -96,6 +96,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c899e6f99f418af4794eaa6b7251f0c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 0, y: 0, z: -5}
+  baseOffset: {x: 0.5, y: 0.3, z: -2.2}
   baseAngle: -5
   maxAngle: 90
