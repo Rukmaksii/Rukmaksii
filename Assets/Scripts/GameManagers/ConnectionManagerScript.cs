@@ -37,12 +37,14 @@ namespace GameManagers
             {
                 case "host":
                     NetworkManager.Singleton.StartHost();
+                    StartCoroutine(waitagent());
                     break;
                 case "client":
                     NetworkManager.Singleton.StartClient();
                     break;
                 case "server":
                     NetworkManager.Singleton.StartServer();
+                    StartCoroutine(waitagent());
                     break;
             }
         }
