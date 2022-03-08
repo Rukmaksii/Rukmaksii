@@ -77,7 +77,7 @@ namespace PlayerControllers
             }
         }
 
-        protected Vector3 fireCastPoint
+        protected Vector3 FireCastPoint
         {
             get
             {
@@ -85,8 +85,7 @@ namespace PlayerControllers
                 Vector2 crosshairPosition = new Vector2(0.5f, 0.5f);
 
                 Vector3 origin = cameraController.Camera.ViewportToWorldPoint(crosshairPosition);
-                origin -= cameraController.Offset;
-                origin += transform.TransformVector(Vector3.forward * cld.radius * 2);
+                origin += cameraController.gameObject.transform.forward * cameraController.Offset.magnitude;
                 return origin;
             }
         }
@@ -647,7 +646,8 @@ namespace PlayerControllers
         {
             RaycastHit hit;
 
-            if (!Physics.Raycast(fireCastPoint, cameraController.Camera.transform.forward, out hit, weaponRange))
+            
+            if (!Physics.Raycast(FireCastPoint, cameraController.Camera.transform.forward, out hit, weaponRange))
 
                 return null;
 
