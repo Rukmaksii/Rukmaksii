@@ -32,7 +32,7 @@ namespace PlayerControllers
     public abstract class BasePlayer : NetworkBehaviour
     {
         public abstract string ClassName { get; }
-        protected virtual float movementSpeed { get; } = 20f;
+        protected virtual float movementSpeed { get; } = 5f;
 
         /**
         * <value>the speed multiplier when running</value>
@@ -221,7 +221,7 @@ namespace PlayerControllers
         private Vector3 _dashDirection = Vector3.zero;
 
         // default value for fuel duration
-        public float DefaultFuelDuration { get; } = 20f;
+        public float DefaultFuelDuration { get; } = 10f;
 
         private bool HasFlag(PlayerFlags flag)
         {

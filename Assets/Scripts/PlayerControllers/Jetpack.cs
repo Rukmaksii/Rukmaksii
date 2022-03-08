@@ -48,7 +48,7 @@ namespace PlayerControllers
         /**
          * <value>the force that will be applied to the Player by the jetpack</value>
          */
-        [SerializeField] private float jetpackForce = 5f;
+        [SerializeField] private float jetpackForce = 20f;
 
         /**
          * <value>the minimum amount of fuel required to start the engines</value>
