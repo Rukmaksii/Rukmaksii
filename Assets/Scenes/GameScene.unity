@@ -926,8 +926,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1112646623}
-  - component: {fileID: 1112646621}
   - component: {fileID: 1112646624}
+  - component: {fileID: 1112646621}
   - component: {fileID: 1112646622}
   m_Layer: 0
   m_Name: ConnectionManager
@@ -945,16 +945,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 1112646620}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b84c2d8dfe509a34fb59e2b81f8e1319, type: 3}
+  m_Script: {fileID: 11500000, guid: 52c005b32a68a254cbe502a4e5cb8eb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MessageBufferSize: 5120
-  MaxConnections: 100
-  MaxSentMessageQueueSize: 128
-  ConnectAddress: 192.168.137.1
-  ConnectPort: 7777
-  ServerListenPort: 7777
-  MessageSendMode: 0
+  m_NickName: 
+  m_RoomName: test room
+  m_MaxPlayers: 16
+  m_NetworkDeliveryEventCodesStartRange: 0
+  m_AttachSupportLogger: 0
+  m_BatchMode: 1
+  m_SendQueueBatchSize: 4096
+  m_BatchedTransportEventCode: 129
+  m_KickEventCode: 130
 --- !u!114 &1112646622
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -975,16 +977,16 @@ MonoBehaviour:
     PlayerPrefab: {fileID: 0}
     NetworkPrefabs:
     - Override: 0
-      Prefab: {fileID: 1800387450937859543, guid: ddd7cfbbbb0dbb44f81ebb725ce41458, type: 3}
-      SourcePrefabToOverride: {fileID: 0}
-      SourceHashToOverride: 0
-      OverridingTargetPrefab: {fileID: 0}
-    - Override: 0
       Prefab: {fileID: 6843441952451957665, guid: edbe904d3f30c5642ba4b86ee96c8e78, type: 3}
       SourcePrefabToOverride: {fileID: 0}
       SourceHashToOverride: 0
       OverridingTargetPrefab: {fileID: 0}
-    TickRate: 10000
+    - Override: 0
+      Prefab: {fileID: 1800387450937859543, guid: ddd7cfbbbb0dbb44f81ebb725ce41458, type: 3}
+      SourcePrefabToOverride: {fileID: 0}
+      SourceHashToOverride: 0
+      OverridingTargetPrefab: {fileID: 0}
+    TickRate: 30
     ClientConnectionBufferTimeout: 10
     ConnectionApproval: 0
     ConnectionData: 

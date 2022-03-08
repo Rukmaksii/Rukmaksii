@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.community.netcode.transport.photon-realtime": "https://github.com/Unity-Technologies/multiplayer-community-contributions.git?path=/Transports/com.community.netcode.transport.photon-realtime",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.2d.tilemap": "1.0.0",
     "com.unity.ads": "3.7.5",
