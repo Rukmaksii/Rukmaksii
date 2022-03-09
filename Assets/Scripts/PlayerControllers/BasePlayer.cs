@@ -65,8 +65,6 @@ namespace PlayerControllers
 
         protected CooldownManager cdManager;
 
-        protected GameController gameController;
-
         // the world space point the camera will rotate around
         protected Vector3 camRotationAnchor
         {
@@ -247,15 +245,12 @@ namespace PlayerControllers
 
         void Start()
         {
-            GameObject gameManager = GameObject.FindGameObjectWithTag("GameController");
-            gameController = gameManager.GetComponent<GameController>();
-
             this.inventory = new Inventory(this);
 
-            GameObject autoWeaponPrefab = gameController.WeaponPrefabs.Find(go => go.name == "TestAutoPrefab");
+            GameObject autoWeaponPrefab = GameController.Singleton.WeaponPrefabs.Find(go => go.name == "TestAutoPrefab");
             this.inventory.AddWeapon(Instantiate(autoWeaponPrefab).GetComponent<BaseWeapon>());
 
-            GameObject gunWeaponPrefab = gameController.WeaponPrefabs.Find(go => go.name == "TestGunPrefab");
+            GameObject gunWeaponPrefab = GameController.Singleton.WeaponPrefabs.Find(go => go.name == "TestGunPrefab");
             this.inventory.AddWeapon(Instantiate(gunWeaponPrefab).GetComponent<BaseWeapon>());
 
             inventory.Jetpack = gameObject.AddComponent<Jetpack>();
@@ -269,9 +264,9 @@ namespace PlayerControllers
 
             if (IsOwner)
             {
-                gameController.BindPlayer(this);
+                GameController.Singleton.BindPlayer(this);
 
-                int teamId = gameController.Parameters.IsReady ? gameController.Parameters.TeamId : 0;
+                int teamId = GameController.Singleton.Parameters.IsReady ? GameController.Singleton.Parameters.TeamId : 0;
                 UpdateTeamServerRpc(teamId);
 
                 if (teamId == 1)
@@ -533,10 +528,10 @@ namespace PlayerControllers
             // respawn location
             this.UpdatePositionServerRpc(new Vector3(30f, 0f, 30f));
 
-            GameObject autoWeaponPrefab = gameController.WeaponPrefabs.Find(go => go.name == "TestAutoPrefab");
+            GameObject autoWeaponPrefab = GameController.Singleton.WeaponPrefabs.Find(go => go.name == "TestAutoPrefab");
             this.inventory.AddWeapon(Instantiate(autoWeaponPrefab).GetComponent<BaseWeapon>());
 
-            GameObject gunWeaponPrefab = gameController.WeaponPrefabs.Find(go => go.name == "TestGunPrefab");
+            GameObject gunWeaponPrefab = GameController.Singleton.WeaponPrefabs.Find(go => go.name == "TestGunPrefab");
             this.inventory.AddWeapon(Instantiate(gunWeaponPrefab).GetComponent<BaseWeapon>());
 
             foreach (BaseItem item in Inventory.ItemsList)
@@ -544,7 +539,7 @@ namespace PlayerControllers
                 Inventory.RemoveItem(item);
             }
 
-            gameController.deathScreen.SetActive(false);
+            GameController.Singleton.deathScreen.SetActive(false);
         }
 
         public void OnWeaponSwitch(InputAction.CallbackContext ctx)

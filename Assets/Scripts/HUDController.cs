@@ -24,14 +24,10 @@ public class HUDController : MonoBehaviour
 
     private ObjectiveController capturePoint;
 
-    private GameController gameController;
-
     public Image Crosshair;
 
     void Start()
     {
-        GameObject gameManager = GameObject.FindGameObjectWithTag("GameController");
-        gameController = gameManager.GetComponent<GameController>();
 
         SetMaxHealth(100);
         SetMaxFuel(100);
@@ -45,16 +41,16 @@ public class HUDController : MonoBehaviour
 
     void Update()
     {
-        if (gameController.LocalPlayer == null)
+        if (GameController.Singleton.LocalPlayer == null)
             return;
 
-        weaponPlaceHolder.sprite = gameController.LocalPlayer.Inventory.CurrentWeapon.sprite;
+        weaponPlaceHolder.sprite = GameController.Singleton.LocalPlayer.Inventory.CurrentWeapon.sprite;
 
-        SetHealth(gameController.LocalPlayer.CurrentHealthValue);
-        SetFuelAmount(gameController.LocalPlayer.Jetpack.FuelConsumption);
-        SetDashCooldown(gameController.LocalPlayer.DashedSince, gameController.LocalPlayer.DashCooldown);
-        SetAmmoCounter(gameController.LocalPlayer.Inventory.CurrentWeapon.CurrentAmmo,
-            gameController.LocalPlayer.Inventory.CurrentWeapon.MaxAmmo);
+        SetHealth(GameController.Singleton.LocalPlayer.CurrentHealthValue);
+        SetFuelAmount(GameController.Singleton.LocalPlayer.Jetpack.FuelConsumption);
+        SetDashCooldown(GameController.Singleton.LocalPlayer.DashedSince, GameController.Singleton.LocalPlayer.DashCooldown);
+        SetAmmoCounter(GameController.Singleton.LocalPlayer.Inventory.CurrentWeapon.CurrentAmmo,
+            GameController.Singleton.LocalPlayer.Inventory.CurrentWeapon.MaxAmmo);
 
         // updating the capture circle UI if the player is on a point
         if (capturePoint != null)
@@ -87,7 +83,7 @@ public class HUDController : MonoBehaviour
      */
     public void SetHealth(int health)
     {
-        healthSlider.maxValue = gameController.LocalPlayer.MaxHealth;
+        healthSlider.maxValue = GameController.Singleton.LocalPlayer.MaxHealth;
         healthSlider.value = health;
         healthCounter.text = $"{health}";
     }
@@ -151,7 +147,7 @@ public class HUDController : MonoBehaviour
      */
     public void DisplayCaptureState(ObjectiveController area, BasePlayer player, bool state)
     {
-        if (player == gameController.LocalPlayer)
+        if (player == GameController.Singleton.LocalPlayer)
         {
             if (state)
             {
