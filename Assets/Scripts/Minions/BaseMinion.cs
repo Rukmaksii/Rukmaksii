@@ -107,7 +107,7 @@ namespace Minions
          * <summary>adds <see cref="delta"/> to the current life</summary>
          * <param name="delta">the delta to add</param>
          */
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         protected void UpdateHealthServerRpc(int delta)
         {
             this.health.Value += delta;
@@ -126,10 +126,16 @@ namespace Minions
                 return true;
             }
         }
-
+        
         public void OnKill()
         {
-            Destroy(this.gameObject);
+            this.GetComponent<NetworkObject>().Despawn();
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void DestroyServerRpc()
+        {
+            GetComponent<NetworkObject>().Despawn();
         }
     }
 }

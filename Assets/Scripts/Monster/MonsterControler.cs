@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using model;
 using Unity.Netcode;
@@ -7,11 +6,9 @@ using UnityEngine.AI;
 
 namespace MonstersControler
 {
-    
     [RequireComponent(typeof(NetworkObject))]
     public class MonsterControler : NetworkBehaviour, IKillable
     {
-
         [SerializeField] private int maxHealth = 50;
         private NetworkVariable<int> life = new NetworkVariable<int>(0);
 
@@ -35,12 +32,10 @@ namespace MonstersControler
         // Update is called once per frame
         void Update()
         {
-
         }
 
         public bool TakeDamage(int damage)
         {
-
             if (damage >= life.Value)
             {
                 OnKill();
@@ -55,17 +50,23 @@ namespace MonstersControler
 
         public void OnKill()
         {
-            Destroy(this.gameObject);
+            DestroyServerRpc();
         }
 
         /**
          * <summary>adds the <see cref="delta"/> to life</summary>
          * <param name="delta">the delta to add to the life</param>
          */
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void UpdateLifeServerRpc(int delta)
         {
             life.Value += delta;
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void DestroyServerRpc()
+        {
+            GetComponent<NetworkObject>().Despawn();
         }
     }
 }
