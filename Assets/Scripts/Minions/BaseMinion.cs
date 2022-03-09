@@ -18,7 +18,10 @@ namespace Minions
     {
         [SerializeField] private float lookRadius = 10f;
 
+        public virtual int MaxHealth { get; protected set; } = 50;
+        
         private NetworkVariable<int> teamId = new NetworkVariable<int>(-1);
+        private NetworkVariable<int> health = new NetworkVariable<int>(0);
 
         public int TeamId
         {
@@ -34,6 +37,7 @@ namespace Minions
         void Start()
         {
             agent = GetComponent<NavMeshAgent>();
+            UpdateHealthServerRpc(MaxHealth);
         }
 
         void Update()
@@ -98,14 +102,33 @@ namespace Minions
             this.teamId.Value = teamId;
         }
 
+        /**
+         * <summary>adds <see cref="delta"/> to the current life</summary>
+         * <param name="delta">the delta to add</param>
+         */
+        [ServerRpc]
+        protected void UpdateHealthServerRpc(int delta)
+        {
+            this.health.Value += delta;
+        }
+
         public bool TakeDamage(int damage)
         {
-            throw new NotImplementedException();
+            if (health.Value <= damage)
+            {
+                OnKill();
+                return false;
+            }
+            else
+            {
+                UpdateHealthServerRpc(-damage);
+                return true;
+            }
         }
 
         public void OnKill()
         {
-            throw new NotImplementedException();
+            Destroy(this.gameObject);
         }
     }
 }

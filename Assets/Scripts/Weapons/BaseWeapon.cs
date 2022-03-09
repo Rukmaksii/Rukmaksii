@@ -230,6 +230,8 @@ namespace Weapons
                 BaseMinion minion = hit.GetComponent<BaseMinion>();
                 if (minion == null || Player.TeamId == minion.TeamId)
                     return false;
+
+                minion.TakeDamage(this.Damage);
             }
             else if (hit.CompareTag("Destructible"))
             {
