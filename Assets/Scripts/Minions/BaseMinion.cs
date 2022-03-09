@@ -1,5 +1,6 @@
 ﻿using System;
 using model;
+using PlayerControllers;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
@@ -15,7 +16,23 @@ namespace Minions
         
         [SerializeField]
         private float lookRadius = 10f;
-        
+
+        private NetworkVariable<int> teamId = new NetworkVariable<int>(-1);
+
+        public int TeamId
+        {
+            get => teamId.Value;
+            private set => UpdateTeamServerRpc(value);
+        }
+
+        protected BasePlayer owner;
+
+        public void BindOwner(BasePlayer owner)
+        {
+            this.owner = owner;
+            TeamId = owner.TeamId;
+        }
+
         public void Aim()
         {
             throw new System.NotImplementedException();
@@ -35,6 +52,13 @@ namespace Minions
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, lookRadius);
+        }
+
+        [ServerRpc]
+        private void UpdateTeamServerRpc(int teamId)
+        {
+            this.teamId.Value = teamId;
         }
     }
 }

@@ -113,26 +113,7 @@ namespace PlayerControllers
          */
         public Vector3 Velocity
         {
-            get
-            {
-                if (IsFlying)
-                {
-                    return Jetpack.Velocity;
-                }
-                else
-                {
-                    /*float multiplier = movementSpeed;
-                    if (IsRunning)
-                    {
-                        multiplier *= runningSpeedMultiplier;
-                    }
-
-                    Vector3 res = Movement * multiplier;
-                    res.y = yVelocity;
-                    return res;*/
-                    return velocity.Value;
-                }
-            }
+            get => IsFlying ? Jetpack.Velocity : velocity.Value;
         }
 
 
@@ -196,6 +177,8 @@ namespace PlayerControllers
         private NetworkVariable<int> CurrentHealth { get; } = new NetworkVariable<int>(1);
 
         private NetworkVariable<int> teamId = new NetworkVariable<int>(-1);
+        
+        public int TeamId => teamId.Value;
 
         private NetworkVariable<int> flags = new NetworkVariable<int>(0);
 
