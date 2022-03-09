@@ -34,7 +34,7 @@ public class AnimationsPlayer : NetworkBehaviour
 
         _Enabled = fall;
 
-        Vector3 velocity = player.Movement;
+        Vector3 velocity = player.Velocity;
         playerAnimator.SetBool("fly", player.IsFlying);
 
         playerAnimator.SetBool("isSprinting", player.IsRunning);

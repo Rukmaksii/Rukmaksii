@@ -53,7 +53,7 @@ namespace PlayerControllers
         {
             get
                 => this.HasFlag(PlayerFlags.MOVING) && this.HasFlag(PlayerFlags.RUNNING) &&
-                   movement.Value.z >= Mathf.Abs(movement.Value.x);
+                   velocity.Value.z >= Mathf.Abs(velocity.Value.x);
             private set => UpdateFlagsServerRpc(PlayerFlags.RUNNING, value);
         }
 
@@ -95,13 +95,17 @@ namespace PlayerControllers
         /**
      * <value>stores the x,y,z inputs of the player</value>
      */
-        private readonly NetworkVariable<Vector3> movement = new NetworkVariable<Vector3>(Vector3.zero);
+        // private readonly NetworkVariable<Vector3> movement = new NetworkVariable<Vector3>(Vector3.zero);
+
+        public Vector3 Movement { get; private set; } = Vector3.zero;
 
         /**
          * <value>the yVelocity of the player</value>
          * <remarks>this velocity is only accessible to and used by the server</remarks>
          */
         private float yVelocity = 0f;
+
+        private NetworkVariable<Vector3> velocity = new NetworkVariable<Vector3>(Vector3.zero);
 
         /**
          * <value>the local velocity of the player</value>
@@ -111,18 +115,13 @@ namespace PlayerControllers
         {
             get
             {
-                if (!IsServer)
-                {
-                    throw new NullReferenceException("Velocity is only available on the server");
-                }
-
                 if (IsFlying)
                 {
                     return Jetpack.Velocity;
                 }
                 else
                 {
-                    float multiplier = movementSpeed;
+                    /*float multiplier = movementSpeed;
                     if (IsRunning)
                     {
                         multiplier *= runningSpeedMultiplier;
@@ -130,13 +129,12 @@ namespace PlayerControllers
 
                     Vector3 res = Movement * multiplier;
                     res.y = yVelocity;
-                    return res;
+                    return res;*/
+                    return velocity.Value;
                 }
             }
         }
 
-
-        public Vector3 Movement => movement.Value;
 
         private CharacterController controller;
 
@@ -249,7 +247,8 @@ namespace PlayerControllers
         {
             this.inventory = new Inventory(this);
 
-            GameObject autoWeaponPrefab = GameController.Singleton.WeaponPrefabs.Find(go => go.name == "TestAutoPrefab");
+            GameObject autoWeaponPrefab =
+                GameController.Singleton.WeaponPrefabs.Find(go => go.name == "TestAutoPrefab");
             this.inventory.AddWeapon(Instantiate(autoWeaponPrefab).GetComponent<BaseWeapon>());
 
             GameObject gunWeaponPrefab = GameController.Singleton.WeaponPrefabs.Find(go => go.name == "TestGunPrefab");
@@ -268,7 +267,9 @@ namespace PlayerControllers
             {
                 GameController.Singleton.BindPlayer(this);
 
-                int teamId = GameController.Singleton.Parameters.IsReady ? GameController.Singleton.Parameters.TeamId : 0;
+                int teamId = GameController.Singleton.Parameters.IsReady
+                    ? GameController.Singleton.Parameters.TeamId
+                    : 0;
                 UpdateTeamServerRpc(teamId);
 
                 if (teamId == 1)
@@ -284,7 +285,7 @@ namespace PlayerControllers
 
                 spawnPoint -= GetComponent<CapsuleCollider>().height * Vector3.up;
 
-                UpdatePositionServerRpc(spawnPoint);
+                UpdatePositionRpc(spawnPoint);
                 GameObject playerCamera = GameObject.FindGameObjectWithTag("Player Camera");
                 cameraController = playerCamera.GetComponent<CameraController>();
                 UpdateCamera();
@@ -317,10 +318,11 @@ namespace PlayerControllers
         // Update is called once per frame
         private void Update()
         {
-            if (IsClient)
-                UpdateClient();
-            if (IsServer)
+            if (IsOwner)
+            {
                 UpdateServer();
+                UpdateClient();
+            }
         }
 
         public bool CanDamage(BasePlayer other)
@@ -336,18 +338,38 @@ namespace PlayerControllers
             var _deltaTime = Time.deltaTime;
 
             handleDash(_deltaTime);
-            var moveVector = movement.Value;
+
+            Vector3 res;
+
             if (!IsFlying)
             {
+                var moveVector = Movement;
+
+                float multiplier = movementSpeed;
+                if (IsRunning)
+                {
+                    multiplier *= runningSpeedMultiplier;
+                }
+
+                res = Movement * multiplier;
+
                 yVelocity += gravity * _deltaTime;
                 if (IsGrounded && yVelocity < 0f)
                     yVelocity = 0;
 
                 if (moveVector.y > 0)
                     Jump();
+
+                res.y = yVelocity;
+            }
+            else
+            {
+                res = Jetpack.Velocity;
             }
 
-            controller.Move(transform.TransformDirection(this.Velocity) * _deltaTime);
+
+            controller.Move(transform.TransformDirection(res) * _deltaTime);
+            UpdateVelocityServerRpc(res);
         }
 
         /**
@@ -382,12 +404,12 @@ namespace PlayerControllers
                 Vector2 direction = ctx.ReadValue<Vector2>();
                 Vector3 moveVector = new Vector3(direction.x, Movement.y, direction.y);
 
-                UpdateMovementServerRpc(moveVector);
+                UpdateMovement(moveVector);
             }
             else
             {
                 var moveVector = new Vector3(0, Movement.y, 0);
-                UpdateMovementServerRpc(moveVector);
+                UpdateMovement(moveVector);
             }
         }
 
@@ -403,7 +425,7 @@ namespace PlayerControllers
             if (!IsOwner || cameraController == null)
                 return;
             Vector2 rotation = ctx.ReadValue<Vector2>();
-            UpdateRotationServerRpc(Vector3.up, rotation.x * sensitivity);
+            UpdateRotationRpc(Vector3.up, rotation.x * sensitivity);
 
             cameraController.AddedAngle -= rotation.y * sensitivity;
         }
@@ -424,6 +446,7 @@ namespace PlayerControllers
             if (ctx.interaction is MultiTapInteraction && ctx.performed)
             {
                 moveVector.y = 0;
+                yVelocity = 0;
                 this.Jetpack.IsFlying = !this.Jetpack.IsFlying;
             }
             else
@@ -431,11 +454,11 @@ namespace PlayerControllers
                 moveVector.y = (ctx.started || ctx.performed) && !ctx.canceled ? 1 : 0;
             }
 
-            UpdateMovementServerRpc(moveVector);
+            UpdateMovement(moveVector);
         }
 
         /**
-         * <summary>Server-Side handler for jump function</summary>
+         * <summary>handler for jump function</summary>
          */
         private void Jump()
         {
@@ -462,7 +485,7 @@ namespace PlayerControllers
 
             // ServerRpc methods operate not changes if values are unchanged 
             // if(currentMovement != Movement)
-            UpdateMovementServerRpc(currentMovement);
+            UpdateMovement(currentMovement);
         }
 
         public void OnReload(InputAction.CallbackContext _)
@@ -495,6 +518,11 @@ namespace PlayerControllers
                 return;
 
             IsDashing = true;
+            dashStartedSince = 0;
+            Vector3 moveVector = Movement;
+            if (moveVector == Vector3.zero)
+                moveVector = Vector3.forward;
+            _dashDirection = transform.TransformDirection(moveVector) * dashForce;
             SetAim(false);
         }
 
@@ -528,9 +556,10 @@ namespace PlayerControllers
         public void OnRespawn()
         {
             // respawn location
-            this.UpdatePositionServerRpc(new Vector3(30f, 0f, 30f));
+            this.UpdatePositionRpc(spawnPoint);
 
-            GameObject autoWeaponPrefab = GameController.Singleton.WeaponPrefabs.Find(go => go.name == "TestAutoPrefab");
+            GameObject autoWeaponPrefab =
+                GameController.Singleton.WeaponPrefabs.Find(go => go.name == "TestAutoPrefab");
             this.inventory.AddWeapon(Instantiate(autoWeaponPrefab).GetComponent<BaseWeapon>());
 
             GameObject gunWeaponPrefab = GameController.Singleton.WeaponPrefabs.Find(go => go.name == "TestGunPrefab");
@@ -643,7 +672,7 @@ namespace PlayerControllers
         {
             RaycastHit hit;
 
-            
+
             if (!Physics.Raycast(FireCastPoint, cameraController.Camera.transform.forward, out hit, weaponRange))
 
                 return null;
@@ -661,21 +690,28 @@ namespace PlayerControllers
             damagedPlayer.CurrentHealth.Value = newHealth;
         }
 
-        [ServerRpc]
-        public void UpdateMovementServerRpc(Vector3 movement)
+        //[ServerRpc]
+        //public void UpdateMovementServerRpc(Vector3 movement)
+        public void UpdateMovement(Vector3 movement)
         {
             UpdateFlagsServerRpc(PlayerFlags.MOVING, movement.magnitude > 0);
-            this.movement.Value = movement;
+            this.Movement = movement;
         }
 
         [ServerRpc]
-        public void UpdatePositionServerRpc(Vector3 position)
+        private void UpdateVelocityServerRpc(Vector3 velocity)
+        {
+            this.velocity.Value = velocity;
+        }
+
+        //[ServerRpc]
+        public void UpdatePositionRpc(Vector3 position)
         {
             controller.Move(position);
         }
 
-        [ServerRpc]
-        public void UpdateRotationServerRpc(Vector3 direction, float angle)
+        //[ServerRpc]
+        public void UpdateRotationRpc(Vector3 direction, float angle)
         {
             transform.Rotate(direction, angle);
         }
@@ -701,14 +737,9 @@ namespace PlayerControllers
             switch (flag)
             {
                 case PlayerFlags.DASHING:
-                    dashStartedSince = 0;
-                    Vector3 moveVector = Movement;
-                    if (moveVector == Vector3.zero)
-                        moveVector = Vector3.forward;
-                    _dashDirection = transform.TransformDirection(moveVector) * dashForce;
+
                     break;
                 case PlayerFlags.FLYING:
-                    yVelocity = 0;
                     break;
             }
         }
