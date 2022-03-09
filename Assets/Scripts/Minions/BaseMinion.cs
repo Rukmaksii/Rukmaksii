@@ -1,4 +1,6 @@
-﻿using GameManagers;
+﻿using System;
+using System.Collections.Generic;
+using GameManagers;
 using model;
 using PlayerControllers;
 using Unity.Netcode;
@@ -13,9 +15,7 @@ namespace Minions
     [RequireComponent(typeof(NavMeshAgent))]
     public class BaseMinion : NetworkBehaviour, IMinion
     {
-        
-        [SerializeField]
-        private float lookRadius = 10f;
+        [SerializeField] private float lookRadius = 10f;
 
         private NetworkVariable<int> teamId = new NetworkVariable<int>(-1);
 
@@ -27,6 +27,42 @@ namespace Minions
 
         protected BasePlayer owner;
 
+        protected Transform target;
+        protected NavMeshAgent agent;
+
+        void Start()
+        {
+            agent = GetComponent<NavMeshAgent>();
+        }
+
+        void Update()
+        {
+            // minion is not ready
+            if (owner == null)
+                return;
+            List<BasePlayer> enemies = GameController.Singleton.Players.FindAll(p => p.TeamId != TeamId);
+
+            float minDistance = -1;
+            BasePlayer closest = null;
+            foreach (var enemy in enemies)
+            {
+                float distance = Vector3.Distance(transform.position, enemy.transform.position);
+                if (distance <= lookRadius)
+                {
+                    if (closest == null || distance < minDistance)
+                    {
+                        minDistance = distance;
+                        closest = enemy;
+                    }
+                }
+            }
+
+            if (closest != null)
+            {
+                MoveTo(closest.transform.position);
+            }
+        }
+
         public void BindOwner(BasePlayer owner)
         {
             this.owner = owner;
@@ -36,17 +72,17 @@ namespace Minions
 
         public void Aim()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void MoveTo(Vector3 position)
         {
-            throw new System.NotImplementedException();
+            agent.SetDestination(position);
         }
 
         public void Fire()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
 
