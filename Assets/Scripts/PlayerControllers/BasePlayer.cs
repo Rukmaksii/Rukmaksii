@@ -699,25 +699,23 @@ namespace PlayerControllers
                 return;
 
             var tr = this.transform;
-            SpawnMinion(IMinion.Strategy.ATTACK, tr.position - tr.forward, tr.rotation);
+            SpawnMinionServerRpc(IMinion.Strategy.ATTACK, tr.position - tr.forward, tr.rotation);
         }
 
         /**
          * <summary>spawns a minion bound to the player</summary>
-         * <returns>true if the minion was spawned, false otherwise</returns>
          */
-        protected bool SpawnMinion(IMinion.Strategy strat, Vector3 position, Quaternion rotation)
+        [ServerRpc]
+        protected void SpawnMinionServerRpc(IMinion.Strategy strat, Vector3 position, Quaternion rotation)
         {
             if (Minions.Count >= maxMinions)
-                return false;
+                return;
 
             GameObject instance = Instantiate(GameController.Singleton.MinionPrefab, position, rotation);
             instance.GetComponent<NetworkObject>().Spawn();
             BaseMinion minion = instance.GetComponent<BaseMinion>();
             minion.BindOwner(this);
             minions.Add(minion);
-
-            return true;
         }
 
 
