@@ -1,5 +1,4 @@
-﻿using System;
-using model;
+﻿using model;
 using PlayerControllers;
 using Unity.Netcode;
 using Unity.Netcode.Components;

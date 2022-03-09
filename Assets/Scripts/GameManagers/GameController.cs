@@ -57,10 +57,21 @@ namespace GameManagers
             Singleton = this;
         }
 
+        /**
+         * <summary>binds the local player to the game controller</summary>
+         */
         public void BindPlayer(BasePlayer player)
         {
             localPlayer = player;
-            players.Append(player);
+            players.Add(player);
+        }
+
+        /**
+         * <summary>adds a non-local player to the game controller</summary>
+         */
+        public void AddClientPlayer(BasePlayer player)
+        {
+           players.Add(player); 
         }
 
         void Start()

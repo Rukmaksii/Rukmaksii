@@ -276,6 +276,10 @@ namespace PlayerControllers
 
                 Cursor.lockState = CursorLockMode.Locked;
             }
+            else
+            {
+                GameController.Singleton.AddClientPlayer(this);
+            }
 
             weapons = GameObject.FindGameObjectsWithTag("Weapon");
             foreach (GameObject weaponModel in weapons)
