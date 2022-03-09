@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using GameManagers;
 using Items;
+using Minions;
 using model;
 using Unity.Netcode;
 using Unity.Netcode.Samples;
@@ -203,6 +205,18 @@ namespace PlayerControllers
 
         // default value for fuel duration
         public float DefaultFuelDuration { get; } = 10f;
+
+        [SerializeField] private int maxMinions = 2;
+        private List<BaseMinion> minions = new List<BaseMinion>();
+
+        public List<BaseMinion> Minions
+        {
+            get
+            {
+                minions = minions.FindAll(m => m != null && m.gameObject != null);
+                return minions;
+            }
+        }
 
         private bool HasFlag(PlayerFlags flag)
         {

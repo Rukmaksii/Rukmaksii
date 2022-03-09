@@ -67,7 +67,6 @@ namespace Minions
         {
             this.owner = owner;
             TeamId = owner.TeamId;
-            GameController.Singleton.AddMinion(this);
         }
 
         public void Aim()

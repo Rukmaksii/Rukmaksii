@@ -31,13 +31,15 @@ namespace GameManagers
             }
         }
 
-        private List<BaseMinion> minions = new List<BaseMinion>();
-
         public List<BaseMinion> Minions
         {
             get
             {
-                minions = minions.FindAll(m => m != null && m.gameObject != null);
+                List<BaseMinion> minions = new List<BaseMinion>();
+                foreach (var player in Players)
+                {
+                    minions.AddRange(player.Minions);
+                }
                 return minions;
             }
         }
@@ -93,11 +95,6 @@ namespace GameManagers
         public void AddClientPlayer(BasePlayer player)
         {
             players.Add(player);
-        }
-
-        public void AddMinion(BaseMinion minion)
-        {
-            this.minions.Add(minion);
         }
 
         void Start()
