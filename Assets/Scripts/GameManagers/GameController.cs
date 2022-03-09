@@ -1,22 +1,13 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Items;
-using JetBrains.Annotations;
 using model;
+using PlayerControllers;
 using UnityEngine;
 using UnityEngine.UI;
-using PlayerControllers;
-using UnityEngine.AI;
-using Unity.Netcode;
-using UnityEngine.PlayerLoop;
-using UnityEngine.Purchasing;
-
 
 namespace GameManagers
 {
-    
     enum GameState
     {
         Menu,
@@ -26,33 +17,46 @@ namespace GameManagers
 
     public class GameController : MonoBehaviour
     {
+        public static GameController Singleton { get; private set; }
+
         private List<BasePlayer> players = new List<BasePlayer>();
 
         [SerializeField] private List<GameObject> weaponPrefabs = new List<GameObject>();
 
         public List<GameObject> WeaponPrefabs => weaponPrefabs;
-        
+
         [SerializeField] private List<GameObject> itemPrefabs = new List<GameObject>();
 
         public List<GameObject> ItemPrefabs => itemPrefabs;
 
         [SerializeField] private ConnectionScriptableObject connectionData;
         public ConnectionData Parameters => connectionData.Data;
-        
+
         [SerializeField] protected GameObject uiPrefab;
         private GameObject playerUIInstance;
-        
+
         [SerializeField] protected GameObject deathScreenPrefab;
 
         public GameObject deathScreen;
 
         private BasePlayer localPlayer;
-        
-        
+
+
         [SerializeField] private int respawnTime = 5;
-        
+
         public BasePlayer LocalPlayer => localPlayer;
-        
+
+        private void Awake()
+        {
+            if (Singleton != null && Singleton != this)
+            {
+                Destroy(this);
+                return;
+            } 
+            
+            Singleton = this;
+        }
+
         public void BindPlayer(BasePlayer player)
         {
             localPlayer = player;
@@ -85,7 +89,7 @@ namespace GameManagers
                         StartCoroutine(DeathScreenTimer());
                     }
 
-                    
+
                     player.SetActive(false);
 
                     StartCoroutine(RespawnTimer(player));
@@ -96,15 +100,17 @@ namespace GameManagers
                 }
             }
         }
+
         IEnumerator DeathScreenTimer()
         {
             for (int i = respawnTime; i > 0; i--)
             {
-                deathScreen.GetComponent<Canvas>().GetComponentsInChildren<Text>()[1].text = $"Respawning in {i} seconds";
+                deathScreen.GetComponent<Canvas>().GetComponentsInChildren<Text>()[1].text =
+                    $"Respawning in {i} seconds";
                 yield return new WaitForSeconds(1);
             }
         }
-        
+
         IEnumerator RespawnTimer(GameObject player)
         {
             BasePlayer basePlayer = player.GetComponent<BasePlayer>();
@@ -112,15 +118,14 @@ namespace GameManagers
 
             if (!player.activeSelf)
             {
-                
                 player.SetActive(true);
                 basePlayer.UpdateHealthServerRpc(basePlayer.MaxHealth, basePlayer.OwnerClientId);
-            
+
                 CharacterController cc = basePlayer.GetComponent(typeof(CharacterController)) as CharacterController;
                 cc.enabled = false;
-            
+
                 basePlayer.OnRespawn();
-            
+
                 cc.enabled = true;
             }
         }
