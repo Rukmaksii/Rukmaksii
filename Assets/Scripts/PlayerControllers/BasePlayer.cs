@@ -3,6 +3,7 @@ using GameManagers;
 using Items;
 using model;
 using Unity.Netcode;
+using Unity.Netcode.Samples;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
@@ -28,6 +29,7 @@ namespace PlayerControllers
     [RequireComponent(typeof(Collider))]
     [RequireComponent(typeof(CharacterController))]
     [RequireComponent(typeof(NetworkObject))]
+    [RequireComponent(typeof(ClientNetworkTransform))]
     [RequireComponent(typeof(CooldownManager))]
     public abstract class BasePlayer : NetworkBehaviour
     {
@@ -37,9 +39,9 @@ namespace PlayerControllers
         /**
         * <value>the speed multiplier when running</value>
         */
-        protected virtual float runningSpeedMultiplier { get; set; } = 2f;
+        protected virtual float runningSpeedMultiplier { get; } = 2f;
 
-        protected virtual float jumpForce { get; set; } = 5f;
+        protected virtual float jumpForce { get; } = 5f;
 
         /**
         * <value>the mouse sensitivity</value>
