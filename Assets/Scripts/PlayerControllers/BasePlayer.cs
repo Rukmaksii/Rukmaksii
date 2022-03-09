@@ -179,7 +179,7 @@ namespace PlayerControllers
         private NetworkVariable<int> CurrentHealth { get; } = new NetworkVariable<int>(1);
 
         private NetworkVariable<int> teamId = new NetworkVariable<int>(-1);
-        
+
         public int TeamId => teamId.Value;
 
         private NetworkVariable<int> flags = new NetworkVariable<int>(0);
@@ -688,6 +688,24 @@ namespace PlayerControllers
             return hit.collider.gameObject;
         }
 
+        /**
+         * <summary>spawns a minion bound to the player</summary>
+         * <returns>true if the minion was spawned, false otherwise</returns>
+         */
+        protected bool SpawnMinion(IMinion.Strategy strat, Vector3 position, Quaternion rotation)
+        {
+            if (Minions.Count >= maxMinions)
+                return false;
+
+            GameObject instance = Instantiate(GameController.Singleton.MinionPrefab, position, rotation);
+            instance.GetComponent<NetworkObject>().Spawn();
+            BaseMinion minion = instance.GetComponent<BaseMinion>();
+            minion.BindOwner(this);
+            minions.Add(minion);
+
+            return true;
+        }
+
 
         [ServerRpc(RequireOwnership = false)]
         public void UpdateHealthServerRpc(int newHealth, ulong playerId)
@@ -752,11 +770,6 @@ namespace PlayerControllers
             }
         }
 
-        protected bool SpawnMinion(IMinion.Strategy strat, Vector3 position, Quaternion rotation)
-        {
-
-            return false;
-        }
 
         [ServerRpc]
         private void UpdateTeamServerRpc(int teamId)
