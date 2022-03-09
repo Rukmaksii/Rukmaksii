@@ -1,5 +1,7 @@
 using System;
+using Minions;
 using model;
+using MonstersControler;
 using PlayerControllers;
 using UnityEngine;
 
@@ -215,7 +217,6 @@ namespace Weapons
 
             if (hit.CompareTag("Player"))
             {
-                
                 BasePlayer enemyPlayer = hit.GetComponent<BasePlayer>();
                 if (enemyPlayer == null || !Player.CanDamage(enemyPlayer))
                 {
@@ -223,25 +224,22 @@ namespace Weapons
                 }
 
                 enemyPlayer.TakeDamage(this.Damage);
-
-                hitMarkerDisplayed = true;
-                targetHit?.Invoke(true);
+            }
+            else if (hit.CompareTag("Minion"))
+            {
+                BaseMinion minion = hit.GetComponent<BaseMinion>();
+                if (minion == null || Player.TeamId == minion.TeamId)
+                    return false;
             }
             else if (hit.CompareTag("Destructible"))
             {
                 DestructibleController destructible = hit.GetComponent<DestructibleController>();
                 destructible.Health -= 20;
-
-                hitMarkerDisplayed = true;
-                targetHit?.Invoke(true);
             }
             else if (hit.CompareTag("Monster"))
             {
-                MonstersControler.MonsterControler monster = hit.GetComponent<MonstersControler.MonsterControler>();
-                monster.TakeDamage(10, monster);
-
-                hitMarkerDisplayed = true;
-                targetHit?.Invoke(true);
+                MonsterControler monster = hit.GetComponent<MonsterControler>();
+                monster.TakeDamage(this.Damage);
             }
             else
             {
@@ -249,8 +247,9 @@ namespace Weapons
                 return false;
             }
 
+            hitMarkerDisplayed = true;
+            targetHit?.Invoke(true);
             return true;
         }
     }
-    
 }

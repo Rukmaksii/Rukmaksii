@@ -10,7 +10,9 @@ namespace MonstersControler
     [RequireComponent(typeof(NetworkObject))]
     public class MonsterControler : NetworkBehaviour
     {
-        private NetworkVariable<int> life = new NetworkVariable<int>();
+
+        [SerializeField] private int maxHealth = 50;
+        private NetworkVariable<int> life = new NetworkVariable<int>(0);
 
         public int Life => life.Value;
 
@@ -18,7 +20,7 @@ namespace MonstersControler
         // Start is called before the first frame update
         void Start()
         {
-            life.Value = 50;
+            UpdateLifeServerRpc(maxHealth);
             StartCoroutine(wait());
         }
 
@@ -35,24 +37,27 @@ namespace MonstersControler
 
         }
 
-        public void TakeDamage(int damage, MonsterControler monster)
+        public void TakeDamage(int damage)
         {
 
             if (damage >= life.Value)
             {
-                if (monster != null)
-                {
-                    monster.gameObject.SetActive(false);
-                }
-                else
-                {
-                    Debug.Log("monster is null");
-                }
+                Destroy(this.gameObject);
             }
             else
             {
-                life.Value -= damage;
+                UpdateLifeServerRpc(-damage);
             }
+        }
+
+        /**
+         * <summary>adds the <see cref="delta"/> to life</summary>
+         * <param name="delta">the delta to add to the life</param>
+         */
+        [ServerRpc]
+        private void UpdateLifeServerRpc(int delta)
+        {
+            life.Value += delta;
         }
     }
 }
