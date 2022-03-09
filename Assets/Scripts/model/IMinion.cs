@@ -2,7 +2,7 @@
 
 namespace model
 {
-    public interface IMinion
+    public interface IMinion : IKillable
     {
      
         /**

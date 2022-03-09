@@ -97,5 +97,15 @@ namespace Minions
         {
             this.teamId.Value = teamId;
         }
+
+        public bool TakeDamage(int damage)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnKill()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

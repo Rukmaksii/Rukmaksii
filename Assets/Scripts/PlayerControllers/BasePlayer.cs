@@ -33,7 +33,7 @@ namespace PlayerControllers
     [RequireComponent(typeof(NetworkObject))]
     [RequireComponent(typeof(ClientNetworkTransform))]
     [RequireComponent(typeof(CooldownManager))]
-    public abstract class BasePlayer : NetworkBehaviour
+    public abstract class BasePlayer : NetworkBehaviour, IKillable
     {
         public abstract string ClassName { get; }
         protected virtual float movementSpeed { get; } = 5f;
@@ -540,7 +540,7 @@ namespace PlayerControllers
         {
             if (damage >= CurrentHealth.Value)
             {
-                UpdateHealthServerRpc(0, this.OwnerClientId);
+                OnKill();
                 return false;
             }
             else
@@ -548,6 +548,11 @@ namespace PlayerControllers
                 UpdateHealthServerRpc(CurrentHealth.Value - damage, this.OwnerClientId);
                 return true;
             }
+        }
+
+        public void OnKill()
+        {
+            UpdateHealthServerRpc(0, this.OwnerClientId);
         }
 
         public void OnFire(InputAction.CallbackContext ctx)
@@ -693,7 +698,7 @@ namespace PlayerControllers
             if (!IsOwner || !ctx.started)
                 return;
 
-            var tr= this.transform;
+            var tr = this.transform;
             SpawnMinion(IMinion.Strategy.ATTACK, tr.position - tr.forward, tr.rotation);
         }
 

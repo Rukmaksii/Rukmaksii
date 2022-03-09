@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using model;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
@@ -8,7 +9,7 @@ namespace MonstersControler
 {
     
     [RequireComponent(typeof(NetworkObject))]
-    public class MonsterControler : NetworkBehaviour
+    public class MonsterControler : NetworkBehaviour, IKillable
     {
 
         [SerializeField] private int maxHealth = 50;
@@ -37,17 +38,24 @@ namespace MonstersControler
 
         }
 
-        public void TakeDamage(int damage)
+        public bool TakeDamage(int damage)
         {
 
             if (damage >= life.Value)
             {
-                Destroy(this.gameObject);
+                OnKill();
+                return false;
             }
             else
             {
                 UpdateLifeServerRpc(-damage);
+                return true;
             }
+        }
+
+        public void OnKill()
+        {
+            Destroy(this.gameObject);
         }
 
         /**
