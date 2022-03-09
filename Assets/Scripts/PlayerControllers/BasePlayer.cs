@@ -752,6 +752,12 @@ namespace PlayerControllers
             }
         }
 
+        protected bool SpawnMinion(IMinion.Strategy strat, Vector3 position, Quaternion rotation)
+        {
+
+            return false;
+        }
+
         [ServerRpc]
         private void UpdateTeamServerRpc(int teamId)
         {

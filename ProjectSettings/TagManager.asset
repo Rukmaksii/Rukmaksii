@@ -7,7 +7,6 @@ TagManager:
   - Player Camera
   - Ground
   - PlayerHUD
-  - FuelBoosterItem
   - CaptureArea
   - Destructible
   - Monster

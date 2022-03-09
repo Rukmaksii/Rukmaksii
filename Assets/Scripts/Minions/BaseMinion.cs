@@ -13,6 +13,7 @@ namespace Minions
     [RequireComponent(typeof(NetworkTransform))]
     [RequireComponent(typeof(NetworkRigidbody))]
     [RequireComponent(typeof(NavMeshAgent))]
+    [RequireComponent(typeof(NetworkObject))]
     public class BaseMinion : NetworkBehaviour, IMinion
     {
         [SerializeField] private float lookRadius = 10f;
