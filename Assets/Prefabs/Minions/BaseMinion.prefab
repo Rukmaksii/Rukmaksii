@@ -6533,6 +6533,7 @@ GameObject:
   - component: {fileID: -493592584999068713}
   - component: {fileID: -7469959031982201565}
   - component: {fileID: -6849724960188070638}
+  - component: {fileID: 1031412863989468357}
   m_Layer: 0
   m_Name: BaseMinion
   m_TagString: Minion
@@ -6549,7 +6550,7 @@ Transform:
   m_GameObject: {fileID: 5002791120966035299}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_Children:
   - {fileID: 6572596041548284889}
   - {fileID: 4074581527657124294}
@@ -6774,6 +6775,20 @@ MonoBehaviour:
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+--- !u!136 &1031412863989468357
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5002791120966035299}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.81598467
+  m_Height: 6.706987
+  m_Direction: 1
+  m_Center: {x: 0, y: 3, z: 0}
 --- !u!1 &5091624259659842616
 GameObject:
   m_ObjectHideFlags: 0
