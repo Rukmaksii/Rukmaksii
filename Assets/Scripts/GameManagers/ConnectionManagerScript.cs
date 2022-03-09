@@ -3,6 +3,7 @@ using System.Collections;
 using model;
 using PlayerControllers;
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -14,7 +15,6 @@ namespace GameManagers
         [SerializeField] private List<GameObject> classPrefabs = new List<GameObject>();
 
         [SerializeField]protected GameObject monster;
-        private GameObject monsterinstance;
 
         void Start()
         {
@@ -83,13 +83,14 @@ namespace GameManagers
             yield return new WaitForSeconds(10);
             for (int i = 0; i < 4; i++)
             {
-                monsterinstance = Instantiate(monster);
+                GameObject instance = Instantiate(monster);
+                instance.GetComponent<NetworkObject>().Spawn();
                 Vector3 sourcePostion = new Vector3(15 * i, -39, -10); //The position you want to place your agent
                 NavMeshHit closestHit;
                 NavMesh.SamplePosition(sourcePostion, out closestHit, 500, 2);
-                monsterinstance.transform.position = sourcePostion;
+                instance.transform.position = sourcePostion;
                 yield return new WaitForSeconds(5);
-                monsterinstance.gameObject.AddComponent<NavMeshAgent>();
+                instance.gameObject.AddComponent<NavMeshAgent>();
             }
         }
     }
