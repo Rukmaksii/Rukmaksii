@@ -688,6 +688,14 @@ namespace PlayerControllers
             return hit.collider.gameObject;
         }
 
+        public void OnSpawnMinion(InputAction.CallbackContext ctx)
+        {
+            if (!IsOwner)
+                return;
+
+            SpawnMinion(IMinion.Strategy.ATTACK, transform.position - Vector3.forward, transform.rotation);
+        }
+
         /**
          * <summary>spawns a minion bound to the player</summary>
          * <returns>true if the minion was spawned, false otherwise</returns>
