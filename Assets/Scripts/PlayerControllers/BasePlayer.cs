@@ -690,10 +690,11 @@ namespace PlayerControllers
 
         public void OnSpawnMinion(InputAction.CallbackContext ctx)
         {
-            if (!IsOwner)
+            if (!IsOwner || !ctx.started)
                 return;
 
-            SpawnMinion(IMinion.Strategy.ATTACK, transform.position - Vector3.forward, transform.rotation);
+            var tr= this.transform;
+            SpawnMinion(IMinion.Strategy.ATTACK, tr.position - tr.forward, tr.rotation);
         }
 
         /**
