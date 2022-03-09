@@ -1035,7 +1035,6 @@ MonoBehaviour:
   connectionData: {fileID: 11400000, guid: 51f4e5ed14290eb4db05031d297551b9, type: 2}
   classPrefabs:
   - {fileID: 1800387450937859543, guid: ddd7cfbbbb0dbb44f81ebb725ce41458, type: 3}
-  monster: {fileID: 6843441952451957665, guid: edbe904d3f30c5642ba4b86ee96c8e78, type: 3}
 --- !u!1001 &1153582349
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1186,6 +1185,8 @@ MonoBehaviour:
   connectionData: {fileID: 11400000, guid: 51f4e5ed14290eb4db05031d297551b9, type: 2}
   uiPrefab: {fileID: 6371553158960861218, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
   deathScreenPrefab: {fileID: 1499698901574752855, guid: d3dc5c1c781e5ea1299fe7f2164dc726, type: 3}
+  minionPrefab: {fileID: 5002791120966035299, guid: ee4e4df61806d478ca4c3233855d63e2, type: 3}
+  monsterPrefab: {fileID: 6843441952451957665, guid: edbe904d3f30c5642ba4b86ee96c8e78, type: 3}
   deathScreen: {fileID: 1499698901574752855, guid: d3dc5c1c781e5ea1299fe7f2164dc726, type: 3}
   respawnTime: 5
 --- !u!1 &1555882658

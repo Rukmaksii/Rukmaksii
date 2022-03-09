@@ -14,8 +14,6 @@ namespace GameManagers
         [SerializeField] private ConnectionScriptableObject connectionData;
         [SerializeField] private List<GameObject> classPrefabs = new List<GameObject>();
 
-        [SerializeField]protected GameObject monster;
-
         void Start()
         {
 
@@ -83,7 +81,7 @@ namespace GameManagers
             yield return new WaitForSeconds(10);
             for (int i = 0; i < 4; i++)
             {
-                GameObject instance = Instantiate(monster);
+                GameObject instance = Instantiate(GameController.Singleton.MonsterPrefab);
                 instance.GetComponent<NetworkObject>().Spawn();
                 Vector3 sourcePostion = new Vector3(15 * i, -39, -10); //The position you want to place your agent
                 NavMeshHit closestHit;

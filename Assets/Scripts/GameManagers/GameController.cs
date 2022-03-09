@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Minions;
 using model;
 using PlayerControllers;
@@ -40,6 +39,7 @@ namespace GameManagers
                 {
                     minions.AddRange(player.Minions);
                 }
+
                 return minions;
             }
         }
@@ -59,6 +59,18 @@ namespace GameManagers
         private GameObject playerUIInstance;
 
         [SerializeField] protected GameObject deathScreenPrefab;
+
+        #region Prefabs
+
+        [SerializeField] private GameObject minionPrefab;
+
+        public GameObject MinionPrefab => minionPrefab;
+
+        [SerializeField] private GameObject monsterPrefab;
+
+        public GameObject MonsterPrefab => monsterPrefab;
+
+        #endregion
 
         public GameObject deathScreen;
 
