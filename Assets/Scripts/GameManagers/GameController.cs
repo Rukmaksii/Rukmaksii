@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Minions;
 using model;
 using PlayerControllers;
 using UnityEngine;
@@ -20,6 +21,26 @@ namespace GameManagers
         public static GameController Singleton { get; private set; }
 
         private List<BasePlayer> players = new List<BasePlayer>();
+
+        public List<BasePlayer> Players
+        {
+            get
+            {
+                players = players.FindAll(p => p != null && p.gameObject != null);
+                return players;
+            }
+        }
+
+        private List<BaseMinion> minions = new List<BaseMinion>();
+
+        public List<BaseMinion> Minions
+        {
+            get
+            {
+                minions = minions.FindAll(m => m != null && m.gameObject != null);
+                return minions;
+            }
+        }
 
         [SerializeField] private List<GameObject> weaponPrefabs = new List<GameObject>();
 
@@ -52,8 +73,8 @@ namespace GameManagers
             {
                 Destroy(this);
                 return;
-            } 
-            
+            }
+
             Singleton = this;
         }
 
@@ -71,7 +92,12 @@ namespace GameManagers
          */
         public void AddClientPlayer(BasePlayer player)
         {
-           players.Add(player); 
+            players.Add(player);
+        }
+
+        public void AddMinion(BaseMinion minion)
+        {
+            this.minions.Add(minion);
         }
 
         void Start()

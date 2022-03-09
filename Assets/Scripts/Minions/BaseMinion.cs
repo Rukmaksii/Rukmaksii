@@ -1,4 +1,5 @@
-﻿using model;
+﻿using GameManagers;
+using model;
 using PlayerControllers;
 using Unity.Netcode;
 using Unity.Netcode.Components;
@@ -30,6 +31,7 @@ namespace Minions
         {
             this.owner = owner;
             TeamId = owner.TeamId;
+            GameController.Singleton.AddMinion(this);
         }
 
         public void Aim()
