@@ -73,10 +73,14 @@ namespace Minions
             }
         }
 
+        public bool AssignedPlayerInRange => assignedPlayer != null &&
+                                             Vector3.Distance(assignedPlayer.transform.position, transform.position) <=
+                                             lookRadius;
+
         protected BasePlayer owner;
 
         protected BasePlayer assignedPlayer;
-        public IMinion.Strategy Strategy { get; set; }
+        public IMinion.Strategy Strategy { get; protected set; }
         public Vector3 AssignedPosition { get; set; }
 
         protected Transform target;
@@ -94,23 +98,20 @@ namespace Minions
             if (owner == null || !IsGrounded)
                 return;
 
-            var closest = ClosestEnemy;
-            if (closest != null)
+            if (Strategy == IMinion.Strategy.PROTECT)
             {
-                MoveTo(closest.transform.position);
+                FollowPlayer();
             }
         }
 
-        public void BindOwner(BasePlayer owner)
+        public void BindOwner(BasePlayer owner, IMinion.Strategy strat)
         {
             this.owner = owner;
             TeamId = owner.TeamId;
+            this.Strategy = strat;
+            assignedPlayer = owner;
         }
 
-        public void Aim()
-        {
-            throw new NotImplementedException();
-        }
 
         public void MoveTo(Vector3 position)
         {
@@ -127,6 +128,18 @@ namespace Minions
          */
         private void FollowPlayer()
         {
+            if (assignedPlayer == null || assignedPlayer.TeamId != TeamId)
+                return;
+
+            MoveTo(assignedPlayer.transform.position);
+        }
+
+        public void Aim(Transform target)
+        {
+            Vector3 direction = (target.position - transform.position).normalized;
+            direction.y = 0;
+            Quaternion lookRotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 5 * Time.deltaTime);
         }
 
 

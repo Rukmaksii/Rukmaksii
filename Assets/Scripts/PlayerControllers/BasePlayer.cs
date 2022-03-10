@@ -714,7 +714,7 @@ namespace PlayerControllers
             GameObject instance = Instantiate(GameController.Singleton.MinionPrefab, position, rotation);
             instance.GetComponent<NetworkObject>().Spawn();
             BaseMinion minion = instance.GetComponent<BaseMinion>();
-            minion.BindOwner(this);
+            minion.BindOwner(this, strat);
             minions.Add(minion);
         }
 

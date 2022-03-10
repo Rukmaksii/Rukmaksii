@@ -28,7 +28,7 @@ namespace model
         /**
          * <summary>aims at a target</summary>
          */
-        public void Aim();
+        public void Aim(Transform target);
 
         /**
          * <summary>moves to a given position</summary>
