@@ -59,7 +59,7 @@ namespace PlayerControllers
             private set => UpdateFlagsServerRpc(PlayerFlags.RUNNING, value);
         }
 
-        private GameObject[] weapons;
+        private Transform[] weapons;
         private Transform[] weaponRends;
 
 
@@ -295,18 +295,21 @@ namespace PlayerControllers
                 GameController.Singleton.AddClientPlayer(this);
             }
 
-            weapons = GameObject.FindGameObjectsWithTag("Weapon");
-            foreach (GameObject weaponModel in weapons)
+            weapons = GetComponentsInChildren<Transform>();
+            foreach (Transform weaponModel in weapons)
             {
-                weaponModel.GetComponent<MeshRenderer>().enabled =
-                    String.Equals(weaponModel.name, Inventory.CurrentWeapon.Name);
-                weaponRends = weaponModel.GetComponentsInChildren<Transform>();
-                foreach (Transform tran in weaponRends)
+                if (weaponModel.CompareTag("Weapon"))
                 {
-                    if (tran.GetComponent<MeshRenderer>() != null)
+                    weaponModel.GetComponent<MeshRenderer>().enabled =
+                        String.Equals(weaponModel.name, Inventory.CurrentWeapon.Name);
+                    weaponRends = weaponModel.GetComponentsInChildren<Transform>();
+                    foreach (Transform tran in weaponRends)
                     {
-                        tran.GetComponent<MeshRenderer>().enabled =
-                            String.Equals(weaponModel.name, Inventory.CurrentWeapon.Name);
+                        if (tran.GetComponent<MeshRenderer>() != null)
+                        {
+                            tran.GetComponent<MeshRenderer>().enabled =
+                                String.Equals(weaponModel.name, Inventory.CurrentWeapon.Name);
+                        }
                     }
                 }
             }
@@ -588,17 +591,21 @@ namespace PlayerControllers
                 else if (value < 0)
                     inventory.NextWeapon();
                 //change currentWeaponModel
-                foreach (GameObject weaponModel in weapons)
+                weapons = GetComponentsInChildren<Transform>();
+                foreach (Transform weaponModel in weapons)
                 {
-                    weaponModel.GetComponent<MeshRenderer>().enabled =
-                        String.Equals(weaponModel.name, Inventory.CurrentWeapon.Name);
-                    weaponRends = weaponModel.GetComponentsInChildren<Transform>();
-                    foreach (Transform tran in weaponRends)
+                    if (weaponModel.CompareTag("Weapon"))
                     {
-                        if (tran.GetComponent<MeshRenderer>() != null)
+                        weaponModel.GetComponent<MeshRenderer>().enabled =
+                            String.Equals(weaponModel.name, Inventory.CurrentWeapon.Name);
+                        weaponRends = weaponModel.GetComponentsInChildren<Transform>();
+                        foreach (Transform tran in weaponRends)
                         {
-                            tran.GetComponent<MeshRenderer>().enabled =
-                                String.Equals(weaponModel.name, Inventory.CurrentWeapon.Name);
+                            if (tran.GetComponent<MeshRenderer>() != null)
+                            {
+                                tran.GetComponent<MeshRenderer>().enabled =
+                                    String.Equals(weaponModel.name, Inventory.CurrentWeapon.Name);
+                            }
                         }
                     }
                 }
