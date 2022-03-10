@@ -699,7 +699,7 @@ namespace PlayerControllers
                 return;
 
             var tr = this.transform;
-            SpawnMinionServerRpc(IMinion.Strategy.ATTACK, tr.position - tr.forward, tr.rotation);
+            SpawnMinionServerRpc(IMinion.Strategy.PROTECT, tr.position - tr.forward, tr.rotation);
         }
 
         /**

@@ -6683,7 +6683,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &9116610442249194318
 MonoBehaviour:
@@ -6758,7 +6758,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b85156ec6f5e4574b4cb88b3d3018592, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lookRadius: 10
+  lookRadius: 30
+  closeRangeRadius: 7
 --- !u!114 &-6849724960188070638
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6786,9 +6787,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.81598467
-  m_Height: 6.706987
+  m_Height: 6.041208
   m_Direction: 1
-  m_Center: {x: 0, y: 3, z: 0}
+  m_Center: {x: 0, y: 3.0864897, z: 0}
 --- !u!1 &5091624259659842616
 GameObject:
   m_ObjectHideFlags: 0

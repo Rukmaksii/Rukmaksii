@@ -18,7 +18,15 @@ namespace Minions
     [RequireComponent(typeof(Collider))]
     public class BaseMinion : NetworkBehaviour, IMinion
     {
-        [SerializeField] private float lookRadius = 10f;
+        /**
+         * <value>the radius at which the minion can see other entities</value>
+         */
+        [SerializeField] private float lookRadius = 30f;
+
+        /**
+         * <value>the distance the minion keeps to the <see cref="assignedPlayer"/></value>
+         */
+        [SerializeField] private float closeRangeRadius = 7f;
 
         public virtual int MaxHealth { get; } = 50;
 
@@ -29,22 +37,6 @@ namespace Minions
         {
             get => teamId.Value;
             private set => UpdateTeamServerRpc(value);
-        }
-
-        public bool IsGrounded
-        {
-            get
-            {
-                RaycastHit hit;
-                Vector3 initPos = transform.position;
-                if (Physics.SphereCast(initPos, agent.height / 2, Vector3.down, out hit, 1))
-                {
-                    return hit.distance <= 0.2f && hit.collider.CompareTag("Ground");
-                }
-
-
-                return false;
-            }
         }
 
         protected List<BasePlayer> Enemies =>
@@ -95,8 +87,9 @@ namespace Minions
         void Update()
         {
             // minion is not ready
-            if (owner == null || !IsGrounded)
+            if (owner == null)
                 return;
+
 
             if (Strategy == IMinion.Strategy.PROTECT)
             {
@@ -131,7 +124,10 @@ namespace Minions
             if (assignedPlayer == null || assignedPlayer.TeamId != TeamId)
                 return;
 
-            MoveTo(assignedPlayer.transform.position);
+            if (Vector3.Distance(transform.position, assignedPlayer.transform.position) > closeRangeRadius)
+                MoveTo(assignedPlayer.transform.position);
+            else
+                agent.ResetPath();
         }
 
         public void Aim(Transform target)
