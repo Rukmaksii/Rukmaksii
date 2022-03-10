@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GameManagers;
 using model;
 using PlayerControllers;
@@ -19,8 +20,8 @@ namespace Minions
     {
         [SerializeField] private float lookRadius = 10f;
 
-        public virtual int MaxHealth { get; protected set; } = 50;
-        
+        public virtual int MaxHealth { get; } = 50;
+
         private NetworkVariable<int> teamId = new NetworkVariable<int>(-1);
         private NetworkVariable<int> health = new NetworkVariable<int>(0);
 
@@ -30,7 +31,53 @@ namespace Minions
             private set => UpdateTeamServerRpc(value);
         }
 
+        public bool IsGrounded
+        {
+            get
+            {
+                RaycastHit hit;
+                Vector3 initPos = transform.position;
+                if (Physics.SphereCast(initPos, agent.height / 2, Vector3.down, out hit, 1))
+                {
+                    return hit.distance <= 0.2f && hit.collider.CompareTag("Ground");
+                }
+
+
+                return false;
+            }
+        }
+
+        protected List<BasePlayer> Enemies =>
+            GameController.Singleton.Players.FindAll(p =>
+                p.TeamId != TeamId && Vector3.Distance(p.transform.position, transform.position) <= lookRadius);
+
+        protected BasePlayer ClosestEnemy
+        {
+            get
+            {
+                var res = Enemies.OrderBy(p => Vector3.Distance(p.transform.position, transform.position)).ToList();
+                return res.Count > 0 ? res.First() : null;
+            }
+        }
+
+        protected List<BasePlayer> Allies =>
+            GameController.Singleton.Players.FindAll(p =>
+                p.TeamId == TeamId && Vector3.Distance(p.transform.position, transform.position) <= lookRadius);
+
+        protected BasePlayer ClosestAlly
+        {
+            get
+            {
+                var res = Allies.OrderBy(p => Vector3.Distance(p.transform.position, transform.position)).ToList();
+                return res.Count > 0 ? res.First() : null;
+            }
+        }
+
         protected BasePlayer owner;
+
+        protected BasePlayer assignedPlayer;
+        public IMinion.Strategy Strategy { get; set; }
+        public Vector3 AssignedPosition { get; set; }
 
         protected Transform target;
         protected NavMeshAgent agent;
@@ -44,25 +91,10 @@ namespace Minions
         void Update()
         {
             // minion is not ready
-            if (owner == null)
+            if (owner == null || !IsGrounded)
                 return;
-            List<BasePlayer> enemies = GameController.Singleton.Players.FindAll(p => p.TeamId != TeamId);
 
-            float minDistance = -1;
-            BasePlayer closest = null;
-            foreach (var enemy in enemies)
-            {
-                float distance = Vector3.Distance(transform.position, enemy.transform.position);
-                if (distance <= lookRadius)
-                {
-                    if (closest == null || distance < minDistance)
-                    {
-                        minDistance = distance;
-                        closest = enemy;
-                    }
-                }
-            }
-
+            var closest = ClosestEnemy;
             if (closest != null)
             {
                 MoveTo(closest.transform.position);
@@ -88,6 +120,13 @@ namespace Minions
         public void Fire()
         {
             throw new NotImplementedException();
+        }
+
+        /**
+         * <summary>Follows the <see cref="assignedPlayer"/></summary>
+         */
+        private void FollowPlayer()
+        {
         }
 
 
@@ -126,7 +165,7 @@ namespace Minions
                 return true;
             }
         }
-        
+
         public void OnKill()
         {
             this.GetComponent<NetworkObject>().Despawn();
