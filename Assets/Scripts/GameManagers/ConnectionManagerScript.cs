@@ -83,7 +83,7 @@ namespace GameManagers
             {
                 GameObject instance = Instantiate(GameController.Singleton.MonsterPrefab);
                 instance.GetComponent<NetworkObject>().Spawn();
-                Vector3 sourcePostion = new Vector3(15 * i, -39, -10); //The position you want to place your agent
+                Vector3 sourcePostion = new Vector3(15 * i, 5, -10); //The position you want to place your agent
                 NavMeshHit closestHit;
                 NavMesh.SamplePosition(sourcePostion, out closestHit, 500, 2);
                 instance.transform.position = sourcePostion;
