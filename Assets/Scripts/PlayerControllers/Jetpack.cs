@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace PlayerControllers
 {
@@ -88,6 +89,9 @@ namespace PlayerControllers
                 float currentY = Player.transform.position.y;
                 if (currentY > maxHeight)
                     direction.y = -1;
+                // smoothing
+                else if (Math.Abs(maxHeight - currentY) < 0.1 && direction.y > 0)
+                    direction.y = 0;
 
                 float multiplier = jetpackForce;
                 if (IsSwift)
