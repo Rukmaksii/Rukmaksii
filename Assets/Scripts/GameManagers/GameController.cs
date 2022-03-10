@@ -30,19 +30,17 @@ namespace GameManagers
             }
         }
 
+        private List<BaseMinion> minions = new List<BaseMinion>();
+
         public List<BaseMinion> Minions
         {
             get
             {
-                List<BaseMinion> minions = new List<BaseMinion>();
-                foreach (var player in Players)
-                {
-                    minions.AddRange(player.Minions);
-                }
-
+                minions = minions.FindAll(m => m != null && m.gameObject != null);
                 return minions;
             }
         }
+
 
         [SerializeField] private List<GameObject> weaponPrefabs = new List<GameObject>();
 
@@ -107,6 +105,14 @@ namespace GameManagers
         public void AddClientPlayer(BasePlayer player)
         {
             players.Add(player);
+        }
+
+        /**
+         * <summary>adds a <see cref="BaseMinion"/> to the registry</summary>
+         */
+        public void RegisterMinion(BaseMinion minion)
+        {
+            minions.Add(minion);
         }
 
         void Start()

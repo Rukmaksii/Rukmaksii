@@ -207,16 +207,8 @@ namespace PlayerControllers
         public float DefaultFuelDuration { get; } = 10f;
 
         [SerializeField] private int maxMinions = 2;
-        private List<BaseMinion> minions = new List<BaseMinion>();
 
-        public List<BaseMinion> Minions
-        {
-            get
-            {
-                minions = minions.FindAll(m => m != null && m.gameObject != null);
-                return minions;
-            }
-        }
+        public List<BaseMinion> Minions => GameController.Singleton.Minions.FindAll(m => m.OwnerId == OwnerClientId);
 
         private bool HasFlag(PlayerFlags flag)
         {
@@ -714,8 +706,7 @@ namespace PlayerControllers
             GameObject instance = Instantiate(GameController.Singleton.MinionPrefab, position, rotation);
             instance.GetComponent<NetworkObject>().Spawn();
             BaseMinion minion = instance.GetComponent<BaseMinion>();
-            minion.BindOwner(this, strat);
-            minions.Add(minion);
+            minion.BindOwnerServerRpc(this.OwnerClientId, strat);
         }
 
 

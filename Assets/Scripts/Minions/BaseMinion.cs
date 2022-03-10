@@ -31,6 +31,12 @@ namespace Minions
         public virtual int MaxHealth { get; } = 50;
 
         private NetworkVariable<int> teamId = new NetworkVariable<int>(-1);
+        private NetworkVariable<ulong> ownerId = new NetworkVariable<ulong>();
+        
+        /**
+         * <remarks>only set to true on the server</remarks>
+         */
+        private bool isReady = false;
         private NetworkVariable<int> health = new NetworkVariable<int>(0);
 
         public int TeamId
@@ -69,10 +75,15 @@ namespace Minions
                                              Vector3.Distance(assignedPlayer.transform.position, transform.position) <=
                                              lookRadius;
 
-        protected BasePlayer owner;
+        public ulong OwnerId => ownerId.Value;
+
+        public BasePlayer Owner =>
+            NetworkManager.Singleton.ConnectedClients[OwnerId].PlayerObject.GetComponent<BasePlayer>();
 
         protected BasePlayer assignedPlayer;
-        public IMinion.Strategy Strategy { get; protected set; }
+
+        private NetworkVariable<IMinion.Strategy> strategy = new NetworkVariable<IMinion.Strategy>();
+        public IMinion.Strategy Strategy => strategy.Value; 
         public Vector3 AssignedPosition { get; set; }
 
         protected Transform target;
@@ -82,12 +93,13 @@ namespace Minions
         {
             agent = GetComponent<NavMeshAgent>();
             UpdateHealthServerRpc(MaxHealth);
+            GameController.Singleton.RegisterMinion(this);
         }
 
         void Update()
         {
             // minion is not ready
-            if (owner == null)
+            if (!NetworkManager.Singleton.IsServer || !isReady)
                 return;
 
 
@@ -97,12 +109,26 @@ namespace Minions
             }
         }
 
-        public void BindOwner(BasePlayer owner, IMinion.Strategy strat)
+        /**
+         * <summary>binds the owner of the minion to it</summary>
+         * <remarks>this method has to be executed on server</remarks>
+         */
+        [ServerRpc]
+        public void BindOwnerServerRpc(ulong ownerId, IMinion.Strategy strat)
         {
-            this.owner = owner;
-            TeamId = owner.TeamId;
-            this.Strategy = strat;
-            assignedPlayer = owner;
+            if (!NetworkManager.Singleton.IsServer)
+                throw new NetworkConfigurationException("BaseMinion.BindOwner should only be called on server-side");
+            UpdateStrategyServerRpc(strat);
+            TeamId = Owner.TeamId;
+            this.strategy.Value = strat;
+            assignedPlayer = Owner;
+            isReady = true;
+        }
+
+        [ServerRpc]
+        public void UpdateStrategyServerRpc(IMinion.Strategy strat)
+        {
+            this.strategy.Value = strat;
         }
 
 
