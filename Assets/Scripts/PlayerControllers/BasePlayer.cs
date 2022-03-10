@@ -708,7 +708,7 @@ namespace PlayerControllers
         [ServerRpc]
         protected void SpawnMinionServerRpc(IMinion.Strategy strat, Vector3 position, Quaternion rotation)
         {
-            if (Minions.Count >= maxMinions)
+            if (Minions.Count >= maxMinions || !cdManager.RequestSpawnMinion())
                 return;
 
             GameObject instance = Instantiate(GameController.Singleton.MinionPrefab, position, rotation);
