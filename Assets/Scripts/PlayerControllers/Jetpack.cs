@@ -58,7 +58,7 @@ namespace PlayerControllers
         /**
      * <value>the max height the player can reach flying</value>
      */
-        [SerializeField] private float maxHeight = 70f;
+        [SerializeField] private float maxHeight = 20f;
 
         /**
      * <value>the speed multiplier when the <see cref="Jetpack.IsSwift"/> flag is set</value>
@@ -85,6 +85,10 @@ namespace PlayerControllers
             get
             {
                 Vector3 direction = Vector3.ClampMagnitude(Player.Movement, 1f);
+                float currentY = Player.transform.position.y;
+                if (currentY > maxHeight)
+                    direction.y = -1;
+
                 float multiplier = jetpackForce;
                 if (IsSwift)
                     multiplier *= enhancedSpeedMultiplier;
