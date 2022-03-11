@@ -37,7 +37,7 @@ namespace Minions
         /**
          * <value>the damage value the minion will inflict</value>
          */
-        protected virtual int Damage { get; } = 10;
+        protected virtual int Damage { get; } = 3;
 
         /**
          * <value>the weapon cooldown</value>
