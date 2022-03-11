@@ -152,7 +152,7 @@ namespace Minions
                 return;
 
             if (Vector3.Distance(transform.position, assignedPlayer.transform.position) > closeRangeRadius)
-                MoveTo(assignedPlayer.transform.position);
+                MoveTo(assignedPlayer.GroundPosition);
             else
                 agent.ResetPath();
         }

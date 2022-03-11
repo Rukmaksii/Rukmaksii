@@ -113,9 +113,24 @@ namespace PlayerControllers
          * <value>the local velocity of the player</value>
          * <remarks>the velocity vector is only available on the server</remarks>
          */
-        public Vector3 Velocity
+        public Vector3 Velocity => IsFlying ? Jetpack.Velocity : velocity.Value;
+
+        /**
+         * <value>the projected position on the ground when not grounded</value>
+         */
+        public Vector3 GroundPosition
         {
-            get => IsFlying ? Jetpack.Velocity : velocity.Value;
+            get
+            {
+                Vector3 res = transform.position;
+                RaycastHit hit;
+                if (!IsGrounded && Physics.Raycast(transform.position + controller.center - controller.height / 2 * Vector3.up, Vector3.down, out hit) && hit.collider.CompareTag("Ground"))
+                {
+                    res.y -= hit.distance - controller.height / 2;
+                }
+
+                return res;
+            }
         }
 
 
@@ -128,9 +143,9 @@ namespace PlayerControllers
             {
                 RaycastHit hit;
                 Vector3 initPos = transform.position + controller.center;
-                if (Physics.SphereCast(initPos, controller.height / 2, Vector3.down, out hit, 1))
+                if (Physics.Raycast(initPos, Vector3.down, out hit, controller.height))
                 {
-                    return hit.distance <= 0.2f && hit.collider.CompareTag("Ground");
+                    return hit.collider.CompareTag("Ground");
                 }
 
 
