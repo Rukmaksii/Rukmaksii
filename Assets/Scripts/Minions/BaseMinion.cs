@@ -12,7 +12,7 @@ using UnityEngine.AI;
 namespace Minions
 {
     [RequireComponent(typeof(NetworkTransform))]
-    [RequireComponent(typeof(NetworkRigidbody))]
+    //[RequireComponent(typeof(NetworkRigidbody))]
     [RequireComponent(typeof(NavMeshAgent))]
     [RequireComponent(typeof(NetworkObject))]
     [RequireComponent(typeof(Collider))]
@@ -32,11 +32,12 @@ namespace Minions
 
         private NetworkVariable<int> teamId = new NetworkVariable<int>(-1);
         private NetworkVariable<ulong> ownerId = new NetworkVariable<ulong>();
-        
+
         /**
          * <remarks>only set to true on the server</remarks>
          */
         private bool isReady = false;
+
         private NetworkVariable<int> health = new NetworkVariable<int>(0);
 
         public int TeamId
@@ -83,7 +84,7 @@ namespace Minions
         protected BasePlayer assignedPlayer;
 
         private NetworkVariable<IMinion.Strategy> strategy = new NetworkVariable<IMinion.Strategy>();
-        public IMinion.Strategy Strategy => strategy.Value; 
+        public IMinion.Strategy Strategy => strategy.Value;
         public Vector3 AssignedPosition { get; set; }
 
         protected Transform target;
@@ -99,13 +100,14 @@ namespace Minions
         void Update()
         {
             // minion is not ready
-            if (!NetworkManager.Singleton.IsServer || !isReady)
+            if (!NetworkManager.Singleton.IsServer || !isReady || !agent.isOnNavMesh)
                 return;
 
 
             if (Strategy == IMinion.Strategy.PROTECT)
             {
                 FollowPlayer();
+                Aim(assignedPlayer.transform);
             }
         }
 
@@ -116,11 +118,10 @@ namespace Minions
         [ServerRpc]
         public void BindOwnerServerRpc(ulong ownerId, IMinion.Strategy strat)
         {
-            if (!NetworkManager.Singleton.IsServer)
-                throw new NetworkConfigurationException("BaseMinion.BindOwner should only be called on server-side");
+            this.ownerId.Value = ownerId;
             UpdateStrategyServerRpc(strat);
             TeamId = Owner.TeamId;
-            this.strategy.Value = strat;
+            strategy.Value = strat;
             assignedPlayer = Owner;
             isReady = true;
         }
