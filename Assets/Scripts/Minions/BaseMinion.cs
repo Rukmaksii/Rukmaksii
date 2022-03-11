@@ -1,6 +1,7 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using GameManagers;
 using model;
 using PlayerControllers;
@@ -27,6 +28,23 @@ namespace Minions
          * <value>the distance the minion keeps to the <see cref="assignedPlayer"/></value>
          */
         [SerializeField] private float closeRangeRadius = 7f;
+
+        /**
+         * <value>the rate at which the minion will hit its target</value>
+         */
+        protected virtual float HitRate { get; } = 0.5f;
+
+        /**
+         * <value>the damage value the minion will inflict</value>
+         */
+        protected virtual int Damage { get; } = 10;
+
+        /**
+         * <value>the weapon cooldown</value>
+         */
+        protected virtual float Cooldown { get; } = 1f;
+
+        private bool canAttack = true;
 
         public virtual int MaxHealth { get; } = 50;
 
@@ -103,11 +121,23 @@ namespace Minions
             if (!NetworkManager.Singleton.IsServer || !isReady || !agent.isOnNavMesh)
                 return;
 
+            var enemies = Enemies;
+            var allies = Allies;
 
             if (Strategy == IMinion.Strategy.PROTECT)
             {
                 FollowPlayer();
-                Aim(assignedPlayer.transform);
+                if (AssignedPlayerInRange)
+                {
+                    if (enemies.Count > 0)
+                    {
+                        var enemy = ClosestEnemy;
+                        Aim(enemy.transform);
+                        Fire(enemy);
+                    }
+                    else
+                        Aim(assignedPlayer.transform);
+                }
             }
         }
 
@@ -138,9 +168,22 @@ namespace Minions
             agent.SetDestination(position);
         }
 
-        public void Fire()
+        public void Fire(BasePlayer enemy)
         {
-            throw new NotImplementedException();
+            if (!canAttack)
+                return;
+            if (1 - Random.Range(0f, 1f) > HitRate)
+            {
+                enemy.TakeDamage(Damage);
+                canAttack = false;
+                StartCoroutine(HandleCooldown());
+            }
+        }
+
+        private IEnumerator HandleCooldown()
+        {
+            yield return new WaitForSeconds(Cooldown);
+            canAttack = true;
         }
 
         /**

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using PlayerControllers;
+using UnityEngine;
 
 namespace model
 {
@@ -38,6 +39,6 @@ namespace model
         /**
          * <summary>fires at a target</summary>
          */
-        public void Fire();
+        public void Fire(BasePlayer enemy);
     }
 }
