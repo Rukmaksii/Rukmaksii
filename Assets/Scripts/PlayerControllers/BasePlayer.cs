@@ -124,7 +124,9 @@ namespace PlayerControllers
             {
                 Vector3 res = transform.position;
                 RaycastHit hit;
-                if (!IsGrounded && Physics.Raycast(transform.position + controller.center - controller.height / 2 * Vector3.up, Vector3.down, out hit) && hit.collider.CompareTag("Ground"))
+                if (!IsGrounded &&
+                    Physics.Raycast(transform.position + controller.center - controller.height / 2 * Vector3.up,
+                        Vector3.down, out hit) && hit.collider.CompareTag("Ground"))
                 {
                     res.y -= hit.distance - controller.height / 2;
                 }
@@ -264,11 +266,11 @@ namespace PlayerControllers
 
             cdManager = gameObject.AddComponent<CooldownManager>();
 
-            UpdateHealthServerRpc(maxHealth, OwnerClientId);
             controller = gameObject.GetComponent<CharacterController>();
 
             if (IsOwner)
             {
+                UpdateHealthServerRpc(maxHealth, OwnerClientId);
                 GameController.Singleton.BindPlayer(this);
 
                 int teamId = GameController.Singleton.Parameters.IsReady
