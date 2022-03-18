@@ -19,15 +19,15 @@ namespace MonstersControler
         void Start()
         {
             UpdateLifeServerRpc(maxHealth);
-            StartCoroutine(wait());
+            NavMeshAgent agent = gameObject.GetComponent<NavMeshAgent>();
+            if (agent.isOnNavMesh)
+            {
+                MonsterAI monsterAI = gameObject.AddComponent(typeof(MonsterAI)) as MonsterAI;
+                monsterAI.agent = gameObject.GetComponent<NavMeshAgent>();
+            }
         }
 
-        IEnumerator wait()
-        {
-            yield return new WaitForSeconds(15);
-            MonsterAI monsterAI = gameObject.AddComponent(typeof(MonsterAI)) as MonsterAI;
-            monsterAI.agent = gameObject.GetComponent<NavMeshAgent>();
-        }
+        
 
         // Update is called once per frame
         void Update()
