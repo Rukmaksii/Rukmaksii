@@ -54,7 +54,7 @@ public class HUDController : MonoBehaviour
 
         // updating the capture circle UI if the player is on a point
         if (capturePoint != null)
-            capturingState.fillAmount = capturePoint.Progress / capturePoint.MaxProgress;
+            capturingState.fillAmount = capturePoint.CurrentProgressValue / capturePoint.MaxProgress;
     }
 
     /**
