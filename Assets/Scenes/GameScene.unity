@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -521,6 +521,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1738022806}
     m_Modifications:
+    - target: {fileID: 4645415084687018667, guid: 45d20bddbb40f0c71bd7fdbd455cbafa, type: 3}
+      propertyPath: firstTeamMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 7d48136ae0434664dad52e299c89a45f, type: 2}
+    - target: {fileID: 4645415084687018667, guid: 45d20bddbb40f0c71bd7fdbd455cbafa, type: 3}
+      propertyPath: secondTeamMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 78e00f019cb9fd34bb6afeb29b7478bf, type: 2}
     - target: {fileID: 4645415084773794642, guid: 45d20bddbb40f0c71bd7fdbd455cbafa, type: 3}
       propertyPath: m_TagString
       value: Ground
@@ -1465,6 +1473,14 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -41.4
       objectReference: {fileID: 0}
+    - target: {fileID: 4645415084687018667, guid: 45d20bddbb40f0c71bd7fdbd455cbafa, type: 3}
+      propertyPath: firstTeamMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 7d48136ae0434664dad52e299c89a45f, type: 2}
+    - target: {fileID: 4645415084687018667, guid: 45d20bddbb40f0c71bd7fdbd455cbafa, type: 3}
+      propertyPath: secondTeamMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 78e00f019cb9fd34bb6afeb29b7478bf, type: 2}
     - target: {fileID: 4645415084773794642, guid: 45d20bddbb40f0c71bd7fdbd455cbafa, type: 3}
       propertyPath: m_TagString
       value: Ground
