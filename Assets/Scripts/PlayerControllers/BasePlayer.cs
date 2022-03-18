@@ -709,7 +709,7 @@ namespace PlayerControllers
         {
             if (!IsOwner || !ctx.started)
                 return;
-            strategy = (strategy + 1) % 2; //TODO: Change 2 to 3 when 3rd strategy is implemented
+            strategy = (strategy + 1) % 3;
         }
         public void OnSpawnMinion(InputAction.CallbackContext ctx)
         {

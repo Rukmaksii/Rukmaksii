@@ -151,6 +151,18 @@ namespace Minions
                 else
                     Aim(assignedPlayer.transform);
             }
+            
+            if (Strategy == IMinion.Strategy.ATTACK)
+            {
+                if (enemies.Count > 0)
+                {
+                    var enemy = ClosestEnemy;
+                    FollowPlayer(enemy);
+                    Aim(enemy.transform);
+                    Fire(enemy);
+                }
+            }
+            
         }
 
         /**
@@ -208,6 +220,16 @@ namespace Minions
 
             if (Vector3.Distance(transform.position, assignedPlayer.transform.position) > closeRangeRadius)
                 MoveTo(assignedPlayer.GroundPosition);
+            else
+                agent.ResetPath();
+        }
+        private void FollowPlayer(BasePlayer enemy)
+        {
+            if (enemy == null || enemy.TeamId == TeamId)
+                return;
+
+            if (Vector3.Distance(transform.position, enemy.transform.position) > closeRangeRadius)
+                MoveTo(enemy.GroundPosition);
             else
                 agent.ResetPath();
         }
