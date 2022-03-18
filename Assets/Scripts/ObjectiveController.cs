@@ -10,6 +10,7 @@ public class ObjectiveController : MonoBehaviour
     public enum State
     {
         Neutral,
+        Capuring,
         Captured
     }
     
@@ -17,10 +18,14 @@ public class ObjectiveController : MonoBehaviour
     [SerializeField] private Material baseMaterial;
     
     /** <value>the material used for captured point</value> */
-    [SerializeField] private Material capturedMaterial;
-    
+    [SerializeField] private Material firstTeamMaterial;
+    [SerializeField] private Material secondTeamMaterial;
+
     /** <value>the GameObject used to trigger capture</value> */
     [SerializeField] private GameObject captureArea;
+
+    private int controllingTeam;
+    private int capturingTeam;
     
     /** <value>the capture progress</value> */
     private float progress = 0f;
@@ -56,24 +61,70 @@ public class ObjectiveController : MonoBehaviour
     {
         if (state == State.Neutral)
         {
-            int playersCapturing = CapturingPlayersList.Count;
-        
-            progress += playersCapturing * progressSpeed * Time.deltaTime;
-            
-            if (progress > maxProgress)
+            if (capturingPlayersList.Count != 0)
             {
-                state = State.Captured;
-                Debug.Log("Point captured!");
+                capturingTeam = CapturingPlayersList[0].TeamId;
+                controllingTeam = CapturingPlayersList[0].TeamId;
+                state = State.Capuring;
             }
         }
-        else
+        else if (state == State.Capuring)
         {
-            captureArea.GetComponent<MeshRenderer>().material = capturedMaterial;
+            (List<BasePlayer> t1PlayerList, List<BasePlayer> t2PlayerList) = (new List<BasePlayer>(), new List<BasePlayer>(0));
+
+            foreach (BasePlayer player in CapturingPlayersList)
+            {
+                if (player.TeamId == 0)
+                    t1PlayerList.Add(player);
+                else if (player.TeamId == 1)
+                    t2PlayerList.Add(player);
+            }
+
+            Debug.Log($"Team 1 has {t1PlayerList.Capacity + 0} players");
+            Debug.Log($"Team 2 has {t2PlayerList.Capacity + 0} players");
+            
+            controllingTeam = t1PlayerList.Count > t2PlayerList.Count ? 0 : 1;
+
+            int nbrPlayersCapturing;
+
+            if (capturingTeam == 0)
+                nbrPlayersCapturing = t1PlayerList.Count;
+            else if (capturingTeam == 1)
+                nbrPlayersCapturing = t2PlayerList.Count;
+            else
+                nbrPlayersCapturing = 0;
+            
+            if (capturingTeam != controllingTeam)
+                progress -= nbrPlayersCapturing * progressSpeed * Time.deltaTime;
+            else
+                progress += nbrPlayersCapturing * progressSpeed * Time.deltaTime;
+
+            if (progress < 0)
+            {
+                progress = 0;
+                state = State.Neutral;
+                capturingTeam = -1;
+            }
+            else if (progress > maxProgress)
+            {
+                state = State.Captured;
+                Debug.Log($"Point captured by team {controllingTeam}");
+            }
+            
+            Debug.Log(progress);
+        }
+        else if (state == State.Captured)
+        {
+            if (capturingTeam == 0)
+                captureArea.GetComponent<MeshRenderer>().material = firstTeamMaterial;
+            else if (capturingTeam == 1)
+                captureArea.GetComponent<MeshRenderer>().material = secondTeamMaterial;
         }
     }
 
     private void OnTriggerEnter(Collider collider)
     {
+        Debug.Log("something entered");
         if (collider.CompareTag("Player"))
         {
             OnPlayerInteract?.Invoke(this,collider.GetComponent<BasePlayer>(),true);
