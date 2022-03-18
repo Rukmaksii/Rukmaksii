@@ -3,9 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using PlayerControllers;
+using Unity.Netcode;
 using UnityEngine;
 
-public class ObjectiveController : MonoBehaviour
+public class ObjectiveController : NetworkBehaviour
 {
     public enum State
     {
@@ -24,6 +25,10 @@ public class ObjectiveController : MonoBehaviour
     /** <value>the GameObject used to trigger capture</value> */
     [SerializeField] private GameObject captureArea;
 
+    private NetworkVariable<float> CurrentProgress { get; } = new NetworkVariable<float>(0f);
+    
+    public float CurrentProgressValue => CurrentProgress.Value;
+    
     private int controllingTeam;
     private int capturingTeam;
     
@@ -80,38 +85,53 @@ public class ObjectiveController : MonoBehaviour
                     t2PlayerList.Add(player);
             }
 
-            Debug.Log($"Team 1 has {t1PlayerList.Capacity + 0} players");
-            Debug.Log($"Team 2 has {t2PlayerList.Capacity + 0} players");
+            Debug.Log($"Team 1 has {t1PlayerList.Count + 0} players");
+            //Debug.Log($"Team 2 has {t2PlayerList.Count + 0} players");
             
-            controllingTeam = t1PlayerList.Count > t2PlayerList.Count ? 0 : 1;
-
             int nbrPlayersCapturing;
 
-            if (capturingTeam == 0)
-                nbrPlayersCapturing = t1PlayerList.Count;
-            else if (capturingTeam == 1)
-                nbrPlayersCapturing = t2PlayerList.Count;
-            else
-                nbrPlayersCapturing = 0;
-            
-            if (capturingTeam != controllingTeam)
-                progress -= nbrPlayersCapturing * progressSpeed * Time.deltaTime;
-            else
-                progress += nbrPlayersCapturing * progressSpeed * Time.deltaTime;
-
-            if (progress < 0)
+            if (t1PlayerList.Count > t2PlayerList.Count)
             {
-                progress = 0;
-                state = State.Neutral;
-                capturingTeam = -1;
+                controllingTeam = 0;
+                nbrPlayersCapturing = t1PlayerList.Count;
             }
-            else if (progress > maxProgress)
+            else if (t1PlayerList.Count < t2PlayerList.Count)
+            {
+                controllingTeam = 1;
+                nbrPlayersCapturing = t2PlayerList.Count;
+            }
+            else
+            {
+                controllingTeam = -1;
+                nbrPlayersCapturing = 0;
+            }
+
+            Debug.Log(capturingTeam);
+            Debug.Log(controllingTeam);
+            if (capturingTeam == 0 && controllingTeam == 1 || capturingTeam == 1 && controllingTeam == 0)
+            {
+                CurrentProgress.Value -= nbrPlayersCapturing * progressSpeed * Time.deltaTime;
+                Debug.Log("downcap");
+            }
+            else if (controllingTeam == capturingTeam)
+            {
+                CurrentProgress.Value += nbrPlayersCapturing * progressSpeed * Time.deltaTime;
+                Debug.Log("upcap");
+            }
+            Debug.Log(CurrentProgress.Value);
+
+            if (CurrentProgress.Value < 0)
+            {
+                CurrentProgress.Value = 0;
+                state = State.Neutral;
+            }
+            else if (CurrentProgress.Value > maxProgress)
             {
                 state = State.Captured;
                 Debug.Log($"Point captured by team {controllingTeam}");
             }
             
-            Debug.Log(progress);
+            //Debug.Log(CurrentProgress.Value);
         }
         else if (state == State.Captured)
         {
@@ -124,11 +144,11 @@ public class ObjectiveController : MonoBehaviour
 
     private void OnTriggerEnter(Collider collider)
     {
-        Debug.Log("something entered");
         if (collider.CompareTag("Player"))
         {
             OnPlayerInteract?.Invoke(this,collider.GetComponent<BasePlayer>(),true);
             capturingPlayersList.Add(collider.GetComponent<BasePlayer>());
+
         }
     }
     

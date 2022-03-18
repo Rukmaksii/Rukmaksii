@@ -929,7 +929,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_NickName: 
-  m_RoomName: test room
+  m_RoomName: my room
   m_MaxPlayers: 16
   m_NetworkDeliveryEventCodesStartRange: 0
   m_AttachSupportLogger: 0
