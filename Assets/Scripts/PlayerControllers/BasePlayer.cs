@@ -227,6 +227,8 @@ namespace PlayerControllers
 
         public List<BaseMinion> Minions => GameController.Singleton.Minions.FindAll(m => m.OwnerId == OwnerClientId);
 
+        private int strategy = 0;
+
         private bool HasFlag(PlayerFlags flag)
         {
             int value = (int) flag;
@@ -703,13 +705,19 @@ namespace PlayerControllers
             return hit.collider.gameObject;
         }
 
+        public void OnChangeStrategy(InputAction.CallbackContext ctx)
+        {
+            if (!IsOwner || !ctx.started)
+                return;
+            strategy = (strategy + 1) % 2; //TODO: Change 2 to 3 when 3rd strategy is implemented
+        }
         public void OnSpawnMinion(InputAction.CallbackContext ctx)
         {
             if (!IsOwner || !ctx.started)
                 return;
 
             var tr = this.transform;
-            SpawnMinionServerRpc(IMinion.Strategy.PROTECT, tr.position - tr.forward, tr.rotation);
+            SpawnMinionServerRpc((IMinion.Strategy) strategy, tr.position - tr.forward, tr.rotation);
         }
 
         /**

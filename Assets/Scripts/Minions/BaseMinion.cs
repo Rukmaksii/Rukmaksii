@@ -139,6 +139,18 @@ namespace Minions
                         Aim(assignedPlayer.transform);
                 }
             }
+
+            if (Strategy == IMinion.Strategy.DEFEND)
+            {
+                if (enemies.Count > 0)
+                {
+                    var enemy = ClosestEnemy;
+                    Aim(enemy.transform);
+                    Fire(enemy);
+                }
+                else
+                    Aim(assignedPlayer.transform);
+            }
         }
 
         /**
