@@ -1,4 +1,5 @@
 using GameManagers;
+using model;
 using PlayerControllers;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,6 +22,8 @@ public class HUDController : MonoBehaviour
     [SerializeField] protected Image weaponPlaceHolder;
 
     [SerializeField] protected Image capturingState;
+    
+    [SerializeField] protected Text currentStrategy;
 
     private ObjectiveController capturePoint;
 
@@ -51,6 +54,7 @@ public class HUDController : MonoBehaviour
         SetDashCooldown(GameController.Singleton.LocalPlayer.DashedSince, GameController.Singleton.LocalPlayer.DashCooldown);
         SetAmmoCounter(GameController.Singleton.LocalPlayer.Inventory.CurrentWeapon.CurrentAmmo,
             GameController.Singleton.LocalPlayer.Inventory.CurrentWeapon.MaxAmmo);
+        SetCurrentStrategy((IMinion.Strategy) GameController.Singleton.LocalPlayer.Strategy);
 
         // updating the capture circle UI if the player is on a point
         if (capturePoint != null)
@@ -122,7 +126,29 @@ public class HUDController : MonoBehaviour
     {
         ammoCounter.text = $"{ammo}/{maxAmmo}";
     }
-
+    
+    /**
+     * <summary>sets the next minion's strategy</summary>
+     * <param name="strat">current minion's strategy</param>
+     */
+    public void SetCurrentStrategy(IMinion.Strategy strat)
+    {
+        string str = "Next minion: ";
+        switch (strat)
+        {
+            case IMinion.Strategy.ATTACK:
+                str += "Attack";
+                break;
+            case IMinion.Strategy.DEFEND:
+                str += "Defend";
+                break;
+            case IMinion.Strategy.PROTECT:
+                str += "Protect";
+                break;
+        }
+        currentStrategy.text = str;
+    }
+    
     /**
      * <summary>displays and hides the hit marker on the screen</summary>
      * <param name="status">bool for whether the hit marker should be shown or not</param>

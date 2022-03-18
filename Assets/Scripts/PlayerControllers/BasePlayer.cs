@@ -228,6 +228,7 @@ namespace PlayerControllers
         public List<BaseMinion> Minions => GameController.Singleton.Minions.FindAll(m => m.OwnerId == OwnerClientId);
 
         private int strategy = 0;
+        public int Strategy => strategy;
 
         private bool HasFlag(PlayerFlags flag)
         {
