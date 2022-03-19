@@ -42,6 +42,9 @@ namespace GameManagers
         }
 
 
+        public Vector3 SpawnPoint { get; private set; }
+
+
         [SerializeField] private List<GameObject> weaponPrefabs = new List<GameObject>();
 
         public List<GameObject> WeaponPrefabs => weaponPrefabs;
@@ -93,17 +96,34 @@ namespace GameManagers
         /**
          * <summary>binds the local player to the game controller</summary>
          */
-        public void BindPlayer(BasePlayer player)
+        private void BindPlayer(BasePlayer player)
         {
             localPlayer = player;
-            players.Add(player);
+
+            int teamId = Parameters.IsReady
+                ? Parameters.TeamId
+                : 0;
+            player.UpdateTeamServerRpc(teamId);
+
+            if (teamId == 1)
+            {
+                GameObject obj = GameObject.FindGameObjectWithTag("SpawnPoint2");
+                SpawnPoint = obj.transform.position;
+            }
+            else
+            {
+                GameObject obj = GameObject.FindGameObjectWithTag("SpawnPoint1");
+                SpawnPoint = obj.transform.position;
+            }
         }
 
         /**
          * <summary>adds a non-local player to the game controller</summary>
          */
-        public void AddClientPlayer(BasePlayer player)
+        public void AddPlayer(BasePlayer player)
         {
+            if (player.IsOwner)
+                BindPlayer(player);
             players.Add(player);
         }
 

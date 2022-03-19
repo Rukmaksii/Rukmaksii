@@ -177,8 +177,6 @@ namespace PlayerControllers
 
         protected Inventory inventory;
 
-        protected Vector3 spawnPoint = Vector3.zero;
-
         public Inventory Inventory => inventory;
         public Jetpack Jetpack => inventory.Jetpack;
 
@@ -271,31 +269,13 @@ namespace PlayerControllers
 
             controller = gameObject.GetComponent<CharacterController>();
 
+
+            GameController.Singleton.AddPlayer(this);
+
             if (IsOwner)
             {
                 UpdateHealthServerRpc(maxHealth, OwnerClientId);
-                GameController.Singleton.BindPlayer(this);
 
-                int teamId = GameController.Singleton.Parameters.IsReady
-                    ? GameController.Singleton.Parameters.TeamId
-                    : 0;
-                UpdateTeamServerRpc(teamId);
-
-                if (teamId == 1)
-                {
-                    GameObject obj = GameObject.FindGameObjectWithTag("SpawnPoint2");
-                    spawnPoint = obj.transform.position;
-                }
-                else
-                {
-                    GameObject obj = GameObject.FindGameObjectWithTag("SpawnPoint1");
-                    spawnPoint = obj.transform.position;
-                }
-
-                Debug.Log($"spawning at {spawnPoint}");
-                spawnPoint -= controller.height * Vector3.up;
-
-                UpdatePositionRpc(spawnPoint);
                 GameObject playerCamera = GameObject.FindGameObjectWithTag("Player Camera");
                 cameraController = playerCamera.GetComponent<CameraController>();
                 UpdateCamera();
@@ -303,10 +283,7 @@ namespace PlayerControllers
 
                 Cursor.lockState = CursorLockMode.Locked;
             }
-            else
-            {
-                GameController.Singleton.AddClientPlayer(this);
-            }
+
 
             weapons = GetComponentsInChildren<Transform>();
             foreach (Transform weaponModel in weapons)
@@ -315,6 +292,7 @@ namespace PlayerControllers
                 {
                     weaponModel.GetComponent<MeshRenderer>().enabled =
                         String.Equals(weaponModel.name, Inventory.CurrentWeapon.Name);
+
                     weaponRends = weaponModel.GetComponentsInChildren<Transform>();
                     foreach (Transform tran in weaponRends)
                     {
@@ -326,6 +304,21 @@ namespace PlayerControllers
                     }
                 }
             }
+
+            MoveToSpawn();
+        }
+
+        /**
+         * <summary>moves the player to the spawn</summary>
+         */
+        private void MoveToSpawn()
+        {
+            if (!IsOwner)
+                return;
+            var pos = GameController.Singleton.SpawnPoint;
+            pos.y += 30;
+
+            UpdatePositionRpc(pos);
         }
 
         void Awake()
@@ -578,7 +571,7 @@ namespace PlayerControllers
         public void OnRespawn()
         {
             // respawn location
-            this.UpdatePositionRpc(spawnPoint);
+            MoveToSpawn();
 
             GameObject autoWeaponPrefab =
                 GameController.Singleton.WeaponPrefabs.Find(go => go.name == "TestAutoPrefab");
@@ -587,10 +580,7 @@ namespace PlayerControllers
             GameObject gunWeaponPrefab = GameController.Singleton.WeaponPrefabs.Find(go => go.name == "TestGunPrefab");
             this.inventory.AddWeapon(Instantiate(gunWeaponPrefab).GetComponent<BaseWeapon>());
 
-            foreach (BaseItem item in Inventory.ItemsList)
-            {
-                Inventory.RemoveItem(item);
-            }
+            Inventory.ItemsList.Clear();
 
             GameController.Singleton.deathScreen.SetActive(false);
         }
@@ -712,6 +702,7 @@ namespace PlayerControllers
                 return;
             strategy = (strategy + 1) % 3;
         }
+
         public void OnSpawnMinion(InputAction.CallbackContext ctx)
         {
             if (!IsOwner || !ctx.started)
@@ -802,7 +793,7 @@ namespace PlayerControllers
 
 
         [ServerRpc]
-        private void UpdateTeamServerRpc(int teamId)
+        public void UpdateTeamServerRpc(int teamId)
         {
             this.teamId.Value = teamId;
         }
