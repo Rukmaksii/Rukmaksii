@@ -17,12 +17,14 @@ namespace GameManagers
 
         void Start()
         {
-
+#if UNET
+            NetworkManager.Singleton.NetworkConfig.NetworkTransport = GetComponent<UNetTransport>();
+#endif
             // kept for local tests
             // TODO : remove this line and OnGui
             if (!connectionData.Data.IsReady)
                 return;
-            
+
             GameObject playerPrefab = classPrefabs.Find(go =>
                 go.GetComponent<BasePlayer>().ClassName == connectionData.Data.ClassName);
 
@@ -31,6 +33,7 @@ namespace GameManagers
                 playerPrefab = classPrefabs[0];
 
             NetworkManager.Singleton.NetworkConfig.PlayerPrefab = playerPrefab;
+
 
             switch (connectionData.Data.ConnectionType)
             {
@@ -46,10 +49,6 @@ namespace GameManagers
                     StartCoroutine(waitagent());
                     break;
             }
-            
-            #if UNET
-                NetworkManager.Singleton.NetworkConfig.NetworkTransport = GetComponent<UNetTransport>();
-            #endif
         }
 
         private void OnGUI()
@@ -80,7 +79,7 @@ namespace GameManagers
             else if (GUILayout.Button("Client"))
                 NetworkManager.Singleton.StartClient();
         }
-        
+
         IEnumerator waitagent()
         {
             yield return new WaitForSeconds(10);
