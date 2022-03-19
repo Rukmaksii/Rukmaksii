@@ -900,6 +900,7 @@ GameObject:
   - component: {fileID: 1112646624}
   - component: {fileID: 1112646621}
   - component: {fileID: 1112646622}
+  - component: {fileID: 1112646625}
   m_Layer: 0
   m_Name: ConnectionManager
   m_TagString: Untagged
@@ -1006,6 +1007,25 @@ MonoBehaviour:
   connectionData: {fileID: 11400000, guid: 51f4e5ed14290eb4db05031d297551b9, type: 2}
   classPrefabs:
   - {fileID: 1800387450937859543, guid: ddd7cfbbbb0dbb44f81ebb725ce41458, type: 3}
+--- !u!114 &1112646625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1112646620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b84c2d8dfe509a34fb59e2b81f8e1319, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MessageBufferSize: 5120
+  MaxConnections: 100
+  MaxSentMessageQueueSize: 128
+  ConnectAddress: 127.0.0.1
+  ConnectPort: 7777
+  ServerListenPort: 7777
+  MessageSendMode: 0
 --- !u!1001 &1153582349
 PrefabInstance:
   m_ObjectHideFlags: 0

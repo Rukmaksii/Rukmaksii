@@ -4,6 +4,7 @@ using model;
 using PlayerControllers;
 using Unity.Netcode;
 using Unity.Netcode.Components;
+using Unity.Netcode.Transports.UNET;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -45,6 +46,10 @@ namespace GameManagers
                     StartCoroutine(waitagent());
                     break;
             }
+            
+            #if UNET
+                NetworkManager.Singleton.NetworkConfig.NetworkTransport = GetComponent<UNetTransport>();
+            #endif
         }
 
         private void OnGUI()
