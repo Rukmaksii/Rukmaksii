@@ -132,9 +132,11 @@ namespace PlayerControllers
         {
             if (IsOwner)
             {
-                UpdateServer();
                 UpdateClient();
             }
+
+            if (IsServer)
+                UpdateServer();
         }
 
         public bool CanDamage(BasePlayer other)
@@ -142,10 +144,17 @@ namespace PlayerControllers
             return other.teamId.Value != teamId.Value;
         }
 
+
+        private void UpdateServer()
+        {
+            if (IsShooting)
+                this.inventory.CurrentWeapon.Fire();
+        }
+
         /**
          * <summary>the function is called in <see cref="Update"/> if instance is server</summary>
          */
-        private void UpdateServer()
+        private void UpdateClient()
         {
             var _deltaTime = Time.deltaTime;
 
@@ -182,22 +191,8 @@ namespace PlayerControllers
 
             controller.Move(transform.TransformDirection(res) * _deltaTime);
             UpdateVelocityServerRpc(res);
-        }
-
-        /**
-         * <summary>the function is called in <see cref="FixedUpdate"/> if instance is a client</summary>
-         */
-        private void UpdateClient()
-        {
-            if (!IsOwner)
-                return;
-
             UpdateCamera();
-
-            if (IsShooting)
-                this.inventory.CurrentWeapon.Fire();
         }
-
 
         /**
          * <summary>handler for jump function</summary>
