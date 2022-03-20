@@ -5,7 +5,6 @@ namespace model
 {
     public interface IMinion : IKillable
     {
-     
         /**
          * <summary>the strategy used for the minion</summary>
          */
@@ -14,18 +13,24 @@ namespace model
             /**
              * <value>defend a spot on the map</value>
              */
-            DEFEND,
+            DEFEND = 0,
+
             /**
              * <value>Protects a player</value>
              */
-            PROTECT,
-            
+            PROTECT = DEFEND + 1,
+
             /**
              * <value>attack enemy players and follow them</value>
              */
-            ATTACK
+            ATTACK = PROTECT + 1,
+
+            /**
+             * <value>the number elements in the enum</value>
+             */
+            Count = ATTACK + 1
         }
-        
+
         /**
          * <summary>aims at a target</summary>
          */
@@ -35,7 +40,7 @@ namespace model
          * <summary>moves to a given position</summary>
          */
         public void MoveTo(Vector3 position);
-        
+
         /**
          * <summary>fires at a target</summary>
          */

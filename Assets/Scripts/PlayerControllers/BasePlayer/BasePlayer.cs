@@ -1,0 +1,324 @@
+using System;
+using GameManagers;
+using model;
+using Unity.Netcode;
+using Unity.Netcode.Samples;
+using UnityEngine;
+using Weapons;
+
+namespace PlayerControllers
+{
+    enum PlayerFlags
+    {
+        MOVING = 1,
+        RUNNING = 2 * MOVING,
+        FLYING = 2 * RUNNING,
+        SHOOTING = 2 * FLYING,
+        DASHING = 2 * SHOOTING,
+        AIMING = 2 * DASHING
+    }
+
+    /**
+ * <summary>
+ *      The controller class for any player spawned in the game
+ * </summary>
+ */
+    [RequireComponent(typeof(Collider))]
+    [RequireComponent(typeof(CharacterController))]
+    [RequireComponent(typeof(NetworkObject))]
+    [RequireComponent(typeof(ClientNetworkTransform))]
+    [RequireComponent(typeof(CooldownManager))]
+    public abstract partial class BasePlayer : NetworkBehaviour, IKillable
+    {
+        private bool HasFlag(PlayerFlags flag)
+        {
+            int value = (int) flag;
+            return HasFlag(value);
+        }
+
+        private bool HasFlags(params PlayerFlags[] flags)
+        {
+            int value = 0;
+            foreach (PlayerFlags fl in flags)
+            {
+                value |= (int) fl;
+            }
+
+            return HasFlag(value);
+        }
+
+        private bool HasFlag(int flag)
+        {
+            return (this.flags.Value & flag) == flag;
+        }
+
+        void Start()
+        {
+            this.inventory = new Inventory(this);
+
+            GameObject autoWeaponPrefab =
+                GameController.Singleton.WeaponPrefabs.Find(go => go.name == "TestAutoPrefab");
+            this.inventory.AddWeapon(Instantiate(autoWeaponPrefab).GetComponent<BaseWeapon>());
+
+            GameObject gunWeaponPrefab = GameController.Singleton.WeaponPrefabs.Find(go => go.name == "TestGunPrefab");
+            this.inventory.AddWeapon(Instantiate(gunWeaponPrefab).GetComponent<BaseWeapon>());
+
+            inventory.Jetpack = gameObject.AddComponent<Jetpack>();
+            inventory.Jetpack.FuelDuration = DefaultFuelDuration;
+
+
+            cdManager = gameObject.AddComponent<CooldownManager>();
+
+            controller = gameObject.GetComponent<CharacterController>();
+
+
+            GameController.Singleton.AddPlayer(this);
+
+            if (IsOwner)
+            {
+                UpdateHealthServerRpc(maxHealth, OwnerClientId);
+
+                GameObject playerCamera = GameObject.FindGameObjectWithTag("Player Camera");
+                cameraController = playerCamera.GetComponent<CameraController>();
+                UpdateCamera();
+
+
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+
+
+            weapons = GetComponentsInChildren<Transform>();
+            foreach (Transform weaponModel in weapons)
+            {
+                if (weaponModel.CompareTag("Weapon"))
+                {
+                    weaponModel.GetComponent<MeshRenderer>().enabled =
+                        String.Equals(weaponModel.name, Inventory.CurrentWeapon.Name);
+
+                    weaponRends = weaponModel.GetComponentsInChildren<Transform>();
+                    foreach (Transform tran in weaponRends)
+                    {
+                        if (tran.GetComponent<MeshRenderer>() != null)
+                        {
+                            tran.GetComponent<MeshRenderer>().enabled =
+                                String.Equals(weaponModel.name, Inventory.CurrentWeapon.Name);
+                        }
+                    }
+                }
+            }
+
+            MoveToSpawn();
+        }
+
+        /**
+         * <summary>moves the player to the spawn</summary>
+         */
+        private void MoveToSpawn()
+        {
+            if (!IsOwner)
+                return;
+            var pos = GameController.Singleton.SpawnPoint;
+            pos.y += 30;
+
+            UpdatePositionRpc(pos);
+        }
+
+        void Awake()
+        {
+        }
+
+        // Update is called once per frame
+        private void Update()
+        {
+            if (IsOwner)
+            {
+                UpdateServer();
+                UpdateClient();
+            }
+        }
+
+        public bool CanDamage(BasePlayer other)
+        {
+            return other.teamId.Value != teamId.Value;
+        }
+
+        /**
+         * <summary>the function is called in <see cref="Update"/> if instance is server</summary>
+         */
+        private void UpdateServer()
+        {
+            var _deltaTime = Time.deltaTime;
+
+            handleDash(_deltaTime);
+
+            Vector3 res;
+
+            if (!IsFlying)
+            {
+                var moveVector = Movement;
+
+                float multiplier = movementSpeed;
+                if (IsRunning)
+                {
+                    multiplier *= runningSpeedMultiplier;
+                }
+
+                res = Movement * multiplier;
+
+                yVelocity += gravity * _deltaTime;
+                if (IsGrounded && yVelocity < 0f)
+                    yVelocity = 0;
+
+                if (moveVector.y > 0)
+                    Jump();
+
+                res.y = yVelocity;
+            }
+            else
+            {
+                res = Jetpack.Velocity;
+            }
+
+
+            controller.Move(transform.TransformDirection(res) * _deltaTime);
+            UpdateVelocityServerRpc(res);
+        }
+
+        /**
+         * <summary>the function is called in <see cref="FixedUpdate"/> if instance is a client</summary>
+         */
+        private void UpdateClient()
+        {
+            if (!IsOwner)
+                return;
+
+            UpdateCamera();
+
+            cameraController.OnPlayerMove(camRotationAnchor, transform);
+
+            if (IsShooting)
+                this.inventory.CurrentWeapon.Fire();
+        }
+
+
+        /**
+         * <summary>handler for jump function</summary>
+         */
+        private void Jump()
+        {
+            if (IsGrounded)
+            {
+                yVelocity = jumpForce;
+            }
+        }
+
+
+        /**
+         * <summary>
+         *      Removes health from the player
+         * </summary>
+         * <param name="damage">int for amount of damage taken</param>
+         */
+        public bool TakeDamage(int damage)
+        {
+            if (damage >= CurrentHealth.Value)
+            {
+                OnKill();
+                return false;
+            }
+            else
+            {
+                UpdateHealthServerRpc(CurrentHealth.Value - damage, this.OwnerClientId);
+                return true;
+            }
+        }
+
+        public void OnKill()
+        {
+            UpdateHealthServerRpc(0, this.OwnerClientId);
+        }
+
+
+        public void OnRespawn()
+        {
+            // respawn location
+            MoveToSpawn();
+
+            GameObject autoWeaponPrefab =
+                GameController.Singleton.WeaponPrefabs.Find(go => go.name == "TestAutoPrefab");
+            this.inventory.AddWeapon(Instantiate(autoWeaponPrefab).GetComponent<BaseWeapon>());
+
+            GameObject gunWeaponPrefab = GameController.Singleton.WeaponPrefabs.Find(go => go.name == "TestGunPrefab");
+            this.inventory.AddWeapon(Instantiate(gunWeaponPrefab).GetComponent<BaseWeapon>());
+
+            Inventory.ItemsList.Clear();
+
+            GameController.Singleton.deathScreen.SetActive(false);
+        }
+
+
+        private void SetAim(bool aim)
+        {
+            if (aim == IsAiming)
+                return;
+
+            GameObject hud = inventory.CurrentWeapon.AimingHUD;
+            if (hud != null)
+                hud.SetActive(aim);
+
+            IsAiming = aim;
+
+            if (aim)
+            {
+                IsRunning = false;
+                cameraController.ChangeOffset(inventory.CurrentWeapon.AimingOffset);
+                UpdateCamera();
+            }
+            else
+            {
+                cameraController.ResetOffset();
+                UpdateCamera();
+            }
+        }
+
+        private void UpdateCamera()
+        {
+            cameraController.OnPlayerMove(camRotationAnchor, transform);
+        }
+
+        private void handleDash(float _deltaTime)
+        {
+            if (!IsDashing)
+                return;
+            if (dashStartedSince > dashDuration)
+            {
+                this.IsDashing = false;
+            }
+            else
+            {
+                dashStartedSince += _deltaTime;
+
+                // a function : [0;1] => [0;1] with f(1) = 0
+                // it acts as a smoothing function for the velocity change
+                // Func<float, float> kernelFunction = x => Mathf.Exp(-5 * (float)Math.Pow(2 * x - 1, 2));
+
+                controller.Move(_dashDirection * _deltaTime);
+            }
+        }
+
+        /**
+         * <summary>a method to get the <see cref="GameObject"/> in the line sight</summary>
+         */
+        public GameObject GetObjectInSight(float weaponRange)
+        {
+            RaycastHit hit;
+
+
+            if (!Physics.Raycast(FireCastPoint, cameraController.Camera.transform.forward, out hit, weaponRange))
+
+                return null;
+
+            return hit.collider.gameObject;
+        }
+    }
+}
