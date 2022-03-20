@@ -201,5 +201,10 @@ namespace PlayerControllers
 
         private IMinion.Strategy strategy = IMinion.Strategy.PROTECT;
         public IMinion.Strategy Strategy => strategy;
+
+        /**
+         * <summary>the fire cast point and the camera </summary>
+         */
+        private (Vector3, Vector3) aimVector = (Vector3.zero, Vector3.zero);
     }
 }

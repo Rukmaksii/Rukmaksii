@@ -194,8 +194,6 @@ namespace PlayerControllers
 
             UpdateCamera();
 
-            cameraController.OnPlayerMove(camRotationAnchor, transform);
-
             if (IsShooting)
                 this.inventory.CurrentWeapon.Fire();
         }
@@ -285,6 +283,7 @@ namespace PlayerControllers
         private void UpdateCamera()
         {
             cameraController.OnPlayerMove(camRotationAnchor, transform);
+            UpdateAimVectorServerRpc(FireCastPoint, CameraController.Camera.transform.forward);
         }
 
         private void handleDash(float _deltaTime)
@@ -309,13 +308,19 @@ namespace PlayerControllers
 
         /**
          * <summary>a method to get the <see cref="GameObject"/> in the line sight</summary>
+         * <remarks></remarks>
          */
         public GameObject GetObjectInSight(float weaponRange)
         {
             RaycastHit hit;
 
+            Vector3 castPoint, direction;
+            if (IsServer)
+                (castPoint, direction) = aimVector;
+            else
+                (castPoint, direction) = (FireCastPoint, cameraController.Camera.transform.forward);
 
-            if (!Physics.Raycast(FireCastPoint, cameraController.Camera.transform.forward, out hit, weaponRange))
+            if (!Physics.Raycast(castPoint, direction, out hit, weaponRange))
 
                 return null;
 

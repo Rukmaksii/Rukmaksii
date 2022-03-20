@@ -93,5 +93,11 @@ namespace PlayerControllers
         {
             this.teamId.Value = teamId;
         }
+
+        [ServerRpc]
+        public void UpdateAimVectorServerRpc(Vector3 castPoint, Vector3 direction)
+        {
+            aimVector = (castPoint, direction);
+        }
     }
 }
