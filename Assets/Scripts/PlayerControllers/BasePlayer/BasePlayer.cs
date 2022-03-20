@@ -242,7 +242,8 @@ namespace PlayerControllers
         public void OnRespawn()
         {
             // respawn location
-            MoveToSpawn();
+            if (IsOwner)
+                MoveToSpawn();
 
             GameObject autoWeaponPrefab =
                 GameController.Singleton.WeaponPrefabs.Find(go => go.name == "TestAutoPrefab");
