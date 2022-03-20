@@ -67,9 +67,9 @@ namespace PlayerControllers
             inventory.Jetpack.FuelDuration = DefaultFuelDuration;
 
 
-            cdManager = gameObject.AddComponent<CooldownManager>();
+            cdManager = GetComponent<CooldownManager>();
 
-            controller = gameObject.GetComponent<CharacterController>();
+            controller = GetComponent<CharacterController>();
 
 
             GameController.Singleton.AddPlayer(this);
