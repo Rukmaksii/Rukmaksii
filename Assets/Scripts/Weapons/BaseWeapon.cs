@@ -33,8 +33,8 @@ namespace Weapons
 
         public abstract int MaxAmmo { get; }
 
-        protected int currentAmmo;
-        public int CurrentAmmo => currentAmmo;
+        protected NetworkVariable<int> currentAmmo = new NetworkVariable<int>();
+        public int CurrentAmmo => currentAmmo.Value;
 
         public abstract float ReloadTime { get; }
 
@@ -94,13 +94,14 @@ namespace Weapons
 
         void Start()
         {
-            currentAmmo = MaxAmmo;
+            if (!IsServer)
+                return;
+            currentAmmo.Value = MaxAmmo;
         }
 
-        // Update is called once per frame
-        void FixedUpdate()
+        void UpdateServer(float deltaTime)
         {
-            if (currentAmmo == 0 && !isReloading)
+            if (CurrentAmmo == 0 && !isReloading)
             {
                 Reload();
             }
@@ -109,11 +110,11 @@ namespace Weapons
             {
                 if (BulletsInRow > 1)
                 {
-                    handleMultiBulletFire();
+                    handleMultiBulletFire(Time.fixedDeltaTime);
                 }
                 else
                 {
-                    handleSingleBulletFire();
+                    handleSingleBulletFire(Time.fixedDeltaTime);
                 }
             }
             else
@@ -122,17 +123,20 @@ namespace Weapons
                 {
                     isReloading = false;
                     remainingReloadTime = 0;
-                    currentAmmo = MaxAmmo;
+                    currentAmmo.Value = MaxAmmo;
                 }
                 else
                 {
-                    remainingReloadTime -= Time.fixedDeltaTime;
+                    remainingReloadTime -= deltaTime;
                 }
             }
+        }
 
+        void UpdateClient(float deltaTime)
+        {
             if (hitMarkerDisplayed)
             {
-                hitMarkerSince += Time.deltaTime;
+                hitMarkerSince += deltaTime;
                 if (hitMarkerSince > hitMarkerDuration)
                 {
                     hitMarkerDisplayed = false;
@@ -142,18 +146,27 @@ namespace Weapons
             }
         }
 
-        void handleMultiBulletFire()
+        // Update is called once per frame
+        void FixedUpdate()
+        {
+            if (IsServer)
+                UpdateServer(Time.fixedDeltaTime);
+            if (IsClient)
+                UpdateClient(Time.fixedDeltaTime);
+        }
+
+        void handleMultiBulletFire(float deltaTime)
         {
             if (remainingCD > 0)
             {
-                remainingCD -= Time.fixedDeltaTime;
+                remainingCD -= deltaTime;
                 isShooting = false;
                 return;
             }
 
             if (betweenBulletsCurrentCD > 0)
             {
-                betweenBulletsCurrentCD -= Time.fixedTime;
+                betweenBulletsCurrentCD -= deltaTime;
             }
             else if (isShooting)
             {
@@ -177,11 +190,11 @@ namespace Weapons
         /**
      * <summary>handles the cooldown process between fire when <see cref="BulletsInRow"/> is 1</summary>
      */
-        void handleSingleBulletFire()
+        void handleSingleBulletFire(float deltaTime)
         {
             if (remainingCD > 0)
             {
-                remainingCD -= Time.fixedDeltaTime;
+                remainingCD -= deltaTime;
             }
             else if (isShooting && Player.IsShooting)
             {
@@ -199,7 +212,7 @@ namespace Weapons
 
         public void Reload()
         {
-            currentAmmo = 0;
+            currentAmmo.Value = 0;
             this.isReloading = true;
             remainingReloadTime = ReloadTime;
         }
@@ -211,7 +224,7 @@ namespace Weapons
          */
         private bool Shoot()
         {
-            currentAmmo--;
+            currentAmmo.Value--;
             GameObject hit;
 
             if ((hit = this.Player.GetObjectInSight(this.Range)) == null)
