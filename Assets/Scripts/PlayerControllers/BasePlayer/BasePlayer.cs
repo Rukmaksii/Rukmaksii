@@ -28,6 +28,7 @@ namespace PlayerControllers
     [RequireComponent(typeof(NetworkObject))]
     [RequireComponent(typeof(ClientNetworkTransform))]
     [RequireComponent(typeof(CooldownManager))]
+    [RequireComponent(typeof(Inventory))]
     public abstract partial class BasePlayer : NetworkBehaviour, IKillable
     {
         private bool HasFlag(PlayerFlags flag)
@@ -54,20 +55,24 @@ namespace PlayerControllers
 
         void Start()
         {
-            this.inventory = new Inventory(this);
+            this.inventory = GetComponent<Inventory>();
+            if (IsOwner)
+                this.inventory.Player = this;
 
             GameObject autoWeaponPrefab =
                 GameController.Singleton.WeaponPrefabs.Find(go => go.name == "TestAutoPrefab");
             GameObject weaponInstance = Instantiate(autoWeaponPrefab);
             if (IsServer)
                 weaponInstance.GetComponent<NetworkObject>().Spawn();
-            this.inventory.AddWeapon(weaponInstance.GetComponent<BaseWeapon>());
+            if (IsOwner)
+                this.inventory.AddWeapon(weaponInstance.GetComponent<BaseWeapon>());
 
             GameObject gunWeaponPrefab = GameController.Singleton.WeaponPrefabs.Find(go => go.name == "TestGunPrefab");
             weaponInstance = Instantiate(gunWeaponPrefab);
             if (IsServer)
                 weaponInstance.GetComponent<NetworkObject>().Spawn();
-            this.inventory.AddWeapon(weaponInstance.GetComponent<BaseWeapon>());
+            if (IsOwner)
+                this.inventory.AddWeapon(weaponInstance.GetComponent<BaseWeapon>());
 
             inventory.Jetpack = gameObject.AddComponent<Jetpack>();
             inventory.Jetpack.FuelDuration = DefaultFuelDuration;

@@ -1,17 +1,24 @@
 ﻿using System.Collections.Generic;
 using Items;
 using PlayerControllers;
+using Unity.Netcode;
 using UnityEngine;
 using Weapons;
 
 namespace model
 {
-    public class Inventory
+    public class Inventory : NetworkBehaviour
     {
+        private NetworkBehaviourReference playerReference = new NetworkBehaviourReference();
+
         /**
          * <value>the bound player <seealso cref="BasePlayer"/></value>
          */
-        private readonly BasePlayer Player;
+        public BasePlayer Player
+        {
+            set => playerReference = new NetworkBehaviourReference(value);
+            get => playerReference.TryGet<BasePlayer>(out BasePlayer p) ? p : null;
+        }
 
         /**
          * <value>the <see cref="Jetpack"/> bound to the <see cref="Player"/></value>
@@ -113,12 +120,6 @@ namespace model
             }
         }
 
-        public Inventory(BasePlayer player)
-        {
-            this.Player = player;
-        }
-
-
         /**
          * <summary>adds a weapon to the inventory replacing the old weapon of the same <see cref="WeaponType"/> if existing</summary>
          */
@@ -129,17 +130,17 @@ namespace model
             {
                 case WeaponType.Heavy:
                     if (heavyWeapon != null)
-                        Object.Destroy(heavyWeapon.gameObject);
+                        Destroy(heavyWeapon.gameObject);
                     heavyWeapon = newWeapon;
                     break;
                 case WeaponType.Light:
                     if (lightWeapon != null)
-                        Object.Destroy(lightWeapon.gameObject);
+                        Destroy(lightWeapon.gameObject);
                     lightWeapon = newWeapon;
                     break;
                 case WeaponType.CloseRange:
                     if (closeRangeWeapon)
-                        Object.Destroy(closeRangeWeapon);
+                        Destroy(closeRangeWeapon);
                     closeRangeWeapon = newWeapon;
                     break;
             }
@@ -239,7 +240,7 @@ namespace model
                 if (item.Type == element.Type)
                 {
                     itemsList.Remove(element);
-                    Object.Destroy(element.gameObject);
+                    Destroy(element.gameObject);
                     break;
                 }
             }
