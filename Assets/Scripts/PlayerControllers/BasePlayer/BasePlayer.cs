@@ -58,10 +58,16 @@ namespace PlayerControllers
 
             GameObject autoWeaponPrefab =
                 GameController.Singleton.WeaponPrefabs.Find(go => go.name == "TestAutoPrefab");
-            this.inventory.AddWeapon(Instantiate(autoWeaponPrefab).GetComponent<BaseWeapon>());
+            GameObject weaponInstance = Instantiate(autoWeaponPrefab);
+            if (IsServer)
+                weaponInstance.GetComponent<NetworkObject>().Spawn();
+            this.inventory.AddWeapon(weaponInstance.GetComponent<BaseWeapon>());
 
             GameObject gunWeaponPrefab = GameController.Singleton.WeaponPrefabs.Find(go => go.name == "TestGunPrefab");
-            this.inventory.AddWeapon(Instantiate(gunWeaponPrefab).GetComponent<BaseWeapon>());
+            weaponInstance = Instantiate(gunWeaponPrefab);
+            if (IsServer)
+                weaponInstance.GetComponent<NetworkObject>().Spawn();
+            this.inventory.AddWeapon(weaponInstance.GetComponent<BaseWeapon>());
 
             inventory.Jetpack = gameObject.AddComponent<Jetpack>();
             inventory.Jetpack.FuelDuration = DefaultFuelDuration;
@@ -237,13 +243,6 @@ namespace PlayerControllers
             // respawn location
             if (IsOwner)
                 MoveToSpawn();
-
-            GameObject autoWeaponPrefab =
-                GameController.Singleton.WeaponPrefabs.Find(go => go.name == "TestAutoPrefab");
-            this.inventory.AddWeapon(Instantiate(autoWeaponPrefab).GetComponent<BaseWeapon>());
-
-            GameObject gunWeaponPrefab = GameController.Singleton.WeaponPrefabs.Find(go => go.name == "TestGunPrefab");
-            this.inventory.AddWeapon(Instantiate(gunWeaponPrefab).GetComponent<BaseWeapon>());
 
             Inventory.ItemsList.Clear();
 

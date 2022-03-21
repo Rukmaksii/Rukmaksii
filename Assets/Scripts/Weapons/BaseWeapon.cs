@@ -3,11 +3,13 @@ using Minions;
 using model;
 using MonstersControler;
 using PlayerControllers;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Weapons
 {
-    public abstract class BaseWeapon : MonoBehaviour, IWeapon
+    [RequireComponent(typeof(NetworkObject))]
+    public abstract class BaseWeapon : NetworkBehaviour, IWeapon
     {
         [SerializeField] public Sprite sprite;
         public abstract WeaponType Type { get; }
@@ -249,9 +251,23 @@ namespace Weapons
                 return false;
             }
 
+            ClientRpcParams p = new ClientRpcParams
+            {
+                Send = new ClientRpcSendParams
+                {
+                    TargetClientIds = new ulong[] {Player.OwnerClientId}
+                }
+            };
+            DisplayHitMarkClientRpc(p);
+
+            return true;
+        }
+
+        [ClientRpc]
+        private void DisplayHitMarkClientRpc(ClientRpcParams clientRpcParams = default)
+        {
             hitMarkerDisplayed = true;
             targetHit?.Invoke(true);
-            return true;
         }
     }
 }
