@@ -13,7 +13,13 @@ namespace Weapons
     {
         [SerializeField] public Sprite sprite;
         public abstract WeaponType Type { get; }
-        public BasePlayer Player { get; set; }
+        private NetworkBehaviourReference playerReference;
+
+        public BasePlayer Player
+        {
+            set => playerReference = new NetworkBehaviourReference(value);
+            get => playerReference.TryGet<BasePlayer>(out BasePlayer res) ? res : null;
+        }
 
         public abstract float Range { get; }
 
