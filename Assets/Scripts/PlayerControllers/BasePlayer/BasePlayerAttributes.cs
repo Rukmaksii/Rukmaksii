@@ -44,14 +44,8 @@ namespace PlayerControllers
         protected CooldownManager cdManager;
 
         // the world space point the camera will rotate around
-        protected Vector3 camRotationAnchor
-        {
-            get
-            {
-                var cld = GetComponent<CapsuleCollider>();
-                return transform.TransformPoint(cld.center + Vector3.up * (cld.height / 4));
-            }
-        }
+        protected Vector3 camRotationAnchor =>
+            transform.TransformPoint(controller.center + Vector3.up * (controller.height / 4));
 
         protected Vector3 FireCastPoint
         {
@@ -99,7 +93,7 @@ namespace PlayerControllers
                 Vector3 res = transform.position;
                 RaycastHit hit;
                 if (!IsGrounded &&
-                    Physics.Raycast(transform.position + controller.center - controller.height / 2 * Vector3.up,
+                    Physics.Raycast(transform.TransformPoint(controller.center - controller.height / 2 * Vector3.up),
                         Vector3.down, out hit) && hit.collider.CompareTag("Ground"))
                 {
                     res.y -= hit.distance - controller.height / 2;
@@ -118,8 +112,8 @@ namespace PlayerControllers
             get
             {
                 RaycastHit hit;
-                Vector3 initPos = transform.position + controller.center;
-                if (Physics.Raycast(initPos, Vector3.down, out hit, controller.height))
+                Vector3 initPos = transform.TransformPoint(controller.center);
+                if (Physics.Raycast(initPos, Vector3.down, out hit, controller.height /*/ 2*/))
                 {
                     return hit.collider.CompareTag("Ground");
                 }

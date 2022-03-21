@@ -121,6 +121,7 @@ GameObject:
   - component: {fileID: 7109548235485717348}
   - component: {fileID: 4100190561654714776}
   - component: {fileID: 3013213782619803523}
+  - component: {fileID: 1218724558542792084}
   m_Layer: 0
   m_Name: TestPlayer
   m_TagString: Player
@@ -136,7 +137,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1800387450937859543}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 5, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8107604541472708201}
@@ -202,10 +203,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2.061595
+  m_Radius: 0.3
+  m_Height: 2.5
   m_Direction: 1
-  m_Center: {x: 0, y: 0.030524254, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3681687013436065962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -531,8 +532,8 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 2
-  m_Radius: 0.5
+  m_Height: 2.7
+  m_Radius: 0.3
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
@@ -579,6 +580,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dashCooldown: 3
   minionCooldown: 10
+--- !u!114 &1218724558542792084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1800387450937859543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5ae8856a6fc4edb93663ac20d1ed9b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3568181961990001043
 GameObject:
   m_ObjectHideFlags: 0
