@@ -20,11 +20,6 @@ namespace model
             get => playerReference.TryGet<BasePlayer>(out BasePlayer p) ? p : null;
         }
 
-        /**
-         * <value>the <see cref="Jetpack"/> bound to the <see cref="Player"/></value>
-         */
-        private Jetpack _jetpack;
-
         public List<GameObject> Weapons
         {
             get
@@ -39,16 +34,6 @@ namespace model
 
 
                 return res;
-            }
-        }
-
-        public Jetpack Jetpack
-        {
-            get => _jetpack;
-            set
-            {
-                _jetpack = value;
-                _jetpack.Player = Player;
             }
         }
 

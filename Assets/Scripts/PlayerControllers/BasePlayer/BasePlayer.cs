@@ -74,8 +74,8 @@ namespace PlayerControllers
             if (IsOwner)
                 this.inventory.AddWeapon(weaponInstance.GetComponent<BaseWeapon>());
 
-            inventory.Jetpack = gameObject.AddComponent<Jetpack>();
-            inventory.Jetpack.FuelDuration = DefaultFuelDuration;
+            gameObject.AddComponent<Jetpack>();
+            Jetpack.FuelDuration = DefaultFuelDuration;
 
 
             cdManager = GetComponent<CooldownManager>();
