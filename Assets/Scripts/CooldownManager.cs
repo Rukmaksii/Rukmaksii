@@ -24,7 +24,6 @@ public class CooldownManager : NetworkBehaviour
     // Update is called once per frame
     public bool RequestDash()
     {
-        Debug.Log("dash requested");
         if (!CanDash)
             return false;
         HandleDashCDServerRpc();
