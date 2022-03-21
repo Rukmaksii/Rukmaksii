@@ -10,7 +10,7 @@ namespace PlayerControllers
     */
         [SerializeField] private float reloadMultiplier = 2.5f;
 
-        public BasePlayer Player { get; set; }
+        public BasePlayer Player => GetComponent<BasePlayer>();
 
         /**
          * <value>the max duration of the flight</value>

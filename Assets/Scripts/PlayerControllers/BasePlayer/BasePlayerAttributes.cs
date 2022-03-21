@@ -152,7 +152,7 @@ namespace PlayerControllers
         protected Inventory inventory;
 
         public Inventory Inventory => inventory;
-        public Jetpack Jetpack => inventory.Jetpack;
+        public Jetpack Jetpack => GetComponent<Jetpack>();
 
         /** <value>the duration of the dash in seconds</value> */
         protected virtual float dashDuration { get; set; } = 0.3F;
