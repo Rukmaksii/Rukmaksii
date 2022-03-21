@@ -288,5 +288,17 @@ namespace Weapons
             hitMarkerDisplayed = true;
             targetHit?.Invoke(true);
         }
+
+        public void Destroy()
+        {
+            RemoveServerRpc();
+            Destroy(this);
+        }
+
+        [ServerRpc]
+        private void RemoveServerRpc()
+        {
+            GetComponent<NetworkObject>().Despawn();
+        }
     }
 }
