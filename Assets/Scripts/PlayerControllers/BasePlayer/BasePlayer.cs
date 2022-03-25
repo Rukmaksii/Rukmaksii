@@ -97,7 +97,7 @@ namespace PlayerControllers
             }
 
 
-            /*weapons = GetComponentsInChildren<Transform>();
+            weapons = GetComponentsInChildren<Transform>();
             foreach (Transform weaponModel in weapons)
             {
                 if (weaponModel.CompareTag("Weapon"))
@@ -115,7 +115,7 @@ namespace PlayerControllers
                         }
                     }
                 }
-            }*/
+            }
 
             MoveToSpawn();
         }
