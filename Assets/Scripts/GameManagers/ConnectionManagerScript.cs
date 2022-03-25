@@ -7,6 +7,8 @@ using Unity.Netcode.Components;
 using Unity.Netcode.Transports.UNET;
 using UnityEngine;
 using UnityEngine.AI;
+using System;
+using Random = UnityEngine.Random;
 
 namespace GameManagers
 {
@@ -85,7 +87,8 @@ namespace GameManagers
             yield return new WaitForSeconds(10);
             for (int i = 0; i < 4; i++)
             {
-                GameObject instance = Instantiate(GameController.Singleton.MonsterPrefab);
+                Vector3 pos = new Vector3(Random.Range(-115, 194), 10, Random.Range(-153, 138));
+                GameObject instance = Instantiate(GameController.Singleton.MonsterPrefab, pos, Quaternion.identity);
                 instance.GetComponent<NetworkObject>().Spawn();
                 instance.gameObject.AddComponent<NavMeshAgent>();
             }
