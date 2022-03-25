@@ -13,30 +13,17 @@ namespace MonstersControler
         private NetworkVariable<int> life = new NetworkVariable<int>(0);
 
         public int Life => life.Value;
-        private NavMeshAgent agent;
+        protected NavMeshAgent agent;
 
         // Start is called before the first frame update
         void Start()
         {
             UpdateLifeServerRpc(maxHealth);
-            agent = gameObject.GetComponent<NavMeshAgent>();
-            StartCoroutine(wait());
+            agent = GetComponent<NavMeshAgent>();
+            MonsterAI monsterAI = gameObject.AddComponent(typeof(MonsterAI)) as MonsterAI;
+            monsterAI.agent = GetComponent<NavMeshAgent>();
         }
 
-        IEnumerator wait()
-        {
-            if (agent.isOnNavMesh)
-            {
-                MonsterAI monsterAI = gameObject.AddComponent(typeof(MonsterAI)) as MonsterAI;
-                monsterAI.agent = gameObject.GetComponent<NavMeshAgent>();
-            }
-            else
-            {
-                yield return new WaitForSeconds(2);
-                StartCoroutine(wait());
-            }
-        }
-        
 
         // Update is called once per frame
         void Update()

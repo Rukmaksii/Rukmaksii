@@ -27,6 +27,9 @@ public class MonsterAI : NetworkBehaviour
 
     private void Update()
     {
+        if(!agent.isOnNavMesh)
+            return;
+        
         if (gameObject != null)
         {
             foreach (var players in GameObject.FindGameObjectsWithTag("Player"))
@@ -39,20 +42,10 @@ public class MonsterAI : NetworkBehaviour
                 }
             }
         }
-
-        if (!agent.isOnNavMesh)
-        {
-            Debug.Log(joueur.transform.position);
-        }
-        else
-        {
-            if (joueur != null)
+        if (joueur != null)
             {
-                float distance =
-                    Vector3.Distance(transform.position,
-                        joueur.transform.position); //distance entre le monstre et le joueur
-                if (distance < detectDistance &&
-                    distance > distanceAttack) //le joueur est visible mais pas à distance d'attaque
+                float distance = Vector3.Distance(transform.position, joueur.transform.position); //distance entre le monstre et le joueur
+                if (distance < detectDistance && distance > distanceAttack) //le joueur est visible mais pas à distance d'attaque
                 {
                     NavMeshPath path = new NavMeshPath();
                     agent.CalculatePath(joueur.transform.position, path);
@@ -78,7 +71,6 @@ public class MonsterAI : NetworkBehaviour
                     agent.destination = InitialPos;
                 }
             }
-        }
     }
 
     IEnumerator Wait()

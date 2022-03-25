@@ -88,9 +88,11 @@ namespace GameManagers
             for (int i = 0; i < 4; i++)
             {
                 Vector3 pos = new Vector3(Random.Range(-115, 194), 10, Random.Range(-153, 138));
-                GameObject instance = Instantiate(GameController.Singleton.MonsterPrefab, pos, Quaternion.identity);
-                instance.GetComponent<NetworkObject>().Spawn();
-                instance.gameObject.AddComponent<NavMeshAgent>();
+                if (Physics.Raycast(pos, Vector3.down, out RaycastHit hit))
+                {
+                    GameObject instance = Instantiate(GameController.Singleton.MonsterPrefab, hit.point, Quaternion.identity);
+                    instance.GetComponent<NetworkObject>().Spawn();
+                }
             }
         }
     }
