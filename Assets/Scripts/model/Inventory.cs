@@ -114,7 +114,6 @@ namespace model
                     availableWeapon = HeavyWeapon;
                 }
 
-                Debug.Log($"available weapon: {availableWeapon}");
                 return availableWeapon;
             }
         }
@@ -126,7 +125,6 @@ namespace model
         {
             newWeapon.Player = Player;
             var weaponRef = new NetworkBehaviourReference(newWeapon);
-            Debug.Log($"adding {newWeapon.Name}");
             AddWeaponServerRpc(weaponRef, newWeapon.Type);
         }
 
