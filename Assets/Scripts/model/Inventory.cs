@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Items;
 using PlayerControllers;
 using Unity.Netcode;
@@ -118,6 +119,11 @@ namespace model
             }
         }
 
+        private void Start()
+        {
+            selectedType.OnValueChanged += OnWeaponSwitch;
+        }
+
         /**
          * <summary>adds a weapon to the inventory replacing the old weapon of the same <see cref="WeaponType"/> if existing</summary>
          */
@@ -193,6 +199,12 @@ namespace model
             return switched;
         }
 
+        private void OnWeaponSwitch(WeaponType oldType, WeaponType newType)
+        {
+            // TODO : lucas change le code pour le render
+            Debug.Log("change le code pour le mesh des armes ici lucas");
+        }
+
         private List<BaseItem> itemsList = new List<BaseItem>();
 
         public List<BaseItem> ItemsList => itemsList;
@@ -256,5 +268,6 @@ namespace model
         {
             selectedType.Value = type;
         }
+
     }
 }
