@@ -9,15 +9,16 @@ namespace model
 {
     public class Inventory : NetworkBehaviour
     {
-        private NetworkBehaviourReference playerReference = new NetworkBehaviourReference();
+        private NetworkVariable<NetworkBehaviourReference> playerReference =
+            new NetworkVariable<NetworkBehaviourReference>();
 
         /**
          * <value>the bound player <seealso cref="BasePlayer"/></value>
          */
         public BasePlayer Player
         {
-            set => playerReference = new NetworkBehaviourReference(value);
-            get => playerReference.TryGet<BasePlayer>(out BasePlayer p) ? p : null;
+            set => UpdatePlayerReferenceServerRpc(new NetworkBehaviourReference(value));
+            get => playerReference.Value.TryGet<BasePlayer>(out BasePlayer p) ? p : null;
         }
 
         public List<GameObject> Weapons
@@ -25,12 +26,12 @@ namespace model
             get
             {
                 List<GameObject> res = new List<GameObject>();
-                if (closeRangeWeapon != null)
-                    res.Add(closeRangeWeapon.gameObject);
-                if (lightWeapon != null)
-                    res.Add(lightWeapon.gameObject);
-                if (heavyWeapon != null)
-                    res.Add(heavyWeapon.gameObject);
+                if (CloseRangeWeapon != null)
+                    res.Add(CloseRangeWeapon.gameObject);
+                if (LightWeapon != null)
+                    res.Add(LightWeapon.gameObject);
+                if (HeavyWeapon != null)
+                    res.Add(HeavyWeapon.gameObject);
 
 
                 return res;
@@ -40,27 +41,39 @@ namespace model
         /**
          * <value>the close range weapon</value>
          */
-        private BaseWeapon closeRangeWeapon;
+        private NetworkVariable<NetworkBehaviourReference> closeRangeWeapon =
+            new NetworkVariable<NetworkBehaviourReference>();
 
         /**
          * <value>the heavy weapon</value>
          */
-        private BaseWeapon heavyWeapon;
+        private NetworkVariable<NetworkBehaviourReference> heavyWeapon =
+            new NetworkVariable<NetworkBehaviourReference>();
 
         /**
          * <value>the light weapon</value>
          */
-        private BaseWeapon lightWeapon;
+        private NetworkVariable<NetworkBehaviourReference> lightWeapon =
+            new NetworkVariable<NetworkBehaviourReference>();
 
-        public BaseWeapon HeavyWeapon => heavyWeapon;
-        public BaseWeapon CloseRangeWeapon => closeRangeWeapon;
-        public BaseWeapon LightWeapon => lightWeapon;
+        public BaseWeapon HeavyWeapon => heavyWeapon.Value.TryGet<BaseWeapon>(out BaseWeapon res) ? res : null;
+
+        public BaseWeapon CloseRangeWeapon =>
+            closeRangeWeapon.Value.TryGet<BaseWeapon>(out BaseWeapon res) ? res : null;
+
+        public BaseWeapon LightWeapon => lightWeapon.Value.TryGet<BaseWeapon>(out BaseWeapon res) ? res : null;
 
         /**
          * <value>the <see cref="WeaponType"/> of the currently selected weapon</value>
          * <remarks>set to <see cref="WeaponType.CloseRange"/> as it is assumed the close range weapon will never be null</remarks>
          */
-        private WeaponType selectedType = WeaponType.CloseRange;
+        private NetworkVariable<WeaponType> selectedType = new NetworkVariable<WeaponType>(WeaponType.CloseRange);
+
+        private WeaponType SelectedType
+        {
+            get => selectedType.Value;
+            set => SwitchWeaponServerRpc(value);
+        }
 
         /**
          * <value>the currently selected weapon</value>
@@ -71,36 +84,37 @@ namespace model
             get
             {
                 BaseWeapon availableWeapon = null;
-                if (closeRangeWeapon != null)
+                if (CloseRangeWeapon != null)
                 {
-                    if (selectedType == closeRangeWeapon.Type)
+                    if (SelectedType == CloseRangeWeapon.Type)
                     {
-                        return closeRangeWeapon;
+                        return CloseRangeWeapon;
                     }
 
-                    availableWeapon = closeRangeWeapon;
+                    availableWeapon = CloseRangeWeapon;
                 }
 
-                if (lightWeapon != null)
+                if (LightWeapon != null)
                 {
-                    if (selectedType == lightWeapon.Type)
+                    if (SelectedType == LightWeapon.Type)
                     {
-                        return lightWeapon;
+                        return LightWeapon;
                     }
 
-                    availableWeapon = lightWeapon;
+                    availableWeapon = LightWeapon;
                 }
 
-                if (heavyWeapon != null)
+                if (HeavyWeapon != null)
                 {
-                    if (selectedType == heavyWeapon.Type)
+                    if (SelectedType == HeavyWeapon.Type)
                     {
-                        return heavyWeapon;
+                        return HeavyWeapon;
                     }
 
-                    availableWeapon = heavyWeapon;
+                    availableWeapon = HeavyWeapon;
                 }
 
+                Debug.Log($"available weapon: {availableWeapon}");
                 return availableWeapon;
             }
         }
@@ -111,24 +125,9 @@ namespace model
         public void AddWeapon(BaseWeapon newWeapon)
         {
             newWeapon.Player = Player;
-            switch (newWeapon.Type)
-            {
-                case WeaponType.Heavy:
-                    if (heavyWeapon != null)
-                        Destroy(heavyWeapon.gameObject);
-                    heavyWeapon = newWeapon;
-                    break;
-                case WeaponType.Light:
-                    if (lightWeapon != null)
-                        Destroy(lightWeapon.gameObject);
-                    lightWeapon = newWeapon;
-                    break;
-                case WeaponType.CloseRange:
-                    if (closeRangeWeapon)
-                        Destroy(closeRangeWeapon);
-                    closeRangeWeapon = newWeapon;
-                    break;
-            }
+            var weaponRef = new NetworkBehaviourReference(newWeapon);
+            Debug.Log($"adding {newWeapon.Name}");
+            AddWeaponServerRpc(weaponRef, newWeapon.Type);
         }
 
         /**
@@ -144,7 +143,7 @@ namespace model
                 case WeaponType.Heavy:
                     if (heavyWeapon != null)
                     {
-                        selectedType = WeaponType.Heavy;
+                        SelectedType = WeaponType.Heavy;
                         switched = true;
                     }
 
@@ -152,7 +151,7 @@ namespace model
                 case WeaponType.Light:
                     if (lightWeapon != null)
                     {
-                        selectedType = WeaponType.Light;
+                        SelectedType = WeaponType.Light;
                         switched = true;
                     }
 
@@ -160,7 +159,7 @@ namespace model
                 case WeaponType.CloseRange:
                     if (closeRangeWeapon != null)
                     {
-                        selectedType = WeaponType.CloseRange;
+                        SelectedType = WeaponType.CloseRange;
                         switched = true;
                     }
 
@@ -229,6 +228,35 @@ namespace model
                     break;
                 }
             }
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void UpdatePlayerReferenceServerRpc(NetworkBehaviourReference playerRef)
+        {
+            this.playerReference.Value = playerRef;
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void AddWeaponServerRpc(NetworkBehaviourReference weaponRef, WeaponType type)
+        {
+            switch (type)
+            {
+                case WeaponType.Heavy:
+                    heavyWeapon.Value = weaponRef;
+                    break;
+                case WeaponType.Light:
+                    lightWeapon.Value = weaponRef;
+                    break;
+                case WeaponType.CloseRange:
+                    closeRangeWeapon.Value = weaponRef;
+                    break;
+            }
+        }
+
+        [ServerRpc]
+        private void SwitchWeaponServerRpc(WeaponType type)
+        {
+            selectedType.Value = type;
         }
     }
 }

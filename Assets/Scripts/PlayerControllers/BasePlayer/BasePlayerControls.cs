@@ -157,6 +157,7 @@ namespace PlayerControllers
                 else if (value < 0)
                     inventory.NextWeapon();
                 //change currentWeaponModel
+                /*
                 weapons = GetComponentsInChildren<Transform>();
                 foreach (Transform weaponModel in weapons)
                 {
@@ -174,7 +175,7 @@ namespace PlayerControllers
                             }
                         }
                     }
-                }
+                }*/
             }
             else // 1,2,3 control
             {

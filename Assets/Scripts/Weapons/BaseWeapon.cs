@@ -13,12 +13,12 @@ namespace Weapons
     {
         [SerializeField] public Sprite sprite;
         public abstract WeaponType Type { get; }
-        private NetworkBehaviourReference playerReference;
+        private NetworkVariable<NetworkBehaviourReference> playerReference = new NetworkVariable<NetworkBehaviourReference>();
 
         public BasePlayer Player
         {
-            set => playerReference = new NetworkBehaviourReference(value);
-            get => playerReference.TryGet<BasePlayer>(out BasePlayer res) ? res : null;
+            set => UpdatePlayerServerRpc(new NetworkBehaviourReference(value));
+            get => playerReference.Value.TryGet<BasePlayer>(out BasePlayer res) ? res : null;
         }
 
         public abstract float Range { get; }
@@ -299,6 +299,12 @@ namespace Weapons
         private void RemoveServerRpc()
         {
             GetComponent<NetworkObject>().Despawn();
+        }
+
+        [ServerRpc]
+        private void UpdatePlayerServerRpc(NetworkBehaviourReference playerRef)
+        {
+            this.playerReference.Value = playerRef;
         }
     }
 }

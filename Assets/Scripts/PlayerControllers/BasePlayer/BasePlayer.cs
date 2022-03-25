@@ -56,23 +56,22 @@ namespace PlayerControllers
         void Start()
         {
             this.inventory = GetComponent<Inventory>();
-            if (IsOwner)
+            if (IsServer)
+            {
                 this.inventory.Player = this;
-
-            GameObject autoWeaponPrefab =
-                GameController.Singleton.WeaponPrefabs.Find(go => go.name == "TestAutoPrefab");
-            GameObject weaponInstance = Instantiate(autoWeaponPrefab);
-            if (IsServer)
+                GameObject autoWeaponPrefab =
+                    GameController.Singleton.WeaponPrefabs.Find(go => go.name == "TestAutoPrefab");
+                GameObject weaponInstance = Instantiate(autoWeaponPrefab);
                 weaponInstance.GetComponent<NetworkObject>().Spawn();
-            if (IsOwner)
                 this.inventory.AddWeapon(weaponInstance.GetComponent<BaseWeapon>());
 
-            GameObject gunWeaponPrefab = GameController.Singleton.WeaponPrefabs.Find(go => go.name == "TestGunPrefab");
-            weaponInstance = Instantiate(gunWeaponPrefab);
-            if (IsServer)
+
+                GameObject gunWeaponPrefab =
+                    GameController.Singleton.WeaponPrefabs.Find(go => go.name == "TestGunPrefab");
+                weaponInstance = Instantiate(gunWeaponPrefab);
                 weaponInstance.GetComponent<NetworkObject>().Spawn();
-            if (IsOwner)
                 this.inventory.AddWeapon(weaponInstance.GetComponent<BaseWeapon>());
+            }
 
             gameObject.AddComponent<Jetpack>();
             Jetpack.FuelDuration = DefaultFuelDuration;
@@ -98,7 +97,7 @@ namespace PlayerControllers
             }
 
 
-            weapons = GetComponentsInChildren<Transform>();
+            /*weapons = GetComponentsInChildren<Transform>();
             foreach (Transform weaponModel in weapons)
             {
                 if (weaponModel.CompareTag("Weapon"))
@@ -116,7 +115,7 @@ namespace PlayerControllers
                         }
                     }
                 }
-            }
+            }*/
 
             MoveToSpawn();
         }
