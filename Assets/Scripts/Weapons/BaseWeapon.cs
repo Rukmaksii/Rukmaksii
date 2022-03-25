@@ -218,9 +218,15 @@ namespace Weapons
 
         public void Reload()
         {
-            currentAmmo.Value = 0;
+            UpdateAmmoServerRpc(0);
             this.isReloading = true;
             remainingReloadTime = ReloadTime;
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void UpdateAmmoServerRpc(int ammo)
+        {
+            currentAmmo.Value = ammo;
         }
 
         /**
