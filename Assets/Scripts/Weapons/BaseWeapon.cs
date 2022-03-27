@@ -13,6 +13,7 @@ namespace Weapons
     public abstract class BaseWeapon : NetworkBehaviour, IWeapon
     {
         [SerializeField] public Sprite sprite;
+        [SerializeField] public Transform Model;
         public abstract WeaponType Type { get; }
         private NetworkVariable<NetworkBehaviourReference> playerReference = new NetworkVariable<NetworkBehaviourReference>();
 
@@ -191,6 +192,14 @@ namespace Weapons
                     isShooting = false;
                 }
             }
+        }
+
+        public void SwitchRender(bool enable)
+        {
+            Transform[] transforms = Model.GetComponentsInChildren<Transform>();
+            foreach (Transform transform in transforms)
+                if (!transform.CompareTag("RightHand") && !transform.CompareTag("LeftHand"))
+                    transform.GetComponent<MeshRenderer>().enabled = enable;
         }
 
 

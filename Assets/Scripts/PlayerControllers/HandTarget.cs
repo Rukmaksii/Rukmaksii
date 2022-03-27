@@ -9,9 +9,11 @@ public class HandTarget : MonoBehaviour
 
     private BasePlayer player;
 
-    private Transform[] weapons;
+    private Transform weapon;
 
-    private Transform[] refHand;
+    private Transform leftHand;
+
+    private Transform rightHand;
 
     // Start is called before the first frame update
     void Start()
@@ -22,53 +24,31 @@ public class HandTarget : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!player.IsLocalPlayer)
+            return;
+
+        weapon = player.Inventory.CurrentWeapon.Model;
+
+        Transform[] transforms = weapon.GetComponentsInChildren<Transform>();
+
+        foreach (Transform transform in transforms)
+        {
+            if (transform.CompareTag("LeftHand"))
+                leftHand = transform;
+            if (transform.CompareTag("RightHand"))
+                rightHand = transform;
+        }
+        
         if (this.gameObject.name == "right_target")
         {
-            if (!player.IsLocalPlayer)
-                return;
-            weapons = player.GetComponentsInChildren<Transform>();
-            foreach (Transform weapon in weapons)
-            {
-                if (weapon.CompareTag("Weapon"))
-                {
-                    if (weapon.name == player.Inventory.CurrentWeapon.Name)
-                    {
-                        refHand = weapon.GetComponentsInChildren<Transform>();
-                        foreach (Transform tran in refHand)
-                        {
-                            if (tran.name == "ref_right_hand_target")
-                            {
-                                this.transform.position = tran.position;
-                                this.transform.rotation = tran.rotation;
-                            }
-                        }
-                    }
-                }
-            }
+            this.transform.localPosition = rightHand.transform.position;
+            this.transform.localRotation = rightHand.transform.rotation;
+
         }
         else if (this.gameObject.name == "left_target")
         {
-            if (!player.IsLocalPlayer)
-                return;
-            weapons = player.GetComponentsInChildren<Transform>();
-            foreach (Transform weapon in weapons)
-            {
-                if (weapon.CompareTag("Weapon"))
-                {
-                    if (weapon.name == player.Inventory.CurrentWeapon.Name)
-                    {
-                        refHand = weapon.GetComponentsInChildren<Transform>();
-                        foreach (Transform tran in refHand)
-                        {
-                            if (tran.name == "ref_left_hand_target")
-                            {
-                                this.transform.position = tran.position;
-                                this.transform.rotation = tran.rotation;
-                            }
-                        }
-                    }
-                }
-            }
+            this.transform.localPosition = leftHand.transform.position;
+            this.transform.localRotation = leftHand.transform.rotation;
         }
     }
 }
