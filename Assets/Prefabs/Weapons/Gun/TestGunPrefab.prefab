@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3859831794047318908}
   - component: {fileID: -4866834614468184058}
+  - component: {fileID: 7051594198312549191}
   m_Layer: 0
   m_Name: TestGunPrefab
   m_TagString: Untagged
@@ -44,3 +45,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sprite: {fileID: 21300000, guid: 1d5e8d39d3ccac42987ddb54a9d46a07, type: 3}
+  Model: {fileID: 8943231109780560913, guid: 3861a254711656a4eb1dd882d50be370, type: 3}
+--- !u!114 &7051594198312549191
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1832220214755728926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 951099334
+  AlwaysReplicateAsRoot: 0
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1

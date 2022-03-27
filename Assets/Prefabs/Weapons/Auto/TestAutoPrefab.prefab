@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6064333869088992856}
   - component: {fileID: -764489385047586582}
+  - component: {fileID: 2517461266033161424}
   m_Layer: 0
   m_Name: TestAutoPrefab
   m_TagString: Untagged
@@ -44,3 +45,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sprite: {fileID: 21300000, guid: 4b738542ce625cbf58d2a7b6eb633ee7, type: 3}
+  Model: {fileID: 3325762661238073069, guid: d4650a5b30a151a44880517555d0dec0, type: 3}
+--- !u!114 &2517461266033161424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1703911258719353816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 951099334
+  AlwaysReplicateAsRoot: 0
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1

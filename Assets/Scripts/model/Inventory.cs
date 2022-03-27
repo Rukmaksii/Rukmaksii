@@ -201,8 +201,37 @@ namespace model
 
         private void OnWeaponSwitch(WeaponType oldType, WeaponType newType)
         {
-            // TODO : lucas change le code pour le render
-            Debug.Log("change le code pour le mesh des armes ici lucas");
+            BaseWeapon oldw = null;
+            BaseWeapon neww = null;
+            
+            switch (oldType)
+            {
+                case WeaponType.Heavy:
+                    oldw = HeavyWeapon;
+                    break;
+                case WeaponType.Light:
+                    oldw = LightWeapon;
+                    break;
+                case WeaponType.CloseRange:
+                    oldw = CloseRangeWeapon;
+                    break;
+            }
+            switch (oldType)
+            {
+                case WeaponType.Heavy:
+                    neww = HeavyWeapon;
+                    break;
+                case WeaponType.Light:
+                    neww = LightWeapon;
+                    break;
+                case WeaponType.CloseRange:
+                    neww = CloseRangeWeapon;
+                    break;
+            }
+            if(oldw != null)
+                oldw.SwitchRender(false);
+            if(neww != null)
+                neww.SwitchRender(true);
         }
 
         private List<BaseItem> itemsList = new List<BaseItem>();
