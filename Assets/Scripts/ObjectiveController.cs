@@ -25,17 +25,18 @@ public class ObjectiveController : MonoBehaviour
     /** <value>the GameObject used to trigger capture</value> */
     [SerializeField] private GameObject captureArea;
 
-    private float CurrentProgress = 0f;
+    private float currentProgress = 0f;
 
-    public float CurrentProgressValue => CurrentProgress;
+    public float CurrentProgress => currentProgress;
     
-    /** <value>teamID of the team whose progress registered</value> */
-    private int controllingTeam;
     /** <value>teamID of the team whose players are more numerous on the point</value> */
+    private int controllingTeam;
+    /** <value>teamID of the team whose progress is registered</value> */
     private int capturingTeam;
 
     public int ControllingTeam => controllingTeam;
-    
+    public int CapturingTeam => capturingTeam;
+
     /** <value>the capture progress</value> */
     private float progress = 0f;
     
@@ -110,18 +111,19 @@ public class ObjectiveController : MonoBehaviour
             
             if (capturingTeam == 0 && controllingTeam == 1 || capturingTeam == 1 && controllingTeam == 0)
             {
-                CurrentProgress -= nbrPlayersCapturing * progressSpeed * Time.deltaTime;
+                currentProgress -= nbrPlayersCapturing * progressSpeed * Time.deltaTime;
             }
             else if (controllingTeam == capturingTeam)
-            {
-                CurrentProgress += nbrPlayersCapturing * progressSpeed * Time.deltaTime;
+            { 
+                currentProgress += nbrPlayersCapturing * progressSpeed * Time.deltaTime;
             }
-            Debug.Log(CurrentProgress);
 
             if (CurrentProgress < 0)
             {
-                CurrentProgress = 0;
+                currentProgress = 0;
                 state = State.Neutral;
+                capturingTeam = -1;
+                controllingTeam = -1;
             }
             else if (CurrentProgress > maxProgress)
             {

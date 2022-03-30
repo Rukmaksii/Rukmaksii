@@ -27,6 +27,8 @@ public class HUDController : MonoBehaviour
 
     private ObjectiveController capturePoint;
 
+    private BasePlayer localPlayer;
+
     public Image Crosshair;
 
     void Start()
@@ -40,6 +42,8 @@ public class HUDController : MonoBehaviour
         ObjectiveController.OnPlayerInteract += DisplayCaptureState;
 
         capturingState.enabled = false;
+
+        BasePlayer localPlayer = GameController.Singleton.LocalPlayer;
     }
 
     void Update()
@@ -58,7 +62,10 @@ public class HUDController : MonoBehaviour
 
         // updating the capture circle UI if the player is on a point
         if (capturePoint != null)
-            capturingState.fillAmount = capturePoint.CurrentProgressValue / capturePoint.MaxProgress;
+        {
+            capturingState.fillAmount = capturePoint.CurrentProgress / capturePoint.MaxProgress;
+            SetCapIconColor();
+        }
     }
 
     /**
@@ -186,5 +193,13 @@ public class HUDController : MonoBehaviour
                 capturingState.enabled = false;
             }
         }
+    }
+
+    private void SetCapIconColor()
+    {
+        if (capturePoint.CapturingTeam == 1)
+            capturingState.color = Color.red;
+        else if (capturePoint.CapturingTeam == 0)
+            capturingState.color = Color.blue;
     }
 }
