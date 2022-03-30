@@ -5,6 +5,7 @@ using model;
 using MonstersControler;
 using PlayerControllers;
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 
 namespace Weapons
@@ -100,11 +101,44 @@ namespace Weapons
          */
         public virtual GameObject AimingHUD { get; } = null;
 
+        private Transform shoulder;
+
+
         void Start()
         {
             if (!IsServer)
                 return;
             currentAmmo.Value = MaxAmmo;
+            Transform[] transforms = Player.GetComponentsInChildren<Transform>();
+            foreach (Transform transform in transforms)
+            {
+                if (transform.CompareTag("Shoulder"))
+                {
+                    shoulder = transform;
+                    break;
+                }
+            }
+
+            CombineMesh();
+        }
+
+        void CombineMesh()
+        {
+            MeshFilter[] meshFilters = Model.GetComponentsInChildren<MeshFilter>();
+            CombineInstance[] combine = new CombineInstance[meshFilters.Length];
+
+            int i = 0;
+            while (i < meshFilters.Length)
+            {
+                combine[i].mesh = meshFilters[i].sharedMesh;
+                combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
+                //meshFilters[i].gameObject.SetActive(false);
+
+                i++;
+            }
+            transform.GetComponent<MeshFilter>().sharedMesh = new Mesh();
+            transform.GetComponent<MeshFilter>().sharedMesh.CombineMeshes(combine);
+            transform.gameObject.SetActive(true);
         }
 
         void UpdateServer(float deltaTime)
@@ -158,9 +192,19 @@ namespace Weapons
         void FixedUpdate()
         {
             if (IsServer)
+            {
+                if (shoulder != null)
+                {
+                    this.transform.rotation = shoulder.transform.rotation;
+                    this.transform.position = shoulder.transform.position;
+                }
                 UpdateServer(Time.fixedDeltaTime);
+            }
             if (IsClient)
                 UpdateClient(Time.fixedDeltaTime);
+            
+            this.transform.position = Player.transform.position;
+            
         }
 
         void handleMultiBulletFire(float deltaTime)
@@ -196,10 +240,7 @@ namespace Weapons
 
         public void SwitchRender(bool enable)
         {
-            Transform[] transforms = Model.GetComponentsInChildren<Transform>();
-            foreach (Transform transform in transforms)
-                if (!transform.CompareTag("RightHand") && !transform.CompareTag("LeftHand"))
-                    transform.GetComponent<MeshRenderer>().enabled = enable;
+            this.GetComponent<MeshRenderer>().enabled = enable;
         }
 
 
