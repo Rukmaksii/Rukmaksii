@@ -149,6 +149,11 @@ namespace GameManagers
 
         private void Update()
         {
+            ManageDeath();
+        }
+        
+        private void ManageDeath()
+        {
             GameObject[] playersArray = GameObject.FindGameObjectsWithTag("Player");
             foreach (var player in playersArray)
             {
@@ -172,7 +177,7 @@ namespace GameManagers
                 }
             }
         }
-
+        
         IEnumerator DeathScreenTimer()
         {
             for (int i = respawnTime; i > 0; i--)
@@ -193,12 +198,7 @@ namespace GameManagers
                 player.SetActive(true);
                 basePlayer.UpdateHealthServerRpc(basePlayer.MaxHealth, basePlayer.OwnerClientId);
 
-                CharacterController cc = basePlayer.GetComponent(typeof(CharacterController)) as CharacterController;
-                cc.enabled = false;
-
                 basePlayer.OnRespawn();
-
-                cc.enabled = true;
             }
         }
     }

@@ -244,15 +244,10 @@ namespace PlayerControllers
 
         public void OnRespawn()
         {
-            // respawn location
-            if (IsOwner)
-                MoveToSpawn();
-
             Inventory.ItemsList.Clear();
-
             GameController.Singleton.deathScreen.SetActive(false);
+            MoveToSpawn();
         }
-
 
         private void SetAim(bool aim)
         {
