@@ -6,7 +6,7 @@ using PlayerControllers;
 using Unity.Netcode;
 using UnityEngine;
 
-public class ObjectiveController : NetworkBehaviour
+public class ObjectiveController : MonoBehaviour
 {
     public enum State
     {
@@ -25,12 +25,16 @@ public class ObjectiveController : NetworkBehaviour
     /** <value>the GameObject used to trigger capture</value> */
     [SerializeField] private GameObject captureArea;
 
-    private NetworkVariable<float> CurrentProgress { get; } = new NetworkVariable<float>(0f);
+    private float CurrentProgress = 0f;
+
+    public float CurrentProgressValue => CurrentProgress;
     
-    public float CurrentProgressValue => CurrentProgress.Value;
-    
+    /** <value>teamID of the team whose progress registered</value> */
     private int controllingTeam;
+    /** <value>teamID of the team whose players are more numerous on the point</value> */
     private int capturingTeam;
+
+    public int ControllingTeam => controllingTeam;
     
     /** <value>the capture progress</value> */
     private float progress = 0f;
@@ -58,7 +62,7 @@ public class ObjectiveController : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        state = State.Neutral;
+        this.state = State.Neutral;
     }
 
     // Update is called once per frame
@@ -70,9 +74,10 @@ public class ObjectiveController : NetworkBehaviour
             {
                 capturingTeam = CapturingPlayersList[0].TeamId;
                 controllingTeam = CapturingPlayersList[0].TeamId;
-                state = State.Capuring;
+                this.state = State.Capuring;
             }
         }
+        
         else if (state == State.Capuring)
         {
             (List<BasePlayer> t1PlayerList, List<BasePlayer> t2PlayerList) = (new List<BasePlayer>(), new List<BasePlayer>(0));
@@ -85,9 +90,6 @@ public class ObjectiveController : NetworkBehaviour
                     t2PlayerList.Add(player);
             }
 
-            Debug.Log($"Team 1 has {t1PlayerList.Count + 0} players");
-            //Debug.Log($"Team 2 has {t2PlayerList.Count + 0} players");
-            
             int nbrPlayersCapturing;
 
             if (t1PlayerList.Count > t2PlayerList.Count)
@@ -105,34 +107,28 @@ public class ObjectiveController : NetworkBehaviour
                 controllingTeam = -1;
                 nbrPlayersCapturing = 0;
             }
-
-            Debug.Log(capturingTeam);
-            Debug.Log(controllingTeam);
+            
             if (capturingTeam == 0 && controllingTeam == 1 || capturingTeam == 1 && controllingTeam == 0)
             {
-                CurrentProgress.Value -= nbrPlayersCapturing * progressSpeed * Time.deltaTime;
-                Debug.Log("downcap");
+                CurrentProgress -= nbrPlayersCapturing * progressSpeed * Time.deltaTime;
             }
             else if (controllingTeam == capturingTeam)
             {
-                CurrentProgress.Value += nbrPlayersCapturing * progressSpeed * Time.deltaTime;
-                Debug.Log("upcap");
+                CurrentProgress += nbrPlayersCapturing * progressSpeed * Time.deltaTime;
             }
-            Debug.Log(CurrentProgress.Value);
+            Debug.Log(CurrentProgress);
 
-            if (CurrentProgress.Value < 0)
+            if (CurrentProgress < 0)
             {
-                CurrentProgress.Value = 0;
+                CurrentProgress = 0;
                 state = State.Neutral;
             }
-            else if (CurrentProgress.Value > maxProgress)
+            else if (CurrentProgress > maxProgress)
             {
                 state = State.Captured;
-                Debug.Log($"Point captured by team {controllingTeam}");
             }
-            
-            //Debug.Log(CurrentProgress.Value);
         }
+        
         else if (state == State.Captured)
         {
             if (capturingTeam == 0)
