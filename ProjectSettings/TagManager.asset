@@ -18,6 +18,7 @@ TagManager:
   - Base
   - RightHand
   - LeftHand
+  - Shoulder
   layers:
   - Default
   - TransparentFX
