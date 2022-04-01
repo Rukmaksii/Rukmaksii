@@ -13,13 +13,11 @@ namespace MonstersControler
         private NetworkVariable<int> life = new NetworkVariable<int>(0);
 
         public int Life => life.Value;
-        protected NavMeshAgent agent;
 
         // Start is called before the first frame update
         void Start()
         {
             UpdateLifeServerRpc(maxHealth);
-            agent = GetComponent<NavMeshAgent>();
             MonsterAI monsterAI = gameObject.AddComponent(typeof(MonsterAI)) as MonsterAI;
             monsterAI.agent = GetComponent<NavMeshAgent>();
         }
