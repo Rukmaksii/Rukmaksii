@@ -38,7 +38,6 @@ public class HandTarget : MonoBehaviour
             if (transform.CompareTag("RightHand"))
                 rightHand = transform;
         }
-        
         if (this.gameObject.name == "right_target")
         {
             this.transform.localPosition = rightHand.transform.position;

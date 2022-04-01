@@ -101,7 +101,7 @@ namespace Weapons
          */
         public virtual GameObject AimingHUD { get; } = null;
 
-        private Transform shoulder;
+        private Transform weapon;
 
 
         void Start()
@@ -112,9 +112,9 @@ namespace Weapons
             Transform[] transforms = Player.GetComponentsInChildren<Transform>();
             foreach (Transform transform in transforms)
             {
-                if (transform.CompareTag("Shoulder"))
+                if (transform.CompareTag("Weapon"))
                 {
-                    shoulder = transform;
+                    weapon = transform;
                     break;
                 }
             }
@@ -193,10 +193,10 @@ namespace Weapons
         {
             if (IsServer)
             {
-                if (shoulder != null)
+                if (weapon != null)
                 {
-                    this.transform.rotation = shoulder.transform.rotation;
-                    this.transform.position = shoulder.transform.position;
+                    this.transform.rotation = weapon.transform.rotation;
+                    this.transform.position = weapon.transform.position;
                 }
                 UpdateServer(Time.fixedDeltaTime);
             }

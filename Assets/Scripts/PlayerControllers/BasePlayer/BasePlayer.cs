@@ -96,27 +96,6 @@ namespace PlayerControllers
                 Cursor.lockState = CursorLockMode.Locked;
             }
 
-
-            weapons = GetComponentsInChildren<Transform>();
-            foreach (Transform weaponModel in weapons)
-            {
-                if (weaponModel.CompareTag("Weapon"))
-                {
-                    weaponModel.GetComponent<MeshRenderer>().enabled =
-                        String.Equals(weaponModel.name, Inventory.CurrentWeapon.Name);
-
-                    weaponRends = weaponModel.GetComponentsInChildren<Transform>();
-                    foreach (Transform tran in weaponRends)
-                    {
-                        if (tran.GetComponent<MeshRenderer>() != null)
-                        {
-                            tran.GetComponent<MeshRenderer>().enabled =
-                                String.Equals(weaponModel.name, Inventory.CurrentWeapon.Name);
-                        }
-                    }
-                }
-            }
-
             MoveToSpawn();
         }
 
