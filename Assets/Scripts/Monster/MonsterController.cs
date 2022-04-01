@@ -7,7 +7,7 @@ using UnityEngine.AI;
 namespace MonstersControler
 {
     [RequireComponent(typeof(NetworkObject))]
-    public class MonsterControler : NetworkBehaviour, IKillable
+    public class MonsterController : NetworkBehaviour, IKillable
     {
         [SerializeField] private int maxHealth = 50;
         private NetworkVariable<int> life = new NetworkVariable<int>(0);

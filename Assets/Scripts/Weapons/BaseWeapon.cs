@@ -263,7 +263,7 @@ namespace Weapons
             }
             else if (hit.CompareTag("Monster"))
             {
-                MonsterControler monster = hit.GetComponent<MonsterControler>();
+                MonsterController monster = hit.GetComponent<MonsterController>();
                 monster.TakeDamage(this.Damage);
             }
             else if (hit.CompareTag("Base"))
