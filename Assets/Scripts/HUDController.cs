@@ -1,4 +1,5 @@
 using GameManagers;
+using Map;
 using model;
 using PlayerControllers;
 using UnityEngine;
