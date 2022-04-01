@@ -6,14 +6,14 @@ using UnityEngine;
 
 namespace Map
 {
-    public class BaseController : NetworkBehaviour, IKillable
+    public class BaseController : MonoBehaviour, IKillable
     {
-        private NetworkVariable<int> CurrentHealth { get; } = new NetworkVariable<int>(1);
+        private int currentHealth = 100;
 
-        private NetworkVariable<int> teamId = new NetworkVariable<int>(-1);
+        private int teamId = -1;
 
-        public int TeamId => teamId.Value;
-
+        public int TeamId => teamId;
+        
         void Start()
         {
             
@@ -26,20 +26,26 @@ namespace Map
 
         public bool TakeDamage(int damage)
         {
-            if (CurrentHealth.Value - damage < 0)
+            if (currentHealth - damage < 0)
             {
-                CurrentHealth.Value = 0;
+                currentHealth = 0;
                 OnKill();
                 return false;
             }
 
-            CurrentHealth.Value -= damage;
+            currentHealth -= damage;
             return true;
         }
 
         public void OnKill()
         {
             Debug.Log("Base destroyed");
+        }
+        
+        [ServerRpc]
+        public void UpdateTeamServerRpc(int teamId)
+        {
+            this.teamId = teamId;
         }
     }
 }

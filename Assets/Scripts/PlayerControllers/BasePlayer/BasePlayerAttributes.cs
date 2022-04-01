@@ -115,7 +115,7 @@ namespace PlayerControllers
                 Vector3 initPos = transform.TransformPoint(controller.center);
                 if (Physics.Raycast(initPos, Vector3.down, out hit, controller.height /*/ 2*/))
                 {
-                    return hit.collider.CompareTag("Ground");
+                    return hit.collider.CompareTag("Ground") || hit.collider.CompareTag("Base");
                 }
 
 

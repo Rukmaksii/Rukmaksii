@@ -1,4 +1,5 @@
 using System;
+using Map;
 using Minions;
 using model;
 using MonstersControler;
@@ -264,6 +265,14 @@ namespace Weapons
             {
                 MonsterControler monster = hit.GetComponent<MonsterControler>();
                 monster.TakeDamage(this.Damage);
+            }
+            else if (hit.CompareTag("Base"))
+            {
+                BaseController baseObject = hit.GetComponent<BaseController>();
+                if (baseObject == null || Player.TeamId == baseObject.TeamId)
+                    return false;
+                
+                baseObject.TakeDamage(this.Damage);
             }
             else
             {

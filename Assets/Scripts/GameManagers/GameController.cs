@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Map;
 using Minions;
 using model;
 using PlayerControllers;
@@ -137,6 +138,9 @@ namespace GameManagers
 
         void Start()
         {
+            GameObject.Find("Base1").GetComponent<BaseController>().UpdateTeamServerRpc(0);
+            GameObject.Find("Base2").GetComponent<BaseController>().UpdateTeamServerRpc(1);
+
             playerUIInstance = Instantiate(uiPrefab);
             playerUIInstance.name = uiPrefab.name;
             playerUIInstance.GetComponent<Canvas>().worldCamera = Camera.current;
