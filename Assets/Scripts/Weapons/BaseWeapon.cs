@@ -260,11 +260,6 @@ namespace Weapons
 
                 minion.TakeDamage(this.Damage);
             }
-            else if (hit.CompareTag("Destructible"))
-            {
-                DestructibleController destructible = hit.GetComponent<DestructibleController>();
-                destructible.Health -= 20;
-            }
             else if (hit.CompareTag("Monster"))
             {
                 MonsterControler monster = hit.GetComponent<MonsterControler>();
