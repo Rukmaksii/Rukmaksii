@@ -236,6 +236,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sensitivity: 0.1
+  weapon: {fileID: 0}
   gravity: -19.62
   maxMinions: 2
 --- !u!114 &1260994430873029613
