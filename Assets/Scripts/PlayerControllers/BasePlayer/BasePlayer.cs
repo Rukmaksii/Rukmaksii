@@ -72,7 +72,15 @@ namespace PlayerControllers
                 weaponInstance.GetComponent<NetworkObject>().Spawn();
                 this.inventory.AddWeapon(weaponInstance.GetComponent<BaseWeapon>());
             }
-
+            Transform[] transforms = GetComponentsInChildren<Transform>();
+            foreach (Transform t in transforms)
+            {
+                if (t.CompareTag("Weapon"))
+                {
+                    this.weapon = t;
+                    break;
+                }
+            }
             gameObject.AddComponent<Jetpack>();
             Jetpack.FuelDuration = DefaultFuelDuration;
 

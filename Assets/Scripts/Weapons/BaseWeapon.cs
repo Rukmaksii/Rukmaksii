@@ -109,16 +109,7 @@ namespace Weapons
             if (!IsServer)
                 return;
             currentAmmo.Value = MaxAmmo;
-            Transform[] transforms = Player.GetComponentsInChildren<Transform>();
-            foreach (Transform transform in transforms)
-            {
-                if (transform.CompareTag("Weapon"))
-                {
-                    weapon = transform;
-                    break;
-                }
-            }
-
+            this.weapon = Player.weapon;
             CombineMesh();
         }
 
@@ -195,8 +186,10 @@ namespace Weapons
             {
                 if (weapon != null)
                 {
-                    this.transform.rotation = weapon.transform.rotation;
-                    this.transform.position = weapon.transform.position;
+                    this.gameObject.transform.rotation = this.weapon.transform.rotation;
+                    this.gameObject.transform.position = this.weapon.transform.position;
+                    Debug.Log("Player weapon: " + weapon);
+                    Debug.Log("Weapon: " + this);
                 }
                 UpdateServer(Time.fixedDeltaTime);
             }
