@@ -810,7 +810,7 @@ GameObject:
   - component: {fileID: 9209973965794875647}
   m_Layer: 0
   m_Name: Weapon
-  m_TagString: Shoulder
+  m_TagString: Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -822,15 +822,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8192404738009552584}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0.5964388, y: -0.32145, z: 0.5314469, w: -0.508424}
+  m_LocalPosition: {x: -1.4906892, y: 0.08793627, z: -0.12377572}
+  m_LocalScale: {x: 3.2826998, y: 3.2826998, z: 3.2826998}
   m_Children:
   - {fileID: 3647418470073596248}
   - {fileID: 6688560063091120677}
   m_Father: {fileID: 1528386017818396703}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -15.356, y: 85.13, z: -106.653}
 --- !u!1001 &8577464079821468034
 PrefabInstance:
   m_ObjectHideFlags: 0
