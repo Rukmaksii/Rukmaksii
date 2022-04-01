@@ -6,12 +6,9 @@ using UnityEngine.AI;
 
 public class MonsterAI : NetworkBehaviour
 {
-    [Range(2, 100)] private float detectDistance = 20; //distance de detection du joueur
+    private float detectDistance = 35; //distance de detection du joueur
     private float distanceAttack = 5f; //distance à laquelle le monstre peut attaquer
-
     private Vector3 InitialPos; //position d'origine du monstre
-
-    //public GameObject col; //collider servant de machoir pour le monstre (ce qui va faire des dégats)
     private GameObject joueur; //référence vers le(s) joueur(s)
     private bool canAttack = true; //le monstre peut attaquer ou non
     public NavMeshAgent agent;
