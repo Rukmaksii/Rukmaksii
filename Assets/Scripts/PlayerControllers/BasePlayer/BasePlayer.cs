@@ -57,7 +57,7 @@ namespace PlayerControllers
             Transform[] transforms = GetComponentsInChildren<Transform>();
             foreach (Transform t in transforms)
             {
-                if (t.CompareTag("Weapon"))
+                if (t.name == "weaponContainer")
                 {
                     this.weaponContainer = t;
                     break;
