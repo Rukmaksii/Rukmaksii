@@ -278,7 +278,7 @@ namespace Weapons
 
         /**
          * <summary>shoots at from the middle of the screen to where looked at</summary>
-         * <remarks>shoots 1 bullet</remarks>
+         * z<remarks>shoots 1 bullet</remarks>
          * <returns>true if an damageable object has been shot</returns>
          */
         private bool Shoot()

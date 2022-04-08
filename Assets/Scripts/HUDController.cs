@@ -26,6 +26,10 @@ public class HUDController : MonoBehaviour
 
     [SerializeField] protected Text currentStrategy;
 
+    [SerializeField] protected GameObject map;
+    
+    [SerializeField] protected Image arrow;
+    
     private ObjectiveController capturePoint;
 
     public Image Crosshair;
@@ -40,6 +44,10 @@ public class HUDController : MonoBehaviour
         ObjectiveController.OnPlayerInteract += DisplayCaptureState;
 
         capturingState.enabled = false;
+
+        BasePlayer localPlayer = GameController.Singleton.LocalPlayer;
+
+        arrow.transform.SetParent(map.transform);
     }
 
     void Update()
@@ -66,6 +74,8 @@ public class HUDController : MonoBehaviour
             capturingState.fillAmount = capturePoint.CurrentProgress / capturePoint.MaxProgress;
             SetCapIconColor();
         }
+
+        UpdateMap();
     }
 
     /**
@@ -202,5 +212,14 @@ public class HUDController : MonoBehaviour
             capturingState.color = Color.red;
         else if (capturePoint.CapturingTeam == 0)
             capturingState.color = Color.blue;
+    }
+
+    private void UpdateMap()
+    {
+        Vector3 playerPosition = GameController.Singleton.LocalPlayer.transform.localPosition;
+        arrow.transform.localPosition = new Vector3(playerPosition.x - 40, playerPosition.z + 15, 0);
+        
+        Quaternion camRotation = GameObject.FindGameObjectWithTag("Player Camera").transform.localRotation;
+        arrow.transform.localRotation = new Quaternion(0, 0, -camRotation.y, camRotation.w);
     }
 }
