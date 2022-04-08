@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using GameManagers;
+using Map;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,12 +9,12 @@ namespace HUD
     public partial class HUDController : MonoBehaviour
     {
         [SerializeField] protected GameObject map;
-        
         [SerializeField] protected Image arrow;
-
         [SerializeField] protected GameObject redPointParent;
-        
         [SerializeField] protected GameObject redPointPrefab;
+        [SerializeField] protected Image objOverlay1;
+        [SerializeField] protected Image objOverlay2;
+        [SerializeField] protected Image objOverlay3;
 
         private List<GameObject> redPoints = new List<GameObject>();
         
@@ -53,6 +54,34 @@ namespace HUD
             
             Quaternion camRotation = GameObject.FindGameObjectWithTag("Player Camera").transform.localRotation;
             arrow.transform.localRotation = new Quaternion(0, 0, -camRotation.y, camRotation.w);
+        }
+
+        private void UpdateObjectives()
+        {
+            ObjectiveController obj1 = GameObject.Find("Objective1").GetComponentInChildren<ObjectiveController>();
+            ObjectiveController obj2 = GameObject.Find("Objective2").GetComponentInChildren<ObjectiveController>();
+            ObjectiveController obj3 = GameObject.Find("Objective3").GetComponentInChildren<ObjectiveController>();
+
+            if (obj1.CapturingTeam == 0)
+                objOverlay1.color = Color.blue;
+            else if (obj1.CapturingTeam == 1)
+                objOverlay1.color = Color.red;
+            else
+                objOverlay1.color = Color.white;
+            
+            if (obj2.CapturingTeam == 0)
+                objOverlay2.color = Color.blue;
+            else if (obj1.CapturingTeam == 1)
+                objOverlay2.color = Color.red;
+            else
+                objOverlay2.color = Color.white;
+            
+            if (obj3.CapturingTeam == 0)
+                objOverlay3.color = Color.blue;
+            else if (obj1.CapturingTeam == 1)
+                objOverlay3.color = Color.red;
+            else
+                objOverlay3.color = Color.white;
         }
     }
 }

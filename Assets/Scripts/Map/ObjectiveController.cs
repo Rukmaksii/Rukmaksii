@@ -32,9 +32,9 @@ namespace Map
         public float CurrentProgress => currentProgress;
         
         /** <value>teamID of the team whose players are more numerous on the point</value> */
-        private int controllingTeam;
+        private int controllingTeam = -1;
         /** <value>teamID of the team whose progress is registered</value> */
-        private int capturingTeam;
+        private int capturingTeam = -1;
 
         public int ControllingTeam => controllingTeam;
         public int CapturingTeam => capturingTeam;
