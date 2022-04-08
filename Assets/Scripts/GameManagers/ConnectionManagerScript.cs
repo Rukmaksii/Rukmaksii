@@ -8,6 +8,7 @@ using Unity.Netcode.Transports.UNET;
 using UnityEngine;
 using UnityEngine.AI;
 using System;
+using Unity.XR.OpenVR;
 using Random = UnityEngine.Random;
 
 namespace GameManagers
@@ -17,6 +18,8 @@ namespace GameManagers
         [SerializeField] private ConnectionScriptableObject connectionData;
         [SerializeField] private List<GameObject> classPrefabs = new List<GameObject>();
 
+
+        public Gameloop gameloop;
         void Start()
         {
 #if UNET
@@ -36,19 +39,21 @@ namespace GameManagers
 
             NetworkManager.Singleton.NetworkConfig.PlayerPrefab = playerPrefab;
 
+            
 
             switch (connectionData.Data.ConnectionType)
             {
                 case "host":
                     NetworkManager.Singleton.StartHost();
-                    StartCoroutine(waitagent());
+                    gameloop = gameObject.AddComponent<Gameloop>();
                     break;
                 case "client":
                     NetworkManager.Singleton.StartClient();
+                    gameloop = gameObject.AddComponent<Gameloop>();
                     break;
                 case "server":
                     NetworkManager.Singleton.StartServer();
-                    StartCoroutine(waitagent());
+                    gameloop = gameObject.AddComponent<Gameloop>();
                     break;
             }
         }
@@ -70,29 +75,18 @@ namespace GameManagers
             if (GUILayout.Button("Host"))
             {
                 NetworkManager.Singleton.StartHost();
-                StartCoroutine(waitagent());
+                gameloop = gameObject.AddComponent<Gameloop>();
             }
             else if (GUILayout.Button("Server"))
             {
                 NetworkManager.Singleton.StartServer();
-                StartCoroutine(waitagent());
+                gameloop = gameObject.AddComponent<Gameloop>();
             }
 
             else if (GUILayout.Button("Client"))
-                NetworkManager.Singleton.StartClient();
-        }
-
-        IEnumerator waitagent()
-        {
-            yield return new WaitForSeconds(10);
-            for (int i = 0; i < 4; i++)
             {
-                Vector3 pos = new Vector3(Random.Range(-115, 194), 10, Random.Range(-153, 138));
-                if (Physics.Raycast(pos, Vector3.down, out RaycastHit hit))
-                {
-                    GameObject instance = Instantiate(GameController.Singleton.MonsterPrefab, hit.point, Quaternion.identity);
-                    instance.GetComponent<NetworkObject>().Spawn();
-                }
+                NetworkManager.Singleton.StartClient();
+                gameloop = gameObject.AddComponent<Gameloop>();
             }
         }
     }
