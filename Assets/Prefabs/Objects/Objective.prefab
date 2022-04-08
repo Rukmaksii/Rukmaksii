@@ -109,8 +109,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseMaterial: {fileID: 2100000, guid: aeee7071bea0a4c478b4fea5933c5f79, type: 2}
-  capturedMaterial: {fileID: 2100000, guid: b0b4de3bd6e976e4f8b3adc6e72377ed, type: 2}
+  firstTeamMaterial: {fileID: 0}
+  secondTeamMaterial: {fileID: 0}
+  neutralMaterial: {fileID: 0}
   captureArea: {fileID: 4645415084773794642}
+  CanCapture: 0
 --- !u!1 &4645415084773794642
 GameObject:
   m_ObjectHideFlags: 0

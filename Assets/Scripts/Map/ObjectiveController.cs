@@ -16,19 +16,19 @@ namespace Map
             Capuring,
             Captured
         }
-        
-        /** <value>the material used for neutral point</value> */
-        [SerializeField] private Material baseMaterial;
-        
+                
         /** <value>the material used for captured point</value> */
         [SerializeField] private Material firstTeamMaterial;
         [SerializeField] private Material secondTeamMaterial;
+        /** <value>the material used for neutral point</value> */
+        [SerializeField] private Material neutralMaterial;
 
         /** <value>the GameObject used to trigger capture</value> */
         [SerializeField] private GameObject captureArea;
 
         private float currentProgress = 0f;
 
+        /** <value>the capture progress</value> */
         public float CurrentProgress => currentProgress;
         
         /** <value>teamID of the team whose players are more numerous on the point</value> */
@@ -39,9 +39,8 @@ namespace Map
         public int ControllingTeam => controllingTeam;
         public int CapturingTeam => capturingTeam;
 
-        /** <value>the capture progress</value> */
-        private float progress = 0f;
-        
+       
+
         /** <value>the progress needed to capture a point</value> */
         private float maxProgress = 5;
         
@@ -54,12 +53,16 @@ namespace Map
         /** <value>the list of all players on an objective</value> */
         private List<BasePlayer> capturingPlayersList = new List<BasePlayer>();
 
-        public float Progress => progress;
         public float MaxProgress => maxProgress;
 
         public List<BasePlayer> CapturingPlayersList => capturingPlayersList;
         
         public static event Action<ObjectiveController,BasePlayer,bool> OnPlayerInteract;
+
+        /** <value>boolean that indicates whether the objectives can be captured or not*/
+        public bool canCapture = false;
+
+        public bool CanCapture => canCapture;
         // TODO: public static event Action<bool> OnCaptured;
         
         // Start is called before the first frame update
@@ -73,6 +76,12 @@ namespace Map
         {
             if (state == State.Neutral)
             {
+                captureArea.GetComponent<MeshRenderer>().material = neutralMaterial;
+                currentProgress = 0;
+                capturingTeam = -1;
+                controllingTeam = -1;
+                if (!canCapture)
+                    return;
                 if (capturingPlayersList.Count != 0)
                 {
                     capturingTeam = CapturingPlayersList[0].TeamId;
@@ -122,10 +131,7 @@ namespace Map
 
                 if (CurrentProgress < 0)
                 {
-                    currentProgress = 0;
                     state = State.Neutral;
-                    capturingTeam = -1;
-                    controllingTeam = -1;
                 }
                 else if (CurrentProgress > maxProgress)
                 {
@@ -159,6 +165,12 @@ namespace Map
                 OnPlayerInteract?.Invoke(this,collider.GetComponent<BasePlayer>(),false);
                 capturingPlayersList.Remove(collider.GetComponent<BasePlayer>());
             }
+        }
+
+        public void ToggleCanCapture(bool status)
+        {
+            canCapture = status;
+            state = State.Neutral;
         }
     }
 }
