@@ -1,6 +1,9 @@
+using System;
+using System.Collections.Generic;
 using GameManagers;
 using Map;
 using model;
+using MonstersControler;
 using PlayerControllers;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,6 +32,12 @@ public class HUDController : MonoBehaviour
     [SerializeField] protected GameObject map;
     
     [SerializeField] protected Image arrow;
+
+    [SerializeField] protected GameObject redPointParent;
+    
+    [SerializeField] protected GameObject redPointPrefab;
+
+    private List<GameObject> redPoints = new List<GameObject>();
     
     private ObjectiveController capturePoint;
 
@@ -75,6 +84,14 @@ public class HUDController : MonoBehaviour
         }
 
         UpdateMap();
+    }
+
+    private void FixedUpdate()
+    {
+        if (GameController.Singleton.LocalPlayer == null)
+            return;
+        
+        UpdateRedPoints();
     }
 
     /**
@@ -212,6 +229,35 @@ public class HUDController : MonoBehaviour
             capturingState.color = Color.blue;
     }
 
+    private void UpdateRedPoints()
+    {
+        GameObject[] monsterList = GameObject.FindGameObjectsWithTag("Monster");
+
+        GameObject[] oldRedPoints = GameObject.FindGameObjectsWithTag("RedPoint");
+        foreach (GameObject point in oldRedPoints)
+        {
+            Destroy(point);
+        }
+        redPoints.Clear();
+        
+        foreach (GameObject monster in monsterList)
+        {
+            redPoints.Add(Instantiate(redPointPrefab, redPointParent.transform, true));
+        }
+        
+        Vector3 playerPosition = GameController.Singleton.LocalPlayer.transform.localPosition;
+        
+        for (int i = 0; i < monsterList.Length; i++)
+        {
+            if (Vector3.Distance(monsterList[i].transform.localPosition, playerPosition) < 50)
+            {
+                GameObject point = redPoints[i];
+                Vector3 monsterPos = monsterList[i].transform.position;
+                point.transform.localPosition = new Vector3(monsterPos.x - 40, monsterPos.z + 15, 0);
+            }
+        }
+    }
+    
     private void UpdateMap()
     {
         Vector3 playerPosition = GameController.Singleton.LocalPlayer.transform.localPosition;

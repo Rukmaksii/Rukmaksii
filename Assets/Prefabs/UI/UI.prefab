@@ -1285,6 +1285,8 @@ MonoBehaviour:
   currentStrategy: {fileID: 6630512428306957375}
   map: {fileID: 6021481022962130057}
   arrow: {fileID: 446399537630396605}
+  redPointParent: {fileID: 4528881434241215105}
+  redPointPrefab: {fileID: 8852760666051628240, guid: 01ae9290701a91543a1838e542c4e642, type: 3}
   Crosshair: {fileID: 238933129528760577}
 --- !u!1 &6755304173120000148
 GameObject:

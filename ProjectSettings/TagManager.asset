@@ -16,6 +16,7 @@ TagManager:
   - SpawnPoint2
   - FuelBoosterItem
   - Base
+  - RedPoint
   layers:
   - Default
   - TransparentFX
