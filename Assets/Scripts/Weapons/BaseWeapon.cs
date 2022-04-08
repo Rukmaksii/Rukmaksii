@@ -19,6 +19,14 @@ namespace Weapons
         private NetworkVariable<NetworkBehaviourReference> playerReference =
             new NetworkVariable<NetworkBehaviourReference>();
 
+
+        [SerializeField] private Transform _rightHandTarget;
+        [SerializeField] private Transform _leftHandTarget;
+
+        public Transform RightHandTarget => _rightHandTarget;
+
+        public Transform LeftHandTarget => _leftHandTarget;
+
         public BasePlayer Player
         {
             set
@@ -27,6 +35,7 @@ namespace Weapons
                 {
                     transform.SetParent(value.transform);
                     transform.SetPositionAndRotation(value.weaponContainer.position, value.weaponContainer.rotation);
+
                 }
                 else
                 {
@@ -121,10 +130,10 @@ namespace Weapons
 
         void Start()
         {
+            CombineMesh();
             if (!IsServer)
                 return;
             currentAmmo.Value = MaxAmmo;
-            CombineMesh();
         }
 
         void CombineMesh()
