@@ -19,6 +19,7 @@ TagManager:
   - RightHand
   - LeftHand
   - Shoulder
+  - RedPoint
   layers:
   - Default
   - TransparentFX
