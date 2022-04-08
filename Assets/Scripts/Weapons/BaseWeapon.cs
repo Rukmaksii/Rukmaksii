@@ -5,7 +5,6 @@ using model;
 using MonstersControler;
 using PlayerControllers;
 using Unity.Netcode;
-using Unity.Netcode.Components;
 using UnityEngine;
 
 namespace Weapons
@@ -16,11 +15,27 @@ namespace Weapons
         [SerializeField] public Sprite sprite;
         [SerializeField] public Transform Model;
         public abstract WeaponType Type { get; }
-        private NetworkVariable<NetworkBehaviourReference> playerReference = new NetworkVariable<NetworkBehaviourReference>();
+
+        private NetworkVariable<NetworkBehaviourReference> playerReference =
+            new NetworkVariable<NetworkBehaviourReference>();
 
         public BasePlayer Player
         {
-            set => UpdatePlayerServerRpc(new NetworkBehaviourReference(value));
+            set
+            {
+                if (value != null)
+                {
+                    transform.SetParent(value.transform);
+                    transform.SetPositionAndRotation(value.weaponContainer.position, value.weaponContainer.rotation);
+                }
+                else
+                {
+                    transform.position = Player.transform.TransformPoint(transform.position);
+                    transform.SetParent(null);
+                }
+
+                UpdatePlayerServerRpc(new NetworkBehaviourReference(value));
+            }
             get => playerReference.Value.TryGet<BasePlayer>(out BasePlayer res) ? res : null;
         }
 
@@ -101,7 +116,7 @@ namespace Weapons
          */
         public virtual GameObject AimingHUD { get; } = null;
 
-        private Transform weapon;
+        private Vector3 weaponPosition;
 
 
         void Start()
@@ -109,7 +124,6 @@ namespace Weapons
             if (!IsServer)
                 return;
             currentAmmo.Value = MaxAmmo;
-            this.weapon = Player.weapon;
             CombineMesh();
         }
 
@@ -127,6 +141,7 @@ namespace Weapons
 
                 i++;
             }
+
             transform.GetComponent<MeshFilter>().sharedMesh = new Mesh();
             transform.GetComponent<MeshFilter>().sharedMesh.CombineMeshes(combine);
             transform.gameObject.SetActive(true);
@@ -183,21 +198,11 @@ namespace Weapons
         void FixedUpdate()
         {
             if (IsServer)
-            {
-                if (weapon != null)
-                {
-                    this.gameObject.transform.rotation = this.weapon.transform.rotation;
-                    this.gameObject.transform.position = this.weapon.transform.position;
-                    Debug.Log("Player weapon: " + weapon);
-                    Debug.Log("Weapon: " + this);
-                }
                 UpdateServer(Time.fixedDeltaTime);
-            }
+
+
             if (IsClient)
                 UpdateClient(Time.fixedDeltaTime);
-            
-            this.transform.position = Player.transform.position;
-            
         }
 
         void handleMultiBulletFire(float deltaTime)
@@ -314,7 +319,7 @@ namespace Weapons
                 BaseController baseObject = hit.GetComponent<BaseController>();
                 if (baseObject == null || Player.TeamId == baseObject.TeamId)
                     return false;
-                
+
                 baseObject.TakeDamage(this.Damage);
             }
             else

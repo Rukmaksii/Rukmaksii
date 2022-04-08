@@ -33,7 +33,7 @@ namespace PlayerControllers
             private set => UpdateFlagsServerRpc(PlayerFlags.RUNNING, value);
         }
 
-        public Transform weapon;
+        public Transform weaponContainer;
 
         private CameraController cameraController;
 
