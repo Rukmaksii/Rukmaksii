@@ -3,6 +3,7 @@ using model;
 using Unity.Netcode;
 using Unity.Netcode.Samples;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 using Weapons;
 
 namespace PlayerControllers
@@ -60,9 +61,11 @@ namespace PlayerControllers
                 if (t.name == "weaponContainer")
                 {
                     this.weaponContainer = t;
-                    break;
                 }
+                else if (t.name == "ironman")
+                    RigBuilder = t.GetComponent<RigBuilder>();
             }
+
 
             this.inventory = GetComponent<Inventory>();
             if (IsServer)
@@ -75,11 +78,11 @@ namespace PlayerControllers
                 this.inventory.AddWeapon(weaponInstance.GetComponent<BaseWeapon>());
 
 
-                GameObject gunWeaponPrefab =
+                /*GameObject gunWeaponPrefab =
                     GameController.Singleton.WeaponPrefabs.Find(go => go.name == "TestGunPrefab");
                 weaponInstance = Instantiate(gunWeaponPrefab);
                 weaponInstance.GetComponent<NetworkObject>().Spawn();
-                this.inventory.AddWeapon(weaponInstance.GetComponent<BaseWeapon>());
+                this.inventory.AddWeapon(weaponInstance.GetComponent<BaseWeapon>());*/
             }
 
 
@@ -307,6 +310,29 @@ namespace PlayerControllers
                 return null;
 
             return hit.collider.gameObject;
+        }
+
+        public void SetHandTargets(Transform right, Transform left)
+        {
+            foreach (var tr in GetComponentsInChildren<Transform>())
+            {
+                if (tr.name == "RightHandIK")
+                {
+                    var ik = tr.GetComponent<TwoBoneIKConstraint>();
+                    ik.data.target = right;
+                    ik.weight = 1;
+
+                    //RigBuilder.Build();
+                }
+                else if (tr.name == "LeftHandIK")
+                {
+                    var ik = tr.GetComponent<TwoBoneIKConstraint>();
+                    ik.data.target = left;
+                    ik.weight = 1;
+                }
+            }
+
+            RigBuilder.Build();
         }
     }
 }

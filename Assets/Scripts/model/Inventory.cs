@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Items;
 using PlayerControllers;
 using Unity.Netcode;
@@ -203,7 +202,7 @@ namespace model
         {
             BaseWeapon oldw = null;
             BaseWeapon neww = null;
-            
+
             switch (oldType)
             {
                 case WeaponType.Heavy:
@@ -216,6 +215,7 @@ namespace model
                     oldw = CloseRangeWeapon;
                     break;
             }
+
             switch (oldType)
             {
                 case WeaponType.Heavy:
@@ -228,9 +228,10 @@ namespace model
                     neww = CloseRangeWeapon;
                     break;
             }
-            if(oldw != null)
+
+            if (oldw != null)
                 oldw.SwitchRender(false);
-            if(neww != null)
+            if (neww != null)
                 neww.SwitchRender(true);
         }
 
@@ -297,6 +298,5 @@ namespace model
         {
             selectedType.Value = type;
         }
-
     }
 }

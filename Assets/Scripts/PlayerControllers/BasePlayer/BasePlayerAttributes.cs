@@ -4,6 +4,7 @@ using Minions;
 using model;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 namespace PlayerControllers
 {
@@ -33,9 +34,11 @@ namespace PlayerControllers
             private set => UpdateFlagsServerRpc(PlayerFlags.RUNNING, value);
         }
 
-        public Transform weaponContainer;
+        public Transform weaponContainer { get; private set; }
 
         private CameraController cameraController;
+
+        protected RigBuilder RigBuilder;
 
         public CameraController CameraController => cameraController;
 

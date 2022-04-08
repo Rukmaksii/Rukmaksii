@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 5459069058538067519}
   - component: {fileID: 6427569000512390549}
   m_Layer: 0
-  m_Name: Right_Hand_IK
+  m_Name: RightHandIK
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5459069058538067519
 Transform:
   m_ObjectHideFlags: 0
@@ -562,12 +562,12 @@ GameObject:
   - component: {fileID: 6294719670732179987}
   - component: {fileID: 7627229977913435786}
   m_Layer: 0
-  m_Name: Left_Hand_IK
+  m_Name: LeftHandIK
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6294719670732179987
 Transform:
   m_ObjectHideFlags: 0
