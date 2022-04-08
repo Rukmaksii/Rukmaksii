@@ -62,6 +62,7 @@ namespace HUD
             }
 
             UpdateMap();
+            UpdateObjectives();
         }
 
         private void FixedUpdate()
