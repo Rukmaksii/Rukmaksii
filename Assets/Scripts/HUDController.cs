@@ -255,7 +255,7 @@ public class HUDController : MonoBehaviour
             {
                 GameObject point = redPoints[i];
                 Vector3 monsterPos = monsterList[i].transform.position;
-                point.transform.localPosition = new Vector3(monsterPos.x - 40, monsterPos.z + 15, 0);
+                point.transform.localPosition = new Vector3(monsterPos.x - 55, monsterPos.z + 15, 0);
             }
         }
     }
