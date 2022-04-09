@@ -78,11 +78,11 @@ namespace PlayerControllers
                 this.inventory.AddWeapon(weaponInstance.GetComponent<BaseWeapon>());
 
 
-                /*GameObject gunWeaponPrefab =
+                GameObject gunWeaponPrefab =
                     GameController.Singleton.WeaponPrefabs.Find(go => go.name == "TestGunPrefab");
                 weaponInstance = Instantiate(gunWeaponPrefab);
                 weaponInstance.GetComponent<NetworkObject>().Spawn();
-                this.inventory.AddWeapon(weaponInstance.GetComponent<BaseWeapon>());*/
+                this.inventory.AddWeapon(weaponInstance.GetComponent<BaseWeapon>());
             }
 
 

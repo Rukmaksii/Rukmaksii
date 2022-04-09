@@ -118,11 +118,6 @@ namespace model
             }
         }
 
-        private void Start()
-        {
-            selectedType.OnValueChanged += OnWeaponSwitch;
-        }
-
         /**
          * <summary>adds a weapon to the inventory replacing the old weapon of the same <see cref="WeaponType"/> if existing</summary>
          */
@@ -198,46 +193,6 @@ namespace model
             return switched;
         }
 
-        private void OnWeaponSwitch(WeaponType oldType, WeaponType newType)
-        {
-            BaseWeapon oldw = null;
-            BaseWeapon neww = null;
-
-            switch (oldType)
-            {
-                case WeaponType.Heavy:
-                    oldw = HeavyWeapon;
-                    break;
-                case WeaponType.Light:
-                    oldw = LightWeapon;
-                    break;
-                case WeaponType.CloseRange:
-                    oldw = CloseRangeWeapon;
-                    break;
-            }
-
-            switch (newType)
-            {
-                case WeaponType.Heavy:
-                    neww = HeavyWeapon;
-                    break;
-                case WeaponType.Light:
-                    neww = LightWeapon;
-                    break;
-                case WeaponType.CloseRange:
-                    neww = CloseRangeWeapon;
-                    break;
-            }
-
-            if (oldw != null)
-                oldw.SwitchRender(false);
-            if (neww != null)
-            {
-                neww.SwitchRender(true);
-                this.Player.SetHandTargets(neww.RightHandTarget, neww.LeftHandTarget);
-            }
-        }
-
         private List<BaseItem> itemsList = new List<BaseItem>();
 
         public List<BaseItem> ItemsList => itemsList;
@@ -298,12 +253,38 @@ namespace model
             SwitchWeaponServerRpc(type);
         }
 
+
+        private BaseWeapon GetWeaponByType(WeaponType type)
+        {
+            return type switch
+            {
+                WeaponType.Light => LightWeapon,
+                WeaponType.Heavy => HeavyWeapon,
+                _ => CloseRangeWeapon
+            };
+        }
+
         [ServerRpc]
         private void SwitchWeaponServerRpc(WeaponType type)
         {
             // server call 
-            OnWeaponSwitch(SelectedType, type);
+            SwitchWeaponClientRpc(SelectedType, type);
             selectedType.Value = type;
+        }
+
+        [ClientRpc]
+        private void SwitchWeaponClientRpc(WeaponType oldType, WeaponType type)
+        {
+            BaseWeapon baseWeapon = GetWeaponByType(type);
+            BaseWeapon oldWeapon = GetWeaponByType(oldType);
+
+            if (oldWeapon != null)
+                oldWeapon.SwitchRender(false);
+            if (baseWeapon != null)
+            {
+                Player.SetHandTargets(baseWeapon.RightHandTarget, baseWeapon.LeftHandTarget);
+                baseWeapon.SwitchRender(true);
+            }
         }
     }
 }
