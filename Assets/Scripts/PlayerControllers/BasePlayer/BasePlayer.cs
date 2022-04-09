@@ -321,18 +321,16 @@ namespace PlayerControllers
                     var ik = tr.GetComponent<TwoBoneIKConstraint>();
                     ik.data.target = right;
                     ik.weight = 1;
-
-                    //RigBuilder.Build();
+                    RigBuilder.Build();
                 }
                 else if (tr.name == "LeftHandIK")
                 {
                     var ik = tr.GetComponent<TwoBoneIKConstraint>();
                     ik.data.target = left;
                     ik.weight = 1;
+                    RigBuilder.Build();
                 }
             }
-
-            RigBuilder.Build();
         }
     }
 }
