@@ -35,7 +35,6 @@ namespace Weapons
                 {
                     transform.SetParent(value.transform);
                     transform.SetPositionAndRotation(value.weaponContainer.position, value.weaponContainer.rotation);
-
                 }
                 else
                 {

@@ -216,7 +216,7 @@ namespace model
                     break;
             }
 
-            switch (oldType)
+            switch (newType)
             {
                 case WeaponType.Heavy:
                     neww = HeavyWeapon;
@@ -232,7 +232,10 @@ namespace model
             if (oldw != null)
                 oldw.SwitchRender(false);
             if (neww != null)
+            {
                 neww.SwitchRender(true);
+                this.Player.SetHandTargets(neww.RightHandTarget, neww.LeftHandTarget);
+            }
         }
 
         private List<BaseItem> itemsList = new List<BaseItem>();
@@ -291,11 +294,15 @@ namespace model
                     closeRangeWeapon.Value = weaponRef;
                     break;
             }
+
+            SwitchWeaponServerRpc(type);
         }
 
         [ServerRpc]
         private void SwitchWeaponServerRpc(WeaponType type)
         {
+            // server call 
+            OnWeaponSwitch(SelectedType, type);
             selectedType.Value = type;
         }
     }
