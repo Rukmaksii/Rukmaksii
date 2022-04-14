@@ -1,5 +1,4 @@
-﻿using System;
-using model;
+﻿using model;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
@@ -64,14 +63,18 @@ namespace PlayerControllers
 
             var moveVector = Movement;
 
-            if (ctx.interaction is MultiTapInteraction && ctx.performed)
+            if (ctx.interaction is MultiTapInteraction multiTapInteraction && multiTapInteraction.tapTime <= 0.2)
             {
-                moveVector.y = 0;
-                yVelocity = 0;
-                this.Jetpack.IsFlying = !this.Jetpack.IsFlying;
+                if (ctx.performed)
+                {
+                    moveVector.y = 0;
+                    yVelocity = 0;
+                    Jetpack.IsFlying = !Jetpack.IsFlying;
+                }
             }
             else
             {
+                Debug.Log($"context: {ctx}");
                 moveVector.y = (ctx.started || ctx.performed) && !ctx.canceled ? 1 : 0;
             }
 
