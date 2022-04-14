@@ -1029,6 +1029,7 @@ MonoBehaviour:
   connectionData: {fileID: 11400000, guid: 51f4e5ed14290eb4db05031d297551b9, type: 2}
   classPrefabs:
   - {fileID: 1800387450937859543, guid: ddd7cfbbbb0dbb44f81ebb725ce41458, type: 3}
+  gameloop: {fileID: 0}
 --- !u!114 &1112646625
 MonoBehaviour:
   m_ObjectHideFlags: 0
