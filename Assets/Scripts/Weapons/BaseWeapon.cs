@@ -29,21 +29,7 @@ namespace Weapons
 
         public BasePlayer Player
         {
-            set
-            {
-                if (value != null)
-                {
-                    transform.SetParent(value.transform);
-                    transform.SetPositionAndRotation(value.weaponContainer.position, value.weaponContainer.rotation);
-                }
-                else
-                {
-                    transform.position = Player.transform.TransformPoint(transform.position);
-                    transform.SetParent(null);
-                }
-
-                UpdatePlayerServerRpc(new NetworkBehaviourReference(value));
-            }
+            set { UpdatePlayerServerRpc(new NetworkBehaviourReference(value)); }
             get => playerReference.Value.TryGet<BasePlayer>(out BasePlayer res) ? res : null;
         }
 
@@ -129,7 +115,7 @@ namespace Weapons
 
         void Start()
         {
-            CombineMesh();
+            // CombineMesh();
             if (!IsServer)
                 return;
             currentAmmo.Value = MaxAmmo;
@@ -375,6 +361,16 @@ namespace Weapons
         private void UpdatePlayerServerRpc(NetworkBehaviourReference playerRef)
         {
             this.playerReference.Value = playerRef;
+            if (Player != null)
+            {
+                transform.SetParent(Player.transform);
+                transform.SetPositionAndRotation(Player.weaponContainer.position, Player.weaponContainer.rotation);
+            }
+            else
+            {
+                transform.position = Player.transform.TransformPoint(transform.position);
+                transform.SetParent(null);
+            }
         }
     }
 }
