@@ -63,7 +63,9 @@ namespace PlayerControllers
 
             var moveVector = Movement;
 
-            if (ctx.interaction is MultiTapInteraction multiTapInteraction && multiTapInteraction.tapTime <= 0.2)
+            if (ctx.interaction is MultiTapInteraction multiTapInteraction &&
+                multiTapInteraction.tapCount > 1 &&
+                ctx.time - ctx.startTime < 0.3)
             {
                 if (ctx.performed)
                 {
@@ -74,9 +76,9 @@ namespace PlayerControllers
             }
             else
             {
-                Debug.Log($"context: {ctx}");
                 moveVector.y = (ctx.started || ctx.performed) && !ctx.canceled ? 1 : 0;
             }
+
 
             UpdateMovement(moveVector);
         }
