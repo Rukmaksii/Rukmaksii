@@ -115,10 +115,10 @@ namespace Weapons
 
         void Start()
         {
-            // CombineMesh();
-            if (!IsServer)
-                return;
-            currentAmmo.Value = MaxAmmo;
+            if (IsServer)
+                currentAmmo.Value = MaxAmmo;
+            else
+                CombineMesh();
         }
 
         void CombineMesh()
