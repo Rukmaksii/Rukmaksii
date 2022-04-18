@@ -74,7 +74,8 @@ namespace PlayerControllers
                 GameObject autoWeaponPrefab =
                     GameController.Singleton.WeaponPrefabs.Find(go => go.name == "TestAutoPrefab");
                 GameObject weaponInstance = Instantiate(autoWeaponPrefab);
-                weaponInstance.GetComponent<NetworkObject>().Spawn();
+                var netObj = weaponInstance.GetComponent<NetworkObject>();
+                netObj.Spawn();
                 this.inventory.AddWeapon(weaponInstance.GetComponent<BaseWeapon>());
 
 

@@ -2,6 +2,7 @@
 using Items;
 using PlayerControllers;
 using Unity.Netcode;
+using Unity.Netcode.Samples;
 using UnityEngine;
 using Weapons;
 
@@ -251,9 +252,8 @@ namespace model
             }
 
             weaponRef.TryGet(out BaseWeapon weapon);
-            
-            weapon.transform.SetParent(Player.transform);
-            // weapon.transform.localPosition = Player.weaponContainer.position;
+
+            weapon.GetComponent<NetworkObject>().TrySetParent(Player.transform);
 
             SwitchWeaponServerRpc(type);
         }

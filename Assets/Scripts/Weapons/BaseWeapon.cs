@@ -5,18 +5,20 @@ using model;
 using MonstersControler;
 using PlayerControllers;
 using Unity.Netcode;
-using Unity.Netcode.Components;
+using Unity.Netcode.Samples;
 using UnityEngine;
 
 namespace Weapons
 {
     [RequireComponent(typeof(NetworkObject))]
+    [RequireComponent(typeof(ClientNetworkTransform))]
     public abstract class BaseWeapon : NetworkBehaviour, IWeapon
     {
         [SerializeField] private Sprite sprite;
 
         public Sprite Sprite => sprite;
         [SerializeField] private Transform model;
+
         public abstract WeaponType Type { get; }
 
         private NetworkVariable<NetworkBehaviourReference> playerReference =
@@ -189,6 +191,12 @@ namespace Weapons
                     hitMarkerSince = 0;
                     targetHit?.Invoke(false);
                 }
+            }
+
+            if (IsOwner && Player != null)
+            {
+                transform.localPosition = Player.weaponContainer.localPosition;
+                transform.localRotation = Player.weaponContainer.localRotation;
             }
         }
 
@@ -365,13 +373,16 @@ namespace Weapons
         private void UpdatePlayerServerRpc(NetworkBehaviourReference playerRef)
         {
             this.playerReference.Value = playerRef;
-            UpdatePlayerClientRpc();
-        }
-
-        [ClientRpc]
-        private void UpdatePlayerClientRpc()
-        {
-            CombineMesh();
+            if (Player != null)
+            {
+                NetworkObject.ChangeOwnership(this.Player.OwnerClientId);
+                NetworkObject.TrySetParent(this.Player.weaponContainer.transform);
+            }
+            else
+            {
+                NetworkObject.ChangeOwnership(NetworkManager.Singleton.ServerClientId);
+                transform.SetParent(null);
+            }
         }
     }
 }

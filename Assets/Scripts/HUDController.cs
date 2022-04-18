@@ -23,18 +23,15 @@ public class HUDController : MonoBehaviour
     [SerializeField] protected Image weaponPlaceHolder;
 
     [SerializeField] protected Image capturingState;
-    
+
     [SerializeField] protected Text currentStrategy;
 
     private ObjectiveController capturePoint;
-
-    private BasePlayer localPlayer;
 
     public Image Crosshair;
 
     void Start()
     {
-
         SetMaxHealth(100);
         SetMaxFuel(100);
 
@@ -43,8 +40,6 @@ public class HUDController : MonoBehaviour
         ObjectiveController.OnPlayerInteract += DisplayCaptureState;
 
         capturingState.enabled = false;
-
-        BasePlayer localPlayer = GameController.Singleton.LocalPlayer;
     }
 
     void Update()
@@ -52,14 +47,18 @@ public class HUDController : MonoBehaviour
         if (GameController.Singleton.LocalPlayer == null)
             return;
 
-        weaponPlaceHolder.sprite = GameController.Singleton.LocalPlayer.Inventory.CurrentWeapon.Sprite;
+        var localPlayer = GameController.Singleton.LocalPlayer;
+        var weapon = localPlayer.Inventory.CurrentWeapon;
+        if (weapon != null)
+        {
+            SetAmmoCounter(weapon.CurrentAmmo, weapon.MaxAmmo);
+            weaponPlaceHolder.sprite = weapon.Sprite;
+        }
 
-        SetHealth(GameController.Singleton.LocalPlayer.CurrentHealthValue);
-        SetFuelAmount(GameController.Singleton.LocalPlayer.Jetpack.FuelConsumption);
-        SetDashCooldown(GameController.Singleton.LocalPlayer.DashedSince, GameController.Singleton.LocalPlayer.DashCooldown);
-        SetAmmoCounter(GameController.Singleton.LocalPlayer.Inventory.CurrentWeapon.CurrentAmmo,
-            GameController.Singleton.LocalPlayer.Inventory.CurrentWeapon.MaxAmmo);
-        SetCurrentStrategy((IMinion.Strategy) GameController.Singleton.LocalPlayer.Strategy);
+        SetHealth(localPlayer.CurrentHealthValue);
+        SetFuelAmount(localPlayer.Jetpack.FuelConsumption);
+        SetDashCooldown(localPlayer.DashedSince, localPlayer.DashCooldown);
+        SetCurrentStrategy(localPlayer.Strategy);
 
         // updating the capture circle UI if the player is on a point
         if (capturePoint != null)
@@ -134,7 +133,7 @@ public class HUDController : MonoBehaviour
     {
         ammoCounter.text = $"{ammo}/{maxAmmo}";
     }
-    
+
     /**
      * <summary>sets the next minion's strategy</summary>
      * <param name="strat">current minion's strategy</param>
@@ -154,9 +153,10 @@ public class HUDController : MonoBehaviour
                 str += "Protect";
                 break;
         }
+
         currentStrategy.text = str;
     }
-    
+
     /**
      * <summary>displays and hides the hit marker on the screen</summary>
      * <param name="status">bool for whether the hit marker should be shown or not</param>
