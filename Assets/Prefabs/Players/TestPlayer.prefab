@@ -429,6 +429,38 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: f8a114b8-57fb-4bd9-a66d-058e87f140fa
     m_ActionName: Player/changeminionstrategy[/Keyboard/x]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: -8936581399182346908}
+        m_TargetAssemblyTypeName: PlayerControllers.BasePlayer, Assembly-CSharp
+        m_MethodName: OnDrop
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 4ac2e5b9-2244-4d75-bd9a-97e4a24e66c9
+    m_ActionName: Player/drop[/Keyboard/g]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: -8936581399182346908}
+        m_TargetAssemblyTypeName: PlayerControllers.BasePlayer, Assembly-CSharp
+        m_MethodName: OnPickUp
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 89ae75a4-f065-4528-85bd-db1ef6bf1a0a
+    m_ActionName: Player/pickup[/Keyboard/f]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player

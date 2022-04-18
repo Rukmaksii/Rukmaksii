@@ -189,7 +189,21 @@ namespace PlayerControllers
                 return;
 
             var tr = this.transform;
-            SpawnMinionServerRpc(strategy, tr.position - tr.forward, tr.rotation);
+            SpawnMinionServerRpc(strategy, GroundPosition - tr.forward, tr.rotation);
+        }
+
+        public void OnDrop(InputAction.CallbackContext ctx)
+        {
+            if (!IsOwner)
+                return;
+            Inventory.DropCurrentWeapon();
+        }
+
+        public void OnPickUp(InputAction.CallbackContext ctx)
+        {
+            if (!IsOwner)
+                return;
+            // TODO
         }
     }
 }

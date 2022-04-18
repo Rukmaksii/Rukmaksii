@@ -121,6 +121,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "drop",
+                    "type": "Button",
+                    "id": "4ac2e5b9-2244-4d75-bd9a-97e4a24e66c9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "pickup",
+                    "type": "Button",
+                    "id": "89ae75a4-f065-4528-85bd-db1ef6bf1a0a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -385,6 +403,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "changeminionstrategy",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cd6c36e0-ab01-429a-9376-78073d4b1c0c",
+                    "path": "<Keyboard>/g",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "drop",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6a2edc41-481a-41bb-9104-e29628185de0",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "pickup",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

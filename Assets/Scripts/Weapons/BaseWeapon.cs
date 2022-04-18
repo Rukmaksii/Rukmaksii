@@ -34,7 +34,9 @@ namespace Weapons
 
         public BasePlayer Player
         {
-            set => UpdatePlayerServerRpc(new NetworkBehaviourReference(value));
+            set => UpdatePlayerServerRpc(value is null
+                ? new NetworkBehaviourReference()
+                : new NetworkBehaviourReference(value));
             get => playerReference.Value.TryGet<BasePlayer>(out BasePlayer res) ? res : null;
         }
 
