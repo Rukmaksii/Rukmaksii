@@ -34,7 +34,7 @@ namespace Weapons
 
         public BasePlayer Player
         {
-            set { UpdatePlayerServerRpc(new NetworkBehaviourReference(value)); }
+            set => UpdatePlayerServerRpc(new NetworkBehaviourReference(value));
             get => playerReference.Value.TryGet<BasePlayer>(out BasePlayer res) ? res : null;
         }
 
@@ -115,36 +115,11 @@ namespace Weapons
          */
         public virtual GameObject AimingHUD { get; } = null;
 
-        private Vector3 weaponPosition;
-
 
         void Start()
         {
             if (IsServer)
                 currentAmmo.Value = MaxAmmo;
-            /*else
-                CombineMesh();*/
-        }
-
-        void CombineMesh()
-        {
-            MeshFilter[] meshFilters = model.GetComponentsInChildren<MeshFilter>();
-            CombineInstance[] combine = new CombineInstance[meshFilters.Length];
-
-            int i = 0;
-            while (i < meshFilters.Length)
-            {
-                combine[i].mesh = meshFilters[i].sharedMesh;
-                combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
-                //meshFilters[i].gameObject.SetActive(false);
-
-                i++;
-            }
-
-            transform.GetComponent<MeshFilter>().sharedMesh = new Mesh();
-            transform.GetComponent<MeshFilter>().sharedMesh.CombineMeshes(combine);
-            transform.GetComponent<MeshFilter>().transform.SetParent(Player.weaponContainer);
-            transform.gameObject.SetActive(true);
         }
 
         void UpdateServer(float deltaTime)

@@ -115,6 +115,8 @@ namespace model
                     availableWeapon = HeavyWeapon;
                 }
 
+                if (availableWeapon != null)
+                    SelectedType = availableWeapon.Type;
                 return availableWeapon;
             }
         }
@@ -127,6 +129,19 @@ namespace model
             newWeapon.Player = Player;
             var weaponRef = new NetworkBehaviourReference(newWeapon);
             AddWeaponServerRpc(weaponRef, newWeapon.Type);
+        }
+
+        /// <summary>
+        ///     drops the current weapon 
+        /// </summary>
+        /// <returns>true if the weapon was dropped</returns>
+        public bool DropCurrentWeapon()
+        {
+            if (Weapons.Count <= 1)
+                return false;
+
+            DropWeaponServerRpc(CurrentWeapon.Type);
+            return true;
         }
 
         /**
@@ -238,6 +253,7 @@ namespace model
         [ServerRpc(RequireOwnership = false)]
         private void AddWeaponServerRpc(NetworkBehaviourReference weaponRef, WeaponType type)
         {
+            DropWeaponServerRpc(type);
             switch (type)
             {
                 case WeaponType.Heavy:
@@ -256,6 +272,17 @@ namespace model
             weapon.GetComponent<NetworkObject>().TrySetParent(Player.transform);
 
             SwitchWeaponServerRpc(type);
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void DropWeaponServerRpc(WeaponType type)
+        {
+            BaseWeapon weapon = GetWeaponByType(type);
+            if (weapon == null)
+                return;
+
+            weapon.Player = null;
+            weapon.transform.SetPositionAndRotation(Player.transform.position, Player.transform.rotation);
         }
 
 
