@@ -250,6 +250,11 @@ namespace model
                     break;
             }
 
+            weaponRef.TryGet(out BaseWeapon weapon);
+            
+            weapon.transform.SetParent(Player.transform);
+            // weapon.transform.localPosition = Player.weaponContainer.position;
+
             SwitchWeaponServerRpc(type);
         }
 
