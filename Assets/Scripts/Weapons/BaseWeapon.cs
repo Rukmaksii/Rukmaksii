@@ -40,6 +40,11 @@ namespace Weapons
             get => playerReference.Value.TryGet<BasePlayer>(out BasePlayer res) ? res : null;
         }
 
+        /// <summary>
+        ///     checks if the weapon is owned by a player
+        /// </summary>
+        public bool IsOwned => !(Player is null);
+
         public abstract float Range { get; }
 
         public abstract int Damage { get; }
@@ -319,7 +324,7 @@ namespace Weapons
             {
                 Send = new ClientRpcSendParams
                 {
-                    TargetClientIds = new ulong[] {Player.OwnerClientId}
+                    TargetClientIds = new[] {Player.OwnerClientId}
                 }
             };
             DisplayHitMarkClientRpc(p);
@@ -346,7 +351,7 @@ namespace Weapons
             GetComponent<NetworkObject>().Despawn();
         }
 
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void UpdatePlayerServerRpc(NetworkBehaviourReference playerRef)
         {
             this.playerReference.Value = playerRef;

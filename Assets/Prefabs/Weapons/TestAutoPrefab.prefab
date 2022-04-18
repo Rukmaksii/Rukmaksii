@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2517461266033161424}
   - component: {fileID: -2089716777061851901}
   - component: {fileID: -4867680179919758976}
+  - component: {fileID: 7668312232002167735}
   m_Layer: 0
   m_Name: TestAutoPrefab
   m_TagString: Untagged
@@ -49,7 +50,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sprite: {fileID: 21300000, guid: 4b738542ce625cbf58d2a7b6eb633ee7, type: 3}
   model: {fileID: 3256883998461219958}
-  mesh: {fileID: 4300000, guid: c7741850eebe1df4ea75a80275b16311, type: 3}
   _rightHandTarget: {fileID: 5659828588708228939}
   _leftHandTarget: {fileID: 2708226277289736695}
 --- !u!114 &2517461266033161424
@@ -83,7 +83,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1703911258719353816}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -117,6 +117,33 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &7668312232002167735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1703911258719353816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54c9647dc784a46bca664910f182491e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 1
+  SyncScaleY: 1
+  SyncScaleZ: 1
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  InLocalSpace: 0
+  Interpolate: 1
+  CanCommitToTransform: 0
 --- !u!1 &3759729540704900282
 GameObject:
   m_ObjectHideFlags: 0

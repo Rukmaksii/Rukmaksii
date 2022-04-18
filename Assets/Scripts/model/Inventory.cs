@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Items;
 using PlayerControllers;
 using Unity.Netcode;
@@ -140,8 +141,6 @@ namespace model
                 return false;
 
             DropWeaponServerRpc(CurrentWeapon.Type);
-            var weapon = CurrentWeapon;
-            Player.SetHandTargets(weapon.RightHandTarget, weapon.LeftHandTarget);
             return true;
         }
 
@@ -151,6 +150,8 @@ namespace model
          */
         public bool SwitchWeapon(WeaponType type)
         {
+            if (type == CurrentWeapon.Type || Weapons.Count <= 1)
+                return false;
             bool switched = false;
 
             switch (type)
@@ -282,6 +283,15 @@ namespace model
             if (weapon == null)
                 return;
 
+            weapon.Player = null;
+            weapon.transform.SetPositionAndRotation(Player.transform.position, Player.transform.rotation);
+            SelectedType =
+                Weapons
+                    .Select(v => v.GetComponent<BaseWeapon>())
+                    .First(w => w.Type != type)
+                    .Type;
+            DropWeaponClientRpc(type);
+
             switch (type)
             {
                 case WeaponType.Heavy:
@@ -294,9 +304,16 @@ namespace model
                     closeRangeWeapon.Value = new NetworkBehaviourReference();
                     break;
             }
+        }
 
-            weapon.Player = null;
-            weapon.transform.SetPositionAndRotation(Player.transform.position, Player.transform.rotation);
+        [ClientRpc]
+        private void DropWeaponClientRpc(WeaponType type)
+        {
+            GetWeaponByType(type).SwitchRender(true);
+
+
+            // var weapon = CurrentWeapon;
+            // Player.SetHandTargets(weapon.RightHandTarget, weapon.LeftHandTarget);
         }
 
 
@@ -313,9 +330,11 @@ namespace model
         [ServerRpc]
         private void SwitchWeaponServerRpc(WeaponType type)
         {
-            // server call 
-            SwitchWeaponClientRpc(SelectedType, type);
-            selectedType.Value = type;
+            if (SelectedType != type)
+            {
+                SwitchWeaponClientRpc(SelectedType, type);
+                selectedType.Value = type;
+            }
         }
 
         [ClientRpc]
@@ -324,9 +343,9 @@ namespace model
             BaseWeapon baseWeapon = GetWeaponByType(type);
             BaseWeapon oldWeapon = GetWeaponByType(oldType);
 
-            if (oldWeapon != null)
+            if (oldWeapon != null && oldWeapon.IsOwned)
                 oldWeapon.SwitchRender(false);
-            if (baseWeapon != null)
+            if (baseWeapon != null && baseWeapon.IsOwned)
             {
                 Player.SetHandTargets(baseWeapon.RightHandTarget, baseWeapon.LeftHandTarget);
                 baseWeapon.SwitchRender(true);
