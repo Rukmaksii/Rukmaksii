@@ -2,7 +2,6 @@
 using Items;
 using PlayerControllers;
 using Unity.Netcode;
-using Unity.Netcode.Samples;
 using UnityEngine;
 using Weapons;
 
@@ -141,6 +140,8 @@ namespace model
                 return false;
 
             DropWeaponServerRpc(CurrentWeapon.Type);
+            var weapon = CurrentWeapon;
+            Player.SetHandTargets(weapon.RightHandTarget, weapon.LeftHandTarget);
             return true;
         }
 
@@ -274,12 +275,25 @@ namespace model
             SwitchWeaponServerRpc(type);
         }
 
-        [ServerRpc(RequireOwnership = false)]
+        [ServerRpc]
         private void DropWeaponServerRpc(WeaponType type)
         {
             BaseWeapon weapon = GetWeaponByType(type);
             if (weapon == null)
                 return;
+
+            switch (type)
+            {
+                case WeaponType.Heavy:
+                    heavyWeapon.Value = new NetworkBehaviourReference();
+                    break;
+                case WeaponType.Light:
+                    lightWeapon.Value = new NetworkBehaviourReference();
+                    break;
+                case WeaponType.CloseRange:
+                    closeRangeWeapon.Value = new NetworkBehaviourReference();
+                    break;
+            }
 
             weapon.Player = null;
             weapon.transform.SetPositionAndRotation(Player.transform.position, Player.transform.rotation);
