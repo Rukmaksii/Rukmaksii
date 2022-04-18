@@ -5,6 +5,7 @@ using model;
 using MonstersControler;
 using PlayerControllers;
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using Unity.Netcode.Samples;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ namespace Weapons
 {
     [RequireComponent(typeof(NetworkObject))]
     [RequireComponent(typeof(ClientNetworkTransform))]
+    [RequireComponent(typeof(NetworkRigidbody))]
     public abstract class BaseWeapon : NetworkBehaviour, IWeapon
     {
         [SerializeField] private Sprite sprite;
@@ -34,9 +36,14 @@ namespace Weapons
 
         public BasePlayer Player
         {
-            set => UpdatePlayerServerRpc(value is null
-                ? new NetworkBehaviourReference()
-                : new NetworkBehaviourReference(value));
+            set
+            {
+                UpdatePlayerServerRpc(value is null
+                    ? new NetworkBehaviourReference()
+                    : new NetworkBehaviourReference(value));
+
+                GetComponent<Rigidbody>().isKinematic = !(value is null);
+            }
             get => playerReference.Value.TryGet<BasePlayer>(out BasePlayer res) ? res : null;
         }
 
