@@ -5,6 +5,7 @@ using model;
 using MonstersControler;
 using PlayerControllers;
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 
 namespace Weapons
@@ -12,8 +13,10 @@ namespace Weapons
     [RequireComponent(typeof(NetworkObject))]
     public abstract class BaseWeapon : NetworkBehaviour, IWeapon
     {
-        [SerializeField] public Sprite sprite;
-        [SerializeField] public Transform Model;
+        [SerializeField] private Sprite sprite;
+
+        public Sprite Sprite => sprite;
+        [SerializeField] private Transform model;
         public abstract WeaponType Type { get; }
 
         private NetworkVariable<NetworkBehaviourReference> playerReference =
@@ -117,13 +120,13 @@ namespace Weapons
         {
             if (IsServer)
                 currentAmmo.Value = MaxAmmo;
-            else
-                CombineMesh();
+            /*else
+                CombineMesh();*/
         }
 
         void CombineMesh()
         {
-            MeshFilter[] meshFilters = Model.GetComponentsInChildren<MeshFilter>();
+            MeshFilter[] meshFilters = model.GetComponentsInChildren<MeshFilter>();
             CombineInstance[] combine = new CombineInstance[meshFilters.Length];
 
             int i = 0;
@@ -138,6 +141,7 @@ namespace Weapons
 
             transform.GetComponent<MeshFilter>().sharedMesh = new Mesh();
             transform.GetComponent<MeshFilter>().sharedMesh.CombineMeshes(combine);
+            transform.GetComponent<MeshFilter>().transform.SetParent(Player.weaponContainer);
             transform.gameObject.SetActive(true);
         }
 
@@ -361,16 +365,13 @@ namespace Weapons
         private void UpdatePlayerServerRpc(NetworkBehaviourReference playerRef)
         {
             this.playerReference.Value = playerRef;
-            if (Player != null)
-            {
-                transform.SetParent(Player.transform);
-                transform.SetPositionAndRotation(Player.weaponContainer.position, Player.weaponContainer.rotation);
-            }
-            else
-            {
-                transform.position = Player.transform.TransformPoint(transform.position);
-                transform.SetParent(null);
-            }
+            UpdatePlayerClientRpc();
+        }
+
+        [ClientRpc]
+        private void UpdatePlayerClientRpc()
+        {
+            CombineMesh();
         }
     }
 }
