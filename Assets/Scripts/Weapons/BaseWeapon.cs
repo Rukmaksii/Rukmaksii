@@ -5,7 +5,6 @@ using model;
 using MonstersControler;
 using PlayerControllers;
 using Unity.Netcode;
-using Unity.Netcode.Components;
 using Unity.Netcode.Samples;
 using UnityEngine;
 
@@ -13,7 +12,7 @@ namespace Weapons
 {
     [RequireComponent(typeof(NetworkObject))]
     [RequireComponent(typeof(ClientNetworkTransform))]
-    [RequireComponent(typeof(NetworkRigidbody))]
+    [RequireComponent(typeof(Rigidbody))]
     public abstract class BaseWeapon : NetworkBehaviour, IWeapon
     {
         [SerializeField] private Sprite sprite;
@@ -359,19 +358,6 @@ namespace Weapons
         private void UpdatePlayerServerRpc(NetworkBehaviourReference playerRef)
         {
             this.playerReference.Value = playerRef;
-            if (Player != null)
-            {
-                NetworkObject.ChangeOwnership(this.Player.OwnerClientId);
-                NetworkObject.TrySetParent(this.Player.weaponContainer.transform);
-
-                GetComponent<Rigidbody>().isKinematic = true;
-            }
-            else
-            {
-                NetworkObject.ChangeOwnership(NetworkManager.Singleton.ServerClientId);
-                transform.SetParent(null);
-                GetComponent<Rigidbody>().isKinematic = false;
-            }
         }
 
         public override void OnLostOwnership()
