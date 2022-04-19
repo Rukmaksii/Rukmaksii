@@ -86,6 +86,12 @@ namespace PlayerControllers
                 this.inventory.AddWeapon(weaponInstance.GetComponent<BaseWeapon>());
             }
 
+            var weapon = inventory.CurrentWeapon;
+            if (weapon != null)
+            {
+                SetHandTargets(weapon.RightHandTarget, weapon.LeftHandTarget);
+            }
+
 
             gameObject.AddComponent<Jetpack>();
             Jetpack.FuelDuration = DefaultFuelDuration;
