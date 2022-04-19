@@ -36,14 +36,11 @@ namespace Weapons
 
         public BasePlayer Player
         {
-            set
-            {
+            set =>
                 UpdatePlayerServerRpc(value is null
                     ? new NetworkBehaviourReference()
                     : new NetworkBehaviourReference(value));
 
-                GetComponent<Rigidbody>().isKinematic = !(value is null);
-            }
             get => playerReference.Value.TryGet<BasePlayer>(out BasePlayer res) ? res : null;
         }
 
@@ -366,12 +363,21 @@ namespace Weapons
             {
                 NetworkObject.ChangeOwnership(this.Player.OwnerClientId);
                 NetworkObject.TrySetParent(this.Player.weaponContainer.transform);
+
+                GetComponent<Rigidbody>().isKinematic = true;
             }
             else
             {
                 NetworkObject.ChangeOwnership(NetworkManager.Singleton.ServerClientId);
                 transform.SetParent(null);
+                GetComponent<Rigidbody>().isKinematic = false;
             }
+        }
+
+        public override void OnLostOwnership()
+        {
+            base.OnLostOwnership();
+            GetComponent<Rigidbody>().isKinematic = false;
         }
     }
 }
