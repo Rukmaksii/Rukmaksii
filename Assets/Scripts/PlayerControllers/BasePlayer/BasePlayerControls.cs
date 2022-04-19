@@ -215,5 +215,18 @@ namespace PlayerControllers
                 .Select(cld => cld.gameObject)
                 .ToArray();
         }
+
+        private GameObject GetClosestPickableObject(float distance)
+        {
+            foreach (var go in GetSurroundingObjects(distance))
+            {
+                var position = cameraController.Camera.WorldToViewportPoint(go.transform.position);
+
+                var screenPos = new Vector2(position.x, position.y);
+                Debug.Log($"{go} at position {screenPos}");
+            }
+
+            return null;
+        }
     }
 }

@@ -229,7 +229,8 @@ namespace Weapons
 
         public void SwitchRender(bool enable)
         {
-            this.GetComponent<MeshRenderer>().enabled = enable;
+            if (TryGetComponent(out MeshRenderer rend))
+                rend.enabled = enable;
             foreach (var renderer in GetComponentsInChildren<MeshRenderer>())
             {
                 renderer.enabled = enable;

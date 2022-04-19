@@ -165,7 +165,7 @@ namespace PlayerControllers
 
             handleDash(_deltaTime);
 
-            GetSurroundingObjects(pickUpDistance);
+            GetClosestPickableObject(pickUpDistance);
 
             Vector3 res;
 
