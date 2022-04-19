@@ -28,6 +28,8 @@ namespace PlayerControllers
 
         [SerializeField] private float pickUpDistance = 10F;
 
+        private GameObject focusedObject = null;
+
 
         public bool IsRunning
         {

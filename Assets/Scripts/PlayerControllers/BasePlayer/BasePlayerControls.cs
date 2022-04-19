@@ -202,9 +202,11 @@ namespace PlayerControllers
 
         public void OnPickUp(InputAction.CallbackContext ctx)
         {
-            if (!IsOwner)
+            if (!IsOwner || focusedObject == null)
                 return;
-            // TODO
+
+            if(focusedObject.TryGetComponent(out BaseWeapon weapon))
+                inventory.AddWeapon(weapon);
         }
 
         private GameObject[] GetSurroundingObjects(float distance)

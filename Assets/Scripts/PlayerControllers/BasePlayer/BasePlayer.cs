@@ -165,10 +165,10 @@ namespace PlayerControllers
 
             handleDash(_deltaTime);
 
-            GameObject toPick = GetClosestPickableObject(pickUpDistance);
-            if (toPick != null)
+            focusedObject = GetClosestPickableObject(pickUpDistance);
+            if (focusedObject != null)
             {
-                Debug.Log(toPick);
+                Debug.Log("TODO: highlight focused object");
             }
 
             Vector3 res;
