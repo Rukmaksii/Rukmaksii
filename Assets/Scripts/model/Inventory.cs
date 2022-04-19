@@ -270,11 +270,7 @@ namespace model
             }
 
             weaponRef.TryGet(out BaseWeapon weapon);
-
-            weapon.NetworkObject.ChangeOwnership(Player.OwnerClientId);
-            weapon.GetComponent<Rigidbody>().isKinematic = true;
-            weapon.GetComponent<NetworkObject>().TrySetParent(Player.transform);
-
+            weapon.PickUp(Player);
             SwitchWeaponServerRpc(type);
         }
 
@@ -285,12 +281,7 @@ namespace model
             if (weapon == null)
                 return;
 
-            weapon.Player = null;
-            weapon.NetworkObject.ChangeOwnership(NetworkManager.Singleton.ServerClientId);
-            weapon.transform.SetParent(null);
-            weapon.GetComponent<Rigidbody>().isKinematic = false;
-
-            weapon.transform.SetPositionAndRotation(Player.transform.position, Player.transform.rotation);
+            weapon.Drop();
             SelectedType =
                 Weapons
                     .Select(v => v.GetComponent<BaseWeapon>())
@@ -317,7 +308,6 @@ namespace model
         {
             var weapon = GetWeaponByType(type);
             weapon.SwitchRender(true);
-            weapon.GetComponent<Rigidbody>().isKinematic = false;
         }
 
 

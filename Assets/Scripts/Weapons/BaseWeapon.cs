@@ -13,7 +13,7 @@ namespace Weapons
     [RequireComponent(typeof(NetworkObject))]
     [RequireComponent(typeof(ClientNetworkTransform))]
     [RequireComponent(typeof(Rigidbody))]
-    public abstract class BaseWeapon : NetworkBehaviour, IWeapon
+    public abstract class BaseWeapon : NetworkBehaviour, IWeapon, IPickable
     {
         [SerializeField] private Sprite sprite;
 
@@ -364,6 +364,26 @@ namespace Weapons
         {
             base.OnLostOwnership();
             GetComponent<Rigidbody>().isKinematic = false;
+        }
+
+        public void PickUp(BasePlayer player)
+        {
+            if (!IsServer)
+                throw new NotServerException();
+            Player = player;
+            GetComponent<Rigidbody>().isKinematic = true;
+            NetworkObject.ChangeOwnership(Player.OwnerClientId);
+            NetworkObject.TrySetParent(Player.transform);
+        }
+
+        public void Drop()
+        {
+            Player = null;
+            NetworkObject.ChangeOwnership(NetworkManager.Singleton.ServerClientId);
+            transform.SetParent(null);
+            GetComponent<Rigidbody>().isKinematic = false;
+
+            transform.SetPositionAndRotation(Player.transform.position, Player.transform.rotation);
         }
     }
 }
