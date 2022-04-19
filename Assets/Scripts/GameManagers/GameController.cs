@@ -4,6 +4,7 @@ using Map;
 using Minions;
 using model;
 using PlayerControllers;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,7 +17,9 @@ namespace GameManagers
         Ended
     }
 
-    public class GameController : MonoBehaviour
+
+    [RequireComponent(typeof(NetworkObject))]
+    public class GameController : NetworkBehaviour
     {
         public static GameController Singleton { get; private set; }
 
@@ -46,6 +49,9 @@ namespace GameManagers
         public Vector3 SpawnPoint { get; private set; }
 
 
+        [SerializeField] private List<GameObject> classPrefabs = new List<GameObject>();
+
+        public List<GameObject> ClassPrefabs => classPrefabs;
         [SerializeField] private List<GameObject> weaponPrefabs = new List<GameObject>();
 
         public List<GameObject> WeaponPrefabs => weaponPrefabs;
@@ -105,17 +111,6 @@ namespace GameManagers
                 ? Parameters.TeamId
                 : 0;
             player.UpdateTeamServerRpc(teamId);
-
-            if (teamId == 1)
-            {
-                GameObject obj = GameObject.FindGameObjectWithTag("SpawnPoint2");
-                SpawnPoint = obj.transform.position;
-            }
-            else
-            {
-                GameObject obj = GameObject.FindGameObjectWithTag("SpawnPoint1");
-                SpawnPoint = obj.transform.position;
-            }
         }
 
         /**
@@ -155,7 +150,42 @@ namespace GameManagers
         {
             ManageDeath();
         }
-        
+
+        public override void OnNetworkSpawn()
+        {
+            SetSpawnPoint();
+            string className = connectionData.Data?.ClassName ?? classPrefabs[0].GetComponent<BasePlayer>().ClassName;
+            SpawnPlayerServerRpc(className, NetworkManager.Singleton.LocalClientId,
+                SpawnPoint,
+                Quaternion.identity);
+        }
+
+        private void SetSpawnPoint()
+        {
+            if (Parameters.TeamId == 1)
+            {
+                GameObject obj = GameObject.FindGameObjectWithTag("SpawnPoint2");
+                SpawnPoint = obj.transform.position;
+            }
+            else
+            {
+                GameObject obj = GameObject.FindGameObjectWithTag("SpawnPoint1");
+                SpawnPoint = obj.transform.position;
+            }
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void SpawnPlayerServerRpc(string className, ulong ownerId, Vector3 position, Quaternion rotation)
+        {
+            GameObject playerPrefab = classPrefabs.Find(go =>
+                go.GetComponent<BasePlayer>().ClassName == className);
+
+            GameObject instance = Instantiate(playerPrefab, position, rotation);
+
+            var netObj = instance.GetComponent<NetworkObject>();
+            netObj.SpawnAsPlayerObject(ownerId, true);
+        }
+
         private void ManageDeath()
         {
             GameObject[] playersArray = GameObject.FindGameObjectsWithTag("Player");
@@ -181,7 +211,7 @@ namespace GameManagers
                 }
             }
         }
-        
+
         IEnumerator DeathScreenTimer()
         {
             for (int i = respawnTime; i > 0; i--)

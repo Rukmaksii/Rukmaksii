@@ -116,7 +116,7 @@ namespace PlayerControllers
                 Cursor.lockState = CursorLockMode.Locked;
             }
 
-            MoveToSpawn();
+            // MoveToSpawn();
         }
 
         /**
