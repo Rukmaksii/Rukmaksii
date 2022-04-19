@@ -211,22 +211,22 @@ namespace PlayerControllers
         {
             // ReSharper disable once Unity.PreferNonAllocApi
             return Physics.OverlapSphere(transform.TransformPoint(controller.center), distance)
-                .Where(cld => cld.gameObject.TryGetComponent(out BaseWeapon weapon))
+                .Where(cld => cld.gameObject.TryGetComponent(out BaseWeapon weapon) && !weapon.IsOwned)
                 .Select(cld => cld.gameObject)
                 .ToArray();
         }
 
         private GameObject GetClosestPickableObject(float distance)
         {
-            foreach (var go in GetSurroundingObjects(distance))
-            {
-                var position = cameraController.Camera.WorldToViewportPoint(go.transform.position);
-
-                var screenPos = new Vector2(position.x, position.y);
-                Debug.Log($"{go} at position {screenPos}");
-            }
-
-            return null;
+            return GetSurroundingObjects(distance)
+                .Where(go =>
+                {
+                    var position = cameraController.Camera.WorldToViewportPoint(go.transform.position);
+                    var screenPos = new Vector2(position.x, position.y);
+                    return screenPos.y > 0 && screenPos.y < 1 && screenPos.x > 0 && screenPos.x < 1;
+                })
+                .OrderBy(go => Vector3.Distance(transform.position, go.transform.position))
+                .FirstOrDefault();
         }
     }
 }

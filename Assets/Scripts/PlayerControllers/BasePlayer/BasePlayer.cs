@@ -165,7 +165,11 @@ namespace PlayerControllers
 
             handleDash(_deltaTime);
 
-            GetClosestPickableObject(pickUpDistance);
+            GameObject toPick = GetClosestPickableObject(pickUpDistance);
+            if (toPick != null)
+            {
+                Debug.Log(toPick);
+            }
 
             Vector3 res;
 
