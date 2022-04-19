@@ -1,4 +1,5 @@
-﻿using model;
+﻿using System.Linq;
+using model;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
@@ -204,6 +205,15 @@ namespace PlayerControllers
             if (!IsOwner)
                 return;
             // TODO
+        }
+
+        private GameObject[] GetSurroundingObjects(float distance)
+        {
+            // ReSharper disable once Unity.PreferNonAllocApi
+            return Physics.OverlapSphere(transform.TransformPoint(controller.center), distance)
+                .Where(cld => cld.gameObject.TryGetComponent(out BaseWeapon weapon))
+                .Select(cld => cld.gameObject)
+                .ToArray();
         }
     }
 }

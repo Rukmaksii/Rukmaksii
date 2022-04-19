@@ -116,7 +116,6 @@ namespace PlayerControllers
                 Cursor.lockState = CursorLockMode.Locked;
             }
 
-            // MoveToSpawn();
         }
 
         /**
@@ -140,10 +139,7 @@ namespace PlayerControllers
         private void Update()
         {
             if (IsOwner)
-            {
                 UpdateClient();
-            }
-
             if (IsServer)
                 UpdateServer();
         }
@@ -168,6 +164,8 @@ namespace PlayerControllers
             var _deltaTime = Time.deltaTime;
 
             handleDash(_deltaTime);
+
+            GetSurroundingObjects(pickUpDistance);
 
             Vector3 res;
 

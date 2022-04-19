@@ -26,6 +26,9 @@ namespace PlayerControllers
         [SerializeField] private float sensitivity = .1F;
 
 
+        [SerializeField] private float pickUpDistance = 3F;
+
+
         public bool IsRunning
         {
             get
