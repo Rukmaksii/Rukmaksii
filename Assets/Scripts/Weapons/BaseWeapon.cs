@@ -378,12 +378,11 @@ namespace Weapons
 
         public void Drop()
         {
-            Player = null;
-            NetworkObject.ChangeOwnership(NetworkManager.Singleton.ServerClientId);
             transform.SetParent(null);
-            GetComponent<Rigidbody>().isKinematic = false;
-
             transform.SetPositionAndRotation(Player.transform.position, Player.transform.rotation);
+            NetworkObject.ChangeOwnership(NetworkManager.Singleton.ServerClientId);
+            GetComponent<Rigidbody>().isKinematic = false;
+            Player = null;
         }
     }
 }

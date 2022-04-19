@@ -194,7 +194,7 @@ namespace PlayerControllers
 
         public void OnDrop(InputAction.CallbackContext ctx)
         {
-            if (!IsOwner)
+            if (!IsOwner || !ctx.performed)
                 return;
             Inventory.DropCurrentWeapon();
         }

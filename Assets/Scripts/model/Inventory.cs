@@ -287,7 +287,7 @@ namespace model
                     .Select(v => v.GetComponent<BaseWeapon>())
                     .First(w => w.Type != type)
                     .Type;
-            DropWeaponClientRpc(type);
+            DropWeaponClientRpc(type, SelectedType);
 
             switch (type)
             {
@@ -304,10 +304,14 @@ namespace model
         }
 
         [ClientRpc]
-        private void DropWeaponClientRpc(WeaponType type)
+        private void DropWeaponClientRpc(WeaponType type, WeaponType newType)
         {
-            var weapon = GetWeaponByType(type);
-            weapon.SwitchRender(true);
+            var oldWeapon = GetWeaponByType(type);
+            oldWeapon.SwitchRender(true);
+
+            var currentWeapon = GetWeaponByType(newType);
+
+            Player.SetHandTargets(currentWeapon.RightHandTarget, currentWeapon.LeftHandTarget);
         }
 
 
