@@ -1,5 +1,7 @@
 using GameManagers;
+using Items;
 using model;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.Netcode;
 using Unity.Netcode.Samples;
 using UnityEngine;
@@ -84,6 +86,12 @@ namespace PlayerControllers
                 weaponInstance = Instantiate(gunWeaponPrefab);
                 weaponInstance.GetComponent<NetworkObject>().Spawn();
                 this.inventory.AddWeapon(weaponInstance.GetComponent<BaseWeapon>());
+
+                GameObject fuelBoosterPrefab =
+                    GameController.Singleton.ItemPrefabs.Find(go => go.name == "FuelBoosterPrefab");
+                FuelBooster itemInstance = Instantiate(fuelBoosterPrefab).GetComponent<FuelBooster>();
+                itemInstance.NetworkObject.Spawn();
+                inventory.GetItemContainer<FuelBooster>().Push(itemInstance);
             }
 
             var weapon = inventory.CurrentWeapon;
@@ -115,7 +123,6 @@ namespace PlayerControllers
 
                 Cursor.lockState = CursorLockMode.Locked;
             }
-
         }
 
         /**

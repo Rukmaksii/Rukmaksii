@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using model;
 using PlayerControllers;
 using Unity.Netcode;
+using Unity.Netcode.Samples;
 using UnityEngine;
 
 namespace Items
 {
+    [RequireComponent(typeof(NetworkObject))]
+    [RequireComponent(typeof(ClientNetworkTransform))]
     public abstract class BaseItem : NetworkBehaviour, IItem, IPickable
     {
         public static Dictionary<Type, int> MaxDictionary = new Dictionary<Type, int>
@@ -109,12 +112,21 @@ namespace Items
 
         public void PickUp(BasePlayer player)
         {
-            throw new NotImplementedException();
+            if (!IsServer)
+                throw new NotServerException();
+            Player = player;
+            NetworkObject.ChangeOwnership(Player.OwnerClientId);
+            NetworkObject.TrySetParent(Player.transform);
         }
 
         public void Drop()
         {
-            throw new NotImplementedException();
+            if (!IsServer)
+                throw new NotServerException();
+            transform.SetParent(null);
+            transform.SetPositionAndRotation(Player.transform.position, Player.transform.rotation);
+            NetworkObject.ChangeOwnership(NetworkManager.Singleton.ServerClientId);
+            Player = null;
         }
     }
 }
