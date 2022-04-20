@@ -237,7 +237,7 @@ namespace model
             {
                 itemsDictionary[item.GetType()].Push(item);
             }
-            catch (KeyNotFoundException e)
+            catch (KeyNotFoundException)
             {
                 itemsDictionary.Add(item.GetType(),
                     new ItemContainer<BaseItem>(BaseItem.MaxDictionary[item.GetType()]));
