@@ -7,6 +7,7 @@ namespace Items
     public class FuelBooster : BaseItem
     {
         public override ItemCategory Type { get; } = ItemCategory.Other;
+        public override float Duration { get; protected set; } = 3f;
         public override string Name { get; } = "FuelBooster";
 
         // storing the old fuel value

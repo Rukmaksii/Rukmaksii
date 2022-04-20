@@ -4,8 +4,8 @@ using model;
 
 public class ItemContainer<TBaseItem> where TBaseItem : BaseItem
 {
-    protected int maxCount;
-    private Stack<TBaseItem> itemList = new Stack<TBaseItem>();
+    public readonly int MaxCount;
+    private Stack<TBaseItem> items = new Stack<TBaseItem>();
     private ItemCategory category;
     public ItemCategory Category => category;
 
@@ -13,14 +13,14 @@ public class ItemContainer<TBaseItem> where TBaseItem : BaseItem
 
     public ItemContainer(int maxCount)
     {
-        this.maxCount = maxCount;
+        this.MaxCount = maxCount;
     }
 
     public bool Push(TBaseItem item)
     {
-        if (itemList.Count < maxCount)
+        if (items.Count < MaxCount)
         {
-            itemList.Push(item);
+            items.Push(item);
             return true;
         }
 
@@ -29,9 +29,9 @@ public class ItemContainer<TBaseItem> where TBaseItem : BaseItem
 
     public TBaseItem Pop()
     {
-        if (itemList.Count > 0)
+        if (items.Count > 0)
         {
-            return itemList.Pop();
+            return items.Pop();
         }
 
         return null;
