@@ -1,21 +1,15 @@
 using System.Collections.Generic;
 using Items;
+using model;
 
 public class ItemContainer<TBaseItem> where TBaseItem : BaseItem
 {
     protected int maxCount;
-    private int currentCount = 0;
     private Stack<TBaseItem> itemList = new Stack<TBaseItem>();
     private ItemCategory category;
     public ItemCategory Category => category;
 
-    public enum ItemCategory
-    {
-        Attack,
-        Heal,
-        Defense,
-        Other
-    }
+    
 
     public ItemContainer(int maxCount)
     {
@@ -24,10 +18,9 @@ public class ItemContainer<TBaseItem> where TBaseItem : BaseItem
 
     public bool Push(TBaseItem item)
     {
-        if (currentCount < maxCount)
+        if (itemList.Count < maxCount)
         {
             itemList.Push(item);
-            currentCount++;
             return true;
         }
 
@@ -38,7 +31,6 @@ public class ItemContainer<TBaseItem> where TBaseItem : BaseItem
     {
         if (itemList.Count > 0)
         {
-            currentCount--;
             return itemList.Pop();
         }
 

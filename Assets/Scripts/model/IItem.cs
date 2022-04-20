@@ -1,22 +1,22 @@
 ﻿namespace model
 {
-
-    public enum ItemType
+    public enum ItemCategory
     {
-        Active,
-        Passive
+        Attack,
+        Heal,
+        Defense,
+        Other
     }
-    
-    
+
+    public enum ItemState
+    {
+        Clean, 
+        Consuming,
+        Consumed
+    }
+
     public interface IItem
     {
-        public void Start();
-        public void Update();
-        public void OnDestroy();
-    }
-
-    public interface IIActiveItem : IItem
-    {
-        public void Use();
+        void Consume();
     }
 }
