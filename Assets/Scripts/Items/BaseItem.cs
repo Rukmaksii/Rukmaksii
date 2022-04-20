@@ -7,12 +7,27 @@ using UnityEngine;
 
 namespace Items
 {
-    public abstract class BaseItem : NetworkBehaviour, IItem
+    public abstract class BaseItem : NetworkBehaviour, IItem, IPickable
     {
         public static Dictionary<Type, int> MaxDictionary = new Dictionary<Type, int>
         {
             {typeof(FuelBooster), 3}
         };
+
+        private NetworkVariable<NetworkBehaviourReference> playerReference =
+            new NetworkVariable<NetworkBehaviourReference>();
+
+        public BasePlayer Player
+        {
+            set =>
+                UpdatePlayerServerRpc(value is null
+                    ? new NetworkBehaviourReference()
+                    : new NetworkBehaviourReference(value));
+
+            get => playerReference.Value.TryGet(out BasePlayer res) ? res : null;
+        }
+
+        public bool IsOwned => !(Player is null);
 
         public abstract ItemCategory Type { get; }
 
@@ -33,7 +48,6 @@ namespace Items
 
 
         public abstract string Name { get; }
-        public BasePlayer Player { get; set; }
 
         private void Update()
         {
@@ -82,9 +96,25 @@ namespace Items
             itemState.Value = value;
         }
 
+        [ServerRpc(RequireOwnership = false)]
+        private void UpdatePlayerServerRpc(NetworkBehaviourReference playerRef)
+        {
+            this.playerReference.Value = playerRef;
+        }
+
         protected abstract void Setup();
 
         protected abstract void OnConsume();
         protected abstract void TearDown();
+
+        public void PickUp(BasePlayer player)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Drop()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

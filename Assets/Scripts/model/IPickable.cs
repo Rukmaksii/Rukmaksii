@@ -7,5 +7,7 @@ namespace model
         void PickUp(BasePlayer player);
 
         void Drop();
+
+        public bool IsOwned { get; }
     }
 }
