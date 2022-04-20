@@ -270,18 +270,34 @@ namespace model
             switch (type)
             {
                 case WeaponType.Heavy:
-                    DropWeaponServerRpc(heavyWeapon.Value);
+                    if (heavyWeapon.Value.TryGet(out BaseWeapon oldWeapon))
+                    {
+                        oldWeapon.Drop();
+                        DropWeaponClientRpc(heavyWeapon.Value);
+                    }
+
                     heavyWeapon.Value = weaponRef;
                     break;
                 case WeaponType.Light:
-                    DropWeaponServerRpc(lightWeapon.Value);
+                    if (lightWeapon.Value.TryGet(out oldWeapon))
+                    {
+                        oldWeapon.Drop();
+                        DropWeaponClientRpc(lightWeapon.Value);
+                    }
+
                     lightWeapon.Value = weaponRef;
                     break;
                 case WeaponType.CloseRange:
-                    DropWeaponServerRpc(closeRangeWeapon.Value);
+                    if (closeRangeWeapon.Value.TryGet(out oldWeapon))
+                    {
+                        oldWeapon.Drop();
+                        DropWeaponClientRpc(closeRangeWeapon.Value);
+                    }
+
                     closeRangeWeapon.Value = weaponRef;
                     break;
             }
+
 
             weaponRef.TryGet(out BaseWeapon weapon);
             weapon.PickUp(Player);

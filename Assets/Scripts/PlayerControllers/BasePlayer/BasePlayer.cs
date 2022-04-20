@@ -168,7 +168,7 @@ namespace PlayerControllers
             focusedObject = GetClosestPickableObject(pickUpDistance);
             if (focusedObject != null)
             {
-                Debug.Log("TODO: highlight focused object");
+                // TODO: highlight focused object
             }
 
             Vector3 res;
