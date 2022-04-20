@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Items;
 using PlayerControllers;
 using Unity.Netcode;
@@ -140,7 +139,19 @@ namespace model
             if (Weapons.Count <= 1)
                 return false;
 
-            DropWeaponServerRpc(CurrentWeapon.Type);
+            switch (SelectedType)
+            {
+                case WeaponType.Heavy:
+                    DropWeaponServerRpc(heavyWeapon.Value);
+                    break;
+                case WeaponType.Light:
+                    DropWeaponServerRpc(lightWeapon.Value);
+                    break;
+                case WeaponType.CloseRange:
+                    DropWeaponServerRpc(closeRangeWeapon.Value);
+                    break;
+            }
+
             return true;
         }
 
@@ -255,16 +266,18 @@ namespace model
         [ServerRpc(RequireOwnership = false)]
         private void AddWeaponServerRpc(NetworkBehaviourReference weaponRef, WeaponType type)
         {
-            DropWeaponServerRpc(type);
             switch (type)
             {
                 case WeaponType.Heavy:
+                    DropWeaponServerRpc(heavyWeapon.Value);
                     heavyWeapon.Value = weaponRef;
                     break;
                 case WeaponType.Light:
+                    DropWeaponServerRpc(lightWeapon.Value);
                     lightWeapon.Value = weaponRef;
                     break;
                 case WeaponType.CloseRange:
+                    DropWeaponServerRpc(closeRangeWeapon.Value);
                     closeRangeWeapon.Value = weaponRef;
                     break;
             }
@@ -275,21 +288,13 @@ namespace model
         }
 
         [ServerRpc]
-        private void DropWeaponServerRpc(WeaponType type)
+        private void DropWeaponServerRpc(NetworkBehaviourReference weaponRef)
         {
-            BaseWeapon weapon = GetWeaponByType(type);
-            if (weapon == null)
+            if (!weaponRef.TryGet(out BaseWeapon weapon))
                 return;
 
             weapon.Drop();
-            SelectedType =
-                Weapons
-                    .Select(v => v.GetComponent<BaseWeapon>())
-                    .First(w => w.Type != type)
-                    .Type;
-            DropWeaponClientRpc(type, SelectedType);
-
-            switch (type)
+            switch (weapon.Type)
             {
                 case WeaponType.Heavy:
                     heavyWeapon.Value = new NetworkBehaviourReference();
@@ -301,15 +306,18 @@ namespace model
                     closeRangeWeapon.Value = new NetworkBehaviourReference();
                     break;
             }
+
+            CurrentWeapon.SwitchRender(true);
+            DropWeaponClientRpc(weaponRef);
         }
 
         [ClientRpc]
-        private void DropWeaponClientRpc(WeaponType type, WeaponType newType)
+        private void DropWeaponClientRpc(NetworkBehaviourReference oldWeaponRef)
         {
-            var oldWeapon = GetWeaponByType(type);
+            oldWeaponRef.TryGet(out BaseWeapon oldWeapon);
             oldWeapon.SwitchRender(true);
 
-            var currentWeapon = GetWeaponByType(newType);
+            var currentWeapon = CurrentWeapon;
 
             Player.SetHandTargets(currentWeapon.RightHandTarget, currentWeapon.LeftHandTarget);
         }
