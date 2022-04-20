@@ -47,6 +47,8 @@ namespace Weapons
         ///     checks if the weapon is owned by a player
         /// </summary>
         public bool IsOwned => !(Player is null);
+        
+	private Transform Shoulder;
 
         public abstract float Range { get; }
 
@@ -130,6 +132,16 @@ namespace Weapons
         {
             if (IsServer)
                 currentAmmo.Value = MaxAmmo;
+
+            Transform[] transforms = Player.GetComponentsInChildren<Transform>();
+            foreach (Transform transform in transforms)
+            {
+                if (transform.name == "mixamorig:RightShoulder")
+                {
+                    Shoulder = transform;
+                    break;
+                }
+            }
         }
 
         void UpdateServer(float deltaTime)
@@ -182,8 +194,12 @@ namespace Weapons
 
             if (IsOwner && Player != null)
             {
-                transform.localPosition = Player.weaponContainer.localPosition;
-                transform.localRotation = Player.weaponContainer.localRotation;
+                transform.localPosition = Shoulder.localPosition + 
+                                          new Vector3(Player.weaponContainer.localPosition.y, -Player.weaponContainer.localPosition.z, -Player.weaponContainer.localPosition.x) + 
+                                          new Vector3((float)-0.2, (float)0.1, (float)-0.8);
+                transform.localRotation = Shoulder.localRotation * Player.weaponContainer.localRotation;
+                //transform.localPosition = Player.weaponContainer.localPosition;
+                //transform.localRotation = Player.weaponContainer.localRotation;
             }
         }
 
