@@ -9,11 +9,14 @@ public class ItemContainer<TBaseItem> where TBaseItem : BaseItem
     private ItemCategory category;
     public ItemCategory Category => category;
 
+    private readonly Inventory inventory;
+
     
 
-    public ItemContainer(int maxCount)
+    public ItemContainer(int maxCount, Inventory inventory)
     {
         this.MaxCount = maxCount;
+        this.inventory = inventory;
     }
 
     public bool Push(TBaseItem item)

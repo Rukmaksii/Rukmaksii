@@ -122,6 +122,8 @@ namespace model
             }
         }
 
+        private NetworkList<NetworkBehaviourReference> itemsList = new NetworkList<NetworkBehaviourReference>();
+
         /**
          * <summary>adds a weapon to the inventory replacing the old weapon of the same <see cref="WeaponType"/> if existing</summary>
          */
@@ -233,18 +235,15 @@ namespace model
          */
         public void AddItem(BaseItem item)
         {
-            try
-            {
-                itemsDictionary[item.GetType()].Push(item);
-            }
-            catch (KeyNotFoundException)
-            {
-                itemsDictionary.Add(item.GetType(),
-                    new ItemContainer<BaseItem>(BaseItem.MaxDictionary[item.GetType()]));
-                itemsDictionary[item.GetType()].Push(item);
-            }
+            if (item.State != ItemState.Clean)
+                return;
+            AddItemServerRpc(new NetworkBehaviourReference(item));
+        }
 
-            item.Player = Player;
+        [ServerRpc(RequireOwnership = false)]
+        private void AddItemServerRpc(NetworkBehaviourReference itemRef)
+        {
+            this.itemsList.Add(itemRef);
         }
 
         /**
