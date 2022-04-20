@@ -178,6 +178,8 @@ namespace Weapons
                 }
             }
 
+            GetComponent<Rigidbody>().isKinematic = IsOwned;
+
             if (IsOwner && Player != null)
             {
                 transform.localPosition = Player.weaponContainer.localPosition;
@@ -361,28 +363,31 @@ namespace Weapons
             this.playerReference.Value = playerRef;
         }
 
-        public override void OnLostOwnership()
-        {
-            base.OnLostOwnership();
-            GetComponent<Rigidbody>().isKinematic = false;
-        }
-
+        /// <summary>
+        ///     binds a new owner to the weapon 
+        /// </summary>
+        /// <param name="player">the new owner of the weapon</param>
+        /// <exception cref="NotServerException">if not server</exception>
         public void PickUp(BasePlayer player)
         {
             if (!IsServer)
                 throw new NotServerException();
             Player = player;
-            GetComponent<Rigidbody>().isKinematic = true;
             NetworkObject.ChangeOwnership(Player.OwnerClientId);
             NetworkObject.TrySetParent(Player.transform);
         }
 
+        /// <summary>
+        ///     unbinds the player from the weapon
+        /// </summary>
+        /// <exception cref="NotServerException">if not server</exception>
         public void Drop()
         {
+            if (!IsServer)
+                throw new NotServerException();
             transform.SetParent(null);
             transform.SetPositionAndRotation(Player.transform.position, Player.transform.rotation);
             NetworkObject.ChangeOwnership(NetworkManager.Singleton.ServerClientId);
-            GetComponent<Rigidbody>().isKinematic = false;
             Player = null;
         }
     }
