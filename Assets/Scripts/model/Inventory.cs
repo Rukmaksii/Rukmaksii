@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Items;
 using PlayerControllers;
 using Unity.Netcode;
@@ -307,7 +308,7 @@ namespace model
                     break;
             }
 
-            CurrentWeapon.SwitchRender(true);
+            SelectedType = Weapons.Select(v => v.GetComponent<BaseWeapon>()).First().Type;
             DropWeaponClientRpc(weaponRef);
         }
 
@@ -316,10 +317,6 @@ namespace model
         {
             oldWeaponRef.TryGet(out BaseWeapon oldWeapon);
             oldWeapon.SwitchRender(true);
-
-            var currentWeapon = CurrentWeapon;
-
-            Player.SetHandTargets(currentWeapon.RightHandTarget, currentWeapon.LeftHandTarget);
         }
 
 
