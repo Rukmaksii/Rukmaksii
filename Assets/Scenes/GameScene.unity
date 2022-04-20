@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657815, g: 0.49641192, b: 0.57481617, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -525,6 +525,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1738022806}
     m_Modifications:
+    - target: {fileID: 4645415084687018667, guid: 45d20bddbb40f0c71bd7fdbd455cbafa, type: 3}
+      propertyPath: neutralMaterial
+      value: 
+      objectReference: {fileID: 4637519048616892231, guid: ed6d50ba91cd312468bcf481c0645ab1, type: 3}
     - target: {fileID: 4645415084687018667, guid: 45d20bddbb40f0c71bd7fdbd455cbafa, type: 3}
       propertyPath: firstTeamMaterial
       value: 
@@ -1029,6 +1033,7 @@ MonoBehaviour:
   connectionData: {fileID: 11400000, guid: 51f4e5ed14290eb4db05031d297551b9, type: 2}
   classPrefabs:
   - {fileID: 1800387450937859543, guid: ddd7cfbbbb0dbb44f81ebb725ce41458, type: 3}
+  gameloop: {fileID: 0}
 --- !u!114 &1112646625
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1055,6 +1060,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1738022806}
     m_Modifications:
+    - target: {fileID: 4645415084687018667, guid: 45d20bddbb40f0c71bd7fdbd455cbafa, type: 3}
+      propertyPath: neutralMaterial
+      value: 
+      objectReference: {fileID: 4637519048616892231, guid: ed6d50ba91cd312468bcf481c0645ab1, type: 3}
+    - target: {fileID: 4645415084687018667, guid: 45d20bddbb40f0c71bd7fdbd455cbafa, type: 3}
+      propertyPath: firstTeamMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 7d48136ae0434664dad52e299c89a45f, type: 2}
+    - target: {fileID: 4645415084687018667, guid: 45d20bddbb40f0c71bd7fdbd455cbafa, type: 3}
+      propertyPath: secondTeamMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 78e00f019cb9fd34bb6afeb29b7478bf, type: 2}
     - target: {fileID: 4645415084773794642, guid: 45d20bddbb40f0c71bd7fdbd455cbafa, type: 3}
       propertyPath: m_TagString
       value: Ground
@@ -1566,6 +1583,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -41.4
       objectReference: {fileID: 0}
+    - target: {fileID: 4645415084687018667, guid: 45d20bddbb40f0c71bd7fdbd455cbafa, type: 3}
+      propertyPath: neutralMaterial
+      value: 
+      objectReference: {fileID: 4637519048616892231, guid: ed6d50ba91cd312468bcf481c0645ab1, type: 3}
     - target: {fileID: 4645415084687018667, guid: 45d20bddbb40f0c71bd7fdbd455cbafa, type: 3}
       propertyPath: firstTeamMaterial
       value: 
