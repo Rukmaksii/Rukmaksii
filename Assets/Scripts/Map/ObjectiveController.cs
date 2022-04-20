@@ -49,7 +49,9 @@ namespace Map
         
         /** <value>the state of an objective, whether Neutral or Captured</value> */
         private State state;
-        
+
+        public State CurrentState => state;
+
         /** <value>the list of all players on an objective</value> */
         private List<BasePlayer> capturingPlayersList = new List<BasePlayer>();
 
@@ -60,7 +62,7 @@ namespace Map
         public static event Action<ObjectiveController,BasePlayer,bool> OnPlayerInteract;
 
         /** <value>boolean that indicates whether the objectives can be captured or not*/
-        public bool canCapture = false;
+        private bool canCapture;
 
         public bool CanCapture => canCapture;
         // TODO: public static event Action<bool> OnCaptured;
@@ -68,6 +70,7 @@ namespace Map
         // Start is called before the first frame update
         void Start()
         {
+            canCapture = false;
             this.state = State.Neutral;
         }
 

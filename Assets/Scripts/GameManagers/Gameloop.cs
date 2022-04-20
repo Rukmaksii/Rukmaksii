@@ -14,7 +14,8 @@ namespace GameManagers
 
         private int objectiveDelay;
         private bool hasBeenChange;
-        
+
+        private GameObject[] captureArea;
 
         // Start is called before the first frame update
         void Start()
@@ -32,6 +33,7 @@ namespace GameManagers
         // Update is called once per frame
         void Update()
         {
+            captureArea = GameObject.FindGameObjectsWithTag("CaptureArea");
             if (NetworkManager.Singleton.IsServer)
                 currTime.Value = DateTime.Now;
             var timer = currTime.Value - referenceTime.Value;
@@ -41,12 +43,35 @@ namespace GameManagers
                 hasBeenChange = true;
                 StartCoroutine(Wait1Second());
             }
+            var shield1 = GameObject.Find("Shield1").GetComponent<ShieldController>();
+            var shield2 = GameObject.Find("Shield2").GetComponent<ShieldController>();
+            foreach (GameObject area in captureArea)
+            {
+                ObjectiveController objective = area.GetComponent<ObjectiveController>();
+                if (objective.CurrentState is ObjectiveController.State.Captured)
+                {
+                    if (objective.CapturingTeam != shield1.TeamId)
+                    {
+                        shield1.ChangeActivation(false);
+                        shield2.ChangeActivation(true);
+                    }
+                    else
+                    {
+                        shield1.ChangeActivation(true);
+                        shield2.ChangeActivation(false);
+                    }
+                }
+                else
+                {
+                    shield1.ChangeActivation(true);
+                    shield2.ChangeActivation(true);
+                }
+            }
         }
 
 
         public void ChangeCapturePoints()
         {
-            var captureArea = GameObject.FindGameObjectsWithTag("CaptureArea");
             foreach (GameObject area in captureArea)
             {
                 area.GetComponent<ObjectiveController>().ToggleCanCapture(false);
