@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Items;
 using PlayerControllers;
@@ -223,9 +224,8 @@ namespace model
             return switched;
         }
 
-        private List<BaseItem> itemsList = new List<BaseItem>();
-
-        public List<BaseItem> ItemsList => itemsList;
+        private Dictionary<Type, ItemContainer<BaseItem>> itemsDictionary =
+            new Dictionary<Type, ItemContainer<BaseItem>>();
 
         /**
          * <summary>adds an instantiated item to the inventory</summary>
@@ -233,11 +233,18 @@ namespace model
          */
         public void AddItem(BaseItem item)
         {
-            item.Player = Player;
-            if (!itemsList.Contains(item))
+            try
             {
-                itemsList.Add(item);
+                itemsDictionary[item.GetType()].Push(item);
             }
+            catch (KeyNotFoundException e)
+            {
+                itemsDictionary.Add(item.GetType(),
+                    new ItemContainer<BaseItem>(BaseItem.MaxDictionary[item.GetType()]));
+                itemsDictionary[item.GetType()].Push(item);
+            }
+
+            item.Player = Player;
         }
 
         /**
@@ -247,15 +254,9 @@ namespace model
          */
         public void RemoveItem(BaseItem item)
         {
-            foreach (BaseItem element in itemsList)
-            {
-                if (item.Type == element.Type)
-                {
-                    itemsList.Remove(element);
-                    Destroy(element.gameObject);
-                    break;
-                }
-            }
+            BaseItem element = itemsDictionary[item.GetType()].Pop();
+            if (element != null)
+                Destroy(element.gameObject);
         }
 
         [ServerRpc(RequireOwnership = false)]

@@ -245,7 +245,6 @@ namespace PlayerControllers
 
         public void OnRespawn()
         {
-            Inventory.ItemsList.Clear();
             GameController.Singleton.deathScreen.SetActive(false);
             MoveToSpawn();
         }
