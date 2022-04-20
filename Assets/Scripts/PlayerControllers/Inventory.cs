@@ -122,14 +122,18 @@ namespace model
             }
         }
 
-        private NetworkList<NetworkBehaviourReference> itemsList = new NetworkList<NetworkBehaviourReference>();
+        private NetworkList<NetworkBehaviourReference> itemsList;
+
+        private void Awake()
+        {
+            itemsList = new NetworkList<NetworkBehaviourReference>();
+        }
 
         /**
          * <summary>adds a weapon to the inventory replacing the old weapon of the same <see cref="WeaponType"/> if existing</summary>
          */
         public void AddWeapon(BaseWeapon newWeapon)
         {
-            newWeapon.Player = Player;
             var weaponRef = new NetworkBehaviourReference(newWeapon);
             AddWeaponServerRpc(weaponRef, newWeapon.Type);
         }
@@ -244,6 +248,37 @@ namespace model
         private void AddItemServerRpc(NetworkBehaviourReference itemRef)
         {
             this.itemsList.Add(itemRef);
+            itemRef.TryGet(out BaseItem item);
+            item.PickUp(Player);
+        }
+
+        public ItemContainer<TForMethod> GetItemContainer<TForMethod>() where TForMethod : BaseItem
+        {
+            ItemContainer<TForMethod> res =
+                new ItemContainer<TForMethod>(BaseItem.MaxDictionary[typeof(TForMethod)], this);
+
+            List<NetworkBehaviourReference> toRemove = new List<NetworkBehaviourReference>();
+            foreach (var itemRef in itemsList)
+            {
+                itemRef.TryGet(out BaseItem item);
+                if (item.State == ItemState.Consumed || (item is TForMethod toPush && !res.Push(toPush, true)))
+                    toRemove.Add(itemRef);
+            }
+
+            RemoveItemsServerRpc(toRemove.ToArray());
+
+            return res;
+        }
+
+        [ServerRpc]
+        private void RemoveItemsServerRpc(NetworkBehaviourReference[] itemRefs)
+        {
+            for (int i = 0; i < itemsList.Count; i++)
+            {
+                itemsList[i].TryGet(out BaseItem item);
+                if (item.State == ItemState.Consumed || itemRefs.Contains(itemsList[i]))
+                    itemsList.RemoveAt(i--);
+            }
         }
 
         /**
