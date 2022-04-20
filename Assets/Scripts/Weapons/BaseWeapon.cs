@@ -387,7 +387,7 @@ namespace Weapons
                 throw new NotServerException();
             transform.SetParent(null);
             transform.SetPositionAndRotation(Player.transform.position, Player.transform.rotation);
-            NetworkObject.ChangeOwnership(NetworkManager.Singleton.ServerClientId);
+            NetworkObject.ChangeOwnership(NetworkManager.ServerClientId);
             Player = null;
         }
     }
