@@ -8,13 +8,28 @@ using UnityEngine;
 
 namespace Items
 {
+    public struct ItemInfo
+    {
+        public string Name;
+        public ItemCategory Category;
+        public int MaxCount;
+    }
+
+
     [RequireComponent(typeof(NetworkObject))]
     [RequireComponent(typeof(ClientNetworkTransform))]
     public abstract class BaseItem : NetworkBehaviour, IItem, IPickable
     {
-        public static Dictionary<Type, int> MaxDictionary = new Dictionary<Type, int>
+        public static readonly Dictionary<Type, ItemInfo> ItemInfos = new Dictionary<Type, ItemInfo>
         {
-            {typeof(FuelBooster), 3}
+            {
+                typeof(FuelBooster), new ItemInfo()
+                {
+                    Name = "Fuel Booster",
+                    Category = ItemCategory.Other,
+                    MaxCount = 3
+                }
+            }
         };
 
         private NetworkVariable<NetworkBehaviourReference> playerReference =
@@ -32,7 +47,7 @@ namespace Items
 
         public bool IsOwned => !(Player is null);
 
-        public abstract ItemCategory Type { get; }
+        public ItemInfo Info => ItemInfos[GetType()];
 
         public abstract float Duration { get; protected set; }
 
@@ -50,7 +65,8 @@ namespace Items
         private bool started = false;
 
 
-        public abstract string Name { get; }
+        public string Name => Info.Name;
+        public ItemCategory Category => Info.Category;
 
         private void Update()
         {
@@ -127,6 +143,14 @@ namespace Items
             transform.SetPositionAndRotation(Player.transform.position, Player.transform.rotation);
             NetworkObject.ChangeOwnership(NetworkManager.ServerClientId);
             Player = null;
+        }
+
+        public static long GetHashCode(Type baseItemType)
+        {
+            if (!baseItemType.IsSubclassOf(typeof(BaseItem)))
+                throw new ArgumentException("could not get persistent hash code for non base item instance");
+
+            return 0L;
         }
     }
 }
