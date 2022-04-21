@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Items;
 using Unity.Netcode;
-using UnityEngine.Analytics;
 
 namespace model.Network
 {
@@ -12,6 +12,7 @@ namespace model.Network
         // binds item type hash code to list of item references
         private Dictionary<long, List<NetworkBehaviourReference>> data =
             new Dictionary<long, List<NetworkBehaviourReference>>();
+
 
         public NetworkItemRegistry()
         {
@@ -176,11 +177,57 @@ namespace model.Network
                                 Type = eventType
                             });
                         }
+
                         break;
                     case ItemRegistryEvent.EventType.Full:
                         ReadField(reader);
                         ResetDirty();
                         break;
+                }
+            }
+        }
+
+
+        private void RemoveAt(long objectType, int index)
+        {
+            data[objectType].RemoveAt(index);
+            dirtyEvents.Add(new ItemRegistryEvent()
+            {
+                Type = ItemRegistryEvent.EventType.RemoveAt,
+                index = index
+            });
+        }
+
+        public class ItemContainer
+        {
+            public readonly int MaxCount;
+            public readonly Type ItemType;
+            private readonly NetworkItemRegistry registry;
+            private List<NetworkBehaviourReference> items => registry.data[ItemType.GetHashCode()];
+
+            public int Count
+            {
+                get
+                {
+                    CleanData();
+                    return items.Count;
+                }
+            }
+
+            internal ItemContainer(int maxCount, Type itemType, NetworkItemRegistry registry)
+            {
+                MaxCount = maxCount;
+                ItemType = itemType;
+                this.registry = registry;
+            }
+
+            private void CleanData()
+            {
+                for (int i = 0; i < items.Count; i++)
+                {
+                    if (items[i].TryGet(out BaseItem baseItem) && baseItem.State == ItemState.Clean)
+                        continue;
+                    registry.RemoveAt(ItemType.GetHashCode(), i--);
                 }
             }
         }
@@ -201,12 +248,11 @@ namespace model.Network
                 ///  Fully re-fills the container
                 /// </summary>
                 Full,
-                
+
                 /// <summary>
                 ///     clears the data
                 /// </summary>
                 Clear
-                
             }
 
             public EventType Type;
