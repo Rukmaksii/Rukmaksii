@@ -45,7 +45,7 @@ namespace HUD
             if (GameController.Singleton.LocalPlayer == null)
                 return;
 
-            weaponPlaceHolder.sprite = GameController.Singleton.LocalPlayer.Inventory.CurrentWeapon.sprite;
+            weaponPlaceHolder.sprite = GameController.Singleton.LocalPlayer.Inventory.CurrentWeapon.Sprite;
 
             SetHealth(GameController.Singleton.LocalPlayer.CurrentHealthValue);
             SetFuelAmount(GameController.Singleton.LocalPlayer.Jetpack.FuelConsumption);
