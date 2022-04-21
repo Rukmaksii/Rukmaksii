@@ -201,6 +201,8 @@ namespace model.Network
 
         private void RemoveAt(long objectType, int index)
         {
+            if (!CanClientWrite(NetworkManager.Singleton.LocalClientId))
+                throw new InvalidOperationException("Client cannot write to item registry");
             data[objectType].RemoveAt(index);
             if (data[objectType].Count <= 0)
                 data.Remove(objectType);
@@ -214,6 +216,8 @@ namespace model.Network
 
         private void AddItem(long objectType, NetworkBehaviourReference itemRef)
         {
+            if (!CanClientWrite(NetworkManager.Singleton.LocalClientId))
+                throw new InvalidOperationException("Client cannot write to item registry");
             if (!data.ContainsKey(objectType))
                 data[objectType] = new List<NetworkBehaviourReference>();
             data[objectType].Add(itemRef);

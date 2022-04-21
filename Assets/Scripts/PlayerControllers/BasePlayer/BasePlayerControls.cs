@@ -237,7 +237,10 @@ namespace PlayerControllers
             if (!IsOwner || !ctx.performed)
                 return;
 
-            Debug.Log(inventory.GetItemContainer<FuelBooster>().Count);
+            var container = inventory.GetItemContainer<FuelBooster>();
+            Debug.Log(container.Count);
+            container.TryPush(container.Peek());
+            
         }
     }
 }
