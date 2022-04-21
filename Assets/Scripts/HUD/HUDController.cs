@@ -23,9 +23,21 @@ namespace HUD
         private BasePlayer localPlayer;
         public Image Crosshair;
 
+        public static HUDController Singleton { get; private set; }
+
+        private void Awake()
+        {
+            if (Singleton != null && Singleton != this)
+            {
+                Destroy(this);
+                return;
+            }
+
+            Singleton = this;
+        }
+
         void Start()
         {
-
             SetMaxHealth(100);
             SetMaxFuel(100);
 
@@ -49,7 +61,8 @@ namespace HUD
 
             SetHealth(GameController.Singleton.LocalPlayer.CurrentHealthValue);
             SetFuelAmount(GameController.Singleton.LocalPlayer.Jetpack.FuelConsumption);
-            SetDashCooldown(GameController.Singleton.LocalPlayer.DashedSince, GameController.Singleton.LocalPlayer.DashCooldown);
+            SetDashCooldown(GameController.Singleton.LocalPlayer.DashedSince,
+                GameController.Singleton.LocalPlayer.DashCooldown);
             SetAmmoCounter(GameController.Singleton.LocalPlayer.Inventory.CurrentWeapon.CurrentAmmo,
                 GameController.Singleton.LocalPlayer.Inventory.CurrentWeapon.MaxAmmo);
             SetCurrentStrategy((IMinion.Strategy) GameController.Singleton.LocalPlayer.Strategy);
@@ -69,7 +82,7 @@ namespace HUD
         {
             if (GameController.Singleton.LocalPlayer == null)
                 return;
-            
+
             UpdateMapMonsters();
         }
 
@@ -138,7 +151,7 @@ namespace HUD
         {
             ammoCounter.text = $"{ammo}/{maxAmmo}";
         }
-        
+
         /**
          * <summary>sets the next minion's strategy</summary>
          * <param name="strat">current minion's strategy</param>
@@ -158,23 +171,17 @@ namespace HUD
                     str += "Protect";
                     break;
             }
+
             currentStrategy.text = str;
         }
-        
+
         /**
          * <summary>displays and hides the hit marker on the screen</summary>
          * <param name="status">bool for whether the hit marker should be shown or not</param>
          */
         public void ShowHitMarker(bool status)
         {
-            if (!status)
-            {
-                hitMarker.SetActive(false);
-            }
-            else
-            {
-                hitMarker.SetActive(true);
-            }
+            hitMarker.SetActive(status);
         }
     }
 }
