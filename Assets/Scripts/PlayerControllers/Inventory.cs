@@ -123,7 +123,8 @@ namespace model
             }
         }
 
-        private NetworkItemRegistry itemRegistry = new NetworkItemRegistry();
+        private NetworkItemRegistry itemRegistry =
+            new NetworkItemRegistry(writePermission: NetworkVariableWritePermission.Owner);
 
         private NetworkVariable<long> selectedItemType = new NetworkVariable<long>();
 
@@ -137,7 +138,6 @@ namespace model
         }
 
         public bool ItemSelected => !(SelectedItemType is null);
-
 
 
         /**
@@ -248,10 +248,25 @@ namespace model
          */
         public void AddItem(BaseItem item)
         {
-            if (item.State != ItemState.Clean)
+            if (item.State != ItemState.Clean || !itemRegistry[item.GetType()].CanPush)
                 return;
-            itemRegistry[item.GetType()].Push(item);
-            AddItemServerRpc(new NetworkBehaviourReference(item));
+
+            if (IsOwner && itemRegistry[item.GetType()].TryPush(item))
+            {
+                AddItemServerRpc(new NetworkBehaviourReference(item));
+            }
+            else if (IsServer)
+            {
+                item.PickUp(Player);
+                ClientRpcParams p = new ClientRpcParams
+                {
+                    Send = new ClientRpcSendParams
+                    {
+                        TargetClientIds = new[] {Player.OwnerClientId}
+                    }
+                };
+                AddItemClientRpc(new NetworkBehaviourReference(item), p);
+            }
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -259,6 +274,13 @@ namespace model
         {
             itemRef.TryGet(out BaseItem item);
             item.PickUp(Player);
+        }
+
+        [ClientRpc]
+        private void AddItemClientRpc(NetworkBehaviourReference itemRef, ClientRpcParams p = default)
+        {
+            itemRef.TryGet(out BaseItem item);
+            itemRegistry[item.GetType()].Push(item);
         }
 
         public NetworkItemRegistry.ItemContainer GetItemContainer<TForMethod>() where TForMethod : BaseItem

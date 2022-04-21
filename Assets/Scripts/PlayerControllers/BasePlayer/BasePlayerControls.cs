@@ -206,7 +206,7 @@ namespace PlayerControllers
             if (!IsOwner || focusedObject == null)
                 return;
 
-            if(focusedObject.TryGetComponent(out BaseWeapon weapon))
+            if (focusedObject.TryGetComponent(out BaseWeapon weapon))
                 inventory.AddWeapon(weapon);
         }
 
@@ -239,8 +239,7 @@ namespace PlayerControllers
 
             var container = inventory.GetItemContainer<FuelBooster>();
             Debug.Log(container.Count);
-            container.TryPush(container.Peek());
-            
+            inventory.AddItem(container.Peek());
         }
     }
 }

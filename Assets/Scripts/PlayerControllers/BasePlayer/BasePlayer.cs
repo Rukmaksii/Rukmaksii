@@ -91,7 +91,7 @@ namespace PlayerControllers
                     GameController.Singleton.ItemPrefabs.Find(go => go.name == "FuelBoosterPrefab");
                 FuelBooster itemInstance = Instantiate(fuelBoosterPrefab).GetComponent<FuelBooster>();
                 itemInstance.NetworkObject.Spawn();
-                inventory.GetItemContainer<FuelBooster>().Push(itemInstance);
+                inventory.AddItem(itemInstance);
             }
 
             var weapon = inventory.CurrentWeapon;

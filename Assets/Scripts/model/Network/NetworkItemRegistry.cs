@@ -234,6 +234,10 @@ namespace model.Network
             return data.ContainsKey(BaseItem.GetBaseItemHashCode(key));
         }
 
+        /// <summary>
+        ///     a container for items of the same type 
+        /// </summary>
+        /// <remarks>only allowed writers can use non-pure exposed API <br/> therefore, non-allowed writers can only access <see cref="GetEnumerable"/></remarks>
         public class ItemContainer
         {
             public readonly int MaxCount;
@@ -247,9 +251,8 @@ namespace model.Network
                 get
                 {
                     if (!ContainerExists)
-                        return -1;
-                    CleanData();
-                    return items.Count;
+                        return 0;
+                    return GetEnumerable().Count();
                 }
             }
 
@@ -277,14 +280,15 @@ namespace model.Network
             ///     pops an item from the stack
             /// </summary>
             /// <returns>the popped item</returns>
-            /// <exception cref="InvalidOperationException">if there is no item to pop</exception>
+            /// <exception cref="IndexOutOfRangeException">if there is no item to pop</exception>
+            /// <exception cref="InvalidOperationException">if the caller is not an allowed writer</exception>
             /// <seealso cref="TryPop"/>
             public BaseItem Pop()
             {
-                // cleans data
+                CleanData();
                 int count = Count;
                 if (count <= 0)
-                    throw new InvalidOperationException("could not pop from an empty stack");
+                    throw new IndexOutOfRangeException("could not pop from an empty stack");
 
                 items[count - 1].TryGet(out BaseItem result);
                 registry.RemoveAt(BaseItem.GetBaseItemHashCode(ItemType), Count - 1);
@@ -297,14 +301,15 @@ namespace model.Network
             /// </summary>
             /// <returns>the peaked base item</returns>
             /// <remarks>peeking does not modify the stack top</remarks>
-            /// <exception cref="InvalidOperationException">if the stack is empty</exception>
+            /// <exception cref="IndexOutOfRangeException">if the stack is empty</exception>
+            /// <exception cref="InvalidOperationException">if the caller is not an allowed writer</exception>
             /// <seealso cref="TryPeek"/>
             public BaseItem Peek()
             {
-                // cleans data
+                CleanData();
                 int count = Count;
                 if (count <= 0)
-                    throw new InvalidOperationException("could not peek from an empty stack");
+                    throw new IndexOutOfRangeException("could not peek from an empty stack");
 
                 items[count - 1].TryGet(out BaseItem result);
                 return result;
@@ -316,6 +321,7 @@ namespace model.Network
             /// <param name="result">the peeked to</param>
             /// <returns>true if the stack was not empty</returns>
             /// <remarks>peeking does not modify the stack top</remarks>
+            /// <exception cref="InvalidOperationException">if the caller is not an allowed writer</exception>
             /// <seealso cref="Peek"/>
             public bool TryPeek(out BaseItem result)
             {
@@ -323,7 +329,7 @@ namespace model.Network
                 {
                     result = Peek();
                 }
-                catch (InvalidOperationException)
+                catch (IndexOutOfRangeException)
                 {
                     result = null;
                     return false;
@@ -338,13 +344,14 @@ namespace model.Network
             /// </summary>
             /// <param name="result">the popped top of the stack</param>
             /// <returns>true if the stack was not empty</returns>
+            /// <exception cref="InvalidOperationException">if the caller is not an allowed writer</exception>
             public bool TryPop(out BaseItem result)
             {
                 try
                 {
                     result = Pop();
                 }
-                catch (InvalidOperationException)
+                catch (IndexOutOfRangeException)
                 {
                     result = null;
                     return false;
@@ -359,12 +366,13 @@ namespace model.Network
             /// <param name="baseItem">the item to push</param>
             /// <exception cref="ArgumentException">if item type is invalid</exception>
             /// <exception cref="IndexOutOfRangeException">if excedeed container max count</exception>
+            /// <exception cref="InvalidOperationException">if the caller is not an allowed writer</exception>
             /// <seealso cref="TryPush"/>
             public void Push([NotNull] BaseItem baseItem)
             {
                 if (baseItem.GetType() != ItemType)
                     throw new ArgumentException("wrong item type passed");
-                // cleans data
+                CleanData();
                 int count = Count;
                 if (count >= MaxCount)
                     throw new IndexOutOfRangeException("exceeded max count");
@@ -378,6 +386,7 @@ namespace model.Network
             /// <param name="baseItem">the item to push</param>
             /// <returns>true if push succedeed </returns>
             /// <exception cref="ArgumentException">if item type is invalid</exception>
+            /// <exception cref="InvalidOperationException">if the caller is not an allowed writer</exception>
             /// <seealso cref="Push"/>
             public bool TryPush([NotNull] BaseItem baseItem)
             {
@@ -393,19 +402,22 @@ namespace model.Network
                 return true;
             }
 
-            public IEnumerator<BaseItem> GetEnumerator()
+            [Pure]
+            [NotNull]
+            public IEnumerable<BaseItem> GetEnumerable()
             {
                 if (!ContainerExists)
-                    return new List<BaseItem>().GetEnumerator();
-                CleanData();
+                    return new List<BaseItem>();
                 return items
-                    .Where(v => v.TryGet(out BaseItem _))
+                    .Where(v => v.TryGet(out BaseItem item) && item.State == ItemState.Clean)
                     .Select(v =>
                     {
                         v.TryGet(out BaseItem item);
                         return item;
-                    }).GetEnumerator();
+                    });
             }
+
+            public bool CanPush => Count < MaxCount;
         }
 
         struct ItemRegistryEvent
