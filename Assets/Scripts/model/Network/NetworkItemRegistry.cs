@@ -35,7 +35,35 @@ namespace model.Network
 
         public override void WriteDelta(FastBufferWriter writer)
         {
-            throw new NotImplementedException();
+            if (base.IsDirty())
+            {
+                writer.WriteValueSafe((ushort) 1);
+                writer.WriteValueSafe(ItemRegistryEvent.EventType.Full);
+                WriteField(writer);
+                return;
+            }
+
+            writer.WriteValueSafe((ushort) dirtyEvents.Count);
+            foreach (var dirtyEvent in dirtyEvents)
+            {
+                writer.WriteValueSafe(dirtyEvent.Type);
+                switch (dirtyEvent.Type)
+                {
+                    case ItemRegistryEvent.EventType.Clear:
+                        // remove at
+                        writer.WriteValueSafe(dirtyEvent.index);
+                        break;
+                    case ItemRegistryEvent.EventType.Push:
+                        // push item at key
+                        writer.WriteValueSafe(dirtyEvent.ObjType);
+                        writer.WriteNetworkSerializable(dirtyEvent.itemRef);
+                        break;
+                    case ItemRegistryEvent.EventType.Pop:
+                        // pop item at key
+                        writer.WriteValueSafe(dirtyEvent.ObjType);
+                        break;
+                }
+            }
         }
 
         public override void WriteField(FastBufferWriter writer)
@@ -102,9 +130,11 @@ namespace model.Network
                 Full
             }
 
+            public EventType Type;
+
             public int index;
 
-            public Type ItemType;
+            public long ObjType;
 
             public NetworkBehaviourReference itemRef;
         }
