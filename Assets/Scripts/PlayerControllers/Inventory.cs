@@ -72,7 +72,7 @@ namespace model
          */
         private NetworkVariable<WeaponType> selectedType = new NetworkVariable<WeaponType>(WeaponType.CloseRange);
 
-        private WeaponType SelectedType
+        private WeaponType SelectedWeaponType
         {
             get => selectedType.Value;
             set => SwitchWeaponServerRpc(value);
@@ -89,7 +89,7 @@ namespace model
                 BaseWeapon availableWeapon = null;
                 if (CloseRangeWeapon != null)
                 {
-                    if (SelectedType == CloseRangeWeapon.Type)
+                    if (SelectedWeaponType == CloseRangeWeapon.Type)
                     {
                         return CloseRangeWeapon;
                     }
@@ -99,7 +99,7 @@ namespace model
 
                 if (LightWeapon != null)
                 {
-                    if (SelectedType == LightWeapon.Type)
+                    if (SelectedWeaponType == LightWeapon.Type)
                     {
                         return LightWeapon;
                     }
@@ -109,7 +109,7 @@ namespace model
 
                 if (HeavyWeapon != null)
                 {
-                    if (SelectedType == HeavyWeapon.Type)
+                    if (SelectedWeaponType == HeavyWeapon.Type)
                     {
                         return HeavyWeapon;
                     }
@@ -118,12 +118,26 @@ namespace model
                 }
 
                 if (availableWeapon != null)
-                    SelectedType = availableWeapon.Type;
+                    SelectedWeaponType = availableWeapon.Type;
                 return availableWeapon;
             }
         }
 
         private NetworkItemRegistry itemRegistry;
+
+        private NetworkVariable<long> selectedItemType = new NetworkVariable<long>();
+
+        public Type SelectedItemType
+        {
+            get =>
+                BaseItem.ItemInfos.Keys
+                    .FirstOrDefault(v => BaseItem.GetBaseItemHashCode(v) == selectedItemType.Value);
+
+            set => UpdateSelectedItemTypeServerRpc(BaseItem.GetBaseItemHashCode(value));
+        }
+
+        public bool ItemSelected => !(SelectedItemType is null);
+
 
         private void Awake()
         {
@@ -148,7 +162,7 @@ namespace model
             if (Weapons.Count <= 1)
                 return false;
 
-            switch (SelectedType)
+            switch (SelectedWeaponType)
             {
                 case WeaponType.Heavy:
                     DropWeaponServerRpc(heavyWeapon.Value);
@@ -179,7 +193,7 @@ namespace model
                 case WeaponType.Heavy:
                     if (heavyWeapon != null)
                     {
-                        SelectedType = WeaponType.Heavy;
+                        SelectedWeaponType = WeaponType.Heavy;
                         switched = true;
                     }
 
@@ -187,7 +201,7 @@ namespace model
                 case WeaponType.Light:
                     if (lightWeapon != null)
                     {
-                        SelectedType = WeaponType.Light;
+                        SelectedWeaponType = WeaponType.Light;
                         switched = true;
                     }
 
@@ -195,7 +209,7 @@ namespace model
                 case WeaponType.CloseRange:
                     if (closeRangeWeapon != null)
                     {
-                        SelectedType = WeaponType.CloseRange;
+                        SelectedWeaponType = WeaponType.CloseRange;
                         switched = true;
                     }
 
@@ -262,11 +276,10 @@ namespace model
          */
         public void DropCurrentItem()
         {
-            /*BaseItem element = itemsDictionary[item.GetType()].Pop();
-            if (element != null)
-                Destroy(element.gameObject);
-            */
-            throw new NotImplementedException();
+            if (!ItemSelected)
+                return;
+            if (itemRegistry[SelectedItemType].TryPop(out BaseItem item))
+                DropItemServerRpc(new NetworkBehaviourReference(item));
         }
 
         [ServerRpc]
@@ -280,6 +293,12 @@ namespace model
         private void UpdatePlayerReferenceServerRpc(NetworkBehaviourReference playerRef)
         {
             this.playerReference.Value = playerRef;
+        }
+
+        [ServerRpc]
+        private void UpdateSelectedItemTypeServerRpc(long value)
+        {
+            selectedItemType.Value = value;
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -342,7 +361,7 @@ namespace model
                     break;
             }
 
-            SelectedType = Weapons.Select(v => v.GetComponent<BaseWeapon>()).First().Type;
+            SelectedWeaponType = Weapons.Select(v => v.GetComponent<BaseWeapon>()).First().Type;
             DropWeaponClientRpc(weaponRef);
         }
 
@@ -367,9 +386,9 @@ namespace model
         [ServerRpc]
         private void SwitchWeaponServerRpc(WeaponType type)
         {
-            if (SelectedType != type)
+            if (SelectedWeaponType != type)
             {
-                SwitchWeaponClientRpc(SelectedType, type);
+                SwitchWeaponClientRpc(SelectedWeaponType, type);
                 selectedType.Value = type;
             }
         }
@@ -380,9 +399,9 @@ namespace model
             BaseWeapon baseWeapon = GetWeaponByType(type);
             BaseWeapon oldWeapon = GetWeaponByType(oldType);
 
-            if (oldWeapon != null && oldWeapon.IsOwned)
+            if (oldWeapon is {IsOwned: true})
                 oldWeapon.SwitchRender(false);
-            if (baseWeapon != null && baseWeapon.IsOwned)
+            if (baseWeapon is null && baseWeapon.IsOwned)
             {
                 Player.SetHandTargets(baseWeapon.RightHandTarget, baseWeapon.LeftHandTarget);
                 baseWeapon.SwitchRender(true);
