@@ -4,7 +4,6 @@ using System.Linq;
 using Items;
 using JetBrains.Annotations;
 using Unity.Netcode;
-using UnityEngine;
 
 namespace model.Network
 {
@@ -13,8 +12,8 @@ namespace model.Network
         private List<ItemRegistryEvent> dirtyEvents = new List<ItemRegistryEvent>();
 
         // binds item type hash code to list of item references
-        private Dictionary<int, List<NetworkBehaviourReference>> data =
-            new Dictionary<int, List<NetworkBehaviourReference>>();
+        private Dictionary<long, List<NetworkBehaviourReference>> data =
+            new Dictionary<long, List<NetworkBehaviourReference>>();
 
         public ItemContainer this[Type itemType] => new ItemContainer(BaseItem.MaxDictionary[itemType], itemType, this);
 
@@ -80,7 +79,7 @@ namespace model.Network
             writer.WriteValueSafe((ushort) data.Count);
             foreach (var pair in data)
             {
-                int objType = pair.Key;
+                long objType = pair.Key;
                 List<NetworkBehaviourReference> objRefs = pair.Value;
                 writer.WriteValueSafe(objType);
                 writer.WriteValueSafe(objRefs.Count);
@@ -101,7 +100,7 @@ namespace model.Network
             for (int i = 0; i < containerCount; i++)
             {
                 // fetches type hashcode
-                reader.ReadValueSafe(out int objType);
+                reader.ReadValueSafe(out long objType);
                 // fetches item count
                 reader.ReadValueSafe(out int itemCount);
                 if (!data.ContainsKey(objType))
@@ -125,7 +124,7 @@ namespace model.Network
                 {
                     case ItemRegistryEvent.EventType.RemoveAt:
                     {
-                        reader.ReadValueSafe(out int objType);
+                        reader.ReadValueSafe(out long objType);
                         reader.ReadValueSafe(out int index);
                         data[objType].RemoveAt(index);
 
@@ -145,7 +144,7 @@ namespace model.Network
                         break;
                     case ItemRegistryEvent.EventType.Push:
                     {
-                        reader.ReadValueSafe(out int objType);
+                        reader.ReadValueSafe(out long objType);
                         reader.ReadNetworkSerializable(out NetworkBehaviourReference itemRef);
                         if (!data.ContainsKey(objType))
                             data[objType] = new List<NetworkBehaviourReference>();
@@ -163,7 +162,7 @@ namespace model.Network
                         break;
                     case ItemRegistryEvent.EventType.Pop:
                     {
-                        reader.ReadValueSafe(out int objType);
+                        reader.ReadValueSafe(out long objType);
                         data[objType].RemoveAt(data[objType].Count - 1);
 
                         if (data[objType].Count <= 0)
@@ -199,7 +198,7 @@ namespace model.Network
         }
 
 
-        private void RemoveAt(int objectType, int index)
+        private void RemoveAt(long objectType, int index)
         {
             data[objectType].RemoveAt(index);
             if (data[objectType].Count <= 0)
@@ -212,7 +211,7 @@ namespace model.Network
             });
         }
 
-        private void AddItem(int objectType, NetworkBehaviourReference itemRef)
+        private void AddItem(long objectType, NetworkBehaviourReference itemRef)
         {
             if (!data.ContainsKey(objectType))
                 data[objectType] = new List<NetworkBehaviourReference>();
@@ -223,8 +222,6 @@ namespace model.Network
                 ObjType = objectType,
                 itemRef = itemRef
             });
-            
-            Debug.Log($"is dirty after add {IsDirty()}");
         }
 
         public bool ContainsKey(Type key)
@@ -433,7 +430,7 @@ namespace model.Network
 
             public int index;
 
-            public int ObjType;
+            public long ObjType;
 
             public NetworkBehaviourReference itemRef;
         }
