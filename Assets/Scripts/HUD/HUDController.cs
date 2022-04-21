@@ -24,8 +24,11 @@ namespace HUD
         [SerializeField] protected Text currentStrategy;
         [SerializeField] private GameObject itemSelector;
 
-        public GameObject ItemSelector => itemSelector;
 
+        public float CanvasWidth => GetComponent<RectTransform>().rect.width;
+        public float CanvasHeight => GetComponent<RectTransform>().rect.height;
+        
+        
         private BasePlayer localPlayer;
         public Image Crosshair;
 
@@ -188,6 +191,18 @@ namespace HUD
         public void ShowHitMarker(bool status)
         {
             hitMarker.SetActive(status);
+        }
+
+        public void ShowItemSelector(Vector2 screenPos)
+        {
+            Vector2 positions = new Vector2(CanvasWidth * screenPos.x, CanvasHeight * screenPos.y);
+            itemSelector.GetComponent<RectTransform>().anchoredPosition = positions;
+            itemSelector.SetActive(true);
+        }
+
+        public void HideItemSelector()
+        {
+            itemSelector.SetActive(false);
         }
     }
 }

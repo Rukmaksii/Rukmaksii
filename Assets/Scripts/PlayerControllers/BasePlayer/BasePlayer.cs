@@ -1,7 +1,6 @@
 using GameManagers;
 using Items;
 using model;
-using Unity.Collections.LowLevel.Unsafe;
 using Unity.Netcode;
 using Unity.Netcode.Samples;
 using UnityEngine;
@@ -175,7 +174,12 @@ namespace PlayerControllers
             focusedObject = GetClosestPickableObject(pickUpDistance);
             if (focusedObject != null)
             {
-                // TODO: highlight focused object
+                Vector2 scalars = CameraController.Camera.WorldToViewportPoint(focusedObject.transform.position);
+                GameController.Singleton.HUDController.ShowItemSelector(scalars);
+            }
+            else
+            {
+                GameController.Singleton.HUDController.HideItemSelector();
             }
 
             Vector3 res;

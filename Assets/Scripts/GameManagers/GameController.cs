@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using HUD;
 using Map;
 using Minions;
 using model;
@@ -87,6 +88,8 @@ namespace GameManagers
         [SerializeField] private int respawnTime = 5;
 
         public BasePlayer LocalPlayer => localPlayer;
+
+        public HUDController HUDController => HUDController.Singleton;
 
         private void Awake()
         {
