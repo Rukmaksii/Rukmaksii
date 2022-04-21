@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Items;
+using model.Network;
 using PlayerControllers;
 using Unity.Netcode;
 using UnityEngine;
@@ -123,10 +124,12 @@ namespace model
         }
 
         private NetworkList<NetworkBehaviourReference> itemsList;
+        private NetworkItemRegistry itemRegistry;
 
         private void Awake()
         {
             itemsList = new NetworkList<NetworkBehaviourReference>();
+            itemRegistry = new NetworkItemRegistry();
         }
 
         /**
@@ -241,6 +244,7 @@ namespace model
         {
             if (item.State != ItemState.Clean)
                 return;
+            itemRegistry[item.GetType()].Push(item);
             AddItemServerRpc(new NetworkBehaviourReference(item));
         }
 

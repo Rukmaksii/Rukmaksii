@@ -235,11 +235,14 @@ namespace model.Network
             public readonly Type ItemType;
             private readonly NetworkItemRegistry registry;
             private List<NetworkBehaviourReference> items => registry.data[ItemType.GetHashCode()];
+            private bool ContainerExists => registry.ContainsKey(ItemType);
 
             public int Count
             {
                 get
                 {
+                    if (!ContainerExists)
+                        return -1;
                     CleanData();
                     return items.Count;
                 }
@@ -254,6 +257,9 @@ namespace model.Network
 
             private void CleanData()
             {
+                // awaiting for push operation
+                if (!ContainerExists)
+                    return;
                 for (int i = 0; i < items.Count; i++)
                 {
                     if (items[i].TryGet(out BaseItem baseItem) && baseItem.State == ItemState.Clean)
@@ -292,7 +298,7 @@ namespace model.Network
             {
                 // cleans data
                 int count = Count;
-                if (count >= 0)
+                if (count <= 0)
                     throw new InvalidOperationException("could not peek from an empty stack");
 
                 items[count - 1].TryGet(out BaseItem result);
@@ -384,6 +390,8 @@ namespace model.Network
 
             public IEnumerator<BaseItem> GetEnumerator()
             {
+                if (!ContainerExists)
+                    return new List<BaseItem>().GetEnumerator();
                 CleanData();
                 return items
                     .Where(v => v.TryGet(out BaseItem _))
