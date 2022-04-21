@@ -15,7 +15,7 @@ namespace model.Network
         private Dictionary<long, List<NetworkBehaviourReference>> data =
             new Dictionary<long, List<NetworkBehaviourReference>>();
 
-        public ItemContainer this[Type itemType] => new ItemContainer(BaseItem.MaxDictionary[itemType], itemType, this);
+        public ItemContainer this[Type itemType] => new ItemContainer(BaseItem.ItemInfos[itemType].MaxCount, itemType, this);
 
 
         public NetworkItemRegistry()
@@ -226,7 +226,7 @@ namespace model.Network
 
         public bool ContainsKey(Type key)
         {
-            return data.ContainsKey(key.GetHashCode());
+            return data.ContainsKey(BaseItem.GetBaseItemHashCode(key));
         }
 
         public class ItemContainer
@@ -234,7 +234,7 @@ namespace model.Network
             public readonly int MaxCount;
             public readonly Type ItemType;
             private readonly NetworkItemRegistry registry;
-            private List<NetworkBehaviourReference> items => registry.data[ItemType.GetHashCode()];
+            private List<NetworkBehaviourReference> items => registry.data[BaseItem.GetBaseItemHashCode(ItemType)];
             private bool ContainerExists => registry.ContainsKey(ItemType);
 
             public int Count
@@ -264,7 +264,7 @@ namespace model.Network
                 {
                     if (items[i].TryGet(out BaseItem baseItem) && baseItem.State == ItemState.Clean)
                         continue;
-                    registry.RemoveAt(ItemType.GetHashCode(), i--);
+                    registry.RemoveAt(BaseItem.GetBaseItemHashCode(ItemType), i--);
                 }
             }
 
@@ -282,7 +282,7 @@ namespace model.Network
                     throw new InvalidOperationException("could not pop from an empty stack");
 
                 items[count - 1].TryGet(out BaseItem result);
-                registry.RemoveAt(ItemType.GetHashCode(), Count - 1);
+                registry.RemoveAt(BaseItem.GetBaseItemHashCode(ItemType), Count - 1);
 
                 return result;
             }
@@ -364,7 +364,7 @@ namespace model.Network
                 if (count >= MaxCount)
                     throw new IndexOutOfRangeException("exceeded max count");
 
-                registry.AddItem(ItemType.GetHashCode(), new NetworkBehaviourReference(baseItem));
+                registry.AddItem(BaseItem.GetBaseItemHashCode(ItemType), new NetworkBehaviourReference(baseItem));
             }
 
             /// <summary>

@@ -13,6 +13,33 @@ namespace Items
         public string Name;
         public ItemCategory Category;
         public int MaxCount;
+
+        public new long GetHashCode()
+        {
+            string toParse = Name + new string((char) Category, MaxCount);
+            int i;
+            long result = 0;
+            for (i = 0; i + 7 < toParse.Length; i += 8)
+            {
+                long part = 0;
+                for (int j = i; j < i + 8; j++)
+                {
+                    part <<= 8;
+                    part += (byte) toParse[j];
+                }
+
+                result ^= part;
+            }
+
+            long end = 0;
+            for (; i < toParse.Length; i++)
+            {
+                end <<= 8;
+                end += (byte) toParse[i];
+            }
+
+            return result ^ end;
+        }
     }
 
 
@@ -145,12 +172,12 @@ namespace Items
             Player = null;
         }
 
-        public static long GetHashCode(Type baseItemType)
+        public static long GetBaseItemHashCode(Type baseItemType)
         {
             if (!baseItemType.IsSubclassOf(typeof(BaseItem)))
                 throw new ArgumentException("could not get persistent hash code for non base item instance");
 
-            return 0L;
+            return ItemInfos[baseItemType].GetHashCode();
         }
     }
 }

@@ -256,22 +256,9 @@ namespace model
             item.PickUp(Player);
         }
 
-        public ItemContainer<TForMethod> GetItemContainer<TForMethod>() where TForMethod : BaseItem
+        public NetworkItemRegistry.ItemContainer GetItemContainer<TForMethod>() where TForMethod : BaseItem
         {
-            ItemContainer<TForMethod> res =
-                new ItemContainer<TForMethod>(BaseItem.MaxDictionary[typeof(TForMethod)], this);
-
-            List<NetworkBehaviourReference> toRemove = new List<NetworkBehaviourReference>();
-            foreach (var itemRef in itemsList)
-            {
-                itemRef.TryGet(out BaseItem item);
-                if (item.State == ItemState.Consumed || (item is TForMethod toPush && !res.Push(toPush, true)))
-                    toRemove.Add(itemRef);
-            }
-
-            RemoveItemsServerRpc(toRemove.ToArray());
-
-            return res;
+            return itemRegistry[typeof(TForMethod)];
         }
 
         [ServerRpc]
