@@ -1,8 +1,4 @@
-﻿using System;
-using model;
-using UnityEngine;
-
-namespace Items
+﻿namespace Items
 {
     public class FuelBooster : BaseItem
     {
@@ -19,7 +15,7 @@ namespace Items
             newFuelValue = 1f;
             Player.Jetpack.FuelDuration = newFuelValue;
         }
-        
+
         protected override void OnConsume()
         {
         }

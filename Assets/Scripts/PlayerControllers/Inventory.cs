@@ -257,17 +257,23 @@ namespace model
         }
 
         /**
-         * <summary>if the item is in the inventory, it removes it
-         * also it destroys the item from the scene</summary>
+         * <summary>drops the current selected Item </summary>
          * <param name="item">a BaseItem to be removed</param>
          */
-        public void RemoveItem(BaseItem item)
+        public void DropCurrentItem()
         {
             /*BaseItem element = itemsDictionary[item.GetType()].Pop();
             if (element != null)
                 Destroy(element.gameObject);
             */
             throw new NotImplementedException();
+        }
+
+        [ServerRpc]
+        private void DropItemServerRpc(NetworkBehaviourReference itemRef)
+        {
+            itemRef.TryGet(out BaseItem item);
+            item.Drop();
         }
 
         [ServerRpc(RequireOwnership = false)]
