@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Items;
 using JetBrains.Annotations;
 using Unity.Netcode;
@@ -254,8 +255,15 @@ namespace model.Network
                 }
             }
 
+            /// <summary>
+            ///     pops an item from the stack
+            /// </summary>
+            /// <returns>the popped item</returns>
+            /// <exception cref="InvalidOperationException">if there is no item to pop</exception>
+            /// <seealso cref="TryPop"/>
             public BaseItem Pop()
             {
+                // cleans data
                 int count = Count;
                 if (count <= 0)
                     throw new InvalidOperationException("could not pop from an empty stack");
@@ -266,8 +274,16 @@ namespace model.Network
                 return result;
             }
 
+            /// <summary>
+            ///     peeks the top of the stack
+            /// </summary>
+            /// <returns>the peaked base item</returns>
+            /// <remarks>peeking does not modify the stack top</remarks>
+            /// <exception cref="InvalidOperationException">if the stack is empty</exception>
+            /// <seealso cref="TryPeek"/>
             public BaseItem Peek()
             {
+                // cleans data
                 int count = Count;
                 if (count >= 0)
                     throw new InvalidOperationException("could not peek from an empty stack");
@@ -276,6 +292,13 @@ namespace model.Network
                 return result;
             }
 
+            /// <summary>
+            ///     tries peeking the top of the stack
+            /// </summary>
+            /// <param name="result">the peeked to</param>
+            /// <returns>true if the stack was not empty</returns>
+            /// <remarks>peeking does not modify the stack top</remarks>
+            /// <seealso cref="Peek"/>
             public bool TryPeek(out BaseItem result)
             {
                 try
@@ -291,6 +314,12 @@ namespace model.Network
                 return result != null;
             }
 
+
+            /// <summary>
+            ///     tries popping the top of the stack
+            /// </summary>
+            /// <param name="result">the popped top of the stack</param>
+            /// <returns>true if the stack was not empty</returns>
             public bool TryPop(out BaseItem result)
             {
                 try
@@ -317,6 +346,7 @@ namespace model.Network
             {
                 if (baseItem.GetType() != ItemType)
                     throw new ArgumentException("wrong item type passed");
+                // cleans data
                 int count = Count;
                 if (count >= MaxCount)
                     throw new IndexOutOfRangeException("exceeded max count");
@@ -343,6 +373,18 @@ namespace model.Network
                 }
 
                 return true;
+            }
+
+            public IEnumerator<BaseItem> GetEnumerator()
+            {
+                CleanData();
+                return items
+                    .Where(v => v.TryGet(out BaseItem _))
+                    .Select(v =>
+                    {
+                        v.TryGet(out BaseItem item);
+                        return item;
+                    }).GetEnumerator();
             }
         }
 
