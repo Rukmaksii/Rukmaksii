@@ -124,6 +124,9 @@ namespace model.Network
                         reader.ReadValueSafe(out int index);
                         data[objType].RemoveAt(index);
 
+                        if (data[objType].Count <= 0)
+                            data.Remove(objType);
+
                         if (keepDirtyDelta)
                         {
                             dirtyEvents.Add(new ItemRegistryEvent()
@@ -158,6 +161,9 @@ namespace model.Network
                         reader.ReadValueSafe(out long objType);
                         data[objType].RemoveAt(data[objType].Count - 1);
 
+                        if (data[objType].Count <= 0)
+                            data.Remove(objType);
+
                         if (keepDirtyDelta)
                         {
                             dirtyEvents.Add(new ItemRegistryEvent()
@@ -191,10 +197,26 @@ namespace model.Network
         private void RemoveAt(long objectType, int index)
         {
             data[objectType].RemoveAt(index);
+            if (data[objectType].Count <= 0)
+                data.Remove(objectType);
             dirtyEvents.Add(new ItemRegistryEvent()
             {
                 Type = ItemRegistryEvent.EventType.RemoveAt,
+                ObjType = objectType,
                 index = index
+            });
+        }
+
+        private void AddItem(long objectType, NetworkBehaviourReference itemRef)
+        {
+            if (!data.ContainsKey(objectType))
+                data[objectType] = new List<NetworkBehaviourReference>();
+            data[objectType].Add(itemRef);
+            dirtyEvents.Add(new ItemRegistryEvent()
+            {
+                Type = ItemRegistryEvent.EventType.Push,
+                ObjType = objectType,
+                itemRef = itemRef
             });
         }
 
@@ -229,6 +251,33 @@ namespace model.Network
                         continue;
                     registry.RemoveAt(ItemType.GetHashCode(), i--);
                 }
+            }
+
+            public BaseItem Pop()
+            {
+                int count = Count;
+                if (count <= 0)
+                    throw new InvalidOperationException("could not pop from an empty stack");
+
+                items[count - 1].TryGet(out BaseItem result);
+                registry.RemoveAt(ItemType.GetHashCode(), Count - 1);
+
+                return result;
+            }
+
+            public bool TryPop(out BaseItem result)
+            {
+                try
+                {
+                    result = Pop();
+                }
+                catch (InvalidOperationException)
+                {
+                    result = null;
+                    return false;
+                }
+
+                return true;
             }
         }
 
