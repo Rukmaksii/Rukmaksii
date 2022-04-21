@@ -123,12 +123,10 @@ namespace model
             }
         }
 
-        private NetworkList<NetworkBehaviourReference> itemsList;
         private NetworkItemRegistry itemRegistry;
 
         private void Awake()
         {
-            itemsList = new NetworkList<NetworkBehaviourReference>();
             itemRegistry = new NetworkItemRegistry();
         }
 
@@ -233,8 +231,6 @@ namespace model
             return switched;
         }
 
-        private Dictionary<Type, ItemContainer<BaseItem>> itemsDictionary =
-            new Dictionary<Type, ItemContainer<BaseItem>>();
 
         /**
          * <summary>adds an instantiated item to the inventory</summary>
@@ -251,7 +247,6 @@ namespace model
         [ServerRpc(RequireOwnership = false)]
         private void AddItemServerRpc(NetworkBehaviourReference itemRef)
         {
-            this.itemsList.Add(itemRef);
             itemRef.TryGet(out BaseItem item);
             item.PickUp(Player);
         }
@@ -261,17 +256,6 @@ namespace model
             return itemRegistry[typeof(TForMethod)];
         }
 
-        [ServerRpc]
-        private void RemoveItemsServerRpc(NetworkBehaviourReference[] itemRefs)
-        {
-            for (int i = 0; i < itemsList.Count; i++)
-            {
-                itemsList[i].TryGet(out BaseItem item);
-                if (item.State == ItemState.Consumed || itemRefs.Contains(itemsList[i]))
-                    itemsList.RemoveAt(i--);
-            }
-        }
-
         /**
          * <summary>if the item is in the inventory, it removes it
          * also it destroys the item from the scene</summary>
@@ -279,9 +263,11 @@ namespace model
          */
         public void RemoveItem(BaseItem item)
         {
-            BaseItem element = itemsDictionary[item.GetType()].Pop();
+            /*BaseItem element = itemsDictionary[item.GetType()].Pop();
             if (element != null)
                 Destroy(element.gameObject);
+            */
+            throw new NotImplementedException();
         }
 
         [ServerRpc(RequireOwnership = false)]
