@@ -8,8 +8,9 @@ namespace model.Network
     {
         private List<ItemRegistryEvent> dirtyEvents = new List<ItemRegistryEvent>();
 
-        private Dictionary<Type, List<NetworkBehaviourReference>> data =
-            new Dictionary<Type, List<NetworkBehaviourReference>>();
+        // binds item type hash code to list of item references
+        private Dictionary<long, List<NetworkBehaviourReference>> data =
+            new Dictionary<long, List<NetworkBehaviourReference>>();
 
         public NetworkItemRegistry()
         {
@@ -39,7 +40,19 @@ namespace model.Network
 
         public override void WriteField(FastBufferWriter writer)
         {
-            throw new NotImplementedException();
+            // writes the number of different items
+            writer.WriteValueSafe((ushort) data.Count);
+            foreach (var pair in data)
+            {
+                long objType = pair.Key;
+                List<NetworkBehaviourReference> objRefs = pair.Value;
+                writer.WriteValueSafe(objType);
+                writer.WriteValueSafe(objRefs.Count);
+                foreach (var objRef in objRefs)
+                {
+                    writer.WriteNetworkSerializable(objRef);
+                }
+            }
         }
 
         public override void ReadField(FastBufferReader reader)
@@ -62,7 +75,12 @@ namespace model.Network
                 /// <summary>
                 ///  clears the stack at provided index
                 /// </summary>
-                Clear
+                Clear,
+                
+                /// <summary>
+                ///  Fully re-fills the container
+                /// </summary>
+                Full
             }
 
             public int index;
