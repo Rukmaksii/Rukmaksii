@@ -49,6 +49,8 @@ namespace Map
         
         /** <value>the state of an objective, whether Neutral or Captured</value> */
         private State state;
+
+        public State CurrentState => state;
         
         /** <value>the list of all players on an objective</value> */
         private List<BasePlayer> capturingPlayersList = new List<BasePlayer>();

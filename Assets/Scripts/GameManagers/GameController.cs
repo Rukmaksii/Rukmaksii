@@ -135,6 +135,9 @@ namespace GameManagers
         {
             GameObject.Find("Base1").GetComponent<BaseController>().UpdateTeamServerRpc(0);
             GameObject.Find("Base2").GetComponent<BaseController>().UpdateTeamServerRpc(1);
+            
+            GameObject.Find("Shield1").GetComponent<ShieldController>().UpdateTeamServerRpc(0);
+            GameObject.Find("Shield2").GetComponent<ShieldController>().UpdateTeamServerRpc(1);
 
             playerUIInstance = Instantiate(uiPrefab);
             playerUIInstance.name = uiPrefab.name;
