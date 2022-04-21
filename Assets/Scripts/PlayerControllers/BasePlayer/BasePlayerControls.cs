@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Items;
 using model;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -229,6 +230,14 @@ namespace PlayerControllers
                 })
                 .OrderBy(go => Vector3.Distance(transform.position, go.transform.position))
                 .FirstOrDefault();
+        }
+
+        public void OnInventoryOpened(InputAction.CallbackContext ctx)
+        {
+            if (!IsOwner || !ctx.performed)
+                return;
+
+            Debug.Log(inventory.GetItemContainer<FuelBooster>().Count);
         }
     }
 }
