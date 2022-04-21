@@ -123,7 +123,7 @@ namespace model
             }
         }
 
-        private NetworkItemRegistry itemRegistry;
+        private NetworkItemRegistry itemRegistry = new NetworkItemRegistry();
 
         private NetworkVariable<long> selectedItemType = new NetworkVariable<long>();
 
@@ -139,10 +139,6 @@ namespace model
         public bool ItemSelected => !(SelectedItemType is null);
 
 
-        private void Awake()
-        {
-            itemRegistry = new NetworkItemRegistry();
-        }
 
         /**
          * <summary>adds a weapon to the inventory replacing the old weapon of the same <see cref="WeaponType"/> if existing</summary>
@@ -401,7 +397,7 @@ namespace model
 
             if (oldWeapon is {IsOwned: true})
                 oldWeapon.SwitchRender(false);
-            if (baseWeapon is null && baseWeapon.IsOwned)
+            if (baseWeapon != null && baseWeapon.IsOwned)
             {
                 Player.SetHandTargets(baseWeapon.RightHandTarget, baseWeapon.LeftHandTarget);
                 baseWeapon.SwitchRender(true);
