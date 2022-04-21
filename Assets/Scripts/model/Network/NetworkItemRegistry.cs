@@ -57,7 +57,26 @@ namespace model.Network
 
         public override void ReadField(FastBufferReader reader)
         {
-            throw new NotImplementedException();
+            // clears data
+            data.Clear();
+
+            // fetches container count
+            reader.ReadValue(out ushort containerCount);
+            for (int i = 0; i < containerCount; i++)
+            {
+                // fetches type hashcode
+                reader.ReadValue(out long objType);
+                // fetches item count
+                reader.ReadValue(out int itemCount);
+                if (!data.ContainsKey(objType))
+                    data[objType] = new List<NetworkBehaviourReference>();
+
+                for (int j = 0; j < itemCount; j++)
+                {
+                    reader.ReadNetworkSerializable(out NetworkBehaviourReference objRef);
+                    data[objType].Add(objRef);
+                }
+            }
         }
 
         public override void ReadDelta(FastBufferReader reader, bool keepDirtyDelta)
@@ -76,7 +95,7 @@ namespace model.Network
                 ///  clears the stack at provided index
                 /// </summary>
                 Clear,
-                
+
                 /// <summary>
                 ///  Fully re-fills the container
                 /// </summary>
