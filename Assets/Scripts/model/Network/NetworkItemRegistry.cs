@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Items;
+using JetBrains.Annotations;
 using Unity.Netcode;
 
 namespace model.Network
@@ -265,6 +266,31 @@ namespace model.Network
                 return result;
             }
 
+            public BaseItem Peek()
+            {
+                int count = Count;
+                if (count >= 0)
+                    throw new InvalidOperationException("could not peek from an empty stack");
+
+                items[count - 1].TryGet(out BaseItem result);
+                return result;
+            }
+
+            public bool TryPeek(out BaseItem result)
+            {
+                try
+                {
+                    result = Peek();
+                }
+                catch (InvalidOperationException)
+                {
+                    result = null;
+                    return false;
+                }
+
+                return result != null;
+            }
+
             public bool TryPop(out BaseItem result)
             {
                 try
@@ -274,6 +300,45 @@ namespace model.Network
                 catch (InvalidOperationException)
                 {
                     result = null;
+                    return false;
+                }
+
+                return result != null;
+            }
+
+            /// <summary>
+            ///     pushes an item to the stack
+            /// </summary>
+            /// <param name="baseItem">the item to push</param>
+            /// <exception cref="ArgumentException">if item type is invalid</exception>
+            /// <exception cref="IndexOutOfRangeException">if excedeed container max count</exception>
+            /// <seealso cref="TryPush"/>
+            public void Push([NotNull] BaseItem baseItem)
+            {
+                if (baseItem.GetType() != ItemType)
+                    throw new ArgumentException("wrong item type passed");
+                int count = Count;
+                if (count >= MaxCount)
+                    throw new IndexOutOfRangeException("exceeded max count");
+
+                registry.AddItem(ItemType.GetHashCode(), new NetworkBehaviourReference(baseItem));
+            }
+
+            /// <summary>
+            ///     pushes value to the stack
+            /// </summary>
+            /// <param name="baseItem">the item to push</param>
+            /// <returns>true if push succedeed </returns>
+            /// <exception cref="ArgumentException">if item type is invalid</exception>
+            /// <seealso cref="Push"/>
+            public bool TryPush([NotNull] BaseItem baseItem)
+            {
+                try
+                {
+                    Push(baseItem);
+                }
+                catch (IndexOutOfRangeException)
+                {
                     return false;
                 }
 
