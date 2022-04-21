@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Unity.Netcode;
+using UnityEngine.Analytics;
 
 namespace model.Network
 {
@@ -49,8 +50,9 @@ namespace model.Network
                 writer.WriteValueSafe(dirtyEvent.Type);
                 switch (dirtyEvent.Type)
                 {
-                    case ItemRegistryEvent.EventType.Clear:
+                    case ItemRegistryEvent.EventType.RemoveAt:
                         // remove at
+                        writer.WriteValueSafe(dirtyEvent.ObjType);
                         writer.WriteValueSafe(dirtyEvent.index);
                         break;
                     case ItemRegistryEvent.EventType.Push:
@@ -89,13 +91,13 @@ namespace model.Network
             data.Clear();
 
             // fetches container count
-            reader.ReadValue(out ushort containerCount);
+            reader.ReadValueSafe(out ushort containerCount);
             for (int i = 0; i < containerCount; i++)
             {
                 // fetches type hashcode
-                reader.ReadValue(out long objType);
+                reader.ReadValueSafe(out long objType);
                 // fetches item count
-                reader.ReadValue(out int itemCount);
+                reader.ReadValueSafe(out int itemCount);
                 if (!data.ContainsKey(objType))
                     data[objType] = new List<NetworkBehaviourReference>();
 
@@ -109,7 +111,78 @@ namespace model.Network
 
         public override void ReadDelta(FastBufferReader reader, bool keepDirtyDelta)
         {
-            throw new NotImplementedException();
+            reader.ReadValueSafe(out ushort deltaCount);
+            for (int i = 0; i < deltaCount; i++)
+            {
+                reader.ReadValueSafe(out ItemRegistryEvent.EventType eventType);
+                switch (eventType)
+                {
+                    case ItemRegistryEvent.EventType.RemoveAt:
+                    {
+                        reader.ReadValueSafe(out long objType);
+                        reader.ReadValueSafe(out int index);
+                        data[objType].RemoveAt(index);
+
+                        if (keepDirtyDelta)
+                        {
+                            dirtyEvents.Add(new ItemRegistryEvent()
+                            {
+                                Type = eventType,
+                                ObjType = objType,
+                                index = index
+                            });
+                        }
+                    }
+                        break;
+                    case ItemRegistryEvent.EventType.Push:
+                    {
+                        reader.ReadValueSafe(out long objType);
+                        reader.ReadNetworkSerializable(out NetworkBehaviourReference itemRef);
+                        if (!data.ContainsKey(objType))
+                            data[objType] = new List<NetworkBehaviourReference>();
+                        data[objType].Add(itemRef);
+                        if (keepDirtyDelta)
+                        {
+                            dirtyEvents.Add(new ItemRegistryEvent()
+                            {
+                                Type = eventType,
+                                ObjType = objType,
+                                itemRef = itemRef
+                            });
+                        }
+                    }
+                        break;
+                    case ItemRegistryEvent.EventType.Pop:
+                    {
+                        reader.ReadValueSafe(out long objType);
+                        data[objType].RemoveAt(data[objType].Count - 1);
+
+                        if (keepDirtyDelta)
+                        {
+                            dirtyEvents.Add(new ItemRegistryEvent()
+                            {
+                                Type = eventType,
+                                ObjType = objType
+                            });
+                        }
+                    }
+                        break;
+                    case ItemRegistryEvent.EventType.Clear:
+                        data.Clear();
+                        if (keepDirtyDelta)
+                        {
+                            dirtyEvents.Add(new ItemRegistryEvent()
+                            {
+                                Type = eventType
+                            });
+                        }
+                        break;
+                    case ItemRegistryEvent.EventType.Full:
+                        ReadField(reader);
+                        ResetDirty();
+                        break;
+                }
+            }
         }
 
         struct ItemRegistryEvent
@@ -122,12 +195,18 @@ namespace model.Network
                 /// <summary>
                 ///  clears the stack at provided index
                 /// </summary>
-                Clear,
+                RemoveAt,
 
                 /// <summary>
                 ///  Fully re-fills the container
                 /// </summary>
-                Full
+                Full,
+                
+                /// <summary>
+                ///     clears the data
+                /// </summary>
+                Clear
+                
             }
 
             public EventType Type;
