@@ -15,6 +15,8 @@ namespace model.Network
         private Dictionary<long, List<NetworkBehaviourReference>> data =
             new Dictionary<long, List<NetworkBehaviourReference>>();
 
+        public ItemContainer this[Type itemType] => new ItemContainer(BaseItem.MaxDictionary[itemType], itemType, this);
+
 
         public NetworkItemRegistry()
         {
@@ -220,6 +222,11 @@ namespace model.Network
                 ObjType = objectType,
                 itemRef = itemRef
             });
+        }
+
+        public bool ContainsKey(Type key)
+        {
+            return data.ContainsKey(key.GetHashCode());
         }
 
         public class ItemContainer
