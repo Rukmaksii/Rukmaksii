@@ -32,12 +32,11 @@ public class ShieldController : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        collider.enabled = activated.Value;
     }
 
     public void ChangeActivation(bool activated)
     {
-        collider.enabled = activated;
         this.activated.Value = activated;
     }
     
