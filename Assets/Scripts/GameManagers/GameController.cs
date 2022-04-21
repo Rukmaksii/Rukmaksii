@@ -63,7 +63,6 @@ namespace GameManagers
         [SerializeField] private ConnectionScriptableObject connectionData;
         public ConnectionData Parameters => connectionData.Data;
 
-        [SerializeField] protected GameObject uiPrefab;
         private GameObject playerUIInstance;
 
         [SerializeField] protected GameObject deathScreenPrefab;
@@ -136,9 +135,8 @@ namespace GameManagers
             GameObject.Find("Base1").GetComponent<BaseController>().UpdateTeamServerRpc(0);
             GameObject.Find("Base2").GetComponent<BaseController>().UpdateTeamServerRpc(1);
 
-            playerUIInstance = Instantiate(uiPrefab);
-            playerUIInstance.name = uiPrefab.name;
-            playerUIInstance.GetComponent<Canvas>().worldCamera = Camera.current;
+
+            playerUIInstance = GameObject.FindWithTag("PlayerHUD");
 
             deathScreen = Instantiate(deathScreenPrefab);
             deathScreen.name = deathScreenPrefab.name;

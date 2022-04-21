@@ -4,7 +4,10 @@ using model;
 using PlayerControllers;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 using Weapons;
+using Image = UnityEngine.UI.Image;
+using Slider = UnityEngine.UI.Slider;
 
 namespace HUD
 {
@@ -19,6 +22,9 @@ namespace HUD
         [SerializeField] protected GameObject hitMarker;
         [SerializeField] protected Image weaponPlaceHolder;
         [SerializeField] protected Text currentStrategy;
+        [SerializeField] private GameObject itemSelector;
+
+        public GameObject ItemSelector => itemSelector;
 
         private BasePlayer localPlayer;
         public Image Crosshair;
