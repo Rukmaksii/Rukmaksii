@@ -40,7 +40,7 @@ namespace Weapons
                     ? new NetworkBehaviourReference()
                     : new NetworkBehaviourReference(value));
 
-            get => playerReference.Value.TryGet<BasePlayer>(out BasePlayer res) ? res : null;
+            get => IsSpawned && playerReference.Value.TryGet<BasePlayer>(out BasePlayer res) ? res : null;
         }
 
         /// <summary>
@@ -182,7 +182,7 @@ namespace Weapons
 
             GetComponent<Rigidbody>().isKinematic = IsOwned;
 
-            if (IsOwner && Player != null)
+            if (IsOwner && IsOwned)
             {
                 if (Shoulder == null)
                     SetShoulder();
@@ -198,6 +198,8 @@ namespace Weapons
         // Update is called once per frame
         void FixedUpdate()
         {
+            if (!IsSpawned)
+                return;
             if (IsServer)
                 UpdateServer(Time.fixedDeltaTime);
 

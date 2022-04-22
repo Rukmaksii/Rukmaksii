@@ -73,7 +73,7 @@ namespace Items
                     ? new NetworkBehaviourReference()
                     : new NetworkBehaviourReference(value));
 
-            get => playerReference.Value.TryGet(out BasePlayer res) ? res : null;
+            get => IsSpawned && playerReference.Value.TryGet(out BasePlayer res) ? res : null;
         }
 
         public bool IsOwned => !(Player is null);
@@ -108,11 +108,16 @@ namespace Items
 
         private void Update()
         {
+            if (!IsSpawned)
+                return;
             if (!started)
                 GetComponent<Rigidbody>().isKinematic = IsOwned;
 
 
-            if (!IsOwner || State == ItemState.Consumed || consumedTime < 0)
+            if (!IsOwned ||
+                !IsOwner ||
+                State == ItemState.Consumed ||
+                consumedTime < 0)
                 return;
 
             if (!started)
