@@ -246,15 +246,12 @@ namespace model.Network
             private List<NetworkBehaviourReference> items => registry.data[BaseItem.GetBaseItemHashCode(ItemType)];
             private bool ContainerExists => registry.ContainsKey(ItemType);
 
-            public int Count
-            {
-                get
-                {
-                    if (!ContainerExists)
-                        return 0;
-                    return GetEnumerable().Count();
-                }
-            }
+            public int Count => ContainerExists ? GetEnumerable().Count() : 0;
+
+            /// <summary>
+            ///     the result of Peek function without modifying the data struct
+            /// </summary>
+            public BaseItem Top => Count > 0 ? GetEnumerable().Last() : null;
 
             internal ItemContainer(int maxCount, Type itemType, NetworkItemRegistry registry)
             {

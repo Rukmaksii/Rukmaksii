@@ -95,6 +95,13 @@ namespace Items
         public string Name => Info.Name;
         public ItemCategory Category => Info.Category;
 
+
+        private void Awake()
+        {
+            if (!ItemInfos.ContainsKey(this.GetType()))
+                throw new KeyNotFoundException($"item {Name} was not referenced in BaseItem::ItemInfos");
+        }
+
         private void Update()
         {
             if (!IsOwner || State == ItemState.Consumed || consumedTime < 0)
