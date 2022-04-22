@@ -1,38 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Items;
-using model.Network;
-using PlayerControllers;
 using Unity.Netcode;
 using UnityEngine;
 using Weapons;
 
 namespace model
 {
-    public class Inventory : NetworkBehaviour
+    public partial class Inventory
     {
-        /// <summary>
-        ///     the mode of the inventory
-        /// </summary>
-        public enum Mode
-        {
-            Weapon,
-            Item
-        }
-
-        private readonly NetworkVariable<NetworkBehaviourReference> playerReference =
-            new NetworkVariable<NetworkBehaviourReference>();
-
-        /**
-         * <value>the bound player <seealso cref="BasePlayer"/></value>
-         */
-        public BasePlayer Player
-        {
-            set => UpdatePlayerReferenceServerRpc(new NetworkBehaviourReference(value));
-            get => playerReference.Value.TryGet(out BasePlayer p) ? p : null;
-        }
-
         public List<GameObject> Weapons
         {
             get
@@ -51,20 +26,20 @@ namespace model
         }
 
         /**
-         * <value>the close range weapon</value>
-         */
+                 * <value>the close range weapon</value>
+                 */
         private readonly NetworkVariable<NetworkBehaviourReference> closeRangeWeapon =
             new NetworkVariable<NetworkBehaviourReference>();
 
         /**
-         * <value>the heavy weapon</value>
-         */
+                 * <value>the heavy weapon</value>
+                 */
         private readonly NetworkVariable<NetworkBehaviourReference> heavyWeapon =
             new NetworkVariable<NetworkBehaviourReference>();
 
         /**
-         * <value>the light weapon</value>
-         */
+                 * <value>the light weapon</value>
+                 */
         private readonly NetworkVariable<NetworkBehaviourReference> lightWeapon =
             new NetworkVariable<NetworkBehaviourReference>();
 
@@ -76,9 +51,9 @@ namespace model
         public BaseWeapon LightWeapon => lightWeapon.Value.TryGet(out BaseWeapon res) ? res : null;
 
         /**
-         * <value>the <see cref="WeaponType"/> of the currently selected weapon</value>
-         * <remarks>set to <see cref="WeaponType.CloseRange"/> as it is assumed the close range weapon will never be null</remarks>
-         */
+                 * <value>the <see cref="WeaponType"/> of the currently selected weapon</value>
+                 * <remarks>set to <see cref="WeaponType.CloseRange"/> as it is assumed the close range weapon will never be null</remarks>
+                 */
         private readonly NetworkVariable<WeaponType> selectedWeaponType =
             new NetworkVariable<WeaponType>(WeaponType.CloseRange);
 
@@ -90,9 +65,9 @@ namespace model
 
 
         /**
-         * <value>the currently selected weapon</value>
-         * <remarks>should not be null as at least <see cref="closeRangeWeapon"/> should not be null</remarks>
-         */
+                 * <value>the currently selected weapon</value>
+                 * <remarks>should not be null as at least <see cref="closeRangeWeapon"/> should not be null</remarks>
+                 */
         public BaseWeapon CurrentWeapon
         {
             get
@@ -134,28 +109,9 @@ namespace model
             }
         }
 
-        private readonly NetworkItemRegistry itemRegistry =
-            new NetworkItemRegistry(writePermission: NetworkVariableWritePermission.Owner);
-
-        private readonly NetworkVariable<long> selectedItemType = new NetworkVariable<long>();
-
-        private long _oldSelectedItem;
-
-        public Type SelectedItemType
-        {
-            get =>
-                BaseItem.ItemInfos.Keys
-                    .FirstOrDefault(v => BaseItem.GetBaseItemHashCode(v) == selectedItemType.Value);
-
-            set => UpdateSelectedItemTypeServerRpc(BaseItem.GetBaseItemHashCode(value));
-        }
-
-        public bool ItemSelected => !(SelectedItemType is null);
-
-
         /**
-         * <summary>adds a weapon to the inventory replacing the old weapon of the same <see cref="WeaponType"/> if existing</summary>
-         */
+                 * <summary>adds a weapon to the inventory replacing the old weapon of the same <see cref="WeaponType"/> if existing</summary>
+                 */
         public void AddWeapon(BaseWeapon newWeapon)
         {
             var weaponRef = new NetworkBehaviourReference(newWeapon);
@@ -188,9 +144,9 @@ namespace model
         }
 
         /**
-         * <summary>changes the currently selected weapon if existing</summary>
-         * <returns>false if the provided <see cref="WeaponType"/> not be found</returns>
-         */
+                 * <summary>changes the currently selected weapon if existing</summary>
+                 * <returns>false if the provided <see cref="WeaponType"/> not be found</returns>
+                 */
         public bool SwitchWeapon(WeaponType type)
         {
             if (type == CurrentWeapon.Type || Weapons.Count <= 1)
@@ -252,84 +208,6 @@ namespace model
             }
 
             return switched;
-        }
-
-
-        /**
-         * <summary>adds an instantiated item to the inventory</summary>
-         * <param name="item">a BaseItem to be added</param>
-         */
-        public void AddItem(BaseItem item)
-        {
-            if (item.State != ItemState.Clean || !itemRegistry[item.GetType()].CanPush)
-                return;
-
-            if (IsOwner && itemRegistry[item.GetType()].TryPush(item))
-            {
-                AddItemServerRpc(new NetworkBehaviourReference(item));
-            }
-            else if (IsServer)
-            {
-                item.PickUp(Player);
-                ClientRpcParams p = new ClientRpcParams
-                {
-                    Send = new ClientRpcSendParams
-                    {
-                        TargetClientIds = new[] {Player.OwnerClientId}
-                    }
-                };
-                AddItemClientRpc(new NetworkBehaviourReference(item), p);
-            }
-        }
-
-        [ServerRpc(RequireOwnership = false)]
-        private void AddItemServerRpc(NetworkBehaviourReference itemRef)
-        {
-            itemRef.TryGet(out BaseItem item);
-            item.PickUp(Player);
-        }
-
-        [ClientRpc]
-        private void AddItemClientRpc(NetworkBehaviourReference itemRef, ClientRpcParams p = default)
-        {
-            itemRef.TryGet(out BaseItem item);
-            itemRegistry[item.GetType()].Push(item);
-        }
-
-        public NetworkItemRegistry.ItemContainer GetItemContainer<TForMethod>() where TForMethod : BaseItem
-        {
-            return itemRegistry[typeof(TForMethod)];
-        }
-
-        /**
-         * <summary>drops the current selected Item </summary>
-         * <param name="item">a BaseItem to be removed</param>
-         */
-        public void DropCurrentItem()
-        {
-            if (!ItemSelected)
-                return;
-            if (itemRegistry[SelectedItemType].TryPop(out BaseItem item))
-                DropItemServerRpc(new NetworkBehaviourReference(item));
-        }
-
-        [ServerRpc]
-        private void DropItemServerRpc(NetworkBehaviourReference itemRef)
-        {
-            itemRef.TryGet(out BaseItem item);
-            item.Drop();
-        }
-
-        [ServerRpc(RequireOwnership = false)]
-        private void UpdatePlayerReferenceServerRpc(NetworkBehaviourReference playerRef)
-        {
-            this.playerReference.Value = playerRef;
-        }
-
-        [ServerRpc]
-        private void UpdateSelectedItemTypeServerRpc(long value)
-        {
-            selectedItemType.Value = value;
         }
 
         [ServerRpc(RequireOwnership = false)]
