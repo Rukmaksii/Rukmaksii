@@ -214,7 +214,7 @@ namespace PlayerControllers
         {
             // ReSharper disable once Unity.PreferNonAllocApi
             return Physics.OverlapSphere(transform.TransformPoint(controller.center), distance)
-                .Where(cld => cld.gameObject.TryGetComponent(out BaseWeapon weapon) && !weapon.IsOwned)
+                .Where(cld => cld.gameObject.TryGetComponent(out IPickable pickable) && !pickable.IsOwned)
                 .Select(cld => cld.gameObject)
                 .ToArray();
         }
