@@ -132,16 +132,6 @@ namespace Weapons
         {
             if (IsServer)
                 currentAmmo.Value = MaxAmmo;
-
-            Transform[] transforms = Player.GetComponentsInChildren<Transform>();
-            foreach (Transform transform in transforms)
-            {
-                if (transform.name == "mixamorig:RightShoulder")
-                {
-                    Shoulder = transform;
-                    break;
-                }
-            }
         }
 
         void UpdateServer(float deltaTime)
@@ -391,6 +381,15 @@ namespace Weapons
             Player = player;
             NetworkObject.ChangeOwnership(Player.OwnerClientId);
             NetworkObject.TrySetParent(Player.transform);
+            Transform[] transforms = Player.GetComponentsInChildren<Transform>();
+            foreach (Transform transform in transforms)
+            {
+                if (transform.name == "mixamorig:RightShoulder")
+                {
+                    Shoulder = transform;
+                    break;
+                }
+            }
         }
 
         /// <summary>
