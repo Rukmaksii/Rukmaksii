@@ -18,6 +18,10 @@ namespace model.Network
         public ItemContainer this[Type itemType] =>
             new ItemContainer(BaseItem.ItemInfos[itemType].MaxCount, itemType, this);
 
+        public delegate void OnValueChangeDelegate(ItemRegistryEvent @event);
+
+        public OnValueChangeDelegate OnValueChange = null;
+
 
         public NetworkItemRegistry()
         {
@@ -127,19 +131,24 @@ namespace model.Network
                     {
                         reader.ReadValueSafe(out long objType);
                         reader.ReadValueSafe(out int index);
+
+                        NetworkBehaviourReference itemRef = data[objType][index];
                         data[objType].RemoveAt(index);
 
                         if (data[objType].Count <= 0)
                             data.Remove(objType);
 
+                        var regEvent = new ItemRegistryEvent()
+                        {
+                            Type = eventType,
+                            ObjType = objType,
+                            index = index,
+                            itemRef = itemRef
+                        };
+                        OnValueChange?.Invoke(regEvent);
                         if (keepDirtyDelta)
                         {
-                            dirtyEvents.Add(new ItemRegistryEvent()
-                            {
-                                Type = eventType,
-                                ObjType = objType,
-                                index = index
-                            });
+                            dirtyEvents.Add(regEvent);
                         }
                     }
                         break;
@@ -150,45 +159,61 @@ namespace model.Network
                         if (!data.ContainsKey(objType))
                             data[objType] = new List<NetworkBehaviourReference>();
                         data[objType].Add(itemRef);
+
+                        var regEvent = new ItemRegistryEvent()
+                        {
+                            Type = eventType,
+                            ObjType = objType,
+                            itemRef = itemRef
+                        };
+
+                        OnValueChange?.Invoke(regEvent);
                         if (keepDirtyDelta)
                         {
-                            dirtyEvents.Add(new ItemRegistryEvent()
-                            {
-                                Type = eventType,
-                                ObjType = objType,
-                                itemRef = itemRef
-                            });
+                            dirtyEvents.Add(regEvent);
                         }
                     }
                         break;
                     case ItemRegistryEvent.EventType.Pop:
                     {
                         reader.ReadValueSafe(out long objType);
-                        data[objType].RemoveAt(data[objType].Count - 1);
+                        int index = data[objType].Count - 1;
+                        NetworkBehaviourReference itemRef = data[objType][index];
+                        data[objType].RemoveAt(index);
 
                         if (data[objType].Count <= 0)
                             data.Remove(objType);
 
+                        var regEvent = new ItemRegistryEvent()
+                        {
+                            Type = eventType,
+                            ObjType = objType,
+                            index = index,
+                            itemRef = itemRef
+                        };
+
+                        OnValueChange?.Invoke(regEvent);
                         if (keepDirtyDelta)
                         {
-                            dirtyEvents.Add(new ItemRegistryEvent()
-                            {
-                                Type = eventType,
-                                ObjType = objType
-                            });
+                            dirtyEvents.Add(regEvent);
                         }
                     }
                         break;
                     case ItemRegistryEvent.EventType.Clear:
+                    {
                         data.Clear();
+
+                        var regEvent = new ItemRegistryEvent()
+                        {
+                            Type = eventType
+                        };
+                        
+                        OnValueChange?.Invoke(regEvent);
                         if (keepDirtyDelta)
                         {
-                            dirtyEvents.Add(new ItemRegistryEvent()
-                            {
-                                Type = eventType
-                            });
+                            dirtyEvents.Add(regEvent);
                         }
-
+                    }
                         break;
                     case ItemRegistryEvent.EventType.Full:
                         ReadField(reader);
@@ -430,7 +455,7 @@ namespace model.Network
             public bool CanPush => Count < MaxCount;
         }
 
-        struct ItemRegistryEvent
+        public struct ItemRegistryEvent
         {
             public enum EventType : byte
             {
