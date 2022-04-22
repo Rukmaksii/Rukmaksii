@@ -222,13 +222,15 @@ namespace PlayerControllers
         private GameObject GetClosestPickableObject(float distance)
         {
             return GetSurroundingObjects(distance)
-                .Where(go =>
+                .Select(go =>
                 {
                     var position = cameraController.Camera.WorldToViewportPoint(go.transform.position);
                     var screenPos = new Vector2(position.x, position.y);
-                    return screenPos.y > 0 && screenPos.y < 1 && screenPos.x > 0 && screenPos.x < 1;
+                    return (go, screenPos);
                 })
-                .OrderBy(go => Vector3.Distance(transform.position, go.transform.position))
+                .Where(item => item.Item2.y > 0 && item.Item2.y < 1 && item.Item2.x > 0 && item.Item2.x < 1)
+                .OrderBy(item => Vector2.Distance(new Vector2(.5F, .5F), item.Item2))
+                .Select(item => item.Item1)
                 .FirstOrDefault();
         }
 
