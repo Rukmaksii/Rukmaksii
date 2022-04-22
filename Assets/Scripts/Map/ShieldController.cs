@@ -36,11 +36,6 @@ public class ShieldController : NetworkBehaviour
         collider.enabled = activated.Value;
     }
 
-    public void ChangeActivation(bool activated)
-    {
-        this.activated.Value = activated;
-    }
-    
     [ServerRpc]
     public void UpdateTeamServerRpc(int teamId)
     {

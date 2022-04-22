@@ -75,19 +75,19 @@ namespace GameManagers
                 {
                     if (objective.CapturingTeam != shield1.TeamId)
                     {
-                        shield1.ChangeActivation(false);
-                        shield2.ChangeActivation(true);
+                        shield1.Activated.Value = false;
+                        shield2.Activated.Value = true;
                     }
                     else
                     {
-                        shield1.ChangeActivation(true);
-                        shield2.ChangeActivation(false);
+                        shield1.Activated.Value = true;
+                        shield2.Activated.Value = false;
                     }
                 }
                 else
                 {
-                    shield1.ChangeActivation(true);
-                    shield2.ChangeActivation(true);
+                    shield1.Activated.Value = true;
+                    shield2.Activated.Value = true;
                 }
             }
         }
