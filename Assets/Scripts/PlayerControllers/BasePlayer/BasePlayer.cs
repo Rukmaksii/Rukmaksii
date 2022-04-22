@@ -60,6 +60,7 @@ namespace PlayerControllers
             {
                 SetHandTargets(weapon.RightHandTarget, weapon.LeftHandTarget);
             }
+
             gameObject.AddComponent<Jetpack>();
             Jetpack.FuelDuration = DefaultFuelDuration;
 
@@ -71,12 +72,9 @@ namespace PlayerControllers
 
             if (IsOwner)
             {
-                UpdateHealthServerRpc(maxHealth, OwnerClientId);
-
                 GameObject playerCamera = GameObject.FindGameObjectWithTag("Player Camera");
                 cameraController = playerCamera.GetComponent<CameraController>();
                 UpdateCamera();
-
 
                 Cursor.lockState = CursorLockMode.Locked;
             }

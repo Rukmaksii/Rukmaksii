@@ -158,10 +158,8 @@ namespace PlayerControllers
 
         protected virtual float dashForce { get; set; } = 30f;
 
-        public int MaxHealth => maxHealth;
 
-
-        protected abstract int maxHealth { get; }
+        public abstract int MaxHealth { get; protected set; }
 
         /** <value>current player health</value> */
         private NetworkVariable<int> CurrentHealth { get; } = new NetworkVariable<int>(1);

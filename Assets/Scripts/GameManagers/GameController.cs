@@ -192,6 +192,8 @@ namespace GameManagers
             netObj.SpawnAsPlayerObject(ownerId, true);
 
             var player = instance.GetComponent<BasePlayer>();
+
+            player.UpdateHealthServerRpc(player.MaxHealth, ownerId);
             EquipPlayer(player);
         }
 

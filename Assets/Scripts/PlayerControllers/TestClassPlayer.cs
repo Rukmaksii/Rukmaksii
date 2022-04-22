@@ -3,7 +3,7 @@
     public class TestClassPlayer : BasePlayer
     {
         public override string ClassName { get; } = "test class";
-        protected override int maxHealth { get; } = 100;
+        public override int MaxHealth { get; protected set; } = 100;
         protected override float movementSpeed { get; } = 10f;
     }
 }
