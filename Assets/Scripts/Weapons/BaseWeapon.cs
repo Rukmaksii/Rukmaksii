@@ -373,7 +373,6 @@ namespace Weapons
 
         private void SetShoulder()
         {
-            Debug.Log("set shoulder");
             Transform[] transforms = Player.GetComponentsInChildren<Transform>();
             foreach (Transform transform in transforms)
             {
