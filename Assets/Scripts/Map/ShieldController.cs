@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ShieldController : NetworkBehaviour
 {
-    private NetworkVariable<bool> activated = new NetworkVariable<bool>(true);
+    private NetworkVariable<bool> activated = new NetworkVariable<bool>();
 
     public NetworkVariable<bool> Activated
     {
@@ -21,23 +21,24 @@ public class ShieldController : NetworkBehaviour
         set => teamId = value;
     }
 
-    private new MeshCollider collider;
+    
     
     // Start is called before the first frame update
     void Start()
     {
-        collider = gameObject.GetComponent<MeshCollider>();
+        activated.Value = true;
     }
 
     // Update is called once per frame
     void Update()
     {
+        MeshCollider collider = gameObject.GetComponent<MeshCollider>();
         collider.enabled = activated.Value;
     }
 
     public void ChangeActivation(bool activated)
     {
-        collider.enabled = activated;
+        this.activated.Value = activated;
     }
     
     [ServerRpc]
