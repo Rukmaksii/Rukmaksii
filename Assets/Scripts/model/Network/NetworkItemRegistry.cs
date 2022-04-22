@@ -234,6 +234,19 @@ namespace model.Network
             return data.ContainsKey(BaseItem.GetBaseItemHashCode(key));
         }
 
+        public Dictionary<Type, ItemContainer> GetData()
+        {
+            Dictionary<Type, ItemContainer> res = new Dictionary<Type, ItemContainer>();
+            foreach (var pair in BaseItem.ItemInfos)
+            {
+                var container = this[pair.Key];
+                if (container.Count > 0)
+                    res[pair.Key] = container;
+            }
+
+            return res;
+        }
+
         /// <summary>
         ///     a container for items of the same type 
         /// </summary>
