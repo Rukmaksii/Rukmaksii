@@ -4,10 +4,7 @@ using model;
 using PlayerControllers;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
 using Weapons;
-using Image = UnityEngine.UI.Image;
-using Slider = UnityEngine.UI.Slider;
 
 namespace HUD
 {
@@ -27,9 +24,8 @@ namespace HUD
 
         public float CanvasWidth => GetComponent<RectTransform>().rect.width;
         public float CanvasHeight => GetComponent<RectTransform>().rect.height;
-        
-        
-        private BasePlayer localPlayer;
+
+
         public Image Crosshair;
 
         public static HUDController Singleton { get; private set; }
@@ -63,18 +59,22 @@ namespace HUD
 
         void Update()
         {
-            if (GameController.Singleton.LocalPlayer == null)
+            var localPlayer = GameController.Singleton.LocalPlayer;
+            if (localPlayer == null)
                 return;
 
-            weaponPlaceHolder.sprite = GameController.Singleton.LocalPlayer.Inventory.CurrentWeapon.Sprite;
+            if (localPlayer.Inventory.CurrentWeapon != null)
+            {
+                SetAmmoCounter(localPlayer.Inventory.CurrentWeapon.CurrentAmmo,
+                    localPlayer.Inventory.CurrentWeapon.MaxAmmo);
+                weaponPlaceHolder.sprite = localPlayer.Inventory.CurrentWeapon.Sprite;
+            }
 
-            SetHealth(GameController.Singleton.LocalPlayer.CurrentHealthValue);
-            SetFuelAmount(GameController.Singleton.LocalPlayer.Jetpack.FuelConsumption);
-            SetDashCooldown(GameController.Singleton.LocalPlayer.DashedSince,
-                GameController.Singleton.LocalPlayer.DashCooldown);
-            SetAmmoCounter(GameController.Singleton.LocalPlayer.Inventory.CurrentWeapon.CurrentAmmo,
-                GameController.Singleton.LocalPlayer.Inventory.CurrentWeapon.MaxAmmo);
-            SetCurrentStrategy((IMinion.Strategy) GameController.Singleton.LocalPlayer.Strategy);
+            SetHealth(localPlayer.CurrentHealthValue);
+            SetFuelAmount(localPlayer.Jetpack.FuelConsumption);
+            SetDashCooldown(localPlayer.DashedSince,
+                localPlayer.DashCooldown);
+            SetCurrentStrategy(localPlayer.Strategy);
 
             // updating the capture circle UI if the player is on a point
             if (_capturePoint != null)
@@ -84,15 +84,6 @@ namespace HUD
             }
 
             UpdateMap();
-            UpdateObjectives();
-        }
-
-        private void FixedUpdate()
-        {
-            if (GameController.Singleton.LocalPlayer == null)
-                return;
-
-            UpdateMapMonsters();
         }
 
         /**

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using HUD;
+using Items;
 using Map;
 using Minions;
 using model;
@@ -8,6 +9,7 @@ using PlayerControllers;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
+using Weapons;
 
 namespace GameManagers
 {
@@ -116,7 +118,7 @@ namespace GameManagers
         }
 
         /**
-         * <summary>adds a non-local player to the game controller</summary>
+         * <summary>adds a player to the game controller</summary>
          */
         public void AddPlayer(BasePlayer player)
         {
@@ -137,7 +139,7 @@ namespace GameManagers
         {
             GameObject.Find("Base1").GetComponent<BaseController>().UpdateTeamServerRpc(0);
             GameObject.Find("Base2").GetComponent<BaseController>().UpdateTeamServerRpc(1);
-            
+
             GameObject.Find("Shield1").GetComponent<ShieldController>().UpdateTeamServerRpc(0);
             GameObject.Find("Shield2").GetComponent<ShieldController>().UpdateTeamServerRpc(1);
 
@@ -188,6 +190,9 @@ namespace GameManagers
 
             var netObj = instance.GetComponent<NetworkObject>();
             netObj.SpawnAsPlayerObject(ownerId, true);
+
+            var player = instance.GetComponent<BasePlayer>();
+            EquipPlayer(player);
         }
 
         private void ManageDeath()
@@ -214,6 +219,32 @@ namespace GameManagers
                     player.SetActive(true);
                 }
             }
+        }
+
+        private void EquipPlayer(BasePlayer player)
+        {
+            if (!IsServer)
+                throw new NotServerException();
+            player.Inventory.Player = player;
+            GameObject autoWeaponPrefab =
+                WeaponPrefabs.Find(go => go.name == "TestAutoPrefab");
+            GameObject weaponInstance = Instantiate(autoWeaponPrefab);
+            var netObj = weaponInstance.GetComponent<NetworkObject>();
+            netObj.Spawn();
+            player.Inventory.AddWeapon(weaponInstance.GetComponent<BaseWeapon>());
+
+
+            GameObject gunWeaponPrefab =
+                WeaponPrefabs.Find(go => go.name == "TestGunPrefab");
+            weaponInstance = Instantiate(gunWeaponPrefab);
+            weaponInstance.GetComponent<NetworkObject>().Spawn();
+            player.Inventory.AddWeapon(weaponInstance.GetComponent<BaseWeapon>());
+
+            GameObject fuelBoosterPrefab =
+                ItemPrefabs.Find(go => go.name == "FuelBoosterPrefab");
+            FuelBooster itemInstance = Instantiate(fuelBoosterPrefab).GetComponent<FuelBooster>();
+            itemInstance.NetworkObject.Spawn();
+            player.Inventory.AddItem(itemInstance);
         }
 
         IEnumerator DeathScreenTimer()

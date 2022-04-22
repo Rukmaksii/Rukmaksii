@@ -39,7 +39,7 @@ namespace PlayerControllers
             private set => UpdateFlagsServerRpc(PlayerFlags.RUNNING, value);
         }
 
-        public Transform weaponContainer { get; private set; }
+        public Transform WeaponContainer { get; private set; }
 
         private CameraController cameraController;
 
@@ -150,9 +150,7 @@ namespace PlayerControllers
         }
 
 
-        protected Inventory inventory;
-
-        public Inventory Inventory => inventory;
+        public Inventory Inventory => GetComponent<Inventory>();
         public Jetpack Jetpack => GetComponent<Jetpack>();
 
         /** <value>the duration of the dash in seconds</value> */

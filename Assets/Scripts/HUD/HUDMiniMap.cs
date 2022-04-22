@@ -54,6 +54,9 @@ namespace HUD
             
             Quaternion camRotation = GameObject.FindGameObjectWithTag("Player Camera").transform.localRotation;
             arrow.transform.localRotation = new Quaternion(0, 0, -camRotation.y, camRotation.w);
+            
+            UpdateObjectives();
+            UpdateMapMonsters();
         }
 
         private void UpdateObjectives()

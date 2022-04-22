@@ -185,9 +185,9 @@ namespace Weapons
             if (IsOwner && Player != null)
             {
                 transform.localPosition = Shoulder.localPosition + 
-                                          new Vector3(Player.weaponContainer.localPosition.y, -Player.weaponContainer.localPosition.z, -Player.weaponContainer.localPosition.x) + 
+                                          new Vector3(Player.WeaponContainer.localPosition.y, -Player.WeaponContainer.localPosition.z, -Player.WeaponContainer.localPosition.x) + 
                                           new Vector3((float)-0.2, (float)0.1, (float)-0.8);
-                transform.localRotation = Shoulder.localRotation * Player.weaponContainer.localRotation;
+                transform.localRotation = Shoulder.localRotation * Player.WeaponContainer.localRotation;
                 //transform.localPosition = Player.weaponContainer.localPosition;
                 //transform.localRotation = Player.weaponContainer.localRotation;
             }

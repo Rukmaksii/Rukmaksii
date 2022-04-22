@@ -1,11 +1,9 @@
 using GameManagers;
-using Items;
 using model;
 using Unity.Netcode;
 using Unity.Netcode.Samples;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
-using Weapons;
 
 namespace PlayerControllers
 {
@@ -56,58 +54,18 @@ namespace PlayerControllers
 
         void Start()
         {
-            Transform[] transforms = GetComponentsInChildren<Transform>();
-            foreach (Transform t in transforms)
-            {
-                if (t.name == "weaponContainer")
-                {
-                    this.weaponContainer = t;
-                }
-                else if (t.name == "ironman")
-                    RigBuilder = t.GetComponent<RigBuilder>();
-            }
-
-
-            this.inventory = GetComponent<Inventory>();
-            if (IsServer)
-            {
-                this.inventory.Player = this;
-                GameObject autoWeaponPrefab =
-                    GameController.Singleton.WeaponPrefabs.Find(go => go.name == "TestAutoPrefab");
-                GameObject weaponInstance = Instantiate(autoWeaponPrefab);
-                var netObj = weaponInstance.GetComponent<NetworkObject>();
-                netObj.Spawn();
-                this.inventory.AddWeapon(weaponInstance.GetComponent<BaseWeapon>());
-
-
-                GameObject gunWeaponPrefab =
-                    GameController.Singleton.WeaponPrefabs.Find(go => go.name == "TestGunPrefab");
-                weaponInstance = Instantiate(gunWeaponPrefab);
-                weaponInstance.GetComponent<NetworkObject>().Spawn();
-                this.inventory.AddWeapon(weaponInstance.GetComponent<BaseWeapon>());
-
-                GameObject fuelBoosterPrefab =
-                    GameController.Singleton.ItemPrefabs.Find(go => go.name == "FuelBoosterPrefab");
-                FuelBooster itemInstance = Instantiate(fuelBoosterPrefab).GetComponent<FuelBooster>();
-                itemInstance.NetworkObject.Spawn();
-                inventory.AddItem(itemInstance);
-            }
-
-            var weapon = inventory.CurrentWeapon;
+            SetupNestedComponents();
+            var weapon = Inventory.CurrentWeapon;
             if (weapon != null)
             {
                 SetHandTargets(weapon.RightHandTarget, weapon.LeftHandTarget);
             }
-
-
             gameObject.AddComponent<Jetpack>();
             Jetpack.FuelDuration = DefaultFuelDuration;
-
 
             cdManager = GetComponent<CooldownManager>();
 
             controller = GetComponent<CharacterController>();
-
 
             GameController.Singleton.AddPlayer(this);
 
@@ -121,6 +79,20 @@ namespace PlayerControllers
 
 
                 Cursor.lockState = CursorLockMode.Locked;
+            }
+        }
+
+        private void SetupNestedComponents()
+        {
+            Transform[] transforms = GetComponentsInChildren<Transform>();
+            foreach (Transform t in transforms)
+            {
+                if (t.name == "weaponContainer")
+                {
+                    this.WeaponContainer = t;
+                }
+                else if (t.name == "ironman")
+                    RigBuilder = t.GetComponent<RigBuilder>();
             }
         }
 
@@ -159,7 +131,7 @@ namespace PlayerControllers
         private void UpdateServer()
         {
             if (IsShooting)
-                this.inventory.CurrentWeapon.Fire();
+                this.Inventory.CurrentWeapon.Fire();
         }
 
         /**
@@ -265,7 +237,7 @@ namespace PlayerControllers
             if (aim == IsAiming)
                 return;
 
-            GameObject hud = inventory.CurrentWeapon.AimingHUD;
+            GameObject hud = Inventory.CurrentWeapon.AimingHUD;
             if (hud != null)
                 hud.SetActive(aim);
 
@@ -274,7 +246,7 @@ namespace PlayerControllers
             if (aim)
             {
                 IsRunning = false;
-                cameraController.ChangeOffset(inventory.CurrentWeapon.AimingOffset);
+                cameraController.ChangeOffset(Inventory.CurrentWeapon.AimingOffset);
                 UpdateCamera();
             }
             else
@@ -333,6 +305,8 @@ namespace PlayerControllers
 
         public void SetHandTargets(Transform right, Transform left)
         {
+            if (RigBuilder == null)
+                SetupNestedComponents();
             foreach (var tr in GetComponentsInChildren<Transform>())
             {
                 if (tr.name == "RightHandIK")

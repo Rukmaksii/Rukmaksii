@@ -109,10 +109,10 @@ namespace PlayerControllers
         {
             if (!IsOwner)
                 return;
-            BaseWeapon weapon = inventory.CurrentWeapon;
+            BaseWeapon weapon = Inventory.CurrentWeapon;
             if (weapon.CurrentAmmo < weapon.MaxAmmo)
             {
-                inventory.CurrentWeapon.Reload();
+                Inventory.CurrentWeapon.Reload();
                 SetAim(false);
             }
         }
@@ -160,9 +160,9 @@ namespace PlayerControllers
             {
                 float value = ctx.ReadValue<float>();
                 if (value > 0)
-                    inventory.PreviousWeapon();
+                    Inventory.PreviousWeapon();
                 else if (value < 0)
-                    inventory.NextWeapon();
+                    Inventory.NextWeapon();
             }
             else // 1,2,3 control
             {
@@ -175,7 +175,7 @@ namespace PlayerControllers
             if (!IsOwner)
                 return;
 
-            SetAim(!inventory.CurrentWeapon.IsReloading && ctx.performed);
+            SetAim(!Inventory.CurrentWeapon.IsReloading && ctx.performed);
         }
 
         public void OnChangeStrategy(InputAction.CallbackContext ctx)
@@ -207,7 +207,7 @@ namespace PlayerControllers
                 return;
 
             if (focusedObject.TryGetComponent(out BaseWeapon weapon))
-                inventory.AddWeapon(weapon);
+                Inventory.AddWeapon(weapon);
         }
 
         private GameObject[] GetSurroundingObjects(float distance)
@@ -237,9 +237,9 @@ namespace PlayerControllers
             if (!IsOwner || !ctx.performed)
                 return;
 
-            var container = inventory.GetItemContainer<FuelBooster>();
+            var container = Inventory.GetItemContainer<FuelBooster>();
             Debug.Log(container.Count);
-            inventory.AddItem(container.Peek());
+            Inventory.AddItem(container.Peek());
         }
     }
 }
