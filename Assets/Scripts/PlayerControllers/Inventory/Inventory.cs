@@ -1,5 +1,6 @@
 ﻿using PlayerControllers;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace model
 {
@@ -39,6 +40,7 @@ namespace model
         void Start()
         {
             selectedMode.OnValueChanged += (old, value) => HandleModeRenderers(value);
+            itemRegistry.OnValueChange += ev => Debug.Log(ev.Type);
             HandleModeRenderers(SelectedMode);
         }
 

@@ -93,6 +93,9 @@ namespace GameManagers
 
         public HUDController HUDController => HUDController.Singleton;
 
+
+        private Queue<BasePlayer> playersToEquip = new Queue<BasePlayer>();
+
         private void Awake()
         {
             if (Singleton != null && Singleton != this)
@@ -155,6 +158,18 @@ namespace GameManagers
         private void Update()
         {
             ManageDeath();
+            if (IsServer)
+                UpdateServer();
+        }
+
+        void UpdateServer()
+        {
+            BasePlayer player;
+            while (playersToEquip.Count > 0 && (player = playersToEquip.Peek()).IsSpawned)
+            {
+                EquipPlayer(player);
+                playersToEquip.Dequeue();
+            }
         }
 
         public override void OnNetworkSpawn()
@@ -193,8 +208,7 @@ namespace GameManagers
 
             var player = instance.GetComponent<BasePlayer>();
 
-            player.UpdateHealthServerRpc(player.MaxHealth, ownerId);
-            EquipPlayer(player);
+            playersToEquip.Enqueue(player);
         }
 
         private void ManageDeath()
@@ -227,6 +241,8 @@ namespace GameManagers
         {
             if (!IsServer)
                 throw new NotServerException();
+
+            player.UpdateHealthServerRpc(player.MaxHealth, player.OwnerClientId);
             player.Inventory.Player = player;
             GameObject autoWeaponPrefab =
                 WeaponPrefabs.Find(go => go.name == "TestAutoPrefab");
