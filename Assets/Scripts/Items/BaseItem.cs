@@ -14,6 +14,13 @@ namespace Items
         public ItemCategory Category;
         public int MaxCount;
 
+        public ItemInfo(string name, ItemCategory category, int maxCount)
+        {
+            Name = name;
+            Category = category;
+            MaxCount = maxCount;
+        }
+
         public new long GetHashCode()
         {
             string toParse = Name + new string((char) Category, MaxCount);
@@ -50,12 +57,7 @@ namespace Items
         public static readonly Dictionary<Type, ItemInfo> ItemInfos = new Dictionary<Type, ItemInfo>
         {
             {
-                typeof(FuelBooster), new ItemInfo()
-                {
-                    Name = "Fuel Booster",
-                    Category = ItemCategory.Other,
-                    MaxCount = 3
-                }
+                typeof(FuelBooster), new ItemInfo("Fuel Booster", ItemCategory.Other, 3)
             }
         };
 
@@ -98,8 +100,8 @@ namespace Items
 
         private void Awake()
         {
-            if (!ItemInfos.ContainsKey(this.GetType()))
-                throw new KeyNotFoundException($"item {Name} was not referenced in BaseItem::ItemInfos");
+            if (!ItemInfos.ContainsKey(GetType()))
+                throw new KeyNotFoundException($"item {GetType().Name} was not referenced in BaseItem::ItemInfos");
         }
 
         private void Update()
