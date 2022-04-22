@@ -12,7 +12,16 @@ namespace model
 {
     public class Inventory : NetworkBehaviour
     {
-        private NetworkVariable<NetworkBehaviourReference> playerReference =
+        /// <summary>
+        ///     the mode of the inventory
+        /// </summary>
+        public enum Mode
+        {
+            Weapon,
+            Item
+        }
+
+        private readonly NetworkVariable<NetworkBehaviourReference> playerReference =
             new NetworkVariable<NetworkBehaviourReference>();
 
         /**
@@ -21,7 +30,7 @@ namespace model
         public BasePlayer Player
         {
             set => UpdatePlayerReferenceServerRpc(new NetworkBehaviourReference(value));
-            get => playerReference.Value.TryGet<BasePlayer>(out BasePlayer p) ? p : null;
+            get => playerReference.Value.TryGet(out BasePlayer p) ? p : null;
         }
 
         public List<GameObject> Weapons
@@ -44,39 +53,41 @@ namespace model
         /**
          * <value>the close range weapon</value>
          */
-        private NetworkVariable<NetworkBehaviourReference> closeRangeWeapon =
+        private readonly NetworkVariable<NetworkBehaviourReference> closeRangeWeapon =
             new NetworkVariable<NetworkBehaviourReference>();
 
         /**
          * <value>the heavy weapon</value>
          */
-        private NetworkVariable<NetworkBehaviourReference> heavyWeapon =
+        private readonly NetworkVariable<NetworkBehaviourReference> heavyWeapon =
             new NetworkVariable<NetworkBehaviourReference>();
 
         /**
          * <value>the light weapon</value>
          */
-        private NetworkVariable<NetworkBehaviourReference> lightWeapon =
+        private readonly NetworkVariable<NetworkBehaviourReference> lightWeapon =
             new NetworkVariable<NetworkBehaviourReference>();
 
-        public BaseWeapon HeavyWeapon => heavyWeapon.Value.TryGet<BaseWeapon>(out BaseWeapon res) ? res : null;
+        public BaseWeapon HeavyWeapon => heavyWeapon.Value.TryGet(out BaseWeapon res) ? res : null;
 
         public BaseWeapon CloseRangeWeapon =>
-            closeRangeWeapon.Value.TryGet<BaseWeapon>(out BaseWeapon res) ? res : null;
+            closeRangeWeapon.Value.TryGet(out BaseWeapon res) ? res : null;
 
-        public BaseWeapon LightWeapon => lightWeapon.Value.TryGet<BaseWeapon>(out BaseWeapon res) ? res : null;
+        public BaseWeapon LightWeapon => lightWeapon.Value.TryGet(out BaseWeapon res) ? res : null;
 
         /**
          * <value>the <see cref="WeaponType"/> of the currently selected weapon</value>
          * <remarks>set to <see cref="WeaponType.CloseRange"/> as it is assumed the close range weapon will never be null</remarks>
          */
-        private NetworkVariable<WeaponType> selectedType = new NetworkVariable<WeaponType>(WeaponType.CloseRange);
+        private readonly NetworkVariable<WeaponType> selectedWeaponType =
+            new NetworkVariable<WeaponType>(WeaponType.CloseRange);
 
         private WeaponType SelectedWeaponType
         {
-            get => selectedType.Value;
+            get => selectedWeaponType.Value;
             set => SwitchWeaponServerRpc(value);
         }
+
 
         /**
          * <value>the currently selected weapon</value>
@@ -123,10 +134,12 @@ namespace model
             }
         }
 
-        private NetworkItemRegistry itemRegistry =
+        private readonly NetworkItemRegistry itemRegistry =
             new NetworkItemRegistry(writePermission: NetworkVariableWritePermission.Owner);
 
-        private NetworkVariable<long> selectedItemType = new NetworkVariable<long>();
+        private readonly NetworkVariable<long> selectedItemType = new NetworkVariable<long>();
+
+        private long _oldSelectedItem;
 
         public Type SelectedItemType
         {
@@ -407,7 +420,7 @@ namespace model
             if (SelectedWeaponType != type)
             {
                 SwitchWeaponClientRpc(SelectedWeaponType, type);
-                selectedType.Value = type;
+                selectedWeaponType.Value = type;
             }
         }
 
