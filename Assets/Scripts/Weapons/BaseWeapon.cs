@@ -184,7 +184,7 @@ namespace Weapons
 
             if (IsOwner && Player != null)
             {
-                if(Shoulder == null)
+                if (Shoulder == null)
                     SetShoulder();
                 transform.localPosition = Player.transform.InverseTransformPoint(Player.WeaponContainer.position);
                 transform.localRotation = Shoulder.transform.localRotation * Player.WeaponContainer.localRotation;
@@ -239,12 +239,8 @@ namespace Weapons
 
         public void SwitchRender(bool enable)
         {
-            if (TryGetComponent(out MeshRenderer rend))
+            foreach (var rend in GetComponentsInChildren<MeshRenderer>())
                 rend.enabled = enable;
-            foreach (var renderer in GetComponentsInChildren<MeshRenderer>())
-            {
-                renderer.enabled = enable;
-            }
         }
 
 

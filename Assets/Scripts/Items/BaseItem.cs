@@ -52,6 +52,8 @@ namespace Items
 
     [RequireComponent(typeof(NetworkObject))]
     [RequireComponent(typeof(ClientNetworkTransform))]
+    [RequireComponent(typeof(Rigidbody))]
+    [RequireComponent(typeof(Collider))]
     public abstract class BaseItem : NetworkBehaviour, IItem, IPickable
     {
         public static readonly Dictionary<Type, ItemInfo> ItemInfos = new Dictionary<Type, ItemInfo>
@@ -106,10 +108,16 @@ namespace Items
 
         private void Update()
         {
+            if (!started)
+                GetComponent<Rigidbody>().isKinematic = IsOwned;
+
+
             if (!IsOwner || State == ItemState.Consumed || consumedTime < 0)
                 return;
+
             if (!started)
             {
+                transform.localPosition = Player.transform.InverseTransformPoint(Player.WeaponContainer.position);
                 if (State == ItemState.Consuming)
                 {
                     Setup();
@@ -179,6 +187,12 @@ namespace Items
             transform.SetPositionAndRotation(Player.transform.position, Player.transform.rotation);
             NetworkObject.ChangeOwnership(NetworkManager.ServerClientId);
             Player = null;
+        }
+
+        public void SwitchRender(bool render)
+        {
+            foreach (var renderer in GetComponentsInChildren<MeshRenderer>())
+                renderer.enabled = render;
         }
 
         public static long GetBaseItemHashCode(Type baseItemType)
