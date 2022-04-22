@@ -124,7 +124,7 @@ namespace model
         /// <returns>true if the weapon was dropped</returns>
         public bool DropCurrentWeapon()
         {
-            if (Weapons.Count <= 1)
+            if (SelectedMode != Mode.Weapon || Weapons.Count <= 1)
                 return false;
 
             switch (SelectedWeaponType)

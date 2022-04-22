@@ -17,6 +17,7 @@ namespace model
         private readonly NetworkVariable<NetworkBehaviourReference> playerReference =
             new NetworkVariable<NetworkBehaviourReference>();
 
+
         /**
          * <value>the bound player <seealso cref="BasePlayer"/></value>
          */
@@ -26,14 +27,25 @@ namespace model
             get => playerReference.Value.TryGet(out BasePlayer p) ? p : null;
         }
 
+        private readonly NetworkVariable<Mode> selectedMode = new NetworkVariable<Mode>(Mode.Weapon);
 
-        public bool ItemSelected => !(SelectedItemType is null);
+        public Mode SelectedMode
+        {
+            get => selectedMode.Value;
+            private set => UpdateModeServerRpc(value);
+        } 
 
 
         [ServerRpc(RequireOwnership = false)]
         private void UpdatePlayerReferenceServerRpc(NetworkBehaviourReference playerRef)
         {
             this.playerReference.Value = playerRef;
+        }
+
+        [ServerRpc]
+        private void UpdateModeServerRpc(Mode value)
+        {
+            selectedMode.Value = value;
         }
     }
 }

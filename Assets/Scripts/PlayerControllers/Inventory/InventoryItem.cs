@@ -74,7 +74,7 @@ namespace model
                  */
         public void DropCurrentItem()
         {
-            if (!ItemSelected)
+            if (SelectedMode != Mode.Item)
                 return;
             if (itemRegistry[SelectedItemType].TryPop(out BaseItem item))
                 DropItemServerRpc(new NetworkBehaviourReference(item));
