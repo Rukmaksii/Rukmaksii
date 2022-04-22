@@ -184,8 +184,14 @@ namespace Weapons
 
             if (IsOwner && Player != null)
             {
+                if(Shoulder == null)
+                    SetShoulder();
                 transform.localPosition = Player.transform.InverseTransformPoint(Player.WeaponContainer.position);
                 transform.localRotation = Shoulder.transform.localRotation * Player.WeaponContainer.localRotation;
+            }
+            else
+            {
+                Shoulder = null;
             }
         }
 
@@ -365,6 +371,20 @@ namespace Weapons
             this.playerReference.Value = playerRef;
         }
 
+        private void SetShoulder()
+        {
+            Debug.Log("set shoulder");
+            Transform[] transforms = Player.GetComponentsInChildren<Transform>();
+            foreach (Transform transform in transforms)
+            {
+                if (transform.name == "mixamorig:RightShoulder")
+                {
+                    Shoulder = transform;
+                    break;
+                }
+            }
+        }
+
         /// <summary>
         ///     binds a new owner to the weapon 
         /// </summary>
@@ -377,15 +397,7 @@ namespace Weapons
             Player = player;
             NetworkObject.ChangeOwnership(Player.OwnerClientId);
             NetworkObject.TrySetParent(Player.transform);
-            Transform[] transforms = Player.GetComponentsInChildren<Transform>();
-            foreach (Transform transform in transforms)
-            {
-                if (transform.name == "mixamorig:RightShoulder")
-                {
-                    Shoulder = transform;
-                    break;
-                }
-            }
+            SetShoulder();
         }
 
         /// <summary>
