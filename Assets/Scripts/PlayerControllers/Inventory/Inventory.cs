@@ -33,7 +33,31 @@ namespace model
         {
             get => selectedMode.Value;
             private set => UpdateModeServerRpc(value);
-        } 
+        }
+
+
+        void Start()
+        {
+            selectedMode.OnValueChanged += (old, value) => HandleModeRenderers(value);
+            HandleModeRenderers(SelectedMode);
+        }
+
+        private void HandleModeRenderers(Mode mode)
+        {
+            if (SelectedItem == null)
+                return;
+            switch (mode)
+            {
+                case Mode.Item:
+                    SelectedItem.SwitchRender(true);
+                    CurrentWeapon.SwitchRender(false);
+                    break;
+                case Mode.Weapon:
+                    SelectedItem.SwitchRender(false);
+                    CurrentWeapon.SwitchRender(true);
+                    break;
+            }
+        }
 
 
         [ServerRpc(RequireOwnership = false)]
@@ -46,6 +70,11 @@ namespace model
         private void UpdateModeServerRpc(Mode value)
         {
             selectedMode.Value = value;
+        }
+
+        public void ChangeMode(Mode newMode)
+        {
+            UpdateModeServerRpc(newMode);
         }
     }
 }

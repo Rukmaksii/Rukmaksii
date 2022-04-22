@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Items;
+using JetBrains.Annotations;
 using model.Network;
 using Unity.Netcode;
 
@@ -21,6 +22,9 @@ namespace model
 
             set => UpdateSelectedItemTypeServerRpc(BaseItem.GetBaseItemHashCode(value));
         }
+
+        [CanBeNull]
+        public BaseItem SelectedItem => SelectedItemType is null ? null : itemRegistry[SelectedItemType].Top;
 
         /**
                  * <summary>adds an instantiated item to the inventory</summary>
