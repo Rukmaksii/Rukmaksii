@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Items;
@@ -7,7 +8,8 @@ using Unity.Netcode;
 
 namespace model.Network
 {
-    public class NetworkItemRegistry : NetworkVariableBase
+    public class NetworkItemRegistry : NetworkVariableBase,
+        IEnumerable<KeyValuePair<Type, NetworkItemRegistry.ItemContainer>>
     {
         private List<ItemRegistryEvent> dirtyEvents = new List<ItemRegistryEvent>();
 
@@ -207,7 +209,7 @@ namespace model.Network
                         {
                             Type = eventType
                         };
-                        
+
                         OnValueChange?.Invoke(regEvent);
                         if (keepDirtyDelta)
                         {
@@ -259,24 +261,29 @@ namespace model.Network
             return data.ContainsKey(BaseItem.GetBaseItemHashCode(key));
         }
 
-        public Dictionary<Type, ItemContainer> GetData()
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            Dictionary<Type, ItemContainer> res = new Dictionary<Type, ItemContainer>();
+            return this.GetEnumerator();
+        }
+
+        public IEnumerator<KeyValuePair<Type, ItemContainer>> GetEnumerator()
+        {
+            List<KeyValuePair<Type, ItemContainer>> res = new List<KeyValuePair<Type, ItemContainer>>();
             foreach (var pair in BaseItem.ItemInfos)
             {
                 var container = this[pair.Key];
                 if (container.Count > 0)
-                    res[pair.Key] = container;
+                    res.Add(new KeyValuePair<Type, ItemContainer>(pair.Key, container));
             }
 
-            return res;
+            return res.GetEnumerator();
         }
 
         /// <summary>
         ///     a container for items of the same type 
         /// </summary>
         /// <remarks>only allowed writers can use non-pure exposed API <br/> therefore, non-allowed writers can only access <see cref="GetEnumerable"/></remarks>
-        public class ItemContainer
+        public class ItemContainer : IEnumerable<BaseItem>
         {
             public readonly int MaxCount;
             public readonly Type ItemType;
@@ -284,12 +291,12 @@ namespace model.Network
             private List<NetworkBehaviourReference> items => registry.data[BaseItem.GetBaseItemHashCode(ItemType)];
             private bool ContainerExists => registry.ContainsKey(ItemType);
 
-            public int Count => ContainerExists ? GetEnumerable().Count() : 0;
+            public int Count => ContainerExists ? Data().Count() : 0;
 
             /// <summary>
             ///     the result of Peek function without modifying the data struct
             /// </summary>
-            public BaseItem Top => Count > 0 ? GetEnumerable().Last() : null;
+            public BaseItem Top => Count > 0 ? Data().Last() : null;
 
             internal ItemContainer(int maxCount, Type itemType, NetworkItemRegistry registry)
             {
@@ -437,9 +444,10 @@ namespace model.Network
                 return true;
             }
 
+            public bool CanPush => Count < MaxCount;
+
             [Pure]
-            [NotNull]
-            public IEnumerable<BaseItem> GetEnumerable()
+            public List<BaseItem> Data()
             {
                 if (!ContainerExists)
                     return new List<BaseItem>();
@@ -449,10 +457,19 @@ namespace model.Network
                     {
                         v.TryGet(out BaseItem item);
                         return item;
-                    });
+                    }).ToList();
             }
 
-            public bool CanPush => Count < MaxCount;
+            public IEnumerator<BaseItem> GetEnumerator()
+            {
+                return Data().GetEnumerator();
+            }
+
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
         }
 
         public struct ItemRegistryEvent
