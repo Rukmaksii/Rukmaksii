@@ -20,6 +20,7 @@ TagManager:
   - LeftHand
   - Shoulder
   - RedPoint
+  - ItemTest
   layers:
   - Default
   - TransparentFX

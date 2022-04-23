@@ -41,6 +41,9 @@ namespace model
 
         void Start()
         {
+            if (ItemWheel == null)
+                itemWheel = gameObject.AddComponent<ItemWheel>();
+           
             selectedMode.OnValueChanged += (old, value) => HandleModeRenderers(value);
             itemRegistry.OnValueChange += ev =>
             {

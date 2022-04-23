@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 8036237913269581769}
   m_Layer: 0
   m_Name: itemtest
-  m_TagString: FuelBoosterItem
+  m_TagString: ItemTest
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
