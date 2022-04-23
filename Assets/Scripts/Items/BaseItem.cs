@@ -159,6 +159,7 @@ namespace Items
             State = ItemState.Consumed;
             consumedTime = -1;
             TearDown();
+            DespawnServerRpc();
         }
 
         [ServerRpc]
@@ -195,6 +196,12 @@ namespace Items
             transform.SetPositionAndRotation(Player.transform.position, Player.transform.rotation);
             NetworkObject.ChangeOwnership(NetworkManager.ServerClientId);
             Player = null;
+        }
+
+        [ServerRpc]
+        private void DespawnServerRpc()
+        {
+            NetworkObject.Despawn();
         }
 
         public void SwitchRender(bool render)
