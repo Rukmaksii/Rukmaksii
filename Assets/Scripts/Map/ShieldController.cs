@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
+[RequireComponent(typeof(MeshCollider))]
 public class ShieldController : NetworkBehaviour
 {
     private NetworkVariable<bool> activated = new NetworkVariable<bool>();
@@ -21,18 +22,18 @@ public class ShieldController : NetworkBehaviour
         set => teamId = value;
     }
 
-    
+    private new MeshCollider collider;
     
     // Start is called before the first frame update
     void Start()
     {
         activated.Value = true;
+        collider = gameObject.GetComponent<MeshCollider>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        MeshCollider collider = gameObject.GetComponent<MeshCollider>();
         collider.enabled = activated.Value;
     }
 

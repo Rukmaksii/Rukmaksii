@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Map;
 using MonstersControler;
 using PlayerControllers;
+using UnityEditor;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
@@ -32,54 +33,59 @@ namespace GameManagers
         {
             numberOfMonster = 4;
             ListOfMonster = new List<MonsterController>();
-            if (NetworkManager.Singleton.IsServer || NetworkManager.Singleton.IsHost)
+            if (NetworkManager.Singleton.IsServer)
             {
                 referenceTime.Value = DateTime.Now;
-                SpawnMonsters(numberOfMonster);
             }
             shield1 = GameObject.Find("Shield1").GetComponent<ShieldController>();
             shield2 = GameObject.Find("Shield2").GetComponent<ShieldController>();
             objectiveDelay = 5;
             hasBeenChange = false;
-            foreach (BasePlayer player in GameController.Singleton.Players)
-            {
-                Collider[] child = player.GetComponentsInChildren<Collider>();
-                if (player.TeamId == shield1.TeamId)
-                {
-                    foreach (Collider colliderchild in child)
-                    {
-                        Physics.IgnoreCollision(colliderchild, GameObject.Find("Shield1").GetComponent<MeshCollider>());
-                    }
-                    Physics.IgnoreCollision(player.GetComponent<Collider>(), GameObject.Find("Shield1").GetComponent<MeshCollider>());
-                }
-                else
-                {
-                    foreach (Collider colliderchild in child)
-                    {
-                        Physics.IgnoreCollision(colliderchild, GameObject.Find("Shield2").GetComponent<MeshCollider>());
-                    }
-                    Physics.IgnoreCollision(player.GetComponent<Collider>(), GameObject.Find("Shield2").GetComponent<MeshCollider>());
-                }
-            }
         }
 
         // Update is called once per frame
         void Update()
         {
             captureArea = GameObject.FindGameObjectsWithTag("CaptureArea");
-            if (NetworkManager.Singleton.IsServer || NetworkManager.Singleton.IsHost)
+            if (NetworkManager.Singleton.IsServer)
             {
+                //set the current time
                 currTime.Value = DateTime.Now;
+                //check if there are the right number of monster 
                 if(ListOfMonster.Count < numberOfMonster)
                     SpawnMonsters(numberOfMonster - ListOfMonster.Count);
+                //deactivate the collision between each player and it's team's shield
+                foreach (BasePlayer player in GameController.Singleton.Players)
+                {
+                    Collider[] child = player.GetComponentsInChildren<Collider>();
+                    if (player.TeamId == shield1.TeamId)
+                    {
+                        foreach (Collider colliderchild in child)
+                        {
+                            Physics.IgnoreCollision(colliderchild, shield1.gameObject.GetComponent<MeshCollider>());
+                        }
+                        Physics.IgnoreCollision(player.GetComponent<Collider>(), shield1.gameObject.GetComponent<MeshCollider>());
+                    }
+                    else
+                    {
+                        foreach (Collider colliderchild in child)
+                        {
+                            Physics.IgnoreCollision(colliderchild, shield2.gameObject.GetComponent<MeshCollider>());
+                        }
+                        Physics.IgnoreCollision(player.GetComponent<Collider>(), shield2.gameObject.GetComponent<MeshCollider>());
+                    }
+                }
             }
+            //create the timer
             var timer = currTime.Value - referenceTime.Value;
+            //Debug.Log($"{timer.Hours}:{timer.Minutes}:{timer.Seconds}");
             if (timer.Minutes % objectiveDelay == 0 && timer.Seconds == 0 && !hasBeenChange)
             {
                 ChangeCapturePoints();
                 hasBeenChange = true;
                 StartCoroutine(Wait1Second());
             }
+            //for each capture point it checks if one of them is catured if so, it deactivates the ennemy's shield
             foreach (GameObject area in captureArea)
             {
                 ObjectiveController objective = area.GetComponent<ObjectiveController>();
@@ -87,21 +93,19 @@ namespace GameManagers
                 {
                     if (objective.CapturingTeam != shield1.TeamId)
                     {
+                        //Debug.Log("shield 1 deactivated");
                         shield1.Activated.Value = false;
                         shield2.Activated.Value = true;
                     }
                     else
                     {
+                        //Debug.Log("shield 2 deactivated");
                         shield1.Activated.Value = true;
                         shield2.Activated.Value = false;
                     }
                 }
-                else
-                {
-                    shield1.Activated.Value = true;
-                    shield2.Activated.Value = true;
-                }
             }
+            Debug.Log(ListOfMonster.Count);
         }
 
 
@@ -114,6 +118,9 @@ namespace GameManagers
             captureArea[Random.Range(0, captureArea.Length)]
                 .GetComponent<ObjectiveController>()
                 .ToggleCanCapture(true);
+            //Activate all the shields
+            shield1.Activated.Value = true;
+            shield2.Activated.Value = true;
         }
         public void PossibleJoingame()
         {

@@ -17,7 +17,7 @@ namespace GameManagers
             NetworkManager.Singleton.NetworkConfig.NetworkTransport = GetComponent<UNetTransport>();
 #endif
 
-            gameloop = gameObject.AddComponent<Gameloop>();
+            
             // kept for local tests
             // TODO : remove this line and OnGui
             if (!connectionData.Data.IsReady)
@@ -29,12 +29,15 @@ namespace GameManagers
             {
                 case "host":
                     NetworkManager.Singleton.StartHost();
+                    gameloop = gameObject.AddComponent<Gameloop>();
                     break;
                 case "client":
                     NetworkManager.Singleton.StartClient();
+                    gameloop = gameObject.AddComponent<Gameloop>();
                     break;
                 case "server":
                     NetworkManager.Singleton.StartServer();
+                    gameloop = gameObject.AddComponent<Gameloop>();
                     break;
             }
         }
@@ -56,15 +59,18 @@ namespace GameManagers
             if (GUILayout.Button("Host"))
             {
                 NetworkManager.Singleton.StartHost();
+                gameloop = gameObject.AddComponent<Gameloop>();
             }
             else if (GUILayout.Button("Server"))
             {
                 NetworkManager.Singleton.StartServer();
+                gameloop = gameObject.AddComponent<Gameloop>();
             }
 
             else if (GUILayout.Button("Client"))
             {
                 NetworkManager.Singleton.StartClient();
+                gameloop = gameObject.AddComponent<Gameloop>();
             }
         }
     }
