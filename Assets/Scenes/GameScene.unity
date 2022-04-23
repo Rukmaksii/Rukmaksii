@@ -1512,6 +1512,7 @@ MonoBehaviour:
   - {fileID: 1703911258719353816, guid: c366218389d754d659682565bbc931fd, type: 3}
   itemPrefabs:
   - {fileID: 5389904766975277859, guid: 9fde8f6081cd8e04a9350c6346afd875, type: 3}
+  - {fileID: 5389904766975277859, guid: f87df35c31faa7644a264f6e9796025f, type: 3}
   connectionData: {fileID: 11400000, guid: 51f4e5ed14290eb4db05031d297551b9, type: 2}
   deathScreenPrefab: {fileID: 1499698901574752855, guid: d3dc5c1c781e5ea1299fe7f2164dc726, type: 3}
   minionPrefab: {fileID: 5002791120966035299, guid: ee4e4df61806d478ca4c3233855d63e2, type: 3}

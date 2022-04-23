@@ -60,6 +60,9 @@ namespace Items
         {
             {
                 typeof(FuelBooster), new ItemInfo("Fuel Booster", ItemCategory.Other, 3)
+            },
+            {
+                typeof(ItemTest), new ItemInfo("itemtest", ItemCategory.Other, 3)
             }
         };
 

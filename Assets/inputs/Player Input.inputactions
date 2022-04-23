@@ -148,15 +148,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "item wheel",
-                    "type": "Button",
-                    "id": "58ed82d6-8b8c-4412-bf7f-e286bdf4fa45",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -454,17 +445,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "get items",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "f2eaee4b-83b1-4bcf-ab30-e2f8d972e23b",
-                    "path": "<Keyboard>/c",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "item wheel",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

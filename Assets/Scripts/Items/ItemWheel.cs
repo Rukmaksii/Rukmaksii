@@ -8,43 +8,28 @@ using UnityEngine;
 
 public class ItemWheel : MonoBehaviour
 {
-    private BaseItem item1;
-    private BaseItem item2;
-    private BaseItem item3;
-    private BaseItem item4;
-    private BaseItem item5;
-    private BaseItem item6;
-    private BaseItem item7;
-    private BaseItem item8;
-    
+    public BaseItem[] items = new BaseItem[8];
+
     public void SelectItem(Vector3 mousePosition, BasePlayer Player)
     {
         float x = Input.mousePosition.x - mousePosition.x;
         float y = Input.mousePosition.y - mousePosition.y;
-        
+
         if (x > 0)
         {
             if (y > 0)
             {
                 if (y > x)
-                {
-                    Debug.Log("item1");
-                }
+                    Select(0, Player);
                 else
-                {
-                    Debug.Log("item2");
-                }
+                    Select(1, Player);
             }
             else
             {
                 if (Math.Abs(y) > x)
-                {
-                    Debug.Log("item4");
-                }
+                    Select(3, Player);
                 else
-                {
-                    Debug.Log("item3");
-                }
+                    Select(2, Player);
             }
         }
         else
@@ -52,25 +37,65 @@ public class ItemWheel : MonoBehaviour
             if (y > 0)
             {
                 if (y > Math.Abs(x))
-                {
-                    Debug.Log("item8");
-                }
+                    Select(7, Player);
                 else
-                {
-                    Debug.Log("item7");
-                }
+                    Select(6, Player);
             }
             else
             {
                 if (Math.Abs(y) > Math.Abs(x))
-                {
-                    Debug.Log("item5");
-                }
+                    Select(4, Player);
                 else
-                {
-                    Debug.Log("item6");
-                }
+                    Select(5, Player);
             }
         }
+    }
+
+    private void Select(int i, BasePlayer Player)
+    {
+        if (Player.Inventory.SelectedItem != null && items[i] != null)
+        {
+            Player.Inventory.SelectedItem.SwitchRender(false);
+            Player.Inventory.SelectedItemType = items[i].GetType();
+        }
+    }
+
+    public void AddItem(BaseItem item)
+    {
+        int i = 0;
+        
+        while (i < 8)
+        {
+            if (items[i] != null)
+            {
+                if (items[i].GetType() == item.GetType())
+                    return;
+            }
+            else
+            {
+                items[i] = item;
+                return;
+            }
+            i++;
+        }
+        
+        Debug.Log("ItemWheel: Not enough space");
+    }
+
+    public void RemoveItem(BaseItem item)
+    {
+        int i = 0;
+        
+        while (i < 8 && items[i] != null)
+        {
+            if (items[i].GetType() == item.GetType())
+            {
+                items[i] = null;
+                return;
+            }
+            i++;
+        }
+        
+        Debug.Log("ItemWheel: Item not found");
     }
 }

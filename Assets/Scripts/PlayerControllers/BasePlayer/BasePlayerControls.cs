@@ -185,22 +185,6 @@ namespace PlayerControllers
             strategy = (IMinion.Strategy) ((1 + (int) strategy) % (int) IMinion.Strategy.Count);
         }
 
-        public void OnItemWheel(InputAction.CallbackContext ctx)
-        {
-            if (ctx.started)
-            {
-                itemWheel = true;
-                Cursor.lockState = CursorLockMode.Confined;
-                mousePos = Input.mousePosition;
-            }
-            else if (ctx.canceled)
-            {
-                this.Inventory.ItemWheel.SelectItem(mousePos, this);
-                itemWheel = false;
-                Cursor.lockState = CursorLockMode.Locked;
-            }
-        }
-
         public void OnSpawnMinion(InputAction.CallbackContext ctx)
         {
             if (!IsOwner || !ctx.started)
@@ -252,14 +236,27 @@ namespace PlayerControllers
 
         public void OnInventoryOpened(InputAction.CallbackContext ctx)
         {
-            if (!IsOwner || !ctx.performed)
+            if (!IsOwner)
                 return;
 
-            var container = Inventory.GetItemContainer<FuelBooster>();
+            if (ctx.started)
+            {
+                itemWheel = true;
+                Cursor.lockState = CursorLockMode.Confined;
+                mousePos = Input.mousePosition;
+            }
+            else if (ctx.canceled)
+            {
+                this.Inventory.ItemWheel.SelectItem(mousePos, this);
+                itemWheel = false;
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+            
+            /*var container = Inventory.GetItemContainer<FuelBooster>();
             Inventory.AddItem(container.Peek());
             Inventory.ChangeMode(Inventory.SelectedMode == Inventory.Mode.Item
                 ? Inventory.Mode.Weapon
-                : Inventory.Mode.Item);
+                : Inventory.Mode.Item);*/
         }
     }
 }

@@ -4,6 +4,7 @@ using Items;
 using JetBrains.Annotations;
 using model.Network;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace model
 {
@@ -49,6 +50,9 @@ namespace model
                 itemRegistry[item.GetType()].Push(item);
                 AddItemServerRpc(new NetworkBehaviourReference(item));
                 HandleModeRenderers(SelectedMode);
+                if (itemWheel == null)
+                    itemWheel = gameObject.AddComponent<ItemWheel>();
+                itemWheel.AddItem(item);
             }
             else if (IsServer)
             {
@@ -97,7 +101,10 @@ namespace model
             if (SelectedMode != Mode.Item)
                 return;
             if (itemRegistry[SelectedItemType].TryPop(out BaseItem item))
+            {
                 DropItemServerRpc(new NetworkBehaviourReference(item));
+                itemWheel.RemoveItem(item);
+            }
         }
 
         [ServerRpc]
