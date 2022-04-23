@@ -80,7 +80,7 @@ namespace model
         {
             itemRef.TryGet(out BaseItem item);
             if (SelectedItem != null)
-                SelectedItem.SwitchRender(false);
+                item.SwitchRender(false);
             else
                 SelectedItemType = item.GetType();
             itemRegistry[item.GetType()].Push(item);
