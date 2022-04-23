@@ -4,7 +4,6 @@ using Items;
 using JetBrains.Annotations;
 using model.Network;
 using Unity.Netcode;
-using UnityEngine;
 
 namespace model
 {
@@ -105,6 +104,14 @@ namespace model
                 DropItemServerRpc(new NetworkBehaviourReference(item));
                 itemWheel.RemoveItem(item);
             }
+        }
+
+        public void UseItem()
+        {
+            if (!IsOwner || SelectedItem == null)
+                return;
+
+            itemRegistry[SelectedItemType].Pop().Consume();
         }
 
         [ServerRpc]

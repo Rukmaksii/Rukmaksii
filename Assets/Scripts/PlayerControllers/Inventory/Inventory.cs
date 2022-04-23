@@ -2,7 +2,6 @@
 using model.Network;
 using PlayerControllers;
 using Unity.Netcode;
-using UnityEngine;
 
 namespace model
 {
@@ -43,7 +42,7 @@ namespace model
         {
             if (ItemWheel == null)
                 itemWheel = gameObject.AddComponent<ItemWheel>();
-           
+
             selectedMode.OnValueChanged += (old, value) => HandleModeRenderers(value);
             itemRegistry.OnValueChange += ev =>
             {
@@ -103,10 +102,18 @@ namespace model
             selectedMode.Value = value;
         }
 
-        public void ChangeMode(Mode newMode)
+        /// <summary>
+        ///     changes the inventory mode
+        /// </summary>
+        /// <param name="newMode"></param>
+        /// <returns>whether the mode was changed</returns>
+        public bool ChangeMode(Mode newMode)
         {
+            if (newMode == Mode.Item && SelectedItem == null)
+                return false;
             UpdateModeServerRpc(newMode);
             HandleModeRenderers(newMode);
+            return true;
         }
     }
 }

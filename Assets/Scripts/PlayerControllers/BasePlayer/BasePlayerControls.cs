@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Items;
 using model;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -149,7 +148,11 @@ namespace PlayerControllers
         {
             if (!IsOwner)
                 return;
-            IsShooting = ctx.ReadValueAsButton();
+            IsShooting = Inventory.SelectedMode == Inventory.Mode.Weapon && ctx.ReadValueAsButton();
+            if (Inventory.SelectedMode == Inventory.Mode.Item)
+            {
+                Inventory.UseItem();
+            }
         }
 
         public void OnWeaponSwitch(InputAction.CallbackContext ctx)
@@ -256,11 +259,10 @@ namespace PlayerControllers
                 isChoosingItem = false;
             }
 
-            /*var container = Inventory.GetItemContainer<FuelBooster>();
-            Inventory.AddItem(container.Peek());
+
             Inventory.ChangeMode(Inventory.SelectedMode == Inventory.Mode.Item
                 ? Inventory.Mode.Weapon
-                : Inventory.Mode.Item);*/
+                : Inventory.Mode.Item);
         }
     }
 }
