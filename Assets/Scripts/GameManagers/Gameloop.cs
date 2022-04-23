@@ -57,14 +57,14 @@ namespace GameManagers
                 //deactivate the collision between each player and it's team's shield
                 foreach (BasePlayer player in GameController.Singleton.Players)
                 {
-                    Collider[] child = player.GetComponentsInChildren<Collider>();
+                    Collider[] child = player.gameObject.GetComponentsInChildren<Collider>();
                     if (player.TeamId == shield1.TeamId)
                     {
                         foreach (Collider colliderchild in child)
                         {
                             Physics.IgnoreCollision(colliderchild, shield1.gameObject.GetComponent<MeshCollider>());
                         }
-                        Physics.IgnoreCollision(player.GetComponent<Collider>(), shield1.gameObject.GetComponent<MeshCollider>());
+                        Physics.IgnoreCollision(player.gameObject.GetComponent<Collider>(), shield1.gameObject.GetComponent<MeshCollider>());
                     }
                     else
                     {
@@ -72,7 +72,7 @@ namespace GameManagers
                         {
                             Physics.IgnoreCollision(colliderchild, shield2.gameObject.GetComponent<MeshCollider>());
                         }
-                        Physics.IgnoreCollision(player.GetComponent<Collider>(), shield2.gameObject.GetComponent<MeshCollider>());
+                        Physics.IgnoreCollision(player.gameObject.GetComponent<Collider>(), shield2.gameObject.GetComponent<MeshCollider>());
                     }
                 }
             }
