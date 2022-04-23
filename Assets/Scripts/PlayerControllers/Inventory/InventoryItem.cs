@@ -26,6 +26,7 @@ namespace model
         [CanBeNull]
         public BaseItem SelectedItem => SelectedItemType is null ? null : itemRegistry[SelectedItemType].Top;
 
+        // ReSharper disable Unity.PerformanceAnalysis
         /**
                  * <summary>adds an instantiated item to the inventory</summary>
                  * <param name="item">a BaseItem to be added</param>
@@ -35,9 +36,15 @@ namespace model
             if (item.State != ItemState.Clean || !itemRegistry[item.GetType()].CanPush)
                 return;
 
-            if (IsOwner && itemRegistry[item.GetType()].TryPush(item))
+            if (IsOwner)
             {
+                if (SelectedItem != null)
+                    SelectedItem.SwitchRender(false);
+                else
+                    SelectedItemType = item.GetType();
+                itemRegistry[item.GetType()].Push(item);
                 AddItemServerRpc(new NetworkBehaviourReference(item));
+                HandleModeRenderers(SelectedMode);
             }
             else if (IsServer)
             {
@@ -53,7 +60,7 @@ namespace model
             }
         }
 
-        [ServerRpc(RequireOwnership = false)]
+        [ServerRpc]
         private void AddItemServerRpc(NetworkBehaviourReference itemRef)
         {
             itemRef.TryGet(out BaseItem item);
@@ -64,7 +71,12 @@ namespace model
         private void AddItemClientRpc(NetworkBehaviourReference itemRef, ClientRpcParams p = default)
         {
             itemRef.TryGet(out BaseItem item);
+            if (SelectedItem != null)
+                SelectedItem.SwitchRender(false);
+            else
+                SelectedItemType = item.GetType();
             itemRegistry[item.GetType()].Push(item);
+            HandleModeRenderers(SelectedMode);
         }
 
         public NetworkItemRegistry.ItemContainer GetItemContainer<TForMethod>() where TForMethod : BaseItem

@@ -240,8 +240,10 @@ namespace PlayerControllers
                 return;
 
             var container = Inventory.GetItemContainer<FuelBooster>();
-            Debug.Log(container.Count);
             Inventory.AddItem(container.Peek());
+            Inventory.ChangeMode(Inventory.SelectedMode == Inventory.Mode.Item
+                ? Inventory.Mode.Weapon
+                : Inventory.Mode.Item);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using PlayerControllers;
+﻿using Items;
+using model.Network;
+using PlayerControllers;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -40,7 +42,31 @@ namespace model
         void Start()
         {
             selectedMode.OnValueChanged += (old, value) => HandleModeRenderers(value);
-            itemRegistry.OnValueChange += ev => Debug.Log(ev.Type);
+            itemRegistry.OnValueChange += ev =>
+            {
+                switch (ev.Type)
+                {
+                    case NetworkItemRegistry.ItemRegistryEvent.EventType.Push:
+                    {
+                        if (SelectedItemType == null)
+                            UpdateSelectedItemTypeServerRpc(ev.ObjType);
+                        ev.itemRef.TryGet(out BaseItem item);
+                        item.SwitchRender(false);
+                        HandleModeRenderers(SelectedMode);
+                    }
+                        break;
+                    case NetworkItemRegistry.ItemRegistryEvent.EventType.Pop:
+
+                        break;
+                    case NetworkItemRegistry.ItemRegistryEvent.EventType.Full:
+                        foreach (var pair in itemRegistry)
+                        foreach (var item in pair.Value)
+                            item.SwitchRender(false);
+
+
+                        break;
+                }
+            };
             HandleModeRenderers(SelectedMode);
         }
 
@@ -77,6 +103,7 @@ namespace model
         public void ChangeMode(Mode newMode)
         {
             UpdateModeServerRpc(newMode);
+            HandleModeRenderers(newMode);
         }
     }
 }
