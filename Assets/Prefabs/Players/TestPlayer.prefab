@@ -477,6 +477,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 747d39de-4627-4557-a5ab-5b02fc47bc06
     m_ActionName: Player/get items[/Keyboard/e]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: -8936581399182346908}
+        m_TargetAssemblyTypeName: PlayerControllers.BasePlayer, Assembly-CSharp
+        m_MethodName: OnItemWheel
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 58ed82d6-8b8c-4412-bf7f-e286bdf4fa45
+    m_ActionName: Player/item wheel[/Keyboard/c]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player

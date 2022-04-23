@@ -185,6 +185,22 @@ namespace PlayerControllers
             strategy = (IMinion.Strategy) ((1 + (int) strategy) % (int) IMinion.Strategy.Count);
         }
 
+        public void OnItemWheel(InputAction.CallbackContext ctx)
+        {
+            if (ctx.started)
+            {
+                itemWheel = true;
+                Cursor.lockState = CursorLockMode.Confined;
+                mousePos = Input.mousePosition;
+            }
+            else if (ctx.canceled)
+            {
+                this.Inventory.ItemWheel.SelectItem(mousePos, this);
+                itemWheel = false;
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+        }
+
         public void OnSpawnMinion(InputAction.CallbackContext ctx)
         {
             if (!IsOwner || !ctx.started)

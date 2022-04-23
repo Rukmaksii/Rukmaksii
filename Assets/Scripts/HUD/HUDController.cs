@@ -20,6 +20,7 @@ namespace HUD
         [SerializeField] protected Image weaponPlaceHolder;
         [SerializeField] protected Text currentStrategy;
         [SerializeField] private GameObject itemSelector;
+        [SerializeField] protected Image itemWheel;
 
 
         public float CanvasWidth => GetComponent<RectTransform>().rect.width;
@@ -76,6 +77,8 @@ namespace HUD
                 localPlayer.DashCooldown);
             SetCurrentStrategy(localPlayer.Strategy);
 
+            itemWheel.enabled = localPlayer.ItemWheel;
+            
             // updating the capture circle UI if the player is on a point
             if (_capturePoint != null)
             {

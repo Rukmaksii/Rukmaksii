@@ -23,6 +23,10 @@ namespace model
             set => UpdateSelectedItemTypeServerRpc(BaseItem.GetBaseItemHashCode(value));
         }
 
+        private ItemWheel itemWheel;
+
+        public ItemWheel ItemWheel => itemWheel;
+
         [CanBeNull]
         public BaseItem SelectedItem => SelectedItemType is null ? null : itemRegistry[SelectedItemType].Top;
 
