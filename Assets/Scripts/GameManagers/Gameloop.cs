@@ -105,7 +105,7 @@ namespace GameManagers
                     }
                 }
             }
-            Debug.Log(ListOfMonster.Count);
+            //Debug.Log(ListOfMonster.Count);
         }
 
 
