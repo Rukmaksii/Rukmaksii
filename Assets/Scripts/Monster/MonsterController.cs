@@ -20,6 +20,7 @@ namespace MonstersControler
             UpdateLifeServerRpc(maxHealth);
             MonsterAI monsterAI = gameObject.AddComponent(typeof(MonsterAI)) as MonsterAI;
             monsterAI.agent = GetComponent<NavMeshAgent>();
+            GameManagers.Gameloop.ListOfMonster.Add(this);
         }
 
 
@@ -44,6 +45,7 @@ namespace MonstersControler
 
         public void OnKill()
         {
+            GameManagers.Gameloop.ListOfMonster.Remove(this);
             DestroyServerRpc();
         }
 
