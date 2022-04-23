@@ -10,6 +10,8 @@ namespace PlayerControllers
 {
     public abstract partial class BasePlayer
     {
+        private bool isChoosingItem = false;
+
         /**
                  * <summary>
                  *      Called when the move event is triggered within unity
@@ -44,7 +46,7 @@ namespace PlayerControllers
                  */
         public void OnRotation(InputAction.CallbackContext ctx)
         {
-            if (!IsOwner || cameraController == null)
+            if (!IsOwner || cameraController == null || isChoosingItem)
                 return;
             Vector2 rotation = ctx.ReadValue<Vector2>();
             UpdateRotationRpc(Vector3.up, rotation.x * sensitivity);
@@ -244,14 +246,16 @@ namespace PlayerControllers
                 itemWheel = true;
                 Cursor.lockState = CursorLockMode.Confined;
                 mousePos = Input.mousePosition;
+                isChoosingItem = true;
             }
             else if (ctx.canceled)
             {
                 this.Inventory.ItemWheel.SelectItem(mousePos, this);
                 itemWheel = false;
                 Cursor.lockState = CursorLockMode.Locked;
+                isChoosingItem = false;
             }
-            
+
             /*var container = Inventory.GetItemContainer<FuelBooster>();
             Inventory.AddItem(container.Peek());
             Inventory.ChangeMode(Inventory.SelectedMode == Inventory.Mode.Item

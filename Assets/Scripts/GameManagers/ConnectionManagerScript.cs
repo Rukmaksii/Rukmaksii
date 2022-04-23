@@ -9,37 +9,33 @@ namespace GameManagers
         [SerializeField] private ConnectionScriptableObject connectionData;
 
 
-        public Gameloop gameloop;
-
         void Start()
         {
 #if UNET
             NetworkManager.Singleton.NetworkConfig.NetworkTransport = GetComponent<UNetTransport>();
 #endif
 
-            
+
             // kept for local tests
             // TODO : remove this line and OnGui
             if (!connectionData.Data.IsReady)
                 return;
 
-            // NetworkManager.Singleton.NetworkConfig.PlayerPrefab = playerPrefab;
 
             switch (connectionData.Data.ConnectionType)
             {
                 case "host":
                     NetworkManager.Singleton.StartHost();
-                    gameloop = gameObject.AddComponent<Gameloop>();
                     break;
                 case "client":
                     NetworkManager.Singleton.StartClient();
-                    gameloop = gameObject.AddComponent<Gameloop>();
                     break;
                 case "server":
                     NetworkManager.Singleton.StartServer();
-                    gameloop = gameObject.AddComponent<Gameloop>();
                     break;
             }
+
+            GameController.Singleton.PlayerUIInstance.SetActive(true);
         }
 
         private void OnGUI()
@@ -55,23 +51,24 @@ namespace GameManagers
 
         void StartButtons()
         {
-            // NetworkManager.Singleton.NetworkConfig.PlayerPrefab = classPrefabs[0];
             if (GUILayout.Button("Host"))
             {
                 NetworkManager.Singleton.StartHost();
-                gameloop = gameObject.AddComponent<Gameloop>();
             }
             else if (GUILayout.Button("Server"))
             {
                 NetworkManager.Singleton.StartServer();
-                gameloop = gameObject.AddComponent<Gameloop>();
             }
 
             else if (GUILayout.Button("Client"))
             {
                 NetworkManager.Singleton.StartClient();
-                gameloop = gameObject.AddComponent<Gameloop>();
             }
+            else
+            {
+                return;
+            }
+            GameController.Singleton.PlayerUIInstance.SetActive(true);
         }
     }
 }

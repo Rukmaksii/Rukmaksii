@@ -22,6 +22,7 @@ namespace GameManagers
 
 
     [RequireComponent(typeof(NetworkObject))]
+    [RequireComponent(typeof(Gameloop))]
     public class GameController : NetworkBehaviour
     {
         public static GameController Singleton { get; private set; }
@@ -66,7 +67,7 @@ namespace GameManagers
         [SerializeField] private ConnectionScriptableObject connectionData;
         public ConnectionData Parameters => connectionData.Data;
 
-        private GameObject playerUIInstance;
+        public GameObject PlayerUIInstance { get; private set; }
 
         [SerializeField] protected GameObject deathScreenPrefab;
 
@@ -147,7 +148,8 @@ namespace GameManagers
             GameObject.Find("Shield2").GetComponent<ShieldController>().UpdateTeamServerRpc(1);
 
 
-            playerUIInstance = GameObject.FindWithTag("PlayerHUD");
+            PlayerUIInstance = GameObject.FindWithTag("PlayerHUD");
+            PlayerUIInstance.SetActive(false);
 
             deathScreen = Instantiate(deathScreenPrefab);
             deathScreen.name = deathScreenPrefab.name;
