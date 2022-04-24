@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Items;
+using model;
 using PlayerControllers;
 using UnityEditor;
 using UnityEngine;
@@ -49,6 +50,7 @@ public class ItemWheel : MonoBehaviour
                     Select(5, Player);
             }
         }
+        Player.Inventory.ChangeMode((x, y) == (0, 0) ? (Inventory.Mode)0 : (Inventory.Mode)1);
     }
 
     private void Select(int i, BasePlayer Player)
