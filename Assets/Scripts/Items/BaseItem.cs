@@ -85,6 +85,16 @@ namespace Items
 
         public abstract float Duration { get; protected set; }
 
+        /// <summary>
+        ///     the time after which the player can use another item
+        /// </summary>
+        protected virtual float ReadyCooldown { get; } = 0f;
+
+        /// <summary>
+        ///     a flag indicating whether the player can use another item
+        /// </summary>
+        public bool IsReady => State == ItemState.Consuming && consumedTime >= ReadyCooldown;
+
         private float consumedTime = 0;
 
         private NetworkVariable<ItemState> itemState = new NetworkVariable<ItemState>(ItemState.Clean);

@@ -4,6 +4,8 @@
     {
         public override float Duration { get; protected set; } = 3f;
 
+        protected override float ReadyCooldown { get; } = 3f;
+
         // storing the old fuel value
         private float oldFuelValue = 10f;
 
