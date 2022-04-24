@@ -3,6 +3,8 @@ using Items;
 using model.Network;
 using PlayerControllers;
 using Unity.Netcode;
+using UnityEngine;
+using Weapons;
 
 namespace model
 {
@@ -90,6 +92,14 @@ namespace model
                 DropCurrentWeapon();
             else if (SelectedMode == Mode.Item)
                 DropCurrentItem();
+        }
+
+        public void PickUpObject(GameObject go)
+        {
+            if(go.TryGetComponent(out BaseWeapon weapon))
+                AddWeapon(weapon);
+            else if(go.TryGetComponent(out BaseItem item))
+                AddItem(item);
         }
 
         private void HandleModeRenderers(Mode mode)

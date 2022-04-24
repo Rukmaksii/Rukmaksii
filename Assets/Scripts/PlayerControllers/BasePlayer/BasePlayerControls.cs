@@ -218,8 +218,7 @@ namespace PlayerControllers
             if (!IsOwner || focusedObject == null)
                 return;
 
-            if (focusedObject.TryGetComponent(out BaseWeapon weapon))
-                Inventory.AddWeapon(weapon);
+            Inventory.PickUpObject(focusedObject);
         }
 
         private GameObject[] GetSurroundingObjects(float distance)
