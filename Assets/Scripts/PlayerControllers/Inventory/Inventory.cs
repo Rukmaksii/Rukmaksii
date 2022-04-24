@@ -1,4 +1,5 @@
-﻿using Items;
+﻿using System.Linq;
+using Items;
 using model.Network;
 using PlayerControllers;
 using Unity.Netcode;
@@ -58,6 +59,17 @@ namespace model
                     }
                         break;
                     case NetworkItemRegistry.ItemRegistryEvent.EventType.Pop:
+                        if (ev.index == 0)
+                        {
+                            if (!itemRegistry.Any())
+                            {
+                                SelectedMode = Mode.Weapon;
+                            }
+                            else
+                            {
+                                SelectedItemType = itemRegistry.First().Key;
+                            }
+                        }
 
                         break;
                     case NetworkItemRegistry.ItemRegistryEvent.EventType.Full:
@@ -74,16 +86,17 @@ namespace model
 
         private void HandleModeRenderers(Mode mode)
         {
-            if (SelectedItem == null)
-                return;
             switch (mode)
             {
                 case Mode.Item:
+                    // ReSharper disable once PossibleNullReferenceException
                     SelectedItem.SwitchRender(true);
                     CurrentWeapon.SwitchRender(false);
                     break;
                 case Mode.Weapon:
-                    SelectedItem.SwitchRender(false);
+
+                    if (SelectedItem != null)
+                        SelectedItem.SwitchRender(false);
                     CurrentWeapon.SwitchRender(true);
                     break;
             }
@@ -100,6 +113,7 @@ namespace model
         private void UpdateModeServerRpc(Mode value)
         {
             selectedMode.Value = value;
+            HandleModeRenderers(value);
         }
 
         /// <summary>
@@ -112,7 +126,6 @@ namespace model
             if (newMode == Mode.Item && SelectedItem == null)
                 return false;
             UpdateModeServerRpc(newMode);
-            HandleModeRenderers(newMode);
             return true;
         }
     }

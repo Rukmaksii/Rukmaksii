@@ -111,7 +111,20 @@ namespace model
             if (!IsOwner || SelectedItem == null)
                 return;
 
-            itemRegistry[SelectedItemType].Pop().Consume();
+            var container = itemRegistry[SelectedItemType];
+            var item = container.Pop();
+            if (container.Count <= 0)
+            {
+                if (!itemRegistry.Any())
+                {
+                    SelectedMode = Mode.Weapon;
+                }
+                else
+                {
+                    SelectedItemType = itemRegistry.First().Key;
+                }
+            }
+            item.Consume();
         }
 
         [ServerRpc]
@@ -124,7 +137,11 @@ namespace model
         [ServerRpc]
         private void UpdateSelectedItemTypeServerRpc(long value)
         {
+            if (SelectedItem != null)
+                SelectedItem.SwitchRender(false);
             selectedItemType.Value = value;
+            if (SelectedItem != null)
+                SelectedItem.SwitchRender(true);
         }
     }
 }
