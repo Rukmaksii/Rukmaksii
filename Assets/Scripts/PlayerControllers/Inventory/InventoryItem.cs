@@ -126,6 +126,7 @@ namespace model
                     SelectedItemType = itemRegistry.First().Key;
                 }
             }
+
             item.Consume();
             lastItem = item;
         }
@@ -134,6 +135,19 @@ namespace model
         private void DropItemServerRpc(NetworkBehaviourReference itemRef)
         {
             itemRef.TryGet(out BaseItem item);
+            var container = itemRegistry[item.GetType()];
+            if (container.Count <= 0)
+            {
+                if (!itemRegistry.Any())
+                {
+                    SelectedMode = Mode.Weapon;
+                }
+                else
+                {
+                    SelectedItemType = itemRegistry.First().Key;
+                }
+            }
+
             item.Drop();
         }
 
