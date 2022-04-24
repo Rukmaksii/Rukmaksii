@@ -50,7 +50,6 @@ public class ItemWheel : MonoBehaviour
                     Select(5, Player);
             }
         }
-        Player.Inventory.ChangeMode((x, y) == (0, 0) ? (Inventory.Mode)0 : (Inventory.Mode)1);
     }
 
     private void Select(int i, BasePlayer Player)

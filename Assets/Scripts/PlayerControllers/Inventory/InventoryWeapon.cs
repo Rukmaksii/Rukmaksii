@@ -149,6 +149,7 @@ namespace model
                  */
         public bool SwitchWeapon(WeaponType type)
         {
+            SelectedMode = Mode.Weapon;
             if (type == CurrentWeapon.Type || Weapons.Count <= 1)
                 return false;
             bool switched = false;
@@ -295,6 +296,7 @@ namespace model
         [ServerRpc]
         private void SwitchWeaponServerRpc(WeaponType type)
         {
+            SelectedMode = Mode.Weapon;
             if (SelectedWeaponType != type)
             {
                 SwitchWeaponClientRpc(SelectedWeaponType, type);

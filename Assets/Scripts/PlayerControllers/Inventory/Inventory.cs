@@ -112,8 +112,11 @@ namespace model
         [ServerRpc]
         private void UpdateModeServerRpc(Mode value)
         {
-            selectedMode.Value = value;
-            HandleModeRenderers(value);
+            if (value != SelectedMode)
+            {
+                selectedMode.Value = value;
+                HandleModeRenderers(value);
+            }
         }
 
         /// <summary>
