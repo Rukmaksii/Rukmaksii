@@ -210,7 +210,7 @@ namespace PlayerControllers
         {
             if (!IsOwner || !ctx.performed)
                 return;
-            Inventory.DropCurrentWeapon();
+            Inventory.Drop();
         }
 
         public void OnPickUp(InputAction.CallbackContext ctx)

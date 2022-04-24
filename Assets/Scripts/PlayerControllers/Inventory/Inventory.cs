@@ -84,6 +84,14 @@ namespace model
             HandleModeRenderers(SelectedMode);
         }
 
+        public void Drop()
+        {
+            if (SelectedMode == Mode.Weapon)
+                DropCurrentWeapon();
+            else if (SelectedMode == Mode.Item)
+                DropCurrentItem();
+        }
+
         private void HandleModeRenderers(Mode mode)
         {
             switch (mode)
