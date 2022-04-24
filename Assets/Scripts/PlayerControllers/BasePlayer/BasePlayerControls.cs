@@ -148,10 +148,17 @@ namespace PlayerControllers
         {
             if (!IsOwner)
                 return;
-            IsShooting = Inventory.SelectedMode == Inventory.Mode.Weapon && ctx.ReadValueAsButton();
             if (Inventory.SelectedMode == Inventory.Mode.Item)
             {
-                Inventory.UseItem();
+                if (ctx.started)
+                    Inventory.UseItem();
+            }
+            else if (Inventory.SelectedMode == Inventory.Mode.Weapon)
+            {
+                if (ctx.started)
+                    IsShooting = true;
+                else if (ctx.canceled)
+                    IsShooting = false;
             }
         }
 

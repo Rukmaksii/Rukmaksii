@@ -14,6 +14,8 @@ namespace model
 
         private readonly NetworkVariable<long> selectedItemType = new NetworkVariable<long>();
 
+        private BaseItem lastItem = null;
+
         public Type SelectedItemType
         {
             get =>
@@ -108,7 +110,7 @@ namespace model
 
         public void UseItem()
         {
-            if (!IsOwner || SelectedItem == null)
+            if (!IsOwner || SelectedItem == null || lastItem != null && !lastItem.IsReady)
                 return;
 
             var container = itemRegistry[SelectedItemType];
@@ -125,6 +127,7 @@ namespace model
                 }
             }
             item.Consume();
+            lastItem = item;
         }
 
         [ServerRpc]

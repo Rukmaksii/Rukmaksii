@@ -93,7 +93,7 @@ namespace Items
         /// <summary>
         ///     a flag indicating whether the player can use another item
         /// </summary>
-        public bool IsReady => State == ItemState.Consuming && consumedTime >= ReadyCooldown;
+        public bool IsReady => State == ItemState.Consuming && consumedTime >= ReadyCooldown || State == ItemState.Consumed;
 
         private float consumedTime = 0;
 
