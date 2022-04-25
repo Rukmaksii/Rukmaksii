@@ -6,7 +6,7 @@ namespace PlayerControllers
     {
         public override string ClassName { get; } = "test class";
         public override int MaxHealth { get; protected set; } = 100;
-        public override BaseAbility RootAbility { get; } = null;
+        public override RootAbility RootAbility { get; } = null;
         protected override float movementSpeed { get; } = 10f;
     }
 }

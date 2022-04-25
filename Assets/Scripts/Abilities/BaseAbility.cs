@@ -25,7 +25,7 @@ namespace Abilities
         protected BasePlayer Player;
         public AbilityInfo Info => AbilityInfos[GetType()];
 
-        public abstract List<BaseAbility> Children { get; }
+        public abstract List<Type> Children { get; }
 
 
         public BaseAbility(BasePlayer player)

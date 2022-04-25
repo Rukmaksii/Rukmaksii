@@ -212,6 +212,6 @@ namespace PlayerControllers
         private Vector3 mousePos = Vector3.zero;
         
         
-        public abstract BaseAbility RootAbility { get; }
+        public abstract RootAbility RootAbility { get; }
     }
 }
