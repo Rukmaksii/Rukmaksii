@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -947,6 +947,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 420272, guid: aee731a00031fcc4d9d2b075e528e050, type: 3}
   m_PrefabInstance: {fileID: 862976362}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &883216455 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4528881434241215105, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
+  m_PrefabInstance: {fileID: 1152622202}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1028392545
 GameObject:
   m_ObjectHideFlags: 0
@@ -1159,7 +1164,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connectionData: {fileID: 11400000, guid: 51f4e5ed14290eb4db05031d297551b9, type: 2}
-  gameloop: {fileID: 0}
 --- !u!114 &1112646625
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1275,9 +1279,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1821076053289487703, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
+      propertyPath: pointParent
+      value: 
+      objectReference: {fileID: 883216455}
+    - target: {fileID: 1821076053289487703, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
       propertyPath: itemSelector
       value: 
       objectReference: {fileID: 1963627224}
+    - target: {fileID: 1821076053289487703, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
+      propertyPath: bluePointPrefab
+      value: 
+      objectReference: {fileID: 8852760666051628240, guid: 583891aa1fd89dd4896fa29e70e9d348, type: 3}
     - target: {fileID: 2227596466176413022, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0

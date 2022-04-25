@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using GameManagers;
 using Map;
+using Minions;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,15 +11,17 @@ namespace HUD
     {
         [SerializeField] protected GameObject map;
         [SerializeField] protected Image arrow;
-        [SerializeField] protected GameObject redPointParent;
+        [SerializeField] protected GameObject pointParent;
         [SerializeField] protected GameObject redPointPrefab;
+        [SerializeField] protected GameObject bluePointPrefab;
         [SerializeField] protected Image objOverlay1;
         [SerializeField] protected Image objOverlay2;
         [SerializeField] protected Image objOverlay3;
 
         private List<GameObject> redPoints = new List<GameObject>();
-        
-        private void UpdateMapMonsters()
+        private List<GameObject> bluePoints = new List<GameObject>();
+
+        private void UpdateMonster()
         {
             GameObject[] monsterList = GameObject.FindGameObjectsWithTag("Monster");
 
@@ -31,7 +34,7 @@ namespace HUD
             
             foreach (GameObject monster in monsterList)
             {
-                redPoints.Add(Instantiate(redPointPrefab, redPointParent.transform, true));
+                redPoints.Add(Instantiate(redPointPrefab, pointParent.transform, true));
             }
             
             Vector3 playerPosition = GameController.Singleton.LocalPlayer.transform.localPosition;
@@ -47,6 +50,36 @@ namespace HUD
             }
         }
         
+        private void UpdateMinion()
+        {
+            GameObject[] minionList = GameObject.FindGameObjectsWithTag("Minion");
+
+            GameObject[] oldBluePoints = GameObject.FindGameObjectsWithTag("BluePoint");
+            foreach (GameObject point in oldBluePoints)
+            {
+                Destroy(point);
+            }
+            bluePoints.Clear();
+            
+            foreach (GameObject monster in minionList)
+            {
+                bluePoints.Add(Instantiate(bluePointPrefab, pointParent.transform, true));
+            }
+            
+            Vector3 playerPosition = GameController.Singleton.LocalPlayer.transform.localPosition;
+            
+            for (int i = 0; i < minionList.Length; i++)
+            {
+                BaseMinion compo = minionList[i].GetComponent<BaseMinion>();
+                if (compo != null && compo.TeamId == GameController.Singleton.LocalPlayer.TeamId && Vector3.Distance(minionList[i].transform.localPosition, playerPosition) < 50)
+                {
+                    GameObject point = bluePoints[i];
+                    Vector3 minionPos = minionList[i].transform.position;
+                    point.transform.localPosition = new Vector3(minionPos.x - 55, minionPos.z + 15, 0);
+                }
+            }
+        }
+        
         private void UpdateMap()
         {
             Vector3 playerPosition = GameController.Singleton.LocalPlayer.transform.localPosition;
@@ -56,7 +89,8 @@ namespace HUD
             arrow.transform.localRotation = new Quaternion(0, 0, -camRotation.y, camRotation.w);
             
             UpdateObjectives();
-            UpdateMapMonsters();
+            UpdateMonster();
+            UpdateMinion();
         }
 
         private void UpdateObjectives()

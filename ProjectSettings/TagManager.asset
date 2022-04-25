@@ -21,6 +21,7 @@ TagManager:
   - Shoulder
   - RedPoint
   - ItemTest
+  - BluePoint
   layers:
   - Default
   - TransparentFX
