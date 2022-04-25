@@ -1,20 +1,21 @@
+using System;
 using System.Collections.Generic;
 using model;
 using PlayerControllers;
 
-namespace Ability
+namespace Abilities
 {
     public abstract class BaseAbility : IAbility
     {
-        protected BasePlayer player;
-        public virtual string name { get; }
+        protected BasePlayer Player;
+        public abstract string Name { get; }
 
-        public List<BaseAbility> childrenAbilities { get; private set; } = new List<BaseAbility>();
+        public abstract List<Type> ChildrenAbilities { get; }
 
 
-        protected BaseAbility(BasePlayer player)
+        public BaseAbility(BasePlayer player)
         {
-            this.player = player;
+            Player = player;
         }
 
         public abstract void Apply();
