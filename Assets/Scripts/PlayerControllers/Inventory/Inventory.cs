@@ -112,6 +112,8 @@ namespace model
 
         private void HandleModeRenderers(Mode mode)
         {
+            if (CurrentWeapon is null)
+                return;
             switch (mode)
             {
                 case Mode.Item:
