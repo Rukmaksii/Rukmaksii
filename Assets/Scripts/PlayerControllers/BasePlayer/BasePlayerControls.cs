@@ -263,9 +263,11 @@ namespace PlayerControllers
                 itemWheel = false;
                 Cursor.lockState = CursorLockMode.Locked;
                 isChoosingItem = false;
+                if (this.Inventory.ItemWheel.IsSwitchingItem)
+                    Inventory.ChangeMode(Inventory.Mode.Item);
+                else
+                    Inventory.ChangeMode(Inventory.Mode.Weapon);
             }
-
-            Inventory.ChangeMode(Inventory.Mode.Item);
         }
     }
 }

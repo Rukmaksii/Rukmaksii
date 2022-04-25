@@ -12,8 +12,13 @@ public class ItemWheel : MonoBehaviour
 {
     public Type[] items = {typeof(FuelBooster), typeof(ItemTest), null, null, null, null, null, null};
 
+    private bool isSwitchingItem;
+
+    public bool IsSwitchingItem => isSwitchingItem;
+
     public void SelectItem(Vector3 mousePosition, BasePlayer Player)
     {
+        isSwitchingItem = false;
         float x = Input.mousePosition.x - mousePosition.x;
         float y = Input.mousePosition.y - mousePosition.y;
 
@@ -57,8 +62,11 @@ public class ItemWheel : MonoBehaviour
     {
         if (Player.Inventory.SelectedItem != null && items[i] != null)
         {
-            Player.Inventory.SelectedItem.SwitchRender(false);
+            isSwitchingItem = Player.Inventory.SelectedItemType != items[i] || 
+                              Player.Inventory.SelectedMode == Inventory.Mode.Weapon;
             Player.Inventory.SelectedItemType = items[i];
         }
+        else
+            isSwitchingItem = Player.Inventory.SelectedMode == Inventory.Mode.Item;
     }
 }
