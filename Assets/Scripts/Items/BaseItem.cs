@@ -67,10 +67,7 @@ namespace Items
                 typeof(FuelBooster), new ItemInfo("Fuel Booster", ItemCategory.Other, 3, "Assets/Sprites/Items/JerryCan.PNG")
             },
             {
-                typeof(ItemTest), new ItemInfo("itemtest", ItemCategory.Other, 3)
-            },
-            {
-                typeof(Grenade), new ItemInfo("Grenade", ItemCategory.Other, 10)
+                typeof(Grenade), new ItemInfo("Grenade", ItemCategory.Other, 10, "Assets/Sprites/Items/Grenade.PNG")
             }
         };
 
