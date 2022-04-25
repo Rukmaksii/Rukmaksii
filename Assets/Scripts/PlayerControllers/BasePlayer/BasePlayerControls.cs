@@ -9,7 +9,6 @@ namespace PlayerControllers
 {
     public abstract partial class BasePlayer
     {
-        private bool isChoosingItem = false;
 
         /**
                  * <summary>
@@ -45,7 +44,7 @@ namespace PlayerControllers
                  */
         public void OnRotation(InputAction.CallbackContext ctx)
         {
-            if (!IsOwner || cameraController == null || isChoosingItem)
+            if (!IsOwner || cameraController == null || itemWheel)
                 return;
             Vector2 rotation = ctx.ReadValue<Vector2>();
             UpdateRotationRpc(Vector3.up, rotation.x * sensitivity);
@@ -255,14 +254,12 @@ namespace PlayerControllers
                 itemWheel = true;
                 Cursor.lockState = CursorLockMode.Confined;
                 mousePos = Input.mousePosition;
-                isChoosingItem = true;
             }
             else if (ctx.canceled)
             {
                 this.Inventory.ItemWheel.SelectItem(mousePos, this);
                 itemWheel = false;
                 Cursor.lockState = CursorLockMode.Locked;
-                isChoosingItem = false;
                 if (this.Inventory.ItemWheel.IsSwitchingItem)
                     Inventory.ChangeMode(Inventory.Mode.Item);
                 else

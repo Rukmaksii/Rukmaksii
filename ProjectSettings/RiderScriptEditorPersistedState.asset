@@ -12,12 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: 
   m_EditorClassIdentifier: Unity.Rider.Editor:Packages.Rider.Editor:RiderScriptEditorPersistedState
-<<<<<<< HEAD
-<<<<<<< HEAD
-  lastWriteTicks: -8585507110928462249
-=======
-  lastWriteTicks: -8585507273863681931
->>>>>>> 670ccf5 (Ability: adds jetpack test ability)
-=======
-  lastWriteTicks: -8585507203291357971
->>>>>>> 3a73970 (Ability: adds ability tree)
+  lastWriteTicks: -8585507091142731583
