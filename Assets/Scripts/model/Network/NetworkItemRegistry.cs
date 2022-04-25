@@ -218,8 +218,17 @@ namespace model.Network
                     }
                         break;
                     case ItemRegistryEvent.EventType.Full:
+                    {
                         ReadField(reader);
+                        var regEvent = new ItemRegistryEvent()
+                        {
+                            Type = eventType
+                        };
+
                         ResetDirty();
+
+                        OnValueChange?.Invoke(regEvent);
+                    }
                         break;
                 }
             }
@@ -235,7 +244,9 @@ namespace model.Network
                 data.Remove(objectType);
             dirtyEvents.Add(new ItemRegistryEvent()
             {
-                Type = ItemRegistryEvent.EventType.RemoveAt,
+                Type = index == data[objectType].Count
+                    ? ItemRegistryEvent.EventType.Pop
+                    : ItemRegistryEvent.EventType.RemoveAt,
                 ObjType = objectType,
                 index = index
             });

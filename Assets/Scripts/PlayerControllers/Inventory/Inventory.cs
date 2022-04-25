@@ -37,7 +37,7 @@ namespace model
             get => playerReference.Value.TryGet(out BasePlayer p) ? p : null;
         }
 
-        private readonly NetworkVariable<Mode> selectedMode = new NetworkVariable<Mode>(Mode.Weapon);
+        private readonly NetworkVariable<Mode> selectedMode = new NetworkVariable<Mode>();
 
         public Mode SelectedMode
         {
@@ -53,10 +53,14 @@ namespace model
             if (ItemWheel == null)
                 itemWheel = gameObject.AddComponent<ItemWheel>();
 
+            if (IsOwner)
+                SelectedMode = Mode.Weapon;
+
 
             selectedMode.OnValueChanged += (old, value) => HandleModeRenderers(value);
             itemRegistry.OnValueChange += ev =>
             {
+                Debug.Log(ev.Type);
                 switch (ev.Type)
                 {
                     case NetworkItemRegistry.ItemRegistryEvent.EventType.Push:
@@ -69,6 +73,7 @@ namespace model
                     }
                         break;
                     case NetworkItemRegistry.ItemRegistryEvent.EventType.Pop:
+                    {
                         if (ev.index == 0)
                         {
                             if (!itemRegistry.Any())
@@ -80,12 +85,19 @@ namespace model
                                 SelectedItemType = itemRegistry.First().Key;
                             }
                         }
-
+                    }
                         break;
                     case NetworkItemRegistry.ItemRegistryEvent.EventType.Full:
+
+                        Debug.Log(ev.Type);
                         foreach (var pair in itemRegistry)
-                        foreach (var item in pair.Value)
-                            item.SwitchRender(false);
+                        {
+                            foreach (var item in pair.Value)
+                            {
+                                Debug.Log(item);
+                                item.SwitchRender(false);
+                            }
+                        }
 
 
                         break;

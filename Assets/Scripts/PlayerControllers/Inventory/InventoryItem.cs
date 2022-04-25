@@ -124,6 +124,7 @@ namespace model
                     SelectedItemType = itemRegistry.First().Key;
                 }
             }
+            HandleModeRenderers(SelectedMode);
 
             item.Consume();
             lastItem = item;
