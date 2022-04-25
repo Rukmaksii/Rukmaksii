@@ -262,8 +262,6 @@ namespace GameManagers
 
             GameObject fuelBoosterPrefab =
                 ItemPrefabs.Find(go => go.name == "FuelBoosterPrefab");
-            GameObject itemtestPrefab =
-                ItemPrefabs.Find(go => go.name == "itemtest");
             GameObject grenadePrefab =
                 ItemPrefabs.Find(go => go.name == "Grenade");
             FuelBooster itemInstance = Instantiate(fuelBoosterPrefab).GetComponent<FuelBooster>();
