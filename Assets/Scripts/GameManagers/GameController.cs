@@ -267,7 +267,6 @@ namespace GameManagers
             GameObject grenadePrefab =
                 ItemPrefabs.Find(go => go.name == "Grenade");
             FuelBooster itemInstance = Instantiate(fuelBoosterPrefab).GetComponent<FuelBooster>();
-            ItemTest itemtest = Instantiate(itemtestPrefab).GetComponent<ItemTest>();
             for (int i = 0; i < 10; i++)
             {
                 Grenade grenade = Instantiate(grenadePrefab).GetComponent<Grenade>();
@@ -275,9 +274,7 @@ namespace GameManagers
                 player.Inventory.AddItem(grenade);
             }
             itemInstance.NetworkObject.Spawn();
-            itemtest.NetworkObject.Spawn();
             player.Inventory.AddItem(itemInstance);
-            player.Inventory.AddItem(itemtest);
         }
 
         IEnumerator DeathScreenTimer()

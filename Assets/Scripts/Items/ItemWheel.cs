@@ -10,7 +10,7 @@ using UnityEngine;
 
 public class ItemWheel : MonoBehaviour
 {
-    public Type[] items = {typeof(FuelBooster), typeof(ItemTest), null, null, null, null, null, null};
+    public Type[] items = {typeof(FuelBooster), typeof(Grenade), null, null, null, null, null, null};
 
     private bool isSwitchingItem;
 
