@@ -1,10 +1,15 @@
+using System.Collections.Generic;
 using GameManagers;
+using Items;
 using Map;
 using model;
 using PlayerControllers;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 using Weapons;
+using Image = UnityEngine.UI.Image;
+using Slider = UnityEngine.UI.Slider;
 
 namespace HUD
 {
@@ -20,7 +25,7 @@ namespace HUD
         [SerializeField] protected Image weaponPlaceHolder;
         [SerializeField] protected Text currentStrategy;
         [SerializeField] private GameObject itemSelector;
-        [SerializeField] protected Image itemWheel;
+        [SerializeField] protected GameObject itemWheel;
 
 
         public float CanvasWidth => GetComponent<RectTransform>().rect.width;
@@ -56,6 +61,8 @@ namespace HUD
             BasePlayer localPlayer = GameController.Singleton.LocalPlayer;
 
             arrow.transform.SetParent(map.transform);
+            
+            SetupSprites();
         }
 
         void Update()
@@ -77,8 +84,8 @@ namespace HUD
                 localPlayer.DashCooldown);
             SetCurrentStrategy(localPlayer.Strategy);
 
-            itemWheel.enabled = localPlayer.ItemWheel;
-            
+            itemWheel.SetActive(localPlayer.ItemWheel); 
+
             // updating the capture circle UI if the player is on a point
             if (_capturePoint != null)
             {
@@ -197,6 +204,15 @@ namespace HUD
         public void HideItemSelector()
         {
             itemSelector.SetActive(false);
+        }
+
+        private void SetupSprites()
+        {
+            ItemWheel wheel = gameObject.AddComponent<ItemWheel>();
+            Image[] sprites = itemWheel.GetComponentsInChildren<Image>();
+            for (int i = 1; i < sprites.Length; i++)
+                if (wheel.items[i-1] != null)
+                    sprites[i].sprite = BaseItem.ItemInfos[wheel.items[i-1]].Sprite;
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Items;
+using JetBrains.Annotations;
 using model;
 using PlayerControllers;
 using UnityEditor;
@@ -9,7 +10,7 @@ using UnityEngine;
 
 public class ItemWheel : MonoBehaviour
 {
-    public BaseItem[] items = new BaseItem[8];
+    public Type[] items = {typeof(FuelBooster), typeof(ItemTest), null, null, null, null, null, null};
 
     public void SelectItem(Vector3 mousePosition, BasePlayer Player)
     {
@@ -57,46 +58,7 @@ public class ItemWheel : MonoBehaviour
         if (Player.Inventory.SelectedItem != null && items[i] != null)
         {
             Player.Inventory.SelectedItem.SwitchRender(false);
-            Player.Inventory.SelectedItemType = items[i].GetType();
+            Player.Inventory.SelectedItemType = items[i];
         }
-    }
-
-    public void AddItem(BaseItem item)
-    {
-        int i = 0;
-        
-        while (i < 8)
-        {
-            if (items[i] != null)
-            {
-                if (items[i].GetType() == item.GetType())
-                    return;
-            }
-            else
-            {
-                items[i] = item;
-                return;
-            }
-            i++;
-        }
-        
-        Debug.Log("ItemWheel: Not enough space");
-    }
-
-    public void RemoveItem(BaseItem item)
-    {
-        int i = 0;
-        
-        while (i < 8 && items[i] != null)
-        {
-            if (items[i].GetType() == item.GetType())
-            {
-                items[i] = null;
-                return;
-            }
-            i++;
-        }
-        
-        Debug.Log("ItemWheel: Item not found");
     }
 }

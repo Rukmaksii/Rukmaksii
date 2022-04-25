@@ -53,7 +53,6 @@ namespace model
                 HandleModeRenderers(SelectedMode);
                 if (itemWheel == null)
                     itemWheel = gameObject.AddComponent<ItemWheel>();
-                itemWheel.AddItem(item);
             }
             else if (IsServer)
             {
@@ -104,7 +103,6 @@ namespace model
             if (itemRegistry[SelectedItemType].TryPop(out BaseItem item))
             {
                 DropItemServerRpc(new NetworkBehaviourReference(item));
-                itemWheel.RemoveItem(item);
             }
         }
 

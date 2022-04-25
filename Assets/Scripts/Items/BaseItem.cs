@@ -4,21 +4,26 @@ using model;
 using PlayerControllers;
 using Unity.Netcode;
 using Unity.Netcode.Samples;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Items
 {
     public struct ItemInfo
     {
+        private string spritePath;
+        public Sprite Sprite => (Sprite)AssetDatabase.LoadAssetAtPath(spritePath, typeof(Sprite));
         public string Name;
         public ItemCategory Category;
         public int MaxCount;
 
-        public ItemInfo(string name, ItemCategory category, int maxCount)
+        public ItemInfo(string name, ItemCategory category, int maxCount, string spritePath)
         {
             Name = name;
             Category = category;
             MaxCount = maxCount;
+            this.spritePath = spritePath;
         }
 
         public new long GetHashCode()
@@ -59,10 +64,10 @@ namespace Items
         public static readonly Dictionary<Type, ItemInfo> ItemInfos = new Dictionary<Type, ItemInfo>
         {
             {
-                typeof(FuelBooster), new ItemInfo("Fuel Booster", ItemCategory.Other, 3)
+                typeof(FuelBooster), new ItemInfo("Fuel Booster", ItemCategory.Other, 3, "Assets/Sprites/Items/JerryCan.PNG")
             },
             {
-                typeof(ItemTest), new ItemInfo("itemtest", ItemCategory.Other, 3)
+                typeof(ItemTest), new ItemInfo("itemtest", ItemCategory.Other, 3, "Assets/Sprites/Items/Grenade.PNG")
             }
         };
 

@@ -265,10 +265,7 @@ namespace PlayerControllers
                 isChoosingItem = false;
             }
 
-
-            Inventory.ChangeMode(Inventory.SelectedMode == Inventory.Mode.Item
-                ? Inventory.Mode.Weapon
-                : Inventory.Mode.Item);
+            Inventory.ChangeMode(Inventory.Mode.Item);
         }
     }
 }
