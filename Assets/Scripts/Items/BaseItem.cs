@@ -4,16 +4,14 @@ using model;
 using PlayerControllers;
 using Unity.Netcode;
 using Unity.Netcode.Samples;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Items
 {
     public struct ItemInfo
     {
         private string spritePath;
-        public Sprite Sprite => (Sprite)AssetDatabase.LoadAssetAtPath(spritePath, typeof(Sprite));
+        public Sprite Sprite => Resources.Load<Sprite>(spritePath);
         public string Name;
         public ItemCategory Category;
         public int MaxCount;
@@ -64,10 +62,10 @@ namespace Items
         public static readonly Dictionary<Type, ItemInfo> ItemInfos = new Dictionary<Type, ItemInfo>
         {
             {
-                typeof(FuelBooster), new ItemInfo("Fuel Booster", ItemCategory.Other, 3, "Assets/Sprites/Items/JerryCan.PNG")
+                typeof(FuelBooster), new ItemInfo("Fuel Booster", ItemCategory.Other, 3, "Items/JerryCan")
             },
             {
-                typeof(Grenade), new ItemInfo("Grenade", ItemCategory.Other, 10, "Assets/Sprites/Items/Grenade.PNG")
+                typeof(Grenade), new ItemInfo("Grenade", ItemCategory.Other, 10, "Items/Grenade")
             }
         };
 
