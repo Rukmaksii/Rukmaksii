@@ -356,7 +356,8 @@ namespace Weapons
         [ClientRpc]
         private void PlaySoundClientRPC()
         {
-            gameObject.GetComponent<AudioSource>().Play();
+            AudioSource source = gameObject.GetComponent<AudioSource>();
+            AudioSource.PlayClipAtPoint(source.clip, gameObject.transform.position, source.volume);
         }
         
         [ClientRpc]
