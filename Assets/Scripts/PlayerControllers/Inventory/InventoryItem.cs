@@ -4,6 +4,7 @@ using Items;
 using JetBrains.Annotations;
 using model.Network;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace model
 {
@@ -44,10 +45,8 @@ namespace model
 
             if (IsOwner)
             {
-                if (SelectedItem != null)
-                    item.SwitchRender(false);
-                else
-                    SelectedItemType = item.GetType();
+                item.SwitchRender(false);
+                SelectedItemType ??= item.GetType();
                 itemRegistry[item.GetType()].Push(item);
                 AddItemServerRpc(new NetworkBehaviourReference(item));
                 HandleModeRenderers(SelectedMode);
@@ -57,6 +56,7 @@ namespace model
             else if (IsServer)
             {
                 item.PickUp(Player);
+                item.SwitchRender(false);
                 ClientRpcParams p = new ClientRpcParams
                 {
                     Send = new ClientRpcSendParams
@@ -79,7 +79,7 @@ namespace model
         private void AddItemClientRpc(NetworkBehaviourReference itemRef, ClientRpcParams p = default)
         {
             itemRef.TryGet(out BaseItem item);
-            if (SelectedItem != null)
+            if (itemRegistry.Any() || SelectedMode != Mode.Item)
                 item.SwitchRender(false);
             else
                 SelectedItemType = item.GetType();
@@ -124,6 +124,7 @@ namespace model
                     SelectedItemType = itemRegistry.First().Key;
                 }
             }
+
             HandleModeRenderers(SelectedMode);
 
             item.Consume();

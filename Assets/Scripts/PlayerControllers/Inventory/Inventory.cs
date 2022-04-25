@@ -54,7 +54,6 @@ namespace model
             selectedMode.OnValueChanged += (old, value) => HandleModeRenderers(value);
             itemRegistry.OnValueChange += ev =>
             {
-                Debug.Log($"{OwnerClientId} ordered {ev.Type}");
                 switch (ev.Type)
                 {
                     case NetworkItemRegistry.ItemRegistryEvent.EventType.Push:
@@ -86,15 +85,11 @@ namespace model
                         {
                             foreach (var item in pair.Value)
                             {
-                                Debug.Log(item);
                                 item.SwitchRender(false);
                             }
                         }
-
-
                         break;
                 }
-
                 HandleModeRenderers(SelectedMode);
             };
         }
@@ -126,20 +121,19 @@ namespace model
 
         private void HandleModeRenderers(Mode mode)
         {
-            if (CurrentWeapon is null)
-                return;
             switch (mode)
             {
                 case Mode.Item:
                     // ReSharper disable once PossibleNullReferenceException
                     SelectedItem.SwitchRender(true);
-                    CurrentWeapon.SwitchRender(false);
+                    if (CurrentWeapon != null)
+                        CurrentWeapon.SwitchRender(false);
                     break;
                 case Mode.Weapon:
-
                     if (SelectedItem != null)
                         SelectedItem.SwitchRender(false);
-                    CurrentWeapon.SwitchRender(true);
+                    if (CurrentWeapon != null)
+                        CurrentWeapon.SwitchRender(true);
                     break;
             }
         }
@@ -168,8 +162,6 @@ namespace model
         /// <returns>whether the mode was changed</returns>
         public bool ChangeMode(Mode newMode)
         {
-            if (newMode == Mode.Item && SelectedItem == null)
-                return false;
             UpdateModeServerRpc(newMode);
             return true;
         }
