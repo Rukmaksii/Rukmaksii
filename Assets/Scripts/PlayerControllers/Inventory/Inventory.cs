@@ -32,7 +32,7 @@ namespace model
             set
             {
                 UpdatePlayerReferenceServerRpc(new NetworkBehaviourReference(value));
-                abilityTree = new AbilityTree(value, value.RootAbility);
+                AbilityTree = new AbilityTree(value, value.RootAbility);
             }
             get => playerReference.Value.TryGet(out BasePlayer p) ? p : null;
         }
@@ -45,7 +45,7 @@ namespace model
             private set => UpdateModeServerRpc(value);
         }
 
-        private AbilityTree abilityTree;
+        public AbilityTree AbilityTree { get; private set; }
 
 
         void Start()
