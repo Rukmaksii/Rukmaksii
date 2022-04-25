@@ -35,7 +35,7 @@ namespace GameManagers
                     break;
             }
 
-            GameController.Singleton.PlayerUIInstance.SetActive(true);
+            //GameController.Singleton.PlayerUIInstance.SetActive(true);
         }
 
         private void OnGUI()

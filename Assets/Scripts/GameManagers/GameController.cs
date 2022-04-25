@@ -149,7 +149,7 @@ namespace GameManagers
 
 
             PlayerUIInstance = GameObject.FindWithTag("PlayerHUD");
-            PlayerUIInstance.SetActive(false);
+            //PlayerUIInstance.SetActive(false);
 
             deathScreen = Instantiate(deathScreenPrefab);
             deathScreen.name = deathScreenPrefab.name;
