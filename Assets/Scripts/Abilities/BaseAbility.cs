@@ -8,7 +8,6 @@ namespace Abilities
     public struct AbilityInfo
     {
         public string Name;
-        public List<Type> ChildrenAbilities;
     }
 
     public abstract class BaseAbility : IAbility
@@ -19,15 +18,14 @@ namespace Abilities
                 typeof(Jetpack), new AbilityInfo()
                 {
                     Name = "Jetpack Ability",
-                    ChildrenAbilities = new List<Type>
-                    {
-                    }
                 }
             }
         };
 
         protected BasePlayer Player;
         public AbilityInfo Info => AbilityInfos[GetType()];
+
+        public abstract List<BaseAbility> Children { get; }
 
 
         public BaseAbility(BasePlayer player)
