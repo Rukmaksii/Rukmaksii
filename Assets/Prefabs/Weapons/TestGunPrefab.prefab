@@ -84,6 +84,8 @@ MonoBehaviour:
   model: {fileID: 5522768342882242654}
   _rightHandTarget: {fileID: 4187267723161903522}
   _leftHandTarget: {fileID: 5131043040909951488}
+  Volume: 0
+  Pitch: 0
 --- !u!114 &7051594198312549191
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -206,7 +208,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: fa9b7ff53c4b14d64b97398d50638cd9, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 4b663cfd5124c4a08a7677d03c4cfca6, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1

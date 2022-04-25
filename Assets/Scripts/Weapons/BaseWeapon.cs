@@ -129,23 +129,18 @@ namespace Weapons
         public virtual GameObject AimingHUD { get; } = null;
         
         private AudioSource source;
-        public float Volume;
-        public float Pitch;
 
 
         private void Awake()
         {
             source = GetComponent<AudioSource>();
-            Volume = 0.5f;
-            Pitch = 1f;
         }
 
         void Start()
         {
             if (IsServer)
                 currentAmmo.Value = MaxAmmo;
-            source.volume = Volume;
-            source.pitch = Pitch;
+            
         }
 
         void UpdateServer(float deltaTime)
