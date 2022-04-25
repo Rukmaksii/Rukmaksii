@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Abilities;
 using Items;
 using model.Network;
 using PlayerControllers;
@@ -28,7 +29,11 @@ namespace model
          */
         public BasePlayer Player
         {
-            set => UpdatePlayerReferenceServerRpc(new NetworkBehaviourReference(value));
+            set
+            {
+                UpdatePlayerReferenceServerRpc(new NetworkBehaviourReference(value));
+                abilityTree = new AbilityTree(value, value.RootAbility);
+            }
             get => playerReference.Value.TryGet(out BasePlayer p) ? p : null;
         }
 
@@ -40,11 +45,14 @@ namespace model
             private set => UpdateModeServerRpc(value);
         }
 
+        private AbilityTree abilityTree;
+
 
         void Start()
         {
             if (ItemWheel == null)
                 itemWheel = gameObject.AddComponent<ItemWheel>();
+
 
             selectedMode.OnValueChanged += (old, value) => HandleModeRenderers(value);
             itemRegistry.OnValueChange += ev =>
@@ -96,9 +104,9 @@ namespace model
 
         public void PickUpObject(GameObject go)
         {
-            if(go.TryGetComponent(out BaseWeapon weapon))
+            if (go.TryGetComponent(out BaseWeapon weapon))
                 AddWeapon(weapon);
-            else if(go.TryGetComponent(out BaseItem item))
+            else if (go.TryGetComponent(out BaseItem item))
                 AddItem(item);
         }
 

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Abilities;
 using GameManagers;
 using Minions;
 using model;
@@ -209,5 +210,8 @@ namespace PlayerControllers
         private bool itemWheel = false;
         public bool ItemWheel => itemWheel;
         private Vector3 mousePos = Vector3.zero;
+        
+        
+        public abstract BaseAbility RootAbility { get; }
     }
 }
