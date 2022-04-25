@@ -127,14 +127,8 @@ namespace Weapons
          * <value>the hud to set when aiming</value>
          */
         public virtual GameObject AimingHUD { get; } = null;
-        
-        private AudioSource source;
 
 
-        private void Awake()
-        {
-            source = GetComponent<AudioSource>();
-        }
 
         void Start()
         {
@@ -302,7 +296,8 @@ namespace Weapons
          */
         private bool Shoot()
         {
-            source.Play();
+            PlaySoundClientRPC();
+            
             currentAmmo.Value--;
             GameObject hit;
             
@@ -358,6 +353,12 @@ namespace Weapons
             return true;
         }
 
+        [ClientRpc]
+        private void PlaySoundClientRPC()
+        {
+            gameObject.GetComponent<AudioSource>().Play();
+        }
+        
         [ClientRpc]
         private void DisplayHitMarkClientRpc(ClientRpcParams clientRpcParams = default)
         {
