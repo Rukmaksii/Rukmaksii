@@ -268,13 +268,16 @@ namespace GameManagers
                 ItemPrefabs.Find(go => go.name == "Grenade");
             FuelBooster itemInstance = Instantiate(fuelBoosterPrefab).GetComponent<FuelBooster>();
             ItemTest itemtest = Instantiate(itemtestPrefab).GetComponent<ItemTest>();
-            Grenade grenade = Instantiate(grenadePrefab).GetComponent<Grenade>();
+            for (int i = 0; i < 10; i++)
+            {
+                Grenade grenade = Instantiate(grenadePrefab).GetComponent<Grenade>();
+                grenade.NetworkObject.Spawn();
+                player.Inventory.AddItem(grenade);
+            }
             itemInstance.NetworkObject.Spawn();
             itemtest.NetworkObject.Spawn();
-            grenade.NetworkObject.Spawn();
             player.Inventory.AddItem(itemInstance);
             player.Inventory.AddItem(itemtest);
-            player.Inventory.AddItem(grenade);
         }
 
         IEnumerator DeathScreenTimer()

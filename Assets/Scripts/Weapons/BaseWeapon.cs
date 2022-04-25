@@ -251,7 +251,11 @@ namespace Weapons
         public void SwitchRender(bool enable)
         {
             foreach (var rend in GetComponentsInChildren<MeshRenderer>())
+            {
+                Collider col = gameObject.GetComponent<Collider>();
+                col.enabled = enable;
                 rend.enabled = enable;
+            }
         }
 
 

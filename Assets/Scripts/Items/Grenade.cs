@@ -1,4 +1,5 @@
-﻿using model;
+﻿using ExitGames.Client.Photon.StructWrapping;
+using model;
 using PlayerControllers;
 using UnityEngine;
 
@@ -7,19 +8,28 @@ namespace Items
     public class Grenade : BaseItem
     {
         public override float Duration { get; protected set; } = 3f;
-        private int Damage = 5;
-
+        private int Damage = 50;
+        private float ThrowForce = 30f;
+        public ParticleSystem explosion;
+        
         protected override void Setup()
         {
+            GetComponent<Rigidbody>().isKinematic = false;
+            transform.SetParent(null);
+            Rigidbody rb = gameObject.GetComponent<Rigidbody>();
+            Collider[] c = Player.gameObject.GetComponents<Collider>();
+            gameObject.GetComponent<Collider>().enabled = false;
+            rb.AddForce(Player.AimVector * ThrowForce, ForceMode.Impulse);
         }
 
         protected override void OnConsume()
         {
+            gameObject.GetComponent<Collider>().enabled = true;
         }
 
         protected override void TearDown()
         {
-            Debug.Log("Boom");
+            Instantiate(explosion, transform.position, transform.rotation);
             
             Collider[] colliders = Physics.OverlapSphere(transform.position,5f);
 
@@ -28,7 +38,10 @@ namespace Items
                 IKillable component = hit.GetComponent<IKillable>();
 
                 if (component != null)
-                    component.TakeDamage(Damage);
+                {
+                    if (!(component is BasePlayer && hit is CapsuleCollider))
+                        component.TakeDamage(Damage);
+                }
             }
         }
     }

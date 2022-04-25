@@ -70,7 +70,7 @@ namespace Items
                 typeof(ItemTest), new ItemInfo("itemtest", ItemCategory.Other, 3)
             },
             {
-                typeof(Grenade), new ItemInfo("Grenade", ItemCategory.Other, 1)
+                typeof(Grenade), new ItemInfo("Grenade", ItemCategory.Other, 10)
             }
         };
 
@@ -158,7 +158,7 @@ namespace Items
                 EndConsumption();
                 return;
             }
-
+            
             OnConsume();
             consumedTime += Time.deltaTime;
         }
@@ -226,6 +226,9 @@ namespace Items
         {
             foreach (var renderer in GetComponentsInChildren<MeshRenderer>())
                 renderer.enabled = render;
+
+            foreach (var collider in GetComponentsInChildren<Collider>())
+                collider.enabled = render;
         }
 
         public static long GetBaseItemHashCode(Type baseItemType)

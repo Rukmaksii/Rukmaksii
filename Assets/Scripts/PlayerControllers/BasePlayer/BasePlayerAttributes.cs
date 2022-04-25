@@ -203,6 +203,7 @@ namespace PlayerControllers
          * <summary>the fire cast point and the camera </summary>
          */
         private (Vector3, Vector3) aimVector = (Vector3.zero, Vector3.zero);
+        public Vector3 AimVector => aimVector.Item2;
 
         
         private bool itemWheel = false;
