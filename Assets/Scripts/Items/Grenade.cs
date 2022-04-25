@@ -1,6 +1,7 @@
 ﻿using ExitGames.Client.Photon.StructWrapping;
 using model;
 using PlayerControllers;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Items
@@ -29,7 +30,7 @@ namespace Items
 
         protected override void TearDown()
         {
-            Instantiate(explosion, transform.position, transform.rotation);
+            SpawnExplosionServerRPC();
             
             Collider[] colliders = Physics.OverlapSphere(transform.position,5f);
 
@@ -43,6 +44,13 @@ namespace Items
                         component.TakeDamage(Damage);
                 }
             }
+        }
+
+        [ServerRpc]
+        private void SpawnExplosionServerRPC()
+        {
+            GameObject explo = Instantiate(explosion, transform.position, transform.rotation).gameObject;
+            explo.GetComponent<NetworkObject>().Spawn();
         }
     }
 }
