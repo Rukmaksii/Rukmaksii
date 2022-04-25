@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Abilities;
 using Items;
 using model.Network;
@@ -48,19 +49,12 @@ namespace model
         public AbilityTree AbilityTree { get; private set; }
 
 
-        void Start()
+        private void Awake()
         {
-            if (ItemWheel == null)
-                itemWheel = gameObject.AddComponent<ItemWheel>();
-
-            if (IsOwner)
-                SelectedMode = Mode.Weapon;
-
-
             selectedMode.OnValueChanged += (old, value) => HandleModeRenderers(value);
             itemRegistry.OnValueChange += ev =>
             {
-                Debug.Log(ev.Type);
+                Debug.Log($"{OwnerClientId} ordered {ev.Type}");
                 switch (ev.Type)
                 {
                     case NetworkItemRegistry.ItemRegistryEvent.EventType.Push:
@@ -69,7 +63,6 @@ namespace model
                             UpdateSelectedItemTypeServerRpc(ev.ObjType);
                         ev.itemRef.TryGet(out BaseItem item);
                         item.SwitchRender(false);
-                        HandleModeRenderers(SelectedMode);
                     }
                         break;
                     case NetworkItemRegistry.ItemRegistryEvent.EventType.Pop:
@@ -89,7 +82,6 @@ namespace model
                         break;
                     case NetworkItemRegistry.ItemRegistryEvent.EventType.Full:
 
-                        Debug.Log(ev.Type);
                         foreach (var pair in itemRegistry)
                         {
                             foreach (var item in pair.Value)
@@ -102,7 +94,17 @@ namespace model
 
                         break;
                 }
+
+                HandleModeRenderers(SelectedMode);
             };
+        }
+
+        void Start()
+        {
+            if (ItemWheel == null)
+                itemWheel = gameObject.AddComponent<ItemWheel>();
+
+
             HandleModeRenderers(SelectedMode);
         }
 

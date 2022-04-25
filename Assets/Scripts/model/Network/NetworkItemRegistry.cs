@@ -119,6 +119,11 @@ namespace model.Network
                     data[objType].Add(objRef);
                 }
             }
+
+            OnValueChange?.Invoke(new ItemRegistryEvent()
+            {
+                Type = ItemRegistryEvent.EventType.Full
+            });
         }
 
         public override void ReadDelta(FastBufferReader reader, bool keepDirtyDelta)
@@ -220,14 +225,7 @@ namespace model.Network
                     case ItemRegistryEvent.EventType.Full:
                     {
                         ReadField(reader);
-                        var regEvent = new ItemRegistryEvent()
-                        {
-                            Type = eventType
-                        };
-
                         ResetDirty();
-
-                        OnValueChange?.Invoke(regEvent);
                     }
                         break;
                 }

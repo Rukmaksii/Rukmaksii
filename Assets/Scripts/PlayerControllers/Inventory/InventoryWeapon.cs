@@ -293,7 +293,7 @@ namespace model
             };
         }
 
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void SwitchWeaponServerRpc(WeaponType type)
         {
             SelectedMode = Mode.Weapon;
