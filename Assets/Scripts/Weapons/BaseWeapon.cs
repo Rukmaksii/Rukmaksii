@@ -13,6 +13,7 @@ namespace Weapons
     [RequireComponent(typeof(NetworkObject))]
     [RequireComponent(typeof(ClientNetworkTransform))]
     [RequireComponent(typeof(Rigidbody))]
+    [RequireComponent(typeof(AudioSource))]
     public abstract class BaseWeapon : NetworkBehaviour, IWeapon, IPickable
     {
         [SerializeField] private Sprite sprite;
@@ -126,12 +127,25 @@ namespace Weapons
          * <value>the hud to set when aiming</value>
          */
         public virtual GameObject AimingHUD { get; } = null;
+        
+        private AudioSource source;
+        public float Volume;
+        public float Pitch;
 
+
+        private void Awake()
+        {
+            source = GetComponent<AudioSource>();
+            Volume = 0.5f;
+            Pitch = 1f;
+        }
 
         void Start()
         {
             if (IsServer)
                 currentAmmo.Value = MaxAmmo;
+            source.volume = Volume;
+            source.pitch = Pitch;
         }
 
         void UpdateServer(float deltaTime)
@@ -267,6 +281,7 @@ namespace Weapons
         public void Fire()
         {
             isShooting = true;
+            source.Play();
         }
 
         public void Reload()
