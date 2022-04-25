@@ -276,7 +276,6 @@ namespace Weapons
         public void Fire()
         {
             isShooting = true;
-            source.Play();
         }
 
         public void Reload()
@@ -299,12 +298,13 @@ namespace Weapons
          */
         private bool Shoot()
         {
+            source.Play();
             currentAmmo.Value--;
             GameObject hit;
-
+            
             if ((hit = this.Player.GetObjectInSight(this.Range)) == null)
                 return false;
-
+            
             if (hit.CompareTag("Player"))
             {
                 BasePlayer enemyPlayer = hit.GetComponent<BasePlayer>();
