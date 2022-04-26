@@ -237,14 +237,16 @@ namespace model.Network
         {
             if (!CanClientWrite(NetworkManager.Singleton.LocalClientId))
                 throw new InvalidOperationException("Client cannot write to item registry");
+
+            ItemRegistryEvent.EventType evType = index == data[objectType].Count
+                ? ItemRegistryEvent.EventType.Pop
+                : ItemRegistryEvent.EventType.RemoveAt;
             data[objectType].RemoveAt(index);
             if (data[objectType].Count <= 0)
                 data.Remove(objectType);
             dirtyEvents.Add(new ItemRegistryEvent()
             {
-                Type = index == data[objectType].Count
-                    ? ItemRegistryEvent.EventType.Pop
-                    : ItemRegistryEvent.EventType.RemoveAt,
+                Type = evType,
                 ObjType = objectType,
                 index = index
             });
