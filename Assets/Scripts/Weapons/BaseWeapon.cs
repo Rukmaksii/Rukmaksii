@@ -133,6 +133,11 @@ namespace Weapons
         private AudioSource source;
 
 
+        private void Awake()
+        {
+            source = GetComponent<AudioSource>();
+            renderState.OnValueChanged += (_, val) => SwitchRenderers(val);
+        }
 
         void Start()
         {
@@ -309,7 +314,7 @@ namespace Weapons
         private bool Shoot()
         {
             PlaySoundClientRPC();
-            
+
             currentAmmo.Value--;
             GameObject hit;
 
@@ -371,7 +376,7 @@ namespace Weapons
             AudioSource source = gameObject.GetComponent<AudioSource>();
             AudioSource.PlayClipAtPoint(source.clip, gameObject.transform.position, source.volume);
         }
-        
+
         [ClientRpc]
         private void DisplayHitMarkClientRpc(ClientRpcParams clientRpcParams = default)
         {

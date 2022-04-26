@@ -220,7 +220,7 @@ namespace model
                     if (heavyWeapon.Value.TryGet(out BaseWeapon oldWeapon))
                     {
                         oldWeapon.Drop();
-                        DropWeaponClientRpc(heavyWeapon.Value);
+                        oldWeapon.SwitchRender(true);
                     }
 
                     heavyWeapon.Value = weaponRef;
@@ -229,7 +229,7 @@ namespace model
                     if (lightWeapon.Value.TryGet(out oldWeapon))
                     {
                         oldWeapon.Drop();
-                        DropWeaponClientRpc(lightWeapon.Value);
+                        oldWeapon.SwitchRender(true);
                     }
 
                     lightWeapon.Value = weaponRef;
@@ -238,7 +238,7 @@ namespace model
                     if (closeRangeWeapon.Value.TryGet(out oldWeapon))
                     {
                         oldWeapon.Drop();
-                        DropWeaponClientRpc(closeRangeWeapon.Value);
+                        oldWeapon.SwitchRender(true);
                     }
 
                     closeRangeWeapon.Value = weaponRef;
@@ -248,6 +248,7 @@ namespace model
 
             weaponRef.TryGet(out BaseWeapon weapon);
             weapon.PickUp(Player);
+            weapon.SwitchRender(true);
             SwitchWeaponServerRpc(type);
         }
 
@@ -258,6 +259,7 @@ namespace model
                 return;
 
             weapon.Drop();
+            weapon.SwitchRender(true);
             switch (weapon.Type)
             {
                 case WeaponType.Heavy:
@@ -272,14 +274,7 @@ namespace model
             }
 
             SelectedWeaponType = Weapons.Select(v => v.GetComponent<BaseWeapon>()).First().Type;
-            DropWeaponClientRpc(weaponRef);
-        }
-
-        [ClientRpc]
-        private void DropWeaponClientRpc(NetworkBehaviourReference oldWeaponRef)
-        {
-            oldWeaponRef.TryGet(out BaseWeapon oldWeapon);
-            oldWeapon.SwitchRender(true);
+            HandleModeRenderers(SelectedMode);
         }
 
 
@@ -299,23 +294,27 @@ namespace model
             SelectedMode = Mode.Weapon;
             if (SelectedWeaponType != type)
             {
-                SwitchWeaponClientRpc(SelectedWeaponType, type);
+                var oldWeapon = GetWeaponByType(SelectedWeaponType);
+                if (oldWeapon != null)
+                    oldWeapon.SwitchRender(false);
+
+
+                var weapon = GetWeaponByType(type);
+
+                if (weapon != null)
+                    weapon.SwitchRender(true);
+                SwitchWeaponClientRpc(type);
                 selectedWeaponType.Value = type;
             }
         }
 
         [ClientRpc]
-        private void SwitchWeaponClientRpc(WeaponType oldType, WeaponType type)
+        private void SwitchWeaponClientRpc(WeaponType type)
         {
             BaseWeapon baseWeapon = GetWeaponByType(type);
-            BaseWeapon oldWeapon = GetWeaponByType(oldType);
-
-            if (oldWeapon is {IsOwned: true})
-                oldWeapon.SwitchRender(false);
             if (baseWeapon != null && baseWeapon.IsOwned)
             {
                 Player.SetHandTargets(baseWeapon.RightHandTarget, baseWeapon.LeftHandTarget);
-                baseWeapon.SwitchRender(true);
             }
         }
     }

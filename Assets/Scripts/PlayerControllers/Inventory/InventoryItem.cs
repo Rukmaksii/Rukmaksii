@@ -51,7 +51,7 @@ namespace model
             }
         }
 
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void AddItemServerRpc(NetworkBehaviourReference itemRef)
         {
             itemRef.TryGet(out BaseItem item);

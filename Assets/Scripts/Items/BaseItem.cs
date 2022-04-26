@@ -123,6 +123,10 @@ namespace Items
         {
             if (!ItemInfos.ContainsKey(GetType()))
                 throw new KeyNotFoundException($"item {GetType().Name} was not referenced in BaseItem::ItemInfos");
+        }
+
+        private void Start()
+        {
             renderState.OnValueChanged += (old, val) => SwitchRenderers(val);
         }
 
