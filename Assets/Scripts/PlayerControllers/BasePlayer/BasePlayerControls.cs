@@ -213,7 +213,7 @@ namespace PlayerControllers
 
         public void OnPickUp(InputAction.CallbackContext ctx)
         {
-            if (!IsOwner || focusedObject == null)
+            if (!IsOwner || focusedObject == null || !ctx.performed)
                 return;
 
             Inventory.PickUpObject(focusedObject);

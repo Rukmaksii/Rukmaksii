@@ -4,6 +4,7 @@ using Items;
 using JetBrains.Annotations;
 using model.Network;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace model
 {
@@ -118,6 +119,9 @@ namespace model
             var container = itemRegistry[SelectedItemType];
             if (container.TryPop(out BaseItem item))
                 item.Drop();
+            else
+                return;
+
             if (container.Count <= 0)
             {
                 if (!itemRegistry.Any())
