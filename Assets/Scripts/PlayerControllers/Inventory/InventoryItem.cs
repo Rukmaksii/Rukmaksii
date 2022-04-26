@@ -76,17 +76,19 @@ namespace model
         {
             if (SelectedMode != Mode.Item)
                 return;
-            if (itemRegistry[SelectedItemType].TryPop(out BaseItem item))
-            {
-                DropItemServerRpc(new NetworkBehaviourReference(item));
-            }
+            DropItemServerRpc();
         }
 
         public void UseItem()
         {
-            if (!IsOwner || SelectedItem == null || lastItem != null && !lastItem.IsReady)
-                return;
+            UseItemServerRpc();
+        }
 
+        [ServerRpc]
+        private void UseItemServerRpc()
+        {
+            if (SelectedItem == null || lastItem != null && !lastItem.IsReady)
+                return;
             var container = itemRegistry[SelectedItemType];
             var item = container.Pop();
             if (container.Count <= 0)
@@ -108,10 +110,11 @@ namespace model
         }
 
         [ServerRpc]
-        private void DropItemServerRpc(NetworkBehaviourReference itemRef)
+        private void DropItemServerRpc()
         {
-            itemRef.TryGet(out BaseItem item);
-            var container = itemRegistry[item.GetType()];
+            var container = itemRegistry[SelectedItemType];
+            if (container.TryPop(out BaseItem item))
+                item.Drop();
             if (container.Count <= 0)
             {
                 if (!itemRegistry.Any())
@@ -123,8 +126,6 @@ namespace model
                     SelectedItemType = itemRegistry.First().Key;
                 }
             }
-
-            item.Drop();
         }
 
         [ServerRpc]

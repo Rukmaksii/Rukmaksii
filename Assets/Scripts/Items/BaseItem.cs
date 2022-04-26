@@ -183,7 +183,7 @@ namespace Items
             DespawnServerRpc();
         }
 
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void UpdateStateServerRpc(ItemState value)
         {
             itemState.Value = value;
