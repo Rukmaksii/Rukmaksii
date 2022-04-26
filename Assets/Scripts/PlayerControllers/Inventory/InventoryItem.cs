@@ -39,9 +39,6 @@ namespace model
                  */
         public void AddItem(BaseItem item)
         {
-            if (item.State != ItemState.Clean || !itemRegistry[item.GetType()].CanPush)
-                return;
-
             if (IsOwner || IsServer)
 
             {
@@ -55,9 +52,15 @@ namespace model
         private void AddItemServerRpc(NetworkBehaviourReference itemRef)
         {
             itemRef.TryGet(out BaseItem item);
+
+            if (item.State != ItemState.Clean || !itemRegistry[item.GetType()].CanPush)
+                return;
             item.PickUp(Player);
             if (!itemRegistry.Any())
                 SelectedItemType = item.GetType();
+            else
+                // ReSharper disable once PossibleNullReferenceException
+                SelectedItem.SwitchRender(false);
             itemRegistry[item.GetType()].Push(item);
             item.SwitchRender(false);
             HandleModeRenderers(SelectedMode);
@@ -126,6 +129,8 @@ namespace model
                     SelectedItemType = itemRegistry.First().Key;
                 }
             }
+
+            HandleModeRenderers(SelectedMode);
         }
 
         [ServerRpc]
