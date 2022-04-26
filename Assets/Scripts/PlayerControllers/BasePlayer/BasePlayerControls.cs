@@ -9,7 +9,6 @@ namespace PlayerControllers
 {
     public abstract partial class BasePlayer
     {
-
         /**
                  * <summary>
                  *      Called when the move event is triggered within unity
@@ -253,6 +252,7 @@ namespace PlayerControllers
             {
                 itemWheel = true;
                 Cursor.lockState = CursorLockMode.Confined;
+
                 mousePos = Input.mousePosition;
             }
             else if (ctx.canceled)

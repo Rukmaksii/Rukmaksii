@@ -4,14 +4,13 @@ using Items;
 using JetBrains.Annotations;
 using model.Network;
 using Unity.Netcode;
-using UnityEngine;
 
 namespace model
 {
     public partial class Inventory
     {
         private readonly NetworkItemRegistry itemRegistry =
-            new NetworkItemRegistry(writePermission: NetworkVariableWritePermission.Owner);
+            new NetworkItemRegistry(writePermission: NetworkVariableWritePermission.Server);
 
         private readonly NetworkVariable<long> selectedItemType = new NetworkVariable<long>();
 
@@ -43,28 +42,12 @@ namespace model
             if (item.State != ItemState.Clean || !itemRegistry[item.GetType()].CanPush)
                 return;
 
-            if (IsOwner)
+            if (IsOwner || IsServer)
+
             {
-                item.SwitchRender(false);
-                SelectedItemType ??= item.GetType();
-                itemRegistry[item.GetType()].Push(item);
                 AddItemServerRpc(new NetworkBehaviourReference(item));
-                HandleModeRenderers(SelectedMode);
                 if (itemWheel == null)
                     itemWheel = gameObject.AddComponent<ItemWheel>();
-            }
-            else if (IsServer)
-            {
-                item.PickUp(Player);
-                item.SwitchRender(false);
-                ClientRpcParams p = new ClientRpcParams
-                {
-                    Send = new ClientRpcSendParams
-                    {
-                        TargetClientIds = new[] {Player.OwnerClientId}
-                    }
-                };
-                AddItemClientRpc(new NetworkBehaviourReference(item), p);
             }
         }
 
@@ -73,17 +56,10 @@ namespace model
         {
             itemRef.TryGet(out BaseItem item);
             item.PickUp(Player);
-
-            item.SwitchRender(false);
-        }
-
-        [ClientRpc]
-        private void AddItemClientRpc(NetworkBehaviourReference itemRef, ClientRpcParams p = default)
-        {
-            itemRef.TryGet(out BaseItem item);
             if (!itemRegistry.Any())
                 SelectedItemType = item.GetType();
             itemRegistry[item.GetType()].Push(item);
+            item.SwitchRender(false);
             HandleModeRenderers(SelectedMode);
         }
 

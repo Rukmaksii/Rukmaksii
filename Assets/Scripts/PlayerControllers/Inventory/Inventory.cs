@@ -49,58 +49,10 @@ namespace model
         public AbilityTree AbilityTree { get; private set; }
 
 
-        private void Awake()
-        {
-            selectedMode.OnValueChanged += (old, value) => HandleModeRenderers(value);
-            itemRegistry.OnValueChange += ev =>
-            {
-                switch (ev.Type)
-                {
-                    case NetworkItemRegistry.ItemRegistryEvent.EventType.Push:
-                    {
-                        if (SelectedItemType == null)
-                            UpdateSelectedItemTypeServerRpc(ev.ObjType);
-                        ev.itemRef.TryGet(out BaseItem item);
-                        item.SwitchRender(false);
-                    }
-                        break;
-                    case NetworkItemRegistry.ItemRegistryEvent.EventType.Pop:
-                    {
-                        if (ev.index == 0)
-                        {
-                            if (!itemRegistry.Any())
-                            {
-                                SelectedMode = Mode.Weapon;
-                            }
-                            else
-                            {
-                                SelectedItemType = itemRegistry.First().Key;
-                            }
-                        }
-                    }
-                        break;
-                    case NetworkItemRegistry.ItemRegistryEvent.EventType.Full:
-
-                        foreach (var pair in itemRegistry)
-                        {
-                            foreach (var item in pair.Value)
-                            {
-                                item.SwitchRender(false);
-                            }
-                        }
-                        break;
-                }
-                HandleModeRenderers(SelectedMode);
-            };
-        }
-
         void Start()
         {
             if (ItemWheel == null)
                 itemWheel = gameObject.AddComponent<ItemWheel>();
-
-
-            HandleModeRenderers(SelectedMode);
         }
 
         public void Drop()
@@ -124,8 +76,8 @@ namespace model
             switch (mode)
             {
                 case Mode.Item:
-                    // ReSharper disable once PossibleNullReferenceException
-                    SelectedItem.SwitchRender(true);
+                    if (SelectedItem != null)
+                        SelectedItem.SwitchRender(true);
                     if (CurrentWeapon != null)
                         CurrentWeapon.SwitchRender(false);
                     break;
@@ -160,10 +112,9 @@ namespace model
         /// </summary>
         /// <param name="newMode"></param>
         /// <returns>whether the mode was changed</returns>
-        public bool ChangeMode(Mode newMode)
+        public void ChangeMode(Mode newMode)
         {
             UpdateModeServerRpc(newMode);
-            return true;
         }
     }
 }

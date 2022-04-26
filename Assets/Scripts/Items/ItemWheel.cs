@@ -60,13 +60,18 @@ public class ItemWheel : MonoBehaviour
 
     private void Select(int i, BasePlayer Player)
     {
-        if (Player.Inventory.SelectedItem != null && items[i] != null)
+        if (items[i] == null)
         {
-            isSwitchingItem = Player.Inventory.SelectedItemType != items[i] || 
-                              Player.Inventory.SelectedMode == Inventory.Mode.Weapon;
-            Player.Inventory.SelectedItemType = items[i];
+            isSwitchingItem = false;
         }
         else
-            isSwitchingItem = Player.Inventory.SelectedMode == Inventory.Mode.Item;
+        {
+            isSwitchingItem = items[i] != Player.Inventory.SelectedItemType || Player.Inventory.SelectedMode != Inventory.Mode.Item;
+        }
+
+        if (IsSwitchingItem)
+        {
+            Player.Inventory.SelectedItemType = items[i];
+        }
     }
 }
