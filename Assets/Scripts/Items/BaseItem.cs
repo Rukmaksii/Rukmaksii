@@ -96,11 +96,14 @@ namespace Items
         /// <summary>
         ///     a flag indicating whether the player can use another item
         /// </summary>
-        public bool IsReady => State == ItemState.Consuming && consumedTime >= ReadyCooldown || State == ItemState.Consumed;
+        public bool IsReady =>
+            State == ItemState.Consuming && consumedTime >= ReadyCooldown || State == ItemState.Consumed;
 
         private float consumedTime = 0;
 
         private NetworkVariable<ItemState> itemState = new NetworkVariable<ItemState>(ItemState.Clean);
+
+        private NetworkVariable<bool> renderState = new NetworkVariable<bool>(true);
 
         public ItemState State
         {
@@ -120,6 +123,7 @@ namespace Items
         {
             if (!ItemInfos.ContainsKey(GetType()))
                 throw new KeyNotFoundException($"item {GetType().Name} was not referenced in BaseItem::ItemInfos");
+            renderState.OnValueChanged += (old, val) => SwitchRenderers(val);
         }
 
         private void Update()
@@ -153,7 +157,7 @@ namespace Items
                 EndConsumption();
                 return;
             }
-            
+
             OnConsume();
             consumedTime += Time.deltaTime;
         }
@@ -218,6 +222,16 @@ namespace Items
         }
 
         public void SwitchRender(bool render)
+        {
+            if (!IsServer)
+                throw new NotServerException("only server can switch render");
+
+
+            renderState.Value = render;
+            SwitchRenderers(render);
+        }
+
+        private void SwitchRenderers(bool render)
         {
             foreach (var renderer in GetComponentsInChildren<MeshRenderer>())
                 renderer.enabled = render;

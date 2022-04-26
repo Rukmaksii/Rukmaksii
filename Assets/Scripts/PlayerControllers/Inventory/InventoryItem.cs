@@ -73,15 +73,15 @@ namespace model
         {
             itemRef.TryGet(out BaseItem item);
             item.PickUp(Player);
+
+            item.SwitchRender(false);
         }
 
         [ClientRpc]
         private void AddItemClientRpc(NetworkBehaviourReference itemRef, ClientRpcParams p = default)
         {
             itemRef.TryGet(out BaseItem item);
-            if (itemRegistry.Any() || SelectedMode != Mode.Item)
-                item.SwitchRender(false);
-            else
+            if (!itemRegistry.Any())
                 SelectedItemType = item.GetType();
             itemRegistry[item.GetType()].Push(item);
             HandleModeRenderers(SelectedMode);
