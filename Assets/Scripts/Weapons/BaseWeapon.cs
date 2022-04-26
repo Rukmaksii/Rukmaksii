@@ -128,13 +128,16 @@ namespace Weapons
          */
         public virtual GameObject AimingHUD { get; } = null;
 
+        private NetworkVariable<bool> renderState = new NetworkVariable<bool>(true);
+
+        private AudioSource source;
+
 
 
         void Start()
         {
             if (IsServer)
                 currentAmmo.Value = MaxAmmo;
-            
         }
 
         void UpdateServer(float deltaTime)
@@ -242,14 +245,23 @@ namespace Weapons
             }
         }
 
-        public void SwitchRender(bool enable)
+        public void SwitchRender(bool render)
         {
-            foreach (var rend in GetComponentsInChildren<MeshRenderer>())
-            {
-                Collider col = gameObject.GetComponent<Collider>();
-                col.enabled = enable;
-                rend.enabled = enable;
-            }
+            if (!IsServer)
+                throw new NotServerException("only server can switch render");
+
+
+            renderState.Value = render;
+            SwitchRenderers(render);
+        }
+
+        private void SwitchRenderers(bool render)
+        {
+            foreach (var renderer in GetComponentsInChildren<MeshRenderer>())
+                renderer.enabled = render;
+
+            foreach (var collider in GetComponentsInChildren<Collider>())
+                collider.enabled = render;
         }
 
 
@@ -300,10 +312,10 @@ namespace Weapons
             
             currentAmmo.Value--;
             GameObject hit;
-            
+
             if ((hit = this.Player.GetObjectInSight(this.Range)) == null)
                 return false;
-            
+
             if (hit.CompareTag("Player"))
             {
                 BasePlayer enemyPlayer = hit.GetComponent<BasePlayer>();
