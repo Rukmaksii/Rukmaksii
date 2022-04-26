@@ -115,7 +115,8 @@ namespace GameManagers
             {
                 area.GetComponent<ObjectiveController>().ToggleCanCapture(false);
             }
-            captureArea[Random.Range(0, captureArea.Length)]
+
+            captureArea[/*Random.Range(0, captureArea.Length)*/ 1]
                 .GetComponent<ObjectiveController>()
                 .ToggleCanCapture(true);
             //Activate all the shields
