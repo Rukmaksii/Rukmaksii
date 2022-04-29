@@ -440,7 +440,7 @@ namespace Weapons
                 throw new NotServerException();
             transform.SetParent(null);
             transform.SetPositionAndRotation(Player.transform.position, Player.transform.rotation);
-            NetworkObject.RemoveOwnership();
+            NetworkObject.ChangeOwnership(NetworkManager.ServerClientId);
             Player = null;
         }
     }
