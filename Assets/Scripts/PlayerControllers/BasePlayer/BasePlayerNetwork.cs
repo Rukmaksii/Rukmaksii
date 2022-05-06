@@ -99,5 +99,17 @@ namespace PlayerControllers
         {
             aimVector = (castPoint, direction);
         }
+
+        [ServerRpc]
+        public void UpdateMoneyServerRpc(int money)
+        {
+            this.money = money;
+        }
+
+        [ServerRpc]
+        private void OnKillServerRpc()
+        {
+            
+        }
     }
 }

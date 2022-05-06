@@ -210,8 +210,15 @@ namespace PlayerControllers
         private bool itemWheel = false;
         public bool ItemWheel => itemWheel;
         private Vector3 mousePos = Vector3.zero;
-        
-        
+
+        private int money;
+
+        public int Money
+        {
+            get => money;
+            set => money = value;
+        }
+
         public abstract RootAbility RootAbility { get; }
     }
 }
