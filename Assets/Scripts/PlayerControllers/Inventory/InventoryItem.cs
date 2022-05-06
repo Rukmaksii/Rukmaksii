@@ -117,6 +117,7 @@ namespace model
             HandleModeRenderers(SelectedMode);
 
             item.Consume();
+            item.SwitchRender(true);
             lastItem = item;
         }
 

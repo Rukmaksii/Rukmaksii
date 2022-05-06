@@ -1,8 +1,6 @@
-﻿using ExitGames.Client.Photon.StructWrapping;
-using model;
+﻿using model;
 using PlayerControllers;
 using Unity.Netcode;
-using Unity.Netcode.Components;
 using UnityEngine;
 
 namespace Items
@@ -10,8 +8,8 @@ namespace Items
     public class Grenade : BaseItem
     {
         public override float Duration { get; protected set; } = 3f;
-        private int Damage = 50;
-        private float ThrowForce = 30f;
+        private readonly int Damage = 50;
+        private readonly float ThrowForce = 30f;
         public ParticleSystem explosion;
         public override int Price { get; set; } = 50;
 
@@ -22,8 +20,10 @@ namespace Items
             transform.position = Player.transform.position;
 
 
-            GetComponent<Rigidbody>().isKinematic = false;
-            GetComponent<Rigidbody>().AddForce(Player.AimVector * ThrowForce, ForceMode.Impulse);
+            var rb = GetComponent<Rigidbody>();
+            rb.isKinematic = false;
+            rb.velocity = Vector3.zero;
+            rb.AddForce(Player.AimVector * ThrowForce, ForceMode.Impulse);
         }
 
         protected override void OnConsume()

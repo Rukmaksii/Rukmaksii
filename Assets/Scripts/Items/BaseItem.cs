@@ -192,6 +192,8 @@ namespace Items
         /// </summary>
         protected void EndConsumption()
         {
+            if (!IsServer)
+                throw new NotServerException();
             State = ItemState.Consumed;
             consumedTime = -1;
             TearDown();
