@@ -26,7 +26,10 @@ namespace Items
 
         protected override void TearDown()
         {
-            Instantiate(explosion, transform.position, transform.rotation);
+            
+            ParticleSystem explo = Instantiate(explosion, transform.position, transform.rotation);
+            var netObj = explo.GetComponent<NetworkObject>();
+            netObj.Spawn();
 
             Collider[] colliders = Physics.OverlapSphere(transform.position, 5f);
 
