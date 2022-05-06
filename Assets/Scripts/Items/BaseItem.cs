@@ -87,6 +87,8 @@ namespace Items
         public ItemInfo Info => ItemInfos[GetType()];
 
         public abstract float Duration { get; protected set; }
+        
+        public abstract int Price { get; set; }
 
         /// <summary>
         ///     the time after which the player can use another item

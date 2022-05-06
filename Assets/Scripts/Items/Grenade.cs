@@ -13,6 +13,7 @@ namespace Items
         private int Damage = 50;
         private float ThrowForce = 30f;
         public ParticleSystem explosion;
+        public override int Price { get; set; } = 50;
 
         protected override void Setup()
         {

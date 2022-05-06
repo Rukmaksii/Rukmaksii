@@ -27,7 +27,7 @@ namespace HUD
         [SerializeField] protected Text currentStrategy;
         [SerializeField] private GameObject itemSelector;
         [SerializeField] protected GameObject itemWheel;
-
+        [SerializeField] protected Text MoneyLevel;
 
         public float CanvasWidth => GetComponent<RectTransform>().rect.width;
         public float CanvasHeight => GetComponent<RectTransform>().rect.height;
@@ -84,7 +84,10 @@ namespace HUD
             SetDashCooldown(localPlayer.DashedSince,
                 localPlayer.DashCooldown);
             SetCurrentStrategy(localPlayer.Strategy);
+            SetMoney(localPlayer.Money);
             SetRemainingItems();
+            
+            
             
 
             itemWheel.SetActive(localPlayer.ItemWheel); 
@@ -234,6 +237,11 @@ namespace HUD
             for (int i = 1; i < sprites.Length; i++)
                 if (wheel.items[i-1] != null)
                     sprites[i].sprite = BaseItem.ItemInfos[wheel.items[i-1]].Sprite;
+        }
+
+        private void SetMoney(int money)
+        {
+            MoneyLevel.text = "Player's Money: " + money;
         }
     }
 }

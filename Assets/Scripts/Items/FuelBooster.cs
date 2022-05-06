@@ -3,7 +3,7 @@
     public class FuelBooster : BaseItem
     {
         public override float Duration { get; protected set; } = 3f;
-
+        public override int Price { get; set; } = 100;
         protected override float ReadyCooldown { get; } = 3f;
 
         // storing the old fuel value
