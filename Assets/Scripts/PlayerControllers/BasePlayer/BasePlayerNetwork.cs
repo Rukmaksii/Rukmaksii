@@ -1,6 +1,9 @@
-﻿using GameManagers;
+﻿using System.Collections.Generic;
+using GameManagers;
+using Items;
 using Minions;
 using model;
+using Unity.Mathematics;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -103,13 +106,34 @@ namespace PlayerControllers
         [ServerRpc]
         public void UpdateMoneyServerRpc(int money)
         {
-            this.money = money;
+            this.Money = money;
         }
 
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void OnKillServerRpc()
         {
-            
+            List<BaseItem> ListDropOne = new List<BaseItem>();
+            foreach (var item in Inventory.ItemRegistry)
+            {
+                while (item.Value.TryPop(out BaseItem baseItem))
+                {
+                    foreach (var drop in ListDropOne)
+                    {
+                        Physics.IgnoreCollision(baseItem.gameObject.GetComponent<Collider>(), drop.gameObject.GetComponent<Collider>());
+                    }
+                    baseItem.Drop();
+                    baseItem.SwitchRender(true);
+                    ListDropOne.Add(baseItem);
+                }
+            }
+
+            foreach (BaseItem item in ListDropOne)
+            {
+                foreach (BaseItem baseItem in ListDropOne)
+                {
+                    Physics.IgnoreCollision(baseItem.gameObject.GetComponent<Collider>(), item.gameObject.GetComponent<Collider>(), false);
+                }
+            }
         }
     }
 }

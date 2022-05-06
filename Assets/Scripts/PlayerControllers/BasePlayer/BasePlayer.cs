@@ -77,9 +77,8 @@ namespace PlayerControllers
                 UpdateCamera();
 
                 Cursor.lockState = CursorLockMode.Locked;
+                UpdateMoneyServerRpc(500);
             }
-            
-            UpdateMoneyServerRpc(500);
         }
 
         private void SetupNestedComponents()
@@ -223,8 +222,8 @@ namespace PlayerControllers
 
         public void OnKill()
         {
+            OnKillServerRpc();
             UpdateHealthServerRpc(0, this.OwnerClientId);
-            
         }
 
 
