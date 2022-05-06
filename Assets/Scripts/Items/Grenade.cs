@@ -17,7 +17,13 @@ namespace Items
 
         protected override void Setup()
         {
-            UnparentServerRpc();
+            NetworkObject.ChangeOwnership(NetworkManager.ServerClientId);
+            transform.SetParent(null);
+            transform.position = Player.transform.position;
+
+
+            GetComponent<Rigidbody>().isKinematic = false;
+            GetComponent<Rigidbody>().AddForce(Player.AimVector * ThrowForce, ForceMode.Impulse);
         }
 
         protected override void OnConsume()
@@ -28,7 +34,7 @@ namespace Items
         protected override void TearDown()
         {
             SpawnExplosionServerRpc();
-            
+
             Collider[] colliders = Physics.OverlapSphere(transform.position, 5f);
 
             foreach (Collider hit in colliders)
@@ -41,18 +47,6 @@ namespace Items
                         component.TakeDamage(Damage);
                 }
             }
-        }
-
-        [ServerRpc]
-        private void UnparentServerRpc()
-        {
-            NetworkObject.RemoveOwnership();
-            transform.SetParent(null);
-            GetComponent<Rigidbody>().isKinematic = false;
-            Rigidbody rb = gameObject.GetComponent<Rigidbody>();
-            Collider[] c = Player.gameObject.GetComponents<Collider>();
-            gameObject.GetComponent<Collider>().enabled = false;
-            rb.AddForce(Player.AimVector * ThrowForce, ForceMode.Impulse);
         }
 
         [ServerRpc]

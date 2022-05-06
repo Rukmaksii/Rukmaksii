@@ -69,6 +69,7 @@ namespace Items
             }
         };
 
+
         private NetworkVariable<NetworkBehaviourReference> playerReference =
             new NetworkVariable<NetworkBehaviourReference>();
 
@@ -95,11 +96,13 @@ namespace Items
         /// </summary>
         protected virtual float ReadyCooldown { get; } = 0f;
 
+
+        private NetworkVariable<bool> isReady = new NetworkVariable<bool>();
+
         /// <summary>
         ///     a flag indicating whether the player can use another item
         /// </summary>
-        public bool IsReady =>
-            State == ItemState.Consuming && consumedTime >= ReadyCooldown || State == ItemState.Consumed;
+        public bool IsReady => isReady.Value;
 
         private float consumedTime = 0;
 
@@ -138,18 +141,23 @@ namespace Items
             if (!IsSpawned)
                 return;
             if (!started)
+            {
                 GetComponent<Rigidbody>().isKinematic = IsOwned;
+                if (IsOwner && IsOwned)
+                    transform.localPosition = Player.transform.InverseTransformPoint(Player.WeaponContainer.position);
+            }
 
+            if (!IsServer)
+                return;
 
             if (!IsOwned ||
-                !IsOwner ||
+                !IsServer ||
                 State == ItemState.Consumed ||
                 consumedTime < 0)
                 return;
 
             if (!started)
             {
-                transform.localPosition = Player.transform.InverseTransformPoint(Player.WeaponContainer.position);
                 if (State == ItemState.Consuming)
                 {
                     Setup();
@@ -167,10 +175,14 @@ namespace Items
 
             OnConsume();
             consumedTime += Time.deltaTime;
+            if (consumedTime >= ReadyCooldown)
+                isReady.Value = true;
         }
 
         public void Consume()
         {
+            if (!IsServer)
+                throw new NotServerException();
             if (State == ItemState.Clean)
                 State = ItemState.Consuming;
         }
