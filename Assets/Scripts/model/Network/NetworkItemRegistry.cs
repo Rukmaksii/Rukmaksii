@@ -17,8 +17,6 @@ namespace model.Network
         private Dictionary<long, List<NetworkBehaviourReference>> data =
             new Dictionary<long, List<NetworkBehaviourReference>>();
 
-        public Dictionary<long, List<NetworkBehaviourReference>> Data => data;
-
         public ItemContainer this[Type itemType] =>
             new ItemContainer(BaseItem.ItemInfos[itemType].MaxCount, itemType, this);
 

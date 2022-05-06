@@ -197,7 +197,7 @@ namespace HUD
                 {
                     try
                     {
-                        ammos[i].text = GameController.Singleton.LocalPlayer.Inventory.ItemRegistry.Data[BaseItem.GetBaseItemHashCode(wheel.items[i])].Count.ToString();
+                        ammos[i].text = GameController.Singleton.LocalPlayer.Inventory.ItemRegistry[wheel.items[i]].Count.ToString();
                     }
                     catch (KeyNotFoundException)
                     {
