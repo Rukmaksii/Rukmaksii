@@ -137,6 +137,7 @@ namespace Weapons
         {
             source = GetComponent<AudioSource>();
             renderState.OnValueChanged += (_, val) => SwitchRenderers(val);
+            playerReference.OnValueChanged += (_, val) => SwitchColliders(!IsOwned);
         }
 
         void Start()
@@ -264,9 +265,12 @@ namespace Weapons
         {
             foreach (var renderer in GetComponentsInChildren<MeshRenderer>())
                 renderer.enabled = render;
+        }
 
+        private void SwitchColliders(bool collide)
+        {
             foreach (var collider in GetComponentsInChildren<Collider>())
-                collider.enabled = render;
+                collider.enabled = collide;
         }
 
 
@@ -400,6 +404,10 @@ namespace Weapons
         private void UpdatePlayerServerRpc(NetworkBehaviourReference playerRef)
         {
             this.playerReference.Value = playerRef;
+            if (playerRef.TryGet(out BasePlayer _))
+                SwitchColliders(false);
+            else
+                SwitchColliders(true);
         }
 
         private void SetShoulder()
@@ -438,9 +446,10 @@ namespace Weapons
         {
             if (!IsServer)
                 throw new NotServerException();
+
+            NetworkObject.ChangeOwnership(NetworkManager.ServerClientId);
             transform.SetParent(null);
             transform.SetPositionAndRotation(Player.transform.position, Player.transform.rotation);
-            NetworkObject.ChangeOwnership(NetworkManager.ServerClientId);
             Player = null;
         }
     }
