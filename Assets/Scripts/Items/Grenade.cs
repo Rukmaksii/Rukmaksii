@@ -26,11 +26,8 @@ namespace Items
 
         protected override void TearDown()
         {
+            SpawnExplosionServerRpc();
             
-            ParticleSystem explo = Instantiate(explosion, transform.position, transform.rotation);
-            var netObj = explo.GetComponent<NetworkObject>();
-            netObj.Spawn();
-
             Collider[] colliders = Physics.OverlapSphere(transform.position, 5f);
 
             foreach (Collider hit in colliders)
@@ -55,6 +52,14 @@ namespace Items
             Collider[] c = Player.gameObject.GetComponents<Collider>();
             gameObject.GetComponent<Collider>().enabled = false;
             rb.AddForce(Player.AimVector * ThrowForce, ForceMode.Impulse);
+        }
+
+        [ServerRpc]
+        private void SpawnExplosionServerRpc()
+        {
+            ParticleSystem explo = Instantiate(explosion, transform.position, transform.rotation);
+            var netObj = explo.GetComponent<NetworkObject>();
+            netObj.Spawn();
         }
     }
 }
