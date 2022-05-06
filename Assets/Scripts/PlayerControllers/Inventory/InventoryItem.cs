@@ -17,6 +17,8 @@ namespace model
 
         private BaseItem lastItem = null;
 
+        public NetworkItemRegistry ItemRegistry => itemRegistry;
+
         public Type SelectedItemType
         {
             get =>

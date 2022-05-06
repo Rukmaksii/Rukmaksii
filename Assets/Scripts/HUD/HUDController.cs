@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using GameManagers;
 using Items;
@@ -83,6 +84,8 @@ namespace HUD
             SetDashCooldown(localPlayer.DashedSince,
                 localPlayer.DashCooldown);
             SetCurrentStrategy(localPlayer.Strategy);
+            SetRemainingItems();
+            
 
             itemWheel.SetActive(localPlayer.ItemWheel); 
 
@@ -183,6 +186,24 @@ namespace HUD
             }
 
             currentStrategy.text = str;
+        }
+
+        public void SetRemainingItems()
+        {
+            ItemWheel wheel = gameObject.AddComponent<ItemWheel>();
+            Text[] ammos = itemWheel.GetComponentsInChildren<Text>();
+            for (int i = 0; i < ammos.Length; i++)
+                if (wheel.items[i] != null)
+                {
+                    try
+                    {
+                        ammos[i].text = GameController.Singleton.LocalPlayer.Inventory.ItemRegistry.Data[BaseItem.GetBaseItemHashCode(wheel.items[i])].Count.ToString();
+                    }
+                    catch (KeyNotFoundException)
+                    {
+                        ammos[i].text = "0";
+                    }
+                }
         }
 
         /**
