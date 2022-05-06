@@ -1,5 +1,8 @@
 using System.Collections;
+using GameManagers;
+using Items;
 using model;
+using Unity.Mathematics;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
@@ -45,8 +48,10 @@ namespace MonstersControler
 
         public void OnKill()
         {
-            GameManagers.Gameloop.ListOfMonster.Remove(this);
+            Gameloop.ListOfMonster.Remove(this);
             DestroyServerRpc();
+            GameObject GrenadeInstance = Instantiate(GameController.Singleton.ItemPrefabs[1], gameObject.transform.position, quaternion.identity);
+            GrenadeInstance.GetComponent<NetworkObject>().Spawn();
         }
 
         /**
