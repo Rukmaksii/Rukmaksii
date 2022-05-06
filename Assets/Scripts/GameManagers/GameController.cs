@@ -250,14 +250,14 @@ namespace GameManagers
                 WeaponPrefabs.Find(go => go.name == "TestAutoPrefab");
             GameObject weaponInstance = Instantiate(autoWeaponPrefab);
             var netObj = weaponInstance.GetComponent<NetworkObject>();
-            netObj.Spawn();
+            netObj.Spawn(true);
             player.Inventory.AddWeapon(weaponInstance.GetComponent<BaseWeapon>());
 
 
             GameObject gunWeaponPrefab =
                 WeaponPrefabs.Find(go => go.name == "TestGunPrefab");
             weaponInstance = Instantiate(gunWeaponPrefab);
-            weaponInstance.GetComponent<NetworkObject>().Spawn();
+            weaponInstance.GetComponent<NetworkObject>().Spawn(true);
             player.Inventory.AddWeapon(weaponInstance.GetComponent<BaseWeapon>());
 
             GameObject fuelBoosterPrefab =
@@ -268,10 +268,10 @@ namespace GameManagers
             for (int i = 0; i < 10; i++)
             {
                 Grenade grenade = Instantiate(grenadePrefab).GetComponent<Grenade>();
-                grenade.NetworkObject.Spawn();
+                grenade.NetworkObject.Spawn(true);
                 player.Inventory.AddItem(grenade);
             }
-            itemInstance.NetworkObject.Spawn();
+            itemInstance.NetworkObject.Spawn(true);
             player.Inventory.AddItem(itemInstance);
         }
 
