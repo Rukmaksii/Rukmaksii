@@ -10,6 +10,8 @@ namespace Map
     {
         private int currentHealth = 100;
 
+        public int CurrentHealth => currentHealth;
+
         private int teamId = -1;
 
         public int TeamId => teamId;

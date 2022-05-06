@@ -7,6 +7,7 @@ using Map;
 using MonstersControler;
 using PlayerControllers;
 using UnityEditor;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
@@ -25,6 +26,8 @@ namespace GameManagers
         
         private ShieldController shield1;
         private ShieldController shield2;
+        private BaseController base1;
+        private BaseController base2;
 
         public static List<MonsterController> ListOfMonster;
 
@@ -39,6 +42,8 @@ namespace GameManagers
             }
             shield1 = GameObject.Find("Shield1").GetComponent<ShieldController>();
             shield2 = GameObject.Find("Shield2").GetComponent<ShieldController>();
+            base1 = GameObject.Find("Base1").GetComponent<BaseController>();
+            base2 = GameObject.Find("Base2").GetComponent<BaseController>();
             objectiveDelay = 5;
             hasBeenChange = false;
         }
@@ -54,6 +59,11 @@ namespace GameManagers
                 //check if there are the right number of monster 
                 if(ListOfMonster.Count < numberOfMonster)
                     SpawnMonsters(numberOfMonster - ListOfMonster.Count);
+
+                if (base1.CurrentHealth == 0 || base2.CurrentHealth == 0)
+                {
+                    NetworkManager.Singleton.SceneManager.LoadScene("EndScene", LoadSceneMode.Single);
+                }
             }
             //deactivate the collision between each player and it's team's shield
             foreach (BasePlayer player in GameController.Singleton.Players)
