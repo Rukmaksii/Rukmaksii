@@ -130,6 +130,7 @@ namespace Items
         private void Start()
         {
             renderState.OnValueChanged += (old, val) => SwitchRenderers(val);
+            playerReference.OnValueChanged += (_, val) => SwitchColliders(!IsOwned);
         }
 
         private void Update()
@@ -195,6 +196,10 @@ namespace Items
         private void UpdatePlayerServerRpc(NetworkBehaviourReference playerRef)
         {
             this.playerReference.Value = playerRef;
+            if (playerRef.TryGet(out BasePlayer _))
+                SwitchColliders(false);
+            else
+                SwitchColliders(true);
         }
 
         protected abstract void Setup();
@@ -215,9 +220,9 @@ namespace Items
         {
             if (!IsServer)
                 throw new NotServerException();
+            NetworkObject.ChangeOwnership(NetworkManager.ServerClientId);
             transform.SetParent(null);
             transform.SetPositionAndRotation(Player.transform.position, Player.transform.rotation);
-            NetworkObject.RemoveOwnership();
             Player = null;
         }
 
@@ -241,9 +246,12 @@ namespace Items
         {
             foreach (var renderer in GetComponentsInChildren<MeshRenderer>())
                 renderer.enabled = render;
+        }
 
+        private void SwitchColliders(bool collide)
+        {
             foreach (var collider in GetComponentsInChildren<Collider>())
-                collider.enabled = render;
+                collider.enabled = collide;
         }
 
         public static long GetBaseItemHashCode(Type baseItemType)

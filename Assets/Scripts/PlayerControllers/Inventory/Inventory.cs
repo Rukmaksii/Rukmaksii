@@ -1,8 +1,5 @@
-﻿using System;
-using System.Linq;
-using Abilities;
+﻿using Abilities;
 using Items;
-using model.Network;
 using PlayerControllers;
 using Unity.Netcode;
 using UnityEngine;
@@ -53,6 +50,9 @@ namespace model
         {
             if (ItemWheel == null)
                 itemWheel = gameObject.AddComponent<ItemWheel>();
+
+            if (IsServer && !IsLocalPlayer)
+                HandleModeRenderers(SelectedMode, true);
         }
 
         public void Drop()
@@ -71,8 +71,28 @@ namespace model
                 AddItem(item);
         }
 
-        private void HandleModeRenderers(Mode mode)
+        private void HandleModeRenderers(Mode mode, bool reset = false)
         {
+            if (!IsServer)
+                throw new NotServerException();
+
+
+            if (reset)
+            {
+                foreach (var container in itemRegistry)
+                {
+                    foreach (var item in container.Value)
+                    {
+                        item.SwitchRender(false);
+                    }
+                }
+
+                foreach (var w in Weapons)
+                {
+                    w.GetComponent<BaseWeapon>().SwitchRender(false);
+                }
+            }
+
             switch (mode)
             {
                 case Mode.Item:
