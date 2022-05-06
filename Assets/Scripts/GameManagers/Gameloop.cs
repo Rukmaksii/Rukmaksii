@@ -54,26 +54,26 @@ namespace GameManagers
                 //check if there are the right number of monster 
                 if(ListOfMonster.Count < numberOfMonster)
                     SpawnMonsters(numberOfMonster - ListOfMonster.Count);
-                //deactivate the collision between each player and it's team's shield
-                foreach (BasePlayer player in GameController.Singleton.Players)
+            }
+            //deactivate the collision between each player and it's team's shield
+            foreach (BasePlayer player in GameController.Singleton.Players)
+            {
+                Collider[] child = player.gameObject.GetComponentsInChildren<Collider>();
+                if (player.TeamId == shield1.TeamId)
                 {
-                    Collider[] child = player.gameObject.GetComponentsInChildren<Collider>();
-                    if (player.TeamId == shield1.TeamId)
+                    foreach (Collider colliderchild in child)
                     {
-                        foreach (Collider colliderchild in child)
-                        {
-                            Physics.IgnoreCollision(colliderchild, shield1.gameObject.GetComponent<MeshCollider>());
-                        }
-                        Physics.IgnoreCollision(player.gameObject.GetComponent<Collider>(), shield1.gameObject.GetComponent<MeshCollider>());
+                        Physics.IgnoreCollision(colliderchild, shield1.gameObject.GetComponent<MeshCollider>());
                     }
-                    else
+                    Physics.IgnoreCollision(player.gameObject.GetComponent<Collider>(), shield1.gameObject.GetComponent<MeshCollider>());
+                }
+                else
+                {
+                    foreach (Collider colliderchild in child)
                     {
-                        foreach (Collider colliderchild in child)
-                        {
-                            Physics.IgnoreCollision(colliderchild, shield2.gameObject.GetComponent<MeshCollider>());
-                        }
-                        Physics.IgnoreCollision(player.gameObject.GetComponent<Collider>(), shield2.gameObject.GetComponent<MeshCollider>());
+                        Physics.IgnoreCollision(colliderchild, shield2.gameObject.GetComponent<MeshCollider>());
                     }
+                    Physics.IgnoreCollision(player.gameObject.GetComponent<Collider>(), shield2.gameObject.GetComponent<MeshCollider>());
                 }
             }
             //create the timer
