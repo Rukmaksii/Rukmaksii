@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using Unity.Netcode;
 
 namespace model.Network
@@ -176,6 +178,55 @@ namespace model.Network
                         break;
                 }
             }
+        }
+
+        /// <summary>
+        ///     updates in network the scoreboard
+        /// </summary>
+        /// <param name="playerID"></param>
+        /// <param name="field">the field to update</param>
+        /// <param name="value"></param>
+        /// <param name="delta">whether the <see cref="value"/> is a delta or the final value of the variable</param>
+        /// <exception cref="InvalidOperationException">if the client is not allowed to write to the scoreboard</exception>
+        public void UpdateData(ulong playerID, PlayerInfoField field, int value, bool delta = false)
+        {
+            if (!CanClientWrite(NetworkManager.Singleton.LocalClientId))
+                throw new InvalidOperationException("this client is not allowed to write to the score board");
+
+            if (!ContainsKey(playerID))
+            {
+                data[playerID] = new PlayerInfo();
+            }
+            else if (data[playerID].ContainsKey(field) && delta)
+            {
+                value += data[playerID][field];
+            }
+
+            data[playerID][field] = value;
+
+            dirtyEvents.Add(new ScoreboardEvent()
+            {
+                Type = ScoreboardEvent.EventType.Modify,
+                PlayerID = playerID,
+                Field = field,
+                Value = value
+            });
+        }
+
+        /// <summary>
+        ///     clears the scoreboard
+        /// </summary>
+        /// <exception cref="InvalidOperationException">if the client is not allowed to write to the scoreboard</exception>
+        public void Clear()
+        {
+            if (!CanClientWrite(NetworkManager.Singleton.LocalClientId))
+                throw new InvalidOperationException("this client is not allowed to write to the score board");
+
+            data.Clear();
+            dirtyEvents.Add(new ScoreboardEvent()
+            {
+                Type = ScoreboardEvent.EventType.Clear
+            });
         }
 
         public struct ScoreboardEvent
