@@ -1,4 +1,5 @@
-﻿using Abilities;
+﻿using System;
+using Abilities;
 
 namespace PlayerControllers
 {
@@ -8,5 +9,11 @@ namespace PlayerControllers
         public override int MaxHealth { get; protected set; } = 100;
         public override RootAbility RootAbility { get; } = new TestClassRoot();
         protected override float movementSpeed { get; } = 10f;
+
+        public override Type WeaponInterface { get; } = typeof(TestClassPlayer.IWeapon);
+
+        public interface IWeapon : model.IWeapon
+        {
+        }
     }
 }

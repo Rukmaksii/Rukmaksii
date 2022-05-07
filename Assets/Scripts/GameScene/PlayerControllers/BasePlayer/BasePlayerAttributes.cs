@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Abilities;
 using GameManagers;
 using Minions;
@@ -228,5 +229,7 @@ namespace PlayerControllers
         [SerializeField] private Sprite sprite;
 
         public Sprite Sprite => sprite;
+
+        public abstract Type WeaponInterface { get; }
     }
 }

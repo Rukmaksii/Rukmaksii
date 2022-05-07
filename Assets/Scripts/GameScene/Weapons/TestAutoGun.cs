@@ -1,4 +1,5 @@
 ﻿using model;
+using PlayerControllers;
 using UnityEngine;
 
 namespace Weapons
