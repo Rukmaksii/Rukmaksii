@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Unity.Netcode;
+using UnityEngine.SocialPlatforms.Impl;
 
 namespace model.Network
 {
-    public struct PlayerInfos
+    public struct PlayerInfo
     {
         public int Kills;
         public int DamagesDone;
@@ -14,9 +15,23 @@ namespace model.Network
         public int HealingReceived;
     }
 
+    public enum PlayerInfoField : byte
+    {
+        Kill,
+        DamagesDone,
+        DamagesReceived,
+        MonstersKilled,
+        Deaths,
+        HealingReceived,
+    }
+
     public class NetworkScoreboard : NetworkVariableBase
     {
-        private Dictionary<ulong, PlayerInfos> data = new Dictionary<ulong, PlayerInfos>();
+        private Dictionary<ulong, PlayerInfo> data = new Dictionary<ulong, PlayerInfo>();
+        private List<ScoreboardEvent> dirtyEvents = new List<ScoreboardEvent>();
+
+        public PlayerInfo this[ulong playerID] =>
+            data.ContainsKey(playerID) ? data[playerID] : default;
 
         public delegate void OnValueChangeDelegate(ScoreboardEvent @event);
 
@@ -27,9 +42,41 @@ namespace model.Network
         {
         }
 
+        public override void ResetDirty()
+        {
+            base.ResetDirty();
+            dirtyEvents.Clear();
+        }
+
+        public override bool IsDirty()
+        {
+            return base.IsDirty() || dirtyEvents.Count > 0;
+        }
+
         public override void WriteDelta(FastBufferWriter writer)
         {
-            throw new NotImplementedException();
+            if (base.IsDirty())
+            {
+                writer.WriteValueSafe((ushort) 1);
+                writer.WriteValueSafe(ScoreboardEvent.EventType.Full);
+                WriteField(writer);
+                return;
+            }
+            
+            writer.WriteValueSafe((ushort) dirtyEvents.Count);
+
+            foreach (var @event in dirtyEvents)
+            {
+                writer.WriteValueSafe(@event.Type);
+                switch (@event.Type)
+                {
+                    case ScoreboardEvent.EventType.Modify:
+                        writer.WriteValueSafe(@event.PlayerID);
+                        writer.WriteValueSafe(@event.Field);
+                        writer.WriteValueSafe(@event.Value);
+                        break;
+                }
+            }
         }
 
         public override void WriteField(FastBufferWriter writer)
@@ -60,7 +107,7 @@ namespace model.Network
             public ulong PlayerID;
 
             // the field modified
-            public int Key;
+            public PlayerInfoField Field;
 
             // the new value of the field
             public int Value;
