@@ -77,8 +77,8 @@ namespace model.Network
             {
                 // sends the client id
                 writer.WriteValueSafe(pair.Key);
-                
-                writer.WriteValueSafe(pair.Value.Count);
+
+                writer.WriteValueSafe((ushort) pair.Value.Count);
                 foreach (var field in pair.Value)
                 {
                     // writes field/value
@@ -90,7 +90,21 @@ namespace model.Network
 
         public override void ReadField(FastBufferReader reader)
         {
-            throw new NotImplementedException();
+            data.Clear();
+            reader.ReadValueSafe(out ushort playerCount);
+            for (int i = 0; i < playerCount; i++)
+            {
+                reader.ReadValueSafe(out ulong clientID);
+                data.Add(clientID, new PlayerInfo());
+
+                reader.ReadValueSafe(out ushort count);
+                for (int j = 0; j < count; j++)
+                {
+                    reader.ReadValueSafe(out PlayerInfoField field);
+                    reader.ReadValueSafe(out int value);
+                    data[clientID][field] = value;
+                }
+            }
         }
 
         public override void ReadDelta(FastBufferReader reader, bool keepDirtyDelta)
