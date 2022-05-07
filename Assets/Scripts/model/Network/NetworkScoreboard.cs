@@ -16,6 +16,7 @@ namespace model.Network
         MonstersKilled,
         Deaths,
         HealingReceived,
+        SpawnedMinions,
     }
 
     public class NetworkScoreboard : NetworkVariableBase, IReadOnlyDictionary<ulong, PlayerInfo>

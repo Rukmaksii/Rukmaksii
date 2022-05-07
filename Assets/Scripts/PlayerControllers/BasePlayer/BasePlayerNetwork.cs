@@ -3,6 +3,7 @@ using GameManagers;
 using Items;
 using Minions;
 using model;
+using model.Network;
 using Unity.Mathematics;
 using Unity.Netcode;
 using UnityEngine;
@@ -24,6 +25,7 @@ namespace PlayerControllers
             instance.GetComponent<NetworkObject>().Spawn();
             BaseMinion minion = instance.GetComponent<BaseMinion>();
             minion.BindOwnerServerRpc(this.OwnerClientId, strat);
+            GameController.Singleton.Scoreboard.UpdateData(this.OwnerClientId, PlayerInfoField.SpawnedMinions, 1, true);
         }
 
 
@@ -36,8 +38,6 @@ namespace PlayerControllers
             damagedPlayer.CurrentHealth.Value = newHealth;
         }
 
-        //[ServerRpc]
-        //public void UpdateMovementServerRpc(Vector3 movement)
         public void UpdateMovement(Vector3 movement)
         {
             UpdateFlagsServerRpc(PlayerFlags.MOVING, movement.magnitude > 0);

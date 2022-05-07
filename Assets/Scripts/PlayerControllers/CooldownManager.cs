@@ -78,7 +78,7 @@ namespace PlayerControllers
             }
         }
 
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void HandleSpawnCDServerRpc()
         {
             canSpawnMinion.Value = false;

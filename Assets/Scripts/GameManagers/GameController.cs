@@ -5,6 +5,7 @@ using Items;
 using Map;
 using Minions;
 using model;
+using model.Network;
 using PlayerControllers;
 using Unity.Netcode;
 using UnityEngine;
@@ -28,6 +29,8 @@ namespace GameManagers
         public static GameController Singleton { get; private set; }
 
         private List<BasePlayer> players = new List<BasePlayer>();
+
+        public readonly NetworkScoreboard Scoreboard = new NetworkScoreboard();
 
         public List<BasePlayer> Players
         {
