@@ -35,6 +35,16 @@ namespace PlayerControllers
             BasePlayer damagedPlayer = NetworkManager.Singleton.ConnectedClients[playerId].PlayerObject
                 .GetComponent<BasePlayer>();
 
+            int delta = newHealth - damagedPlayer.CurrentHealthValue;
+            if (delta >= 0)
+            {
+                GameController.Singleton.Scoreboard.UpdateData(playerId, PlayerInfoField.DamagesReceived, delta, true);
+            }
+            else
+            {
+                GameController.Singleton.Scoreboard.UpdateData(playerId, PlayerInfoField.HealingReceived, -delta, true);
+            }
+
             damagedPlayer.CurrentHealth.Value = newHealth;
         }
 
@@ -112,6 +122,7 @@ namespace PlayerControllers
         [ServerRpc(RequireOwnership = false)]
         private void OnKillServerRpc()
         {
+            GameController.Singleton.Scoreboard.UpdateData(OwnerClientId, PlayerInfoField.Deaths, 1, true);
             List<BaseItem> ListDropOne = new List<BaseItem>();
             foreach (var item in Inventory.ItemRegistry)
             {
@@ -119,8 +130,10 @@ namespace PlayerControllers
                 {
                     foreach (var drop in ListDropOne)
                     {
-                        Physics.IgnoreCollision(baseItem.gameObject.GetComponent<Collider>(), drop.gameObject.GetComponent<Collider>());
+                        Physics.IgnoreCollision(baseItem.gameObject.GetComponent<Collider>(),
+                            drop.gameObject.GetComponent<Collider>());
                     }
+
                     baseItem.Drop();
                     baseItem.SwitchRender(true);
                     ListDropOne.Add(baseItem);
@@ -131,7 +144,8 @@ namespace PlayerControllers
             {
                 foreach (BaseItem baseItem in ListDropOne)
                 {
-                    Physics.IgnoreCollision(baseItem.gameObject.GetComponent<Collider>(), item.gameObject.GetComponent<Collider>(), false);
+                    Physics.IgnoreCollision(baseItem.gameObject.GetComponent<Collider>(),
+                        item.gameObject.GetComponent<Collider>(), false);
                 }
             }
         }
