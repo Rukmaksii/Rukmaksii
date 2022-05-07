@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using Unity.Netcode;
 
 namespace model.Network
@@ -15,13 +16,26 @@ namespace model.Network
         HealingReceived,
     }
 
-    public class NetworkScoreboard : NetworkVariableBase
+    public class NetworkScoreboard : NetworkVariableBase, IReadOnlyDictionary<ulong, PlayerInfo>
     {
-        private Dictionary<ulong, PlayerInfo> data = new Dictionary<ulong, PlayerInfo>();
-        private List<ScoreboardEvent> dirtyEvents = new List<ScoreboardEvent>();
+        private readonly Dictionary<ulong, PlayerInfo> data = new Dictionary<ulong, PlayerInfo>();
+        private readonly List<ScoreboardEvent> dirtyEvents = new List<ScoreboardEvent>();
+
+        public bool ContainsKey(ulong key)
+        {
+            return data.ContainsKey(key);
+        }
+
+        public bool TryGetValue(ulong key, out PlayerInfo value)
+        {
+            return data.TryGetValue(key, out value);
+        }
 
         public PlayerInfo this[ulong playerID] =>
             data.ContainsKey(playerID) ? data[playerID] : default;
+
+        public IEnumerable<ulong> Keys => data.Keys;
+        public IEnumerable<PlayerInfo> Values => data.Values;
 
         public delegate void OnValueChangeDelegate(ScoreboardEvent @event);
 
@@ -182,5 +196,17 @@ namespace model.Network
             // the new value of the field
             public int Value;
         }
+
+        public IEnumerator<KeyValuePair<ulong, PlayerInfo>> GetEnumerator()
+        {
+            return data.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public int Count => data.Count;
     }
 }

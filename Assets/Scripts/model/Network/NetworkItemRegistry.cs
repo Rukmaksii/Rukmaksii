@@ -9,25 +9,39 @@ using Unity.Netcode;
 namespace model.Network
 {
     public class NetworkItemRegistry : NetworkVariableBase,
-        IEnumerable<KeyValuePair<Type, NetworkItemRegistry.ItemContainer>>
+        IReadOnlyDictionary<Type, NetworkItemRegistry.ItemContainer>
     {
-        private List<ItemRegistryEvent> dirtyEvents = new List<ItemRegistryEvent>();
+        private readonly List<ItemRegistryEvent> dirtyEvents = new List<ItemRegistryEvent>();
 
         // binds item type hash code to list of item references
-        private Dictionary<long, List<NetworkBehaviourReference>> data =
+        private readonly Dictionary<long, List<NetworkBehaviourReference>> data =
             new Dictionary<long, List<NetworkBehaviourReference>>();
+
+        public bool TryGetValue(Type key, out ItemContainer value)
+        {
+            if (!ContainsKey(key))
+            {
+                value = null;
+                return false;
+            }
+
+            value = this[key];
+            return true;
+        }
 
         public ItemContainer this[Type itemType] =>
             new ItemContainer(BaseItem.ItemInfos[itemType].MaxCount, itemType, this);
+
+        public IEnumerable<Type> Keys => BaseItem.ItemInfos.Keys.Where(t => this[t].Count > 0);
+
+        public IEnumerable<ItemContainer> Values =>
+            BaseItem.ItemInfos.Keys.Select(t => this[t])
+                .Where(c => c.Count > 0);
 
         public delegate void OnValueChangeDelegate(ItemRegistryEvent @event);
 
         public OnValueChangeDelegate OnValueChange = null;
 
-
-        public NetworkItemRegistry()
-        {
-        }
 
         public NetworkItemRegistry(NetworkVariableReadPermission readPermission = DefaultReadPerm,
             NetworkVariableWritePermission writePermission = DefaultWritePerm) : base(readPermission, writePermission)
@@ -65,12 +79,12 @@ namespace model.Network
                     case ItemRegistryEvent.EventType.RemoveAt:
                         // remove at
                         writer.WriteValueSafe(dirtyEvent.ObjType);
-                        writer.WriteValueSafe(dirtyEvent.index);
+                        writer.WriteValueSafe(dirtyEvent.Index);
                         break;
                     case ItemRegistryEvent.EventType.Push:
                         // push item at key
                         writer.WriteValueSafe(dirtyEvent.ObjType);
-                        writer.WriteNetworkSerializable(dirtyEvent.itemRef);
+                        writer.WriteNetworkSerializable(dirtyEvent.ItemRef);
                         break;
                     case ItemRegistryEvent.EventType.Pop:
                         // pop item at key
@@ -149,8 +163,8 @@ namespace model.Network
                         {
                             Type = eventType,
                             ObjType = objType,
-                            index = index,
-                            itemRef = itemRef
+                            Index = index,
+                            ItemRef = itemRef
                         };
                         OnValueChange?.Invoke(regEvent);
                         if (keepDirtyDelta)
@@ -171,7 +185,7 @@ namespace model.Network
                         {
                             Type = eventType,
                             ObjType = objType,
-                            itemRef = itemRef
+                            ItemRef = itemRef
                         };
 
                         OnValueChange?.Invoke(regEvent);
@@ -195,8 +209,8 @@ namespace model.Network
                         {
                             Type = eventType,
                             ObjType = objType,
-                            index = index,
-                            itemRef = itemRef
+                            Index = index,
+                            ItemRef = itemRef
                         };
 
                         OnValueChange?.Invoke(regEvent);
@@ -248,7 +262,7 @@ namespace model.Network
             {
                 Type = evType,
                 ObjType = objectType,
-                index = index
+                Index = index
             });
         }
 
@@ -263,7 +277,7 @@ namespace model.Network
             {
                 Type = ItemRegistryEvent.EventType.Push,
                 ObjType = objectType,
-                itemRef = itemRef
+                ItemRef = itemRef
             });
         }
 
@@ -293,7 +307,7 @@ namespace model.Network
         /// <summary>
         ///     a container for items of the same type 
         /// </summary>
-        /// <remarks>only allowed writers can use non-pure exposed API <br/> therefore, non-allowed writers can only access <see cref="GetEnumerable"/></remarks>
+        /// <remarks>only allowed writers can use non-pure exposed API <br/> therefore, non-allowed writers can only access <see cref="GetEnumerator"/></remarks>
         public class ItemContainer : IEnumerable<BaseItem>
         {
             public readonly int MaxCount;
@@ -458,7 +472,7 @@ namespace model.Network
             public bool CanPush => Count < MaxCount;
 
             [Pure]
-            public List<BaseItem> Data()
+            private List<BaseItem> Data()
             {
                 if (!ContainerExists)
                     return new List<BaseItem>();
@@ -491,7 +505,7 @@ namespace model.Network
                 Pop,
 
                 /// <summary>
-                ///  clears the stack at provided index
+                ///  clears the stack at provided Index
                 /// </summary>
                 RemoveAt,
 
@@ -508,11 +522,13 @@ namespace model.Network
 
             public EventType Type;
 
-            public int index;
+            public int Index;
 
             public long ObjType;
 
-            public NetworkBehaviourReference itemRef;
+            public NetworkBehaviourReference ItemRef;
         }
+
+        public int Count => data.Count;
     }
 }
