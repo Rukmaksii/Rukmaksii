@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Unity.Netcode;
 
 namespace model.Network
@@ -105,11 +104,64 @@ namespace model.Network
                     data[clientID][field] = value;
                 }
             }
+
+            OnValueChanged?.Invoke(new ScoreboardEvent()
+            {
+                Type = ScoreboardEvent.EventType.Full
+            });
         }
 
         public override void ReadDelta(FastBufferReader reader, bool keepDirtyDelta)
         {
-            throw new NotImplementedException();
+            reader.ReadValueSafe(out ushort deltaCount);
+            for (; deltaCount > 0; deltaCount--)
+            {
+                reader.ReadValueSafe(out ScoreboardEvent.EventType eventType);
+                switch (eventType)
+                {
+                    case ScoreboardEvent.EventType.Modify:
+                    {
+                        reader.ReadValueSafe(out ulong playerID);
+                        reader.ReadValueSafe(out PlayerInfoField field);
+                        reader.ReadValueSafe(out int value);
+                        if (!data.ContainsKey(playerID))
+                        {
+                            data.Add(playerID, new PlayerInfo());
+                        }
+
+                        data[playerID][field] = value;
+                        var @event = new ScoreboardEvent()
+                        {
+                            Field = field,
+                            Type = eventType,
+                            Value = value,
+                            PlayerID = playerID
+                        };
+                        if (keepDirtyDelta)
+                            dirtyEvents.Add(@event);
+
+                        OnValueChanged?.Invoke(@event);
+                    }
+                        break;
+                    case ScoreboardEvent.EventType.Clear:
+                        data.Clear();
+                        if (keepDirtyDelta)
+                        {
+                            dirtyEvents.Add(new ScoreboardEvent()
+                            {
+                                Type = eventType,
+                            });
+                        }
+
+                        break;
+                    case ScoreboardEvent.EventType.Full:
+                    {
+                        ReadField(reader);
+                        ResetDirty();
+                    }
+                        break;
+                }
+            }
         }
 
         public struct ScoreboardEvent
