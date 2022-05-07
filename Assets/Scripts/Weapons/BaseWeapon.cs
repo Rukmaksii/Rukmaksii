@@ -1,7 +1,9 @@
 using System;
+using GameManagers;
 using Map;
 using Minions;
 using model;
+using model.Network;
 using MonstersControler;
 using PlayerControllers;
 using Unity.Netcode;
@@ -312,7 +314,8 @@ namespace Weapons
 
         /**
          * <summary>shoots at from the middle of the screen to where looked at</summary>
-         * z<remarks>shoots 1 bullet</remarks>
+         * <remarks>this method is only executed on server</remarks>
+         * <remarks>shoots 1 bullet</remarks>
          * <returns>true if an damageable object has been shot</returns>
          */
         private bool Shoot()
@@ -325,12 +328,19 @@ namespace Weapons
             if ((hit = this.Player.GetObjectInSight(this.Range)) == null)
                 return false;
 
+            var scoreboard = GameController.Singleton.Scoreboard;
             if (hit.CompareTag("Player"))
             {
                 BasePlayer enemyPlayer = hit.GetComponent<BasePlayer>();
                 if (enemyPlayer == null || !Player.CanDamage(enemyPlayer))
                 {
                     return false;
+                }
+
+                scoreboard.UpdateData(Player.OwnerClientId, PlayerInfoField.DamagesDone, this.Damage, true);
+                if (this.Damage >= enemyPlayer.CurrentHealthValue)
+                {
+                    scoreboard.UpdateData(Player.OwnerClientId, PlayerInfoField.Kill, 1, true);
                 }
 
                 enemyPlayer.TakeDamage(this.Damage);
@@ -346,6 +356,11 @@ namespace Weapons
             else if (hit.CompareTag("Monster"))
             {
                 MonsterController monster = hit.GetComponent<MonsterController>();
+                if (this.Damage >= monster.Life)
+                {
+                    scoreboard.UpdateData(Player.OwnerClientId, PlayerInfoField.Kill, 1, true);
+                }
+
                 monster.TakeDamage(this.Damage);
             }
             else if (hit.CompareTag("Base"))
