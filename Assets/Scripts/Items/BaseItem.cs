@@ -88,7 +88,7 @@ namespace Items
         public ItemInfo Info => ItemInfos[GetType()];
 
         public abstract float Duration { get; protected set; }
-        
+
         public abstract int Price { get; set; }
 
         /// <summary>
@@ -133,7 +133,10 @@ namespace Items
         private void Start()
         {
             renderState.OnValueChanged += (old, val) => SwitchRenderers(val);
+            SwitchRenderers(renderState.Value);
+
             playerReference.OnValueChanged += (_, val) => SwitchColliders(!IsOwned);
+            SwitchColliders(!IsOwned);
         }
 
         private void Update()

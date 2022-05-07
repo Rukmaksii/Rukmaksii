@@ -1,5 +1,6 @@
 ﻿using Abilities;
 using Items;
+using model.Network;
 using PlayerControllers;
 using Unity.Netcode;
 using UnityEngine;
@@ -51,7 +52,7 @@ namespace model
             if (ItemWheel == null)
                 itemWheel = gameObject.AddComponent<ItemWheel>();
 
-            if (IsServer && !IsLocalPlayer)
+            if (IsServer)
                 HandleModeRenderers(SelectedMode, true);
         }
 
