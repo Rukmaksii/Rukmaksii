@@ -1,19 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Unity.Netcode;
-using UnityEngine.SocialPlatforms.Impl;
 
 namespace model.Network
 {
-    public struct PlayerInfo
-    {
-        public int Kills;
-        public int DamagesDone;
-        public int DamagesReceived;
-        public int MonstersKilled;
-        public int Deaths;
-        public int HealingReceived;
-    }
+    using PlayerInfo = Dictionary<PlayerInfoField, int>;
 
     public enum PlayerInfoField : byte
     {
@@ -62,7 +53,7 @@ namespace model.Network
                 WriteField(writer);
                 return;
             }
-            
+
             writer.WriteValueSafe((ushort) dirtyEvents.Count);
 
             foreach (var @event in dirtyEvents)
@@ -81,7 +72,20 @@ namespace model.Network
 
         public override void WriteField(FastBufferWriter writer)
         {
-            throw new NotImplementedException();
+            writer.WriteValueSafe((ushort) data.Count);
+            foreach (var pair in data)
+            {
+                // sends the client id
+                writer.WriteValueSafe(pair.Key);
+                
+                writer.WriteValueSafe(pair.Value.Count);
+                foreach (var field in pair.Value)
+                {
+                    // writes field/value
+                    writer.WriteValueSafe(field.Key);
+                    writer.WriteValueSafe(field.Value);
+                }
+            }
         }
 
         public override void ReadField(FastBufferReader reader)
