@@ -181,9 +181,10 @@ namespace GameManagers
         {
             SetSpawnPoint();
             string className = connectionData.Data?.ClassName ?? classPrefabs[0].GetComponent<BasePlayer>().ClassName;
-            SpawnPlayerServerRpc(className, NetworkManager.Singleton.LocalClientId,
-                SpawnPoint,
-                Quaternion.identity);
+            if (IsClient)
+                SpawnPlayerServerRpc(className, NetworkManager.Singleton.LocalClientId,
+                    SpawnPoint,
+                    Quaternion.identity);
         }
 
         private void SetSpawnPoint()
@@ -274,6 +275,7 @@ namespace GameManagers
                 grenade.NetworkObject.Spawn(true);
                 player.Inventory.AddItem(grenade);
             }
+
             itemInstance.NetworkObject.Spawn(true);
             player.Inventory.AddItem(itemInstance);
         }

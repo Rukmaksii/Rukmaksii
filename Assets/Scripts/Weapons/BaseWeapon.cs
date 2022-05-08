@@ -448,8 +448,8 @@ namespace Weapons
             if (!IsServer)
                 throw new NotServerException();
             Player = player;
-            NetworkObject.ChangeOwnership(Player.OwnerClientId);
-            NetworkObject.TrySetParent(Player.transform);
+            NetworkObject.ChangeOwnership(player.OwnerClientId);
+            NetworkObject.TrySetParent(player.transform);
             SetShoulder();
         }
 

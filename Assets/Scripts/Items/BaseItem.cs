@@ -229,7 +229,7 @@ namespace Items
             if (!IsServer)
                 throw new NotServerException();
             Player = player;
-            NetworkObject.ChangeOwnership(Player.OwnerClientId);
+            NetworkObject.ChangeOwnership(player.OwnerClientId);
             NetworkObject.TrySetParent(Player.transform);
         }
 
