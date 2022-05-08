@@ -249,7 +249,6 @@ namespace GameManagers
                 throw new NotServerException();
 
             player.UpdateHealthServerRpc(player.MaxHealth, player.OwnerClientId);
-            player.Inventory.Player = player;
             GameObject autoWeaponPrefab =
                 WeaponPrefabs.Find(go => go.name == "TestAutoPrefab");
             GameObject weaponInstance = Instantiate(autoWeaponPrefab);

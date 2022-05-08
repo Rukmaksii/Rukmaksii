@@ -1,6 +1,5 @@
 ﻿using Abilities;
 using Items;
-using model.Network;
 using PlayerControllers;
 using Unity.Netcode;
 using UnityEngine;
@@ -19,21 +18,24 @@ namespace model
             Item
         }
 
-        private readonly NetworkVariable<NetworkBehaviourReference> playerReference =
-            new NetworkVariable<NetworkBehaviourReference>();
 
+        private BasePlayer _player;
 
         /**
          * <value>the bound player <seealso cref="BasePlayer"/></value>
          */
         public BasePlayer Player
         {
-            set
+            get
             {
-                UpdatePlayerReferenceServerRpc(new NetworkBehaviourReference(value));
-                AbilityTree = new AbilityTree(value, value.RootAbility);
+                if (_player is null)
+                {
+                    _player = GetComponent<BasePlayer>();
+                    AbilityTree = new AbilityTree(_player, _player.RootAbility);
+                }
+
+                return _player;
             }
-            get => playerReference.Value.TryGet(out BasePlayer p) ? p : null;
         }
 
         private readonly NetworkVariable<Mode> selectedMode = new NetworkVariable<Mode>();
@@ -111,12 +113,6 @@ namespace model
             }
         }
 
-
-        [ServerRpc(RequireOwnership = false)]
-        private void UpdatePlayerReferenceServerRpc(NetworkBehaviourReference playerRef)
-        {
-            this.playerReference.Value = playerRef;
-        }
 
         [ServerRpc]
         private void UpdateModeServerRpc(Mode value)
