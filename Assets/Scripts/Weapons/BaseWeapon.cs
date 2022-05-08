@@ -320,6 +320,8 @@ namespace Weapons
          */
         private bool Shoot()
         {
+            if (!IsServer)
+                throw new NotServerException();
             PlaySoundClientRPC();
 
             currentAmmo.Value--;
