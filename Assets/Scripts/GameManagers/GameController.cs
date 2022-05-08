@@ -223,7 +223,7 @@ namespace GameManagers
             foreach (var player in playersArray)
             {
                 BasePlayer basePlayer = player.GetComponent<BasePlayer>();
-                if (basePlayer.CurrentHealthValue <= 0)
+                if (basePlayer.CurrentHealth <= 0)
                 {
                     if (basePlayer == LocalPlayer)
                     {
@@ -248,7 +248,7 @@ namespace GameManagers
             if (!IsServer)
                 throw new NotServerException();
 
-            player.UpdateHealthServerRpc(player.MaxHealth, player.OwnerClientId);
+            player.CurrentHealth = player.MaxHealth;
             player.Money = 500;
             GameObject autoWeaponPrefab =
                 WeaponPrefabs.Find(go => go.name == "TestAutoPrefab");
@@ -298,7 +298,7 @@ namespace GameManagers
             if (!player.activeSelf)
             {
                 player.SetActive(true);
-                basePlayer.UpdateHealthServerRpc(basePlayer.MaxHealth, basePlayer.OwnerClientId);
+                basePlayer.CurrentHealth = basePlayer.MaxHealth;
 
                 basePlayer.OnRespawn();
             }

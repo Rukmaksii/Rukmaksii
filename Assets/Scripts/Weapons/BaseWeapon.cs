@@ -340,7 +340,7 @@ namespace Weapons
                 }
 
                 scoreboard.UpdateData(Player.OwnerClientId, PlayerInfoField.DamagesDone, this.Damage, true);
-                if (this.Damage >= enemyPlayer.CurrentHealthValue)
+                if (this.Damage >= enemyPlayer.CurrentHealth)
                 {
                     scoreboard.UpdateData(Player.OwnerClientId, PlayerInfoField.Kill, 1, true);
                 }

@@ -30,22 +30,20 @@ namespace PlayerControllers
 
 
         [ServerRpc(RequireOwnership = false)]
-        public void UpdateHealthServerRpc(int newHealth, ulong playerId)
+        public void UpdateHealthServerRpc(int newHealth)
         {
-            BasePlayer damagedPlayer = NetworkManager.Singleton.ConnectedClients[playerId].PlayerObject
-                .GetComponent<BasePlayer>();
 
-            int delta = newHealth - damagedPlayer.CurrentHealthValue;
+            int delta = newHealth - CurrentHealth;
             if (delta >= 0)
             {
-                GameController.Singleton.Scoreboard.UpdateData(playerId, PlayerInfoField.DamagesReceived, delta, true);
+                GameController.Singleton.Scoreboard.UpdateData(OwnerClientId, PlayerInfoField.DamagesReceived, delta, true);
             }
             else
             {
-                GameController.Singleton.Scoreboard.UpdateData(playerId, PlayerInfoField.HealingReceived, -delta, true);
+                GameController.Singleton.Scoreboard.UpdateData(OwnerClientId, PlayerInfoField.HealingReceived, -delta, true);
             }
 
-            damagedPlayer.CurrentHealth.Value = newHealth;
+            currentHealth.Value = newHealth;
         }
 
         public void UpdateMovement(Vector3 movement)

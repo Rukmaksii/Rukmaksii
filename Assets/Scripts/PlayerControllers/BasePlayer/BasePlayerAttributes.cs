@@ -163,7 +163,7 @@ namespace PlayerControllers
         public abstract int MaxHealth { get; protected set; }
 
         /** <value>current player health</value> */
-        private NetworkVariable<int> CurrentHealth { get; } = new NetworkVariable<int>(1);
+        private readonly NetworkVariable<int> currentHealth = new NetworkVariable<int>(1);
 
         private NetworkVariable<int> teamId = new NetworkVariable<int>(-1);
 
@@ -171,7 +171,11 @@ namespace PlayerControllers
 
         private NetworkVariable<int> flags = new NetworkVariable<int>(0);
 
-        public int CurrentHealthValue => CurrentHealth.Value;
+        public int CurrentHealth
+        {
+            get => currentHealth.Value;
+            set => UpdateHealthServerRpc(value);
+        }
 
         /**
                 * <value>the time in seconds since the dash has been called</value>

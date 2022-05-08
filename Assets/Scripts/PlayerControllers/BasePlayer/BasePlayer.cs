@@ -207,14 +207,14 @@ namespace PlayerControllers
          */
         public bool TakeDamage(int damage)
         {
-            if (damage >= CurrentHealth.Value)
+            if (damage >= CurrentHealth)
             {
                 OnKill();
                 return false;
             }
             else
             {
-                UpdateHealthServerRpc(CurrentHealth.Value - damage, this.OwnerClientId);
+                CurrentHealth -= damage;
                 return true;
             }
         }
@@ -222,7 +222,7 @@ namespace PlayerControllers
         public void OnKill()
         {
             OnKillServerRpc();
-            UpdateHealthServerRpc(0, this.OwnerClientId);
+            CurrentHealth = 0;
         }
 
 

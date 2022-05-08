@@ -79,7 +79,7 @@ namespace HUD
                 weaponPlaceHolder.sprite = localPlayer.Inventory.CurrentWeapon.Sprite;
             }
 
-            SetHealth(localPlayer.CurrentHealthValue);
+            SetHealth(localPlayer.CurrentHealth);
             SetFuelAmount(localPlayer.Jetpack.FuelConsumption);
             SetDashCooldown(localPlayer.DashedSince,
                 localPlayer.DashCooldown);
