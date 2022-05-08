@@ -211,12 +211,12 @@ namespace PlayerControllers
         public bool ItemWheel => itemWheel;
         private Vector3 mousePos = Vector3.zero;
 
-        private int money;
+        private NetworkVariable<int> money = new NetworkVariable<int>();
 
         public int Money
         {
-            get => money;
-            set => money = value;
+            get => money.Value;
+            set => UpdateMoneyServerRpc(value);
         }
 
         public abstract RootAbility RootAbility { get; }

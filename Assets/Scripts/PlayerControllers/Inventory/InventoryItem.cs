@@ -58,7 +58,7 @@ namespace model
 
             if (item.State != ItemState.Clean || !itemRegistry[item.GetType()].CanPush)
             {
-                Player.UpdateMoneyServerRpc(Player.Money + item.Price);
+                Player.Money += item.Price;
                 item.gameObject.GetComponent<NetworkObject>().Despawn();
                 return;
             }

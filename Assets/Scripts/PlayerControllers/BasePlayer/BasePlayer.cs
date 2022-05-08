@@ -77,7 +77,6 @@ namespace PlayerControllers
                 UpdateCamera();
 
                 Cursor.lockState = CursorLockMode.Locked;
-                UpdateMoneyServerRpc(500);
             }
         }
 

@@ -113,10 +113,10 @@ namespace PlayerControllers
             aimVector = (castPoint, direction);
         }
 
-        [ServerRpc]
-        public void UpdateMoneyServerRpc(int money)
+        [ServerRpc(RequireOwnership = false)]
+        private void UpdateMoneyServerRpc(int money)
         {
-            this.Money = money;
+            this.money.Value = money;
         }
 
         [ServerRpc(RequireOwnership = false)]
