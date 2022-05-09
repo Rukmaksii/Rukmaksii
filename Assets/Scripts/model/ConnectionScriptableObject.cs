@@ -1,9 +1,7 @@
-﻿using model;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace GameManagers
+namespace model
 {
-    
     [CreateAssetMenu(fileName = "ConnectionData", menuName = "Rukmaksii/ConnectionScriptableObject")]
     public class ConnectionScriptableObject : ScriptableObject
     {
