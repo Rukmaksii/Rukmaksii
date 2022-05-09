@@ -1,9 +1,22 @@
-﻿namespace model
+﻿using Unity.Netcode;
+
+namespace model
 {
 
 
-    public class ConnectionData
+    public class ConnectionData : INetworkSerializable
     {
+
+        /// <summary>
+        ///     the pseudo of the local player
+        /// </summary>
+        public string Pseudo = null;
+
+        /// <summary>
+        ///     the name of the room to connect to
+        /// </summary>
+        public string RoomName = null;
+        
         /**
          * <value>the name of the class chosen by the player</value>
          */
@@ -21,5 +34,9 @@
 
         public bool IsReady => !(ClassName == null || ConnectionType == null || TeamId < 0);
 
+        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
