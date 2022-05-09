@@ -20,7 +20,6 @@ namespace model
         public NetworkPlayersRegistry(NetworkVariableReadPermission readPermission = DefaultReadPerm,
             NetworkVariableWritePermission writePermission = DefaultWritePerm) : base(readPermission, writePermission)
         {
-            
         }
 
         public override bool IsDirty()
@@ -36,7 +35,29 @@ namespace model
 
         public override void WriteDelta(FastBufferWriter writer)
         {
-            throw new NotImplementedException();
+            if (base.IsDirty())
+            {
+                writer.WriteValue((ushort) 1);
+                writer.WriteValueSafe(PlayersRegistryEvent.EventType.Full);
+                WriteField(writer);
+                return;
+            }
+
+            writer.WriteValueSafe((ushort) dirtyEvents.Count);
+            foreach (var dirtyEvent in dirtyEvents)
+            {
+                writer.WriteValueSafe(dirtyEvent.Type);
+                switch (dirtyEvent.Type)
+                {
+                    case PlayersRegistryEvent.EventType.Add:
+                        writer.WriteValueSafe(dirtyEvent.key);
+                        writer.WriteNetworkSerializable(dirtyEvent.Data);
+                        break;
+                    case PlayersRegistryEvent.EventType.Remove:
+                        writer.WriteValueSafe(dirtyEvent.key);
+                        break;
+                }
+            }
         }
 
         public override void WriteField(FastBufferWriter writer)
