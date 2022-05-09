@@ -82,12 +82,12 @@ namespace model.Network
                         writer.WriteValueSafe(dirtyEvent.Index);
                         break;
                     case ItemRegistryEvent.EventType.Push:
-                        // push item at key
+                        // push item at Key
                         writer.WriteValueSafe(dirtyEvent.ObjType);
                         writer.WriteNetworkSerializable(dirtyEvent.ItemRef);
                         break;
                     case ItemRegistryEvent.EventType.Pop:
-                        // pop item at key
+                        // pop item at Key
                         writer.WriteValueSafe(dirtyEvent.ObjType);
                         break;
                 }

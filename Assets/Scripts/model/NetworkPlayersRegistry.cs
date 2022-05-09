@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Netcode;
 
 namespace model
@@ -50,11 +51,11 @@ namespace model
                 switch (dirtyEvent.Type)
                 {
                     case PlayersRegistryEvent.EventType.Add:
-                        writer.WriteValueSafe(dirtyEvent.key);
+                        writer.WriteValueSafe(dirtyEvent.Key);
                         writer.WriteNetworkSerializable(dirtyEvent.Data);
                         break;
                     case PlayersRegistryEvent.EventType.Remove:
-                        writer.WriteValueSafe(dirtyEvent.key);
+                        writer.WriteValueSafe(dirtyEvent.Key);
                         break;
                 }
             }
@@ -104,7 +105,7 @@ namespace model
                         var ev = new PlayersRegistryEvent()
                         {
                             Type = eventType,
-                            key = key,
+                            Key = key,
                             Data = value
                         };
 
@@ -121,7 +122,7 @@ namespace model
                         var ev = new PlayersRegistryEvent()
                         {
                             Type = eventType,
-                            key = key
+                            Key = key
                         };
 
                         if (keepDirtyDelta)
@@ -151,30 +152,28 @@ namespace model
             }
         }
 
-        public IEnumerator<KeyValuePair<ulong, TNSerializable>> GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
+        public IEnumerator<KeyValuePair<ulong, TNSerializable>> GetEnumerator() => data.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         public void Add(KeyValuePair<ulong, TNSerializable> item)
-        {
-            throw new NotImplementedException();
-        }
+            => Add(item.Key, item.Value);
+
 
         public void Clear()
         {
-            throw new NotImplementedException();
+            if (IsReadOnly)
+                throw new InvalidOperationException("Client cannot write to player registry");
+            data.Clear();
+            dirtyEvents.Add(new PlayersRegistryEvent()
+            {
+                Type = PlayersRegistryEvent.EventType.Clear
+            });
         }
 
         public bool Contains(KeyValuePair<ulong, TNSerializable> item)
-        {
-            throw new NotImplementedException();
-        }
+            => data.Contains(item);
+
 
         public void CopyTo(KeyValuePair<ulong, TNSerializable>[] array, int arrayIndex)
         {
@@ -182,41 +181,64 @@ namespace model
         }
 
         public bool Remove(KeyValuePair<ulong, TNSerializable> item)
-        {
-            throw new NotImplementedException();
-        }
+            => Remove(item.Key);
 
-        public int Count { get; }
-        public bool IsReadOnly { get; }
+        public int Count => data.Count;
+        public bool IsReadOnly => CanClientWrite(LocalClientId);
 
         public void Add(ulong key, TNSerializable value)
         {
-            throw new NotImplementedException();
+            if (IsReadOnly)
+                throw new InvalidOperationException("Client cannot write to player registry");
+
+            data.Add(key, value);
+            dirtyEvents.Add(new PlayersRegistryEvent()
+            {
+                Type = PlayersRegistryEvent.EventType.Add,
+                Key = key,
+                Data = value
+            });
         }
 
         public bool ContainsKey(ulong key)
-        {
-            throw new NotImplementedException();
-        }
+            => data.ContainsKey(key);
 
         public bool Remove(ulong key)
         {
-            throw new NotImplementedException();
+            if (IsReadOnly)
+                throw new InvalidOperationException("Client cannot write to players registry");
+
+            if (!ContainsKey(key) || !data.Remove(key))
+                return false;
+            dirtyEvents.Add(new PlayersRegistryEvent()
+            {
+                Type = PlayersRegistryEvent.EventType.Remove,
+                Key = key
+            });
+
+            return true;
         }
 
         public bool TryGetValue(ulong key, out TNSerializable value)
         {
-            throw new NotImplementedException();
+            if (!ContainsKey(key))
+            {
+                value = default;
+                return false;
+            }
+
+            value = this[key];
+            return true;
         }
 
         public TNSerializable this[ulong key]
         {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
+            get => data[key];
+            set => Add(key, value);
         }
 
-        public ICollection<ulong> Keys { get; }
-        public ICollection<TNSerializable> Values { get; }
+        public ICollection<ulong> Keys => data.Keys;
+        public ICollection<TNSerializable> Values => data.Values;
 
         public struct PlayersRegistryEvent
         {
@@ -229,7 +251,7 @@ namespace model
             }
 
             public EventType Type;
-            public ulong key;
+            public ulong Key;
             public TNSerializable Data;
         }
     }
