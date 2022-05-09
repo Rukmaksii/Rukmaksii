@@ -2,11 +2,8 @@
 
 namespace model
 {
-
-
     public class ConnectionData : INetworkSerializable
     {
-
         /// <summary>
         ///     the pseudo of the local player
         /// </summary>
@@ -16,7 +13,7 @@ namespace model
         ///     the name of the room to connect to
         /// </summary>
         public string RoomName = null;
-        
+
         /**
          * <value>the name of the class chosen by the player</value>
          */
@@ -36,7 +33,11 @@ namespace model
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
-            throw new System.NotImplementedException();
+            serializer.SerializeValue(ref Pseudo);
+            serializer.SerializeValue(ref RoomName);
+            serializer.SerializeValue(ref ClassName);
+            serializer.SerializeValue(ref ConnectionType);
+            serializer.SerializeValue(ref TeamId);
         }
     }
 }
