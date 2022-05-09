@@ -4,6 +4,7 @@ namespace model
 {
     public class ConnectionData : INetworkSerializable
     {
+
         /// <summary>
         ///     the pseudo of the local player
         /// </summary>
@@ -30,10 +31,15 @@ namespace model
         /// <remarks>only the server can provide this information</remarks>
         public int PlayerAmount = 4;
 
-        /**
-         * <value>the team of the logged in player</value>
-         */
+        /// <summary>the team of the logged in player</summary>
+        /// <remarks>id is 0 based</remarks>
         public int TeamId = -1;
+
+        /// <summary>
+        ///     the id of the player in the team 
+        /// </summary>
+        /// <remarks>id is 0 based</remarks>
+        public int PlayerTeamId = -1;
 
         public bool IsReady => !(ClassName == null || ConnectionType == null || TeamId < 0);
 
@@ -45,6 +51,7 @@ namespace model
             serializer.SerializeValue(ref ConnectionType);
             serializer.SerializeValue(ref TeamId);
             serializer.SerializeValue(ref PlayerAmount);
+            serializer.SerializeValue(ref PlayerTeamId);
         }
     }
 }

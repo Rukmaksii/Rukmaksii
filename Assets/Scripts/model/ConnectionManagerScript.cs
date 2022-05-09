@@ -1,6 +1,7 @@
-using System;
+// ReSharper disable once RedundantUsingDirective
+
 using model;
-using PlayerControllers;
+using Netcode.Transports.PhotonRealtime;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UNET;
 using UnityEngine;
@@ -15,8 +16,20 @@ namespace GameManagers
         void Start()
         {
 #if DEBUG
-            NetworkManager.Singleton.NetworkConfig.NetworkTransport = GetComponent<UNetTransport>();
+            NetworkManager.Singleton.NetworkConfig.NetworkTransport =
+                GetComponent<UNetTransport>();
+#else
+            NetworkManager.Singleton.NetworkConfig.NetworkTransport =
+                GetComponent<PhotonRealtimeTransport>();
+
+
 #endif
+            NetworkManager.Singleton.OnClientConnectedCallback += delegate(ulong clientId)
+            {
+                if (!NetworkManager.Singleton.IsServer)
+                    return;
+                Debug.Log($"{clientId} connected");
+            };
         }
 
         private void Update()
