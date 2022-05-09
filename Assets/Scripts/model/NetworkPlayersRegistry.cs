@@ -89,7 +89,66 @@ namespace model
 
         public override void ReadDelta(FastBufferReader reader, bool keepDirtyDelta)
         {
-            throw new NotImplementedException();
+            reader.ReadValueSafe(out ushort deltaCount);
+            for (int i = 0; i < deltaCount; i++)
+            {
+                reader.ReadValueSafe(out PlayersRegistryEvent.EventType eventType);
+                switch (eventType)
+                {
+                    case PlayersRegistryEvent.EventType.Add:
+                    {
+                        reader.ReadValueSafe(out ulong key);
+                        reader.ReadNetworkSerializable(out TNSerializable value);
+                        data[key] = value;
+
+                        var ev = new PlayersRegistryEvent()
+                        {
+                            Type = eventType,
+                            key = key,
+                            Data = value
+                        };
+
+                        if (keepDirtyDelta)
+                            dirtyEvents.Add(ev);
+                        OnValueChanged?.Invoke(ev);
+                    }
+                        break;
+                    case PlayersRegistryEvent.EventType.Remove:
+                    {
+                        reader.ReadValueSafe(out ulong key);
+                        data.Remove(key);
+
+                        var ev = new PlayersRegistryEvent()
+                        {
+                            Type = eventType,
+                            key = key
+                        };
+
+                        if (keepDirtyDelta)
+                            dirtyEvents.Add(ev);
+                        OnValueChanged?.Invoke(ev);
+                    }
+                        break;
+                    case PlayersRegistryEvent.EventType.Clear:
+                    {
+                        data.Clear();
+
+                        var ev = new PlayersRegistryEvent()
+                        {
+                            Type = eventType,
+                        };
+
+                        if (keepDirtyDelta)
+                            dirtyEvents.Add(ev);
+                        OnValueChanged?.Invoke(ev);
+                    }
+                        break;
+                    case PlayersRegistryEvent.EventType.Full:
+                        ReadField(reader);
+                        ResetDirty();
+                        break;
+                }
+            }
         }
 
         public IEnumerator<KeyValuePair<ulong, TNSerializable>> GetEnumerator()
