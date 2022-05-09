@@ -24,12 +24,7 @@ namespace GameManagers
 
 
 #endif
-            NetworkManager.Singleton.OnClientConnectedCallback += delegate(ulong clientId)
-            {
-                if (!NetworkManager.Singleton.IsServer)
-                    return;
-                Debug.Log($"{clientId} connected");
-            };
+            
         }
 
         private void Update()
