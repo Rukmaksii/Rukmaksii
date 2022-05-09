@@ -8,6 +8,32 @@ namespace model
     public class NetworkPlayersRegistry<TNSerializable> : NetworkVariableBase, IDictionary<ulong, TNSerializable>
         where TNSerializable : INetworkSerializable
     {
+        private ulong LocalClientId => NetworkManager.Singleton.LocalClientId;
+
+        private readonly Dictionary<ulong, TNSerializable> data = new Dictionary<ulong, TNSerializable>();
+        private readonly List<PlayersRegistryEvent> dirtyEvents = new List<PlayersRegistryEvent>();
+
+        public delegate void OnValueChangedDelegate(PlayersRegistryEvent @event);
+
+        public OnValueChangedDelegate OnValueChanged = null;
+
+        public NetworkPlayersRegistry(NetworkVariableReadPermission readPermission = DefaultReadPerm,
+            NetworkVariableWritePermission writePermission = DefaultWritePerm) : base(readPermission, writePermission)
+        {
+            
+        }
+
+        public override bool IsDirty()
+        {
+            return base.IsDirty() || dirtyEvents.Count > 0;
+        }
+
+        public override void ResetDirty()
+        {
+            base.ResetDirty();
+            dirtyEvents.Clear();
+        }
+
         public override void WriteDelta(FastBufferWriter writer)
         {
             throw new NotImplementedException();
@@ -94,5 +120,20 @@ namespace model
 
         public ICollection<ulong> Keys { get; }
         public ICollection<TNSerializable> Values { get; }
+
+        public struct PlayersRegistryEvent
+        {
+            public enum EventType : byte
+            {
+                Full,
+                Add,
+                Remove,
+                Clear
+            }
+
+            public EventType Type;
+            public ulong key;
+            public TNSerializable Data;
+        }
     }
 }
