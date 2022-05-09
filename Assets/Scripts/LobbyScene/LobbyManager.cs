@@ -1,8 +1,8 @@
-using System.Collections.Generic;
 using GameManagers;
 using model;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LobbyManager : NetworkBehaviour
 {
@@ -49,5 +49,10 @@ public class LobbyManager : NetworkBehaviour
     private void RemovePlayerServerRpc(ulong playerId)
     {
         PlayersRegistry.Remove(playerId);
+    }
+
+    public void StartGame()
+    {
+        NetworkManager.Singleton.SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
     }
 }
