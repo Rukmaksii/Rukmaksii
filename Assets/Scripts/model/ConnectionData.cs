@@ -24,6 +24,12 @@ namespace model
          */
         public string ConnectionType = null;
 
+        /// <summary>
+        ///     the number of players required for the game to begin (can be 4 or 6)
+        /// </summary>
+        /// <remarks>only the server can provide this information</remarks>
+        public int PlayerAmount = 4;
+
         /**
          * <value>the team of the logged in player</value>
          */
@@ -38,6 +44,7 @@ namespace model
             serializer.SerializeValue(ref ClassName);
             serializer.SerializeValue(ref ConnectionType);
             serializer.SerializeValue(ref TeamId);
+            serializer.SerializeValue(ref PlayerAmount);
         }
     }
 }
