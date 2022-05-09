@@ -4,7 +4,6 @@ namespace model
 {
     public class ConnectionData : INetworkSerializable
     {
-
         /// <summary>
         ///     the pseudo of the local player
         /// </summary>
@@ -45,8 +44,10 @@ namespace model
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
-            serializer.SerializeValue(ref Pseudo);
-            serializer.SerializeValue(ref RoomName);
+            if (Pseudo != null)
+                serializer.SerializeValue(ref Pseudo);
+            if (RoomName != null)
+                serializer.SerializeValue(ref RoomName);
             serializer.SerializeValue(ref ClassName);
             serializer.SerializeValue(ref ConnectionType);
             serializer.SerializeValue(ref TeamId);

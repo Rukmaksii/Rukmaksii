@@ -13,6 +13,9 @@ public class LobbyManager : NetworkBehaviour
 
     private NetworkVariable<int> playerCount = new NetworkVariable<int>();
 
+    public readonly NetworkPlayersRegistry<ConnectionData> PlayersRegistry =
+        new NetworkPlayersRegistry<ConnectionData>();
+
     public int PlayerCount => playerCount.Value;
 
     // Start is called before the first frame update
@@ -25,14 +28,26 @@ public class LobbyManager : NetworkBehaviour
 
         NetworkManager.Singleton.OnClientConnectedCallback += delegate(ulong clientId)
         {
-            if (!NetworkManager.Singleton.IsServer)
+            if (!NetworkManager.Singleton.IsClient)
                 return;
-            Debug.Log($"{clientId} connected");
+            AddPlayerServerRpc(clientId, connectionData.Data);
         };
     }
 
     // Update is called once per frame
     void Update()
     {
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void AddPlayerServerRpc(ulong playerId, ConnectionData data)
+    {
+        PlayersRegistry[playerId] = data;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void RemovePlayerServerRpc(ulong playerId)
+    {
+        PlayersRegistry.Remove(playerId);
     }
 }

@@ -84,7 +84,6 @@ namespace GameManagers
             connectionData.Data.ClassName = "test class";
             connectionData.Data.TeamId = 0;
 
-            GameController.Singleton.PlayerUIInstance.SetActive(true);
         }
     }
 
