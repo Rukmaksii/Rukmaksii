@@ -6,7 +6,7 @@ using Unity.Netcode;
 namespace model
 {
     public class NetworkPlayersRegistry<TNSerializable> : NetworkVariableBase, IDictionary<ulong, TNSerializable>
-        where TNSerializable : INetworkSerializable
+        where TNSerializable : INetworkSerializable, new()
     {
         private ulong LocalClientId => NetworkManager.Singleton.LocalClientId;
 
@@ -62,12 +62,29 @@ namespace model
 
         public override void WriteField(FastBufferWriter writer)
         {
-            throw new NotImplementedException();
+            writer.WriteValueSafe((ushort) data.Count);
+            foreach (var pair in data)
+            {
+                writer.WriteValueSafe(pair.Key);
+                writer.WriteNetworkSerializable(pair.Value);
+            }
         }
 
         public override void ReadField(FastBufferReader reader)
         {
-            throw new NotImplementedException();
+            data.Clear();
+            reader.ReadValueSafe(out ushort count);
+            for (int i = 0; i < count; i++)
+            {
+                reader.ReadValueSafe(out ulong key);
+                reader.ReadNetworkSerializable(out TNSerializable serializable);
+                data[key] = serializable;
+            }
+
+            OnValueChanged?.Invoke(new PlayersRegistryEvent()
+            {
+                Type = PlayersRegistryEvent.EventType.Full
+            });
         }
 
         public override void ReadDelta(FastBufferReader reader, bool keepDirtyDelta)
