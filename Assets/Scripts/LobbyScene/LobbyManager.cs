@@ -32,8 +32,19 @@ public class LobbyManager : NetworkBehaviour
                 return;
             AddPlayerServerRpc(clientId, connectionData.Data);
         };
-        
+
         DontDestroyOnLoad(gameObject);
+
+        if (IsServer)
+        {
+            NetworkManager.Singleton.ConnectionApprovalCallback +=
+                delegate(byte[] data, ulong clientId, NetworkManager.ConnectionApprovedDelegate cb)
+                {
+                    bool createPlayer = true;
+                    bool approve = PlayersRegistry.Count < PlayerCount;
+                    cb(createPlayer, null, approve, Vector3.zero, Quaternion.identity);
+                };
+        }
     }
 
     // Update is called once per frame
