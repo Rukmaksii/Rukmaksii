@@ -105,6 +105,7 @@ public class LobbyManager : NetworkBehaviour
             }
 
             var viewer = Instantiate(playerViewer, parent);
+            viewer.GetComponentsInChildren<Text>().First(e => e.name == "Pseudo").text = data.Pseudo;
         }
     }
 
