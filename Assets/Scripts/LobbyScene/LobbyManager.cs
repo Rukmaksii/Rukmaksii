@@ -32,6 +32,8 @@ public class LobbyManager : NetworkBehaviour
                 return;
             AddPlayerServerRpc(clientId, connectionData.Data);
         };
+        
+        DontDestroyOnLoad(gameObject);
     }
 
     // Update is called once per frame

@@ -16,6 +16,12 @@ namespace GameManagers
         void Start()
         {
 #if DEBUG
+            if (NetworkManager.Singleton.IsClient || NetworkManager.Singleton.IsHost)
+            {
+                gameObject.SetActive(false);
+                return;
+            }
+
             NetworkManager.Singleton.NetworkConfig.NetworkTransport =
                 GetComponent<UNetTransport>();
 #else
@@ -24,7 +30,6 @@ namespace GameManagers
 
 
 #endif
-            
         }
 
         private void Update()
@@ -83,7 +88,6 @@ namespace GameManagers
 
             connectionData.Data.ClassName = "test class";
             connectionData.Data.TeamId = 0;
-
         }
     }
 
