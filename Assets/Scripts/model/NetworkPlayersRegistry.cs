@@ -184,7 +184,7 @@ namespace model
             => Remove(item.Key);
 
         public int Count => data.Count;
-        public bool IsReadOnly => CanClientWrite(LocalClientId);
+        public bool IsReadOnly => !CanClientWrite(LocalClientId);
 
         public void Add(ulong key, TNSerializable value)
         {
