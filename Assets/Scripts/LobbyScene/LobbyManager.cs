@@ -25,6 +25,8 @@ public class LobbyManager : NetworkBehaviour
     public readonly NetworkPlayersRegistry<ConnectionData> PlayersRegistry =
         new NetworkPlayersRegistry<ConnectionData>();
 
+    public ConnectionData PlayerData => PlayersRegistry[NetworkManager.Singleton.LocalClientId] ?? connectionData.Data;
+
     public int PlayerCount => playerCount.Value;
 
     public bool CanStart => PlayersRegistry.Count > PlayerCount;
@@ -45,7 +47,13 @@ public class LobbyManager : NetworkBehaviour
 
     private BasePlayer PlayerClass
     {
-        get { return null; }
+        get
+        {
+            if (PlayerData.ClassName == null)
+                return null;
+            return ClassPrefabs.Select(go => go.GetComponent<BasePlayer>())
+                .FirstOrDefault(p => p.ClassName == PlayerData.ClassName);
+        }
     }
 
     // Start is called before the first frame update
@@ -91,8 +99,7 @@ public class LobbyManager : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!IsSpawned || lobbyUI == null ||
-            SceneManager.GetActiveScene().name != "LobbyScene")
+        if (!IsSpawned || lobbyUI == null)
             return;
         if (IsServer)
         {
@@ -135,6 +142,12 @@ public class LobbyManager : NetworkBehaviour
 
             var viewer = Instantiate(playerViewer, parent);
             viewer.GetComponentsInChildren<Text>().First(e => e.name == "Pseudo").text = data.Pseudo;
+
+            BasePlayer player;
+            if ((player = PlayerClass) != null)
+            {
+                viewer.GetComponentsInChildren<Image>().First(e => e.name == "Image").sprite = player.Sprite;
+            }
         }
     }
 
@@ -144,7 +157,6 @@ public class LobbyManager : NetworkBehaviour
         PlayersRegistry[playerId] = data;
         if (IsClient)
             FillPlayerViewers();
-        Debug.Log($"added player {playerId}");
     }
 
     [ServerRpc(RequireOwnership = false)]
