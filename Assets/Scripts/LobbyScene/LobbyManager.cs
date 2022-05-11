@@ -34,7 +34,23 @@ public class LobbyManager : NetworkBehaviour
 
     public int PlayerCount => playerCount.Value;
 
-    public bool CanStart => PlayersRegistry.Count > PlayerCount;
+    public bool CanStart
+    {
+        get
+        {
+            if (PlayersRegistry.Count < PlayerCount)
+                return false;
+            int validPlayers = 0;
+            var classNames = classPrefabs.Select(go => go.GetComponent<BasePlayer>().ClassName).ToList();
+            foreach (var data in PlayersRegistry.Values)
+            {
+                if (classNames.Contains(data.ClassName))
+                    validPlayers++;
+            }
+
+            return validPlayers == PlayerCount;
+        }
+    }
 
 
     public static LobbyManager Singleton { get; private set; }
@@ -87,18 +103,20 @@ public class LobbyManager : NetworkBehaviour
             }
         };
 
-
-        if (IsServer)
+        NetworkManager.Singleton.OnServerStarted += () =>
         {
-            playerCount.Value = connectionData.Data.PlayerAmount;
-            NetworkManager.Singleton.ConnectionApprovalCallback +=
-                delegate(byte[] data, ulong clientId, NetworkManager.ConnectionApprovedDelegate cb)
-                {
-                    bool createPlayer = true;
-                    bool approve = PlayersRegistry.Count < PlayerCount;
-                    cb(createPlayer, null, approve, Vector3.zero, Quaternion.identity);
-                };
-        }
+            if (NetworkManager.Singleton.IsServer)
+            {
+                playerCount.Value = connectionData.Data.PlayerAmount;
+                NetworkManager.Singleton.ConnectionApprovalCallback +=
+                    delegate(byte[] data, ulong clientId, NetworkManager.ConnectionApprovedDelegate cb)
+                    {
+                        bool createPlayer = true;
+                        bool approve = PlayersRegistry.Count < PlayerCount;
+                        cb(createPlayer, null, approve, Vector3.zero, Quaternion.identity);
+                    };
+            }
+        };
     }
 
     // Update is called once per frame
