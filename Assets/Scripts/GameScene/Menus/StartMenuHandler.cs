@@ -1,9 +1,7 @@
-using System.Diagnostics;
-using GameManagers;
 using model;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Debug = UnityEngine.Debug;
 
 namespace Menus
 {
@@ -45,16 +43,18 @@ namespace Menus
 
             connectionData.Data.TeamId = chosenTeam.value;
 
-            UnityEngine.SceneManagement.SceneManager.LoadScene("GameScene");
+            SceneManager.LoadScene("GameScene");
         }
 
         public void OnSingleplayer()
         {
-            connectionData.Data = new ConnectionData();
+            connectionData.Data = new ConnectionData
+            {
+                ConnectionType = "host",
+                TeamId = 0
+            };
 
-            connectionData.Data.ConnectionType = "host";
-
-            UnityEngine.SceneManagement.SceneManager.LoadScene("LobbyScene");
+            SceneManager.LoadScene("LobbyScene");
 
             mainMenu.SetActive(false);
             selectMenu.SetActive(true);
@@ -66,7 +66,7 @@ namespace Menus
 
             connectionData.Data.ConnectionType = "client";
 
-            UnityEngine.SceneManagement.SceneManager.LoadScene("LobbyScene");
+            SceneManager.LoadScene("LobbyScene");
 
             mainMenu.SetActive(false);
             selectMenu.SetActive(true);

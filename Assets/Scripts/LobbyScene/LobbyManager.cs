@@ -30,7 +30,7 @@ public class LobbyManager : NetworkBehaviour
     public readonly NetworkPlayersRegistry<ConnectionData> PlayersRegistry =
         new NetworkPlayersRegistry<ConnectionData>();
 
-    public ConnectionData PlayerData => PlayersRegistry[NetworkManager.Singleton.LocalClientId] ?? connectionData.Data;
+    public ConnectionData PlayerData => PlayersRegistry.ContainsKey(NetworkManager.Singleton.LocalClientId) ? PlayersRegistry[NetworkManager.Singleton.LocalClientId] : connectionData.Data;
 
     public int PlayerCount => playerCount.Value;
 
@@ -94,6 +94,7 @@ public class LobbyManager : NetworkBehaviour
 
             if (NetworkManager.Singleton.IsServer)
             {
+                connectionData.Data.TeamId = 0;
                 PlayersRegistry[clientId] = connectionData.Data;
                 FillPlayerViewers();
             }
@@ -202,7 +203,7 @@ public class LobbyManager : NetworkBehaviour
             {
                 if (NetworkManager.Singleton.IsServer)
                 {
-                    ChangeClass(0, player.ClassName);
+                    ChangeClass(NetworkManager.Singleton.LocalClientId, player.ClassName);
                     FillPlayerViewers();
                 }
                 else
@@ -216,6 +217,15 @@ public class LobbyManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void AddPlayerServerRpc(ulong playerId, ConnectionData data)
     {
+        if (GetPlayersInTeam(0).Count > GetPlayersInTeam(1).Count)
+        {
+            data.TeamId = 1;
+        }
+        else
+        {
+            data.TeamId = 0;
+        }
+
         PlayersRegistry[playerId] = data;
         if (IsClient)
             FillPlayerViewers();
