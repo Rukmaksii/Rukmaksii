@@ -1,5 +1,6 @@
 // ReSharper disable once RedundantUsingDirective
 
+using System;
 using model;
 using Netcode.Transports.PhotonRealtime;
 using Unity.Netcode;
@@ -11,7 +12,20 @@ namespace GameManagers
     public class ConnectionManagerScript : MonoBehaviour
     {
         [SerializeField] private ConnectionScriptableObject connectionData;
+        
+        public static ConnectionManagerScript Singleton { get; private set; }
 
+        private void Awake()
+        {
+            if (Singleton != null && Singleton != this)
+            {
+                Destroy(this.gameObject);
+                return;
+            }
+
+            Singleton = this;
+
+        }
 
         void Start()
         {

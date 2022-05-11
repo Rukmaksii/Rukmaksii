@@ -33,7 +33,7 @@ public class LobbyManager : NetworkBehaviour
     {
         if (Singleton != null && Singleton != this)
         {
-            Destroy(this);
+            Destroy(this.gameObject);
             return;
         }
 
@@ -48,6 +48,12 @@ public class LobbyManager : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        DontDestroyOnLoad(gameObject);
+#if DEBUG
+        // in game scene at startup
+        if (lobbyUI == null)
+            return;
+#endif
         PlayersRegistry.OnValueChanged += (@event) => { FillPlayerViewers(); };
         NetworkManager.Singleton.OnClientConnectedCallback += (clientId) =>
         {
@@ -65,7 +71,6 @@ public class LobbyManager : NetworkBehaviour
             }
         };
 
-        DontDestroyOnLoad(gameObject);
 
         if (IsServer)
         {
@@ -83,7 +88,8 @@ public class LobbyManager : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!IsSpawned || SceneManager.GetActiveScene().name != "LobbyScene")
+        if (!IsSpawned || lobbyUI == null ||
+            SceneManager.GetActiveScene().name != "LobbyScene")
             return;
         if (IsServer)
         {
