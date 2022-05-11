@@ -30,7 +30,9 @@ public class LobbyManager : NetworkBehaviour
     public readonly NetworkPlayersRegistry<ConnectionData> PlayersRegistry =
         new NetworkPlayersRegistry<ConnectionData>();
 
-    public ConnectionData PlayerData => PlayersRegistry.ContainsKey(NetworkManager.Singleton.LocalClientId) ? PlayersRegistry[NetworkManager.Singleton.LocalClientId] : connectionData.Data;
+    public ConnectionData PlayerData => PlayersRegistry.ContainsKey(NetworkManager.Singleton.LocalClientId)
+        ? PlayersRegistry[NetworkManager.Singleton.LocalClientId]
+        : connectionData.Data;
 
     public int PlayerCount => playerCount.Value;
 
@@ -201,15 +203,7 @@ public class LobbyManager : NetworkBehaviour
             offset -= classCanvas.GetComponent<RectTransform>().rect.height - 50;
             cv.GetComponent<Button>().onClick.AddListener(delegate
             {
-                if (NetworkManager.Singleton.IsServer)
-                {
-                    ChangeClass(NetworkManager.Singleton.LocalClientId, player.ClassName);
-                    FillPlayerViewers();
-                }
-                else
-                {
-                    ChangeClassServerRpc(NetworkManager.Singleton.LocalClientId, player.ClassName);
-                }
+                ChangeClassServerRpc(NetworkManager.Singleton.LocalClientId, player.ClassName);
             });
         }
     }
@@ -250,7 +244,8 @@ public class LobbyManager : NetworkBehaviour
     /// <param name="player">the player id</param>
     /// <param name="newClass">the name of the new class</param>
     /// <remarks>has to be executed on server</remarks>
-    private void ChangeClass(ulong player, string newClass)
+    [ServerRpc(RequireOwnership = false)]
+    private void ChangeClassServerRpc(ulong player, string newClass)
     {
         var usedClasses = GetPlayersInTeam(PlayersRegistry[player].TeamId).Select(d => d.ClassName).ToList();
         if (usedClasses.Contains(newClass))
@@ -258,8 +253,7 @@ public class LobbyManager : NetworkBehaviour
         var data = PlayersRegistry[player];
         data.ClassName = newClass;
         PlayersRegistry[player] = data;
+        if (NetworkManager.Singleton.IsClient)
+            FillPlayerViewers();
     }
-
-    [ServerRpc(RequireOwnership = false)]
-    private void ChangeClassServerRpc(ulong player, string newClass) => ChangeClass(player, newClass);
 }
