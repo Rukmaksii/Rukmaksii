@@ -191,7 +191,7 @@ namespace model
             if (IsReadOnly)
                 throw new InvalidOperationException("Client cannot write to player registry");
 
-            data.Add(key, value);
+            data[key] = value;
             dirtyEvents.Add(new PlayersRegistryEvent()
             {
                 Type = PlayersRegistryEvent.EventType.Add,

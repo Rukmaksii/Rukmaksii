@@ -119,7 +119,7 @@ public class LobbyManager : NetworkBehaviour
         anchors.ForEach(a =>
         {
             if (a.childCount == 1)
-                Destroy(a.GetChild(0));
+                Destroy(a.GetChild(0).gameObject);
         });
 
         List<RectTransform> t1Anchors = new List<RectTransform>();
@@ -154,6 +154,7 @@ public class LobbyManager : NetworkBehaviour
                 viewer.GetComponentsInChildren<Image>().First(e => e.name == "Image").sprite = player.Sprite;
             }
         }
+
         FillClassViewport();
     }
 
@@ -162,12 +163,12 @@ public class LobbyManager : NetworkBehaviour
         var usedClasses = PlayersRegistry.Values.Select(d => d.ClassName).ToList();
         var availableClasses = classPrefabs
             .Select(go => go.GetComponent<BasePlayer>())
-            .Where(p => !usedClasses.Contains(p.name))
+            .Where(p => !usedClasses.Contains(p.ClassName))
             .ToList();
 
         for (int i = 0; i < classViewport.childCount; i++)
         {
-            Destroy(classViewport.GetChild(i));
+            Destroy(classViewport.GetChild(i).gameObject);
         }
 
         float offset = 0;
@@ -177,6 +178,18 @@ public class LobbyManager : NetworkBehaviour
             cv.transform.localPosition += offset * Vector3.up;
             cv.GetComponent<Image>().sprite = player.Sprite;
             offset -= classCanvas.GetComponent<RectTransform>().rect.height - 50;
+            cv.GetComponent<Button>().onClick.AddListener(delegate
+            {
+                if (NetworkManager.Singleton.IsServer)
+                {
+                    ChangeClass(0, player.ClassName);
+                    FillPlayerViewers();
+                }
+                else
+                {
+                    ChangeClassServerRpc(NetworkManager.Singleton.LocalClientId, player.ClassName);
+                }
+            });
         }
     }
 
