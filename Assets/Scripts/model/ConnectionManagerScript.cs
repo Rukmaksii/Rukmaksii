@@ -12,7 +12,7 @@ namespace GameManagers
     public class ConnectionManagerScript : MonoBehaviour
     {
         [SerializeField] private ConnectionScriptableObject connectionData;
-        
+
         public static ConnectionManagerScript Singleton { get; private set; }
 
         private void Awake()
@@ -24,7 +24,6 @@ namespace GameManagers
             }
 
             Singleton = this;
-
         }
 
         void Start()
@@ -50,20 +49,17 @@ namespace GameManagers
         {
             if (!NetworkManager.Singleton.IsServer && !NetworkManager.Singleton.IsClient)
             {
-                if (connectionData.Data.IsReady)
+                switch (connectionData.Data.ConnectionType)
                 {
-                    switch (connectionData.Data.ConnectionType)
-                    {
-                        case "host":
-                            NetworkManager.Singleton.StartHost();
-                            break;
-                        case "client":
-                            NetworkManager.Singleton.StartClient();
-                            break;
-                        case "server":
-                            NetworkManager.Singleton.StartServer();
-                            break;
-                    }
+                    case "host":
+                        NetworkManager.Singleton.StartHost();
+                        break;
+                    case "client":
+                        NetworkManager.Singleton.StartClient();
+                        break;
+                    case "server":
+                        NetworkManager.Singleton.StartServer();
+                        break;
                 }
             }
         }
@@ -100,7 +96,7 @@ namespace GameManagers
                 return;
             }
 
-            connectionData.Data.ClassName = "test class";
+            // connectionData.Data.ClassName = "test class";
             connectionData.Data.TeamId = 0;
         }
     }

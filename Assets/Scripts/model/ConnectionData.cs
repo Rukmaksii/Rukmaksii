@@ -40,7 +40,6 @@ namespace model
         /// <remarks>id is 0 based</remarks>
         public int PlayerTeamId = -1;
 
-        public bool IsReady => !(ClassName == null || ConnectionType == null || TeamId < 0);
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
@@ -48,7 +47,8 @@ namespace model
                 serializer.SerializeValue(ref Pseudo);
             if (RoomName != null)
                 serializer.SerializeValue(ref RoomName);
-            serializer.SerializeValue(ref ClassName);
+            if (ClassName != null)
+                serializer.SerializeValue(ref ClassName);
             serializer.SerializeValue(ref ConnectionType);
             serializer.SerializeValue(ref TeamId);
             serializer.SerializeValue(ref PlayerAmount);

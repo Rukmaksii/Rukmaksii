@@ -17,6 +17,11 @@ public class LobbyManager : NetworkBehaviour
 
     [SerializeField] private ConnectionScriptableObject connectionData;
     [SerializeField] private GameObject playerViewer;
+
+    // a prefab for class selection in lobby
+    [SerializeField] private GameObject classCanvas;
+    [SerializeField] private RectTransform classViewport;
+
     [SerializeField] private Button startButton;
     [SerializeField] private Canvas lobbyUI;
 
@@ -149,6 +154,30 @@ public class LobbyManager : NetworkBehaviour
                 viewer.GetComponentsInChildren<Image>().First(e => e.name == "Image").sprite = player.Sprite;
             }
         }
+        FillClassViewport();
+    }
+
+    private void FillClassViewport()
+    {
+        var usedClasses = PlayersRegistry.Values.Select(d => d.ClassName).ToList();
+        var availableClasses = classPrefabs
+            .Select(go => go.GetComponent<BasePlayer>())
+            .Where(p => !usedClasses.Contains(p.name))
+            .ToList();
+
+        for (int i = 0; i < classViewport.childCount; i++)
+        {
+            Destroy(classViewport.GetChild(i));
+        }
+
+        float offset = 0;
+        foreach (var player in availableClasses)
+        {
+            var cv = Instantiate(classCanvas, classViewport);
+            cv.transform.localPosition += offset * Vector3.up;
+            cv.GetComponent<Image>().sprite = player.Sprite;
+            offset -= classCanvas.GetComponent<RectTransform>().rect.height - 50;
+        }
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -171,4 +200,23 @@ public class LobbyManager : NetworkBehaviour
     {
         NetworkManager.Singleton.SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
     }
+
+    /// <summary>
+    ///     changes the class of <see cref="player"/>
+    /// </summary>
+    /// <param name="player">the player id</param>
+    /// <param name="newClass">the name of the new class</param>
+    /// <remarks>has to be executed on server</remarks>
+    private void ChangeClass(ulong player, string newClass)
+    {
+        var usedClasses = PlayersRegistry.Values.Select(d => d.ClassName).ToList();
+        if (usedClasses.Contains(newClass))
+            return;
+        var data = PlayersRegistry[player];
+        data.ClassName = newClass;
+        PlayersRegistry[player] = data;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void ChangeClassServerRpc(ulong player, string newClass) => ChangeClass(player, newClass);
 }

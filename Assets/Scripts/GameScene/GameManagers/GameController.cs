@@ -115,10 +115,8 @@ namespace GameManagers
         {
             localPlayer = player;
 
-            int teamId = Parameters.IsReady
-                ? Parameters.TeamId
-                : 0;
-            player.UpdateTeamServerRpc(teamId);
+            
+            player.UpdateTeamServerRpc(Parameters.TeamId);
         }
 
         /**
