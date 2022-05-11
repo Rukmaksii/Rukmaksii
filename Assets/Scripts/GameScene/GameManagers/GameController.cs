@@ -65,8 +65,7 @@ namespace GameManagers
 
         public List<GameObject> ItemPrefabs => itemPrefabs;
 
-        [SerializeField] private ConnectionScriptableObject connectionData;
-        public ConnectionData Parameters => connectionData.Data;
+        public ConnectionData Parameters => LobbyManager.Singleton.PlayerData;
 
         public GameObject PlayerUIInstance { get; private set; }
 
@@ -178,7 +177,7 @@ namespace GameManagers
         public override void OnNetworkSpawn()
         {
             SetSpawnPoint();
-            string className = connectionData.Data?.ClassName ?? LobbyManager.Singleton.ClassPrefabs[0].GetComponent<BasePlayer>().ClassName;
+            string className = Parameters.ClassName ?? LobbyManager.Singleton.ClassPrefabs[0].GetComponent<BasePlayer>().ClassName;
             if (IsClient)
                 SpawnPlayerServerRpc(className, NetworkManager.Singleton.LocalClientId,
                     SpawnPoint,
