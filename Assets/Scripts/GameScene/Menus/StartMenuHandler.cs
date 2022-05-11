@@ -29,7 +29,7 @@ namespace Menus
         void Update()
         {
         }
-        
+
 
         public void OnPlay()
         {
@@ -47,43 +47,47 @@ namespace Menus
 
             UnityEngine.SceneManagement.SceneManager.LoadScene("GameScene");
         }
-        
+
         public void OnSingleplayer()
         {
             connectionData.Data = new ConnectionData();
-            
+
             connectionData.Data.ConnectionType = "host";
-            
+
+            UnityEngine.SceneManagement.SceneManager.LoadScene("LobbyScene");
+
             mainMenu.SetActive(false);
             selectMenu.SetActive(true);
         }
-        
+
         public void OnMultiplayer()
         {
             connectionData.Data = new ConnectionData();
 
             connectionData.Data.ConnectionType = "client";
-            
+
+            UnityEngine.SceneManagement.SceneManager.LoadScene("LobbyScene");
+
             mainMenu.SetActive(false);
             selectMenu.SetActive(true);
         }
-        
+
         public void OnServer()
         {
             connectionData.Data = new ConnectionData();
-            
+
             connectionData.Data.ConnectionType = "server";
-            
+
             mainMenu.SetActive(false);
             OnPlay();
         }
-        
+
         public void OnOptions()
         {
             // TODO: add an option tab
             Debug.Log("Entering options menu");
         }
-        
+
         public void OnQuit()
         {
             Debug.Log("Quitting the game");
