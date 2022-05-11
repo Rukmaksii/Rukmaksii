@@ -113,6 +113,8 @@ public class LobbyManager : NetworkBehaviour
         }
     }
 
+    private List<ConnectionData> GetPlayersInTeam(int t) => PlayersRegistry.Values.Where(c => c.TeamId == t).ToList();
+
     private void FillPlayerViewers()
     {
         var anchors = lobbyUI.GetComponentsInChildren<RectTransform>().Where(t => t.name.StartsWith("Anchor")).ToList();
@@ -160,7 +162,7 @@ public class LobbyManager : NetworkBehaviour
 
     private void FillClassViewport()
     {
-        var usedClasses = PlayersRegistry.Values.Select(d => d.ClassName).ToList();
+        var usedClasses = GetPlayersInTeam(PlayerData.TeamId).Select(d => d.ClassName).ToList();
         var availableClasses = classPrefabs
             .Select(go => go.GetComponent<BasePlayer>())
             .Where(p => !usedClasses.Contains(p.ClassName))
@@ -222,7 +224,7 @@ public class LobbyManager : NetworkBehaviour
     /// <remarks>has to be executed on server</remarks>
     private void ChangeClass(ulong player, string newClass)
     {
-        var usedClasses = PlayersRegistry.Values.Select(d => d.ClassName).ToList();
+        var usedClasses = GetPlayersInTeam(PlayersRegistry[player].TeamId).Select(d => d.ClassName).ToList();
         if (usedClasses.Contains(newClass))
             return;
         var data = PlayersRegistry[player];
