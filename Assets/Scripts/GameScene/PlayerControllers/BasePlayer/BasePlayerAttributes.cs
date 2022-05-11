@@ -224,5 +224,9 @@ namespace PlayerControllers
         }
 
         public abstract RootAbility RootAbility { get; }
+
+        [SerializeField] private Sprite sprite;
+
+        public Sprite Sprite => sprite;
     }
 }

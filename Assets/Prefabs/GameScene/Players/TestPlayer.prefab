@@ -196,6 +196,7 @@ MonoBehaviour:
   pickUpDistance: 10
   gravity: -19.62
   maxMinions: 2
+  sprite: {fileID: 21300000, guid: 2d3c362bb760dda47bf86d1ab1a663ef, type: 3}
 --- !u!114 &1260994430873029613
 MonoBehaviour:
   m_ObjectHideFlags: 0
