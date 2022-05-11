@@ -10,6 +10,9 @@ using UnityEngine.UI;
 
 public class LobbyManager : NetworkBehaviour
 {
+    [SerializeField] private List<GameObject> classPrefabs = new List<GameObject>();
+    public List<GameObject> ClassPrefabs => classPrefabs;
+
     [SerializeField] private ConnectionManagerScript connectionManager;
 
     [SerializeField] private ConnectionScriptableObject connectionData;

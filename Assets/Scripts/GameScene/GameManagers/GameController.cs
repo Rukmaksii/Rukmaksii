@@ -56,9 +56,7 @@ namespace GameManagers
         public Vector3 SpawnPoint { get; private set; }
 
 
-        [SerializeField] private List<GameObject> classPrefabs = new List<GameObject>();
-
-        public List<GameObject> ClassPrefabs => classPrefabs;
+        
         [SerializeField] private List<GameObject> weaponPrefabs = new List<GameObject>();
 
         public List<GameObject> WeaponPrefabs => weaponPrefabs;
@@ -180,7 +178,7 @@ namespace GameManagers
         public override void OnNetworkSpawn()
         {
             SetSpawnPoint();
-            string className = connectionData.Data?.ClassName ?? classPrefabs[0].GetComponent<BasePlayer>().ClassName;
+            string className = connectionData.Data?.ClassName ?? LobbyManager.Singleton.ClassPrefabs[0].GetComponent<BasePlayer>().ClassName;
             if (IsClient)
                 SpawnPlayerServerRpc(className, NetworkManager.Singleton.LocalClientId,
                     SpawnPoint,
@@ -204,7 +202,7 @@ namespace GameManagers
         [ServerRpc(RequireOwnership = false)]
         private void SpawnPlayerServerRpc(string className, ulong ownerId, Vector3 position, Quaternion rotation)
         {
-            GameObject playerPrefab = classPrefabs.Find(go =>
+            GameObject playerPrefab = LobbyManager.Singleton.ClassPrefabs.Find(go =>
                 go.GetComponent<BasePlayer>().ClassName == className);
 
             GameObject instance = Instantiate(playerPrefab, position, rotation);
