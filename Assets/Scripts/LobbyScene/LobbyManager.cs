@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GameManagers;
 using model;
+using PlayerControllers;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -24,6 +25,25 @@ public class LobbyManager : NetworkBehaviour
     public int PlayerCount => playerCount.Value;
 
     public bool CanStart => PlayersRegistry.Count > PlayerCount;
+
+
+    public static LobbyManager Singleton { get; private set; }
+
+    private void Awake()
+    {
+        if (Singleton != null && Singleton != this)
+        {
+            Destroy(this);
+            return;
+        }
+
+        Singleton = this;
+    }
+
+    private BasePlayer PlayerClass
+    {
+        get { return null; }
+    }
 
     // Start is called before the first frame update
     void Start()
