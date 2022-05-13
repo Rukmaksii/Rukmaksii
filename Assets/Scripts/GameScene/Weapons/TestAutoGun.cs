@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Weapons
 {
-    public class TestAutoGun : BaseWeapon
+    public class TestAutoGun : BaseWeapon, SoldierClassPlayer.IWeapon
     {
         public override WeaponType Type { get; } = WeaponType.Heavy;
         public override float Range { get; } = 100f;

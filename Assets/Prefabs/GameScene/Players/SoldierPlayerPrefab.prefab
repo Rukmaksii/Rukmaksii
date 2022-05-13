@@ -80,7 +80,7 @@ GameObject:
   - component: {fileID: 3013213782619803523}
   - component: {fileID: 1218724558542792084}
   m_Layer: 0
-  m_Name: TestPlayer
+  m_Name: SoldierPlayerPrefab
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

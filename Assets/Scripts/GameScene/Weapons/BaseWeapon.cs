@@ -360,7 +360,7 @@ namespace Weapons
                 MonsterController monster = hit.GetComponent<MonsterController>();
                 if (this.Damage >= monster.Life)
                 {
-                    scoreboard.UpdateData(Player.OwnerClientId, PlayerInfoField.Kill, 1, true);
+                    scoreboard.UpdateData(Player.OwnerClientId, PlayerInfoField.MonstersKilled, 1, true);
                 }
 
                 monster.TakeDamage(this.Damage);
