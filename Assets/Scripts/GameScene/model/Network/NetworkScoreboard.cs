@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using Unity.Netcode;
 
-namespace model.Network
+namespace GameScene.model.Network
 {
     using PlayerInfo = Dictionary<PlayerInfoField, int>;
 

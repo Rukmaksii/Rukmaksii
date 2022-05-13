@@ -1,9 +1,9 @@
 ﻿using System;
-using Abilities;
+using GameScene.Abilities.model;
 
-namespace PlayerControllers
+namespace GameScene.PlayerControllers
 {
-    public class SoldierClassPlayer : BasePlayer
+    public class SoldierClassPlayer : BasePlayer.BasePlayer
     {
         public override string ClassName { get; } = "test class";
         public override int MaxHealth { get; protected set; } = 100;

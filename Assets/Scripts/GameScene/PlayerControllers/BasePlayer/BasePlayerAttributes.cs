@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using Abilities;
-using GameManagers;
-using Minions;
-using model;
+using GameScene.Abilities.model;
+using GameScene.GameManagers;
+using GameScene.Minions;
+using GameScene.model;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
-namespace PlayerControllers
+namespace GameScene.PlayerControllers.BasePlayer
 {
     public abstract partial class BasePlayer
     {
@@ -152,7 +152,7 @@ namespace PlayerControllers
         }
 
 
-        public Inventory Inventory => GetComponent<Inventory>();
+        public Inventory.Inventory Inventory => GetComponent<Inventory.Inventory>();
         public Jetpack Jetpack => GetComponent<Jetpack>();
 
         /** <value>the duration of the dash in seconds</value> */

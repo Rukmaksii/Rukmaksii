@@ -1,9 +1,9 @@
-﻿using model;
-using PlayerControllers;
+﻿using GameScene.model;
+using GameScene.PlayerControllers.BasePlayer;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace Items
+namespace GameScene.Items
 {
     public class Grenade : BaseItem
     {

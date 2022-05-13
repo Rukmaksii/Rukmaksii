@@ -1,11 +1,11 @@
-using GameManagers;
-using model;
+using GameScene.GameManagers;
+using GameScene.model;
 using Unity.Netcode;
 using Unity.Netcode.Samples;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
-namespace PlayerControllers
+namespace GameScene.PlayerControllers.BasePlayer
 {
     enum PlayerFlags
     {
@@ -27,7 +27,7 @@ namespace PlayerControllers
     [RequireComponent(typeof(NetworkObject))]
     [RequireComponent(typeof(ClientNetworkTransform))]
     [RequireComponent(typeof(CooldownManager))]
-    [RequireComponent(typeof(Inventory))]
+    [RequireComponent(typeof(Inventory.Inventory))]
     public abstract partial class BasePlayer : NetworkBehaviour, IKillable
     {
         private bool HasFlag(PlayerFlags flag)

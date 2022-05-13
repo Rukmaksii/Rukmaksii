@@ -1,9 +1,12 @@
 using UnityEngine;
 
-public class DeathScreen : MonoBehaviour
+namespace GameScene.Menus
 {
-    public void Respawn()
+    public class DeathScreen : MonoBehaviour
     {
-        Debug.Log("I told ya that I don't do anything");
+        public void Respawn()
+        {
+            Debug.Log("I told ya that I don't do anything");
+        }
     }
 }

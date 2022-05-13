@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Abilities
+namespace GameScene.Abilities.model
 {
     public class TestClassRoot : RootAbility
     {

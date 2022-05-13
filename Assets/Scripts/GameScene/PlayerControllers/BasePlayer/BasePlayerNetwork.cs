@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
-using GameManagers;
-using Items;
-using Minions;
-using model;
-using model.Network;
-using Unity.Mathematics;
+using GameScene.GameManagers;
+using GameScene.Items;
+using GameScene.Minions;
+using GameScene.model;
+using GameScene.model.Network;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace PlayerControllers
+namespace GameScene.PlayerControllers.BasePlayer
 {
     public abstract partial class BasePlayer
     {

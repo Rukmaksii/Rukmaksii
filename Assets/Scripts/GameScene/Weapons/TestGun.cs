@@ -1,7 +1,6 @@
-﻿using model;
-using UnityEngine;
+﻿using GameScene.model;
 
-namespace Weapons
+namespace GameScene.Weapons
 {
     public class TestGun : BaseWeapon
     {

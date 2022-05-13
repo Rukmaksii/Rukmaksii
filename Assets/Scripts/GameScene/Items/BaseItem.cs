@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using model;
-using PlayerControllers;
+using GameScene.model;
+using GameScene.PlayerControllers.BasePlayer;
 using Unity.Netcode;
 using Unity.Netcode.Samples;
 using UnityEngine;
 
-namespace Items
+namespace GameScene.Items
 {
     public struct ItemInfo
     {

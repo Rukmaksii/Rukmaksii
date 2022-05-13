@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
-using model;
-using PlayerControllers;
+using GameScene.model;
+using GameScene.PlayerControllers;
+using GameScene.PlayerControllers.BasePlayer;
 
-namespace Abilities
+namespace GameScene.Abilities
 {
     public struct AbilityInfo
     {

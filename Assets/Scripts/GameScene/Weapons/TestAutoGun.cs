@@ -1,8 +1,7 @@
-﻿using model;
-using PlayerControllers;
-using UnityEngine;
+﻿using GameScene.model;
+using GameScene.PlayerControllers;
 
-namespace Weapons
+namespace GameScene.Weapons
 {
     public class TestAutoGun : BaseWeapon, SoldierClassPlayer.IWeapon
     {

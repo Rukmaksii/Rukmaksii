@@ -1,18 +1,16 @@
-using System;
 using System.Collections.Generic;
-using GameManagers;
-using Items;
-using Map;
-using model;
-using PlayerControllers;
+using GameScene.GameManagers;
+using GameScene.Items;
+using GameScene.Map;
+using GameScene.model;
+using GameScene.PlayerControllers.BasePlayer;
+using GameScene.Weapons;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
-using Weapons;
 using Image = UnityEngine.UI.Image;
 using Slider = UnityEngine.UI.Slider;
 
-namespace HUD
+namespace GameScene.HUD
 {
     public partial class HUDController : MonoBehaviour
     {

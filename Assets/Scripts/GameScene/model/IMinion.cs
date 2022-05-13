@@ -1,7 +1,7 @@
-﻿using PlayerControllers;
+﻿using GameScene.PlayerControllers.BasePlayer;
 using UnityEngine;
 
-namespace model
+namespace GameScene.model
 {
     public interface IMinion : IKillable
     {

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
-using Items;
+using GameScene.Items;
+using GameScene.model;
+using GameScene.model.Network;
 using JetBrains.Annotations;
-using model.Network;
 using Unity.Netcode;
-using UnityEngine;
 
-namespace model
+namespace GameScene.PlayerControllers.Inventory
 {
     public partial class Inventory
     {

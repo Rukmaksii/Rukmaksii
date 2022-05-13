@@ -1,11 +1,11 @@
 ﻿using System.Linq;
-using model;
+using GameScene.model;
+using GameScene.Weapons;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
-using Weapons;
 
-namespace PlayerControllers
+namespace GameScene.PlayerControllers.BasePlayer
 {
     public abstract partial class BasePlayer
     {
@@ -146,12 +146,12 @@ namespace PlayerControllers
         {
             if (!IsOwner)
                 return;
-            if (Inventory.SelectedMode == Inventory.Mode.Item)
+            if (Inventory.SelectedMode == PlayerControllers.Inventory.Inventory.Mode.Item)
             {
                 if (ctx.started)
                     Inventory.UseItem();
             }
-            else if (Inventory.SelectedMode == Inventory.Mode.Weapon)
+            else if (Inventory.SelectedMode == PlayerControllers.Inventory.Inventory.Mode.Weapon)
             {
                 if (ctx.started)
                     IsShooting = true;
@@ -261,9 +261,9 @@ namespace PlayerControllers
                 itemWheel = false;
                 Cursor.lockState = CursorLockMode.Locked;
                 if (this.Inventory.ItemWheel.IsSwitchingItem)
-                    Inventory.ChangeMode(Inventory.Mode.Item);
+                    Inventory.ChangeMode(PlayerControllers.Inventory.Inventory.Mode.Item);
                 else
-                    Inventory.ChangeMode(Inventory.Mode.Weapon);
+                    Inventory.ChangeMode(PlayerControllers.Inventory.Inventory.Mode.Weapon);
             }
         }
     }

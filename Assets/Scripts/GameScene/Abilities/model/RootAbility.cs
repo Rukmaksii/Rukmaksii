@@ -1,6 +1,4 @@
-﻿using PlayerControllers;
-
-namespace Abilities
+﻿namespace GameScene.Abilities.model
 {
     public abstract class RootAbility : BaseAbility
     {

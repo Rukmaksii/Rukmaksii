@@ -1,16 +1,17 @@
 using System;
-using GameManagers;
-using Map;
-using Minions;
-using model;
-using model.Network;
-using MonstersControler;
-using PlayerControllers;
+using GameScene.GameManagers;
+using GameScene.Map;
+using GameScene.Minions;
+using GameScene.model;
+using GameScene.model.Network;
+using GameScene.Monster;
+using GameScene.PlayerControllers;
+using GameScene.PlayerControllers.BasePlayer;
 using Unity.Netcode;
 using Unity.Netcode.Samples;
 using UnityEngine;
 
-namespace Weapons
+namespace GameScene.Weapons
 {
     [RequireComponent(typeof(NetworkObject))]
     [RequireComponent(typeof(ClientNetworkTransform))]

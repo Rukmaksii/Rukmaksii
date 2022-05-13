@@ -1,77 +1,75 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Items;
-using JetBrains.Annotations;
-using model;
-using PlayerControllers;
-using UnityEditor;
+using GameScene.PlayerControllers.BasePlayer;
+using GameScene.PlayerControllers.Inventory;
 using UnityEngine;
 
-public class ItemWheel : MonoBehaviour
+namespace GameScene.Items
 {
-    public Type[] items = {typeof(FuelBooster), typeof(Grenade), null, null, null, null, null, null};
-
-    private bool isSwitchingItem;
-
-    public bool IsSwitchingItem => isSwitchingItem;
-
-    public void SelectItem(Vector3 mousePosition, BasePlayer Player)
+    public class ItemWheel : MonoBehaviour
     {
-        isSwitchingItem = false;
-        float x = Input.mousePosition.x - mousePosition.x;
-        float y = Input.mousePosition.y - mousePosition.y;
+        public Type[] items = {typeof(FuelBooster), typeof(Grenade), null, null, null, null, null, null};
 
-        if (x > 0)
-        {
-            if (y > 0)
-            {
-                if (y > x)
-                    Select(0, Player);
-                else
-                    Select(1, Player);
-            }
-            else
-            {
-                if (Math.Abs(y) > x)
-                    Select(3, Player);
-                else
-                    Select(2, Player);
-            }
-        }
-        else
-        {
-            if (y > 0)
-            {
-                if (y > Math.Abs(x))
-                    Select(7, Player);
-                else
-                    Select(6, Player);
-            }
-            else
-            {
-                if (Math.Abs(y) > Math.Abs(x))
-                    Select(4, Player);
-                else
-                    Select(5, Player);
-            }
-        }
-    }
+        private bool isSwitchingItem;
 
-    private void Select(int i, BasePlayer Player)
-    {
-        if (items[i] == null)
+        public bool IsSwitchingItem => isSwitchingItem;
+
+        public void SelectItem(Vector3 mousePosition, BasePlayer Player)
         {
             isSwitchingItem = false;
-        }
-        else
-        {
-            isSwitchingItem = items[i] != Player.Inventory.SelectedItemType || Player.Inventory.SelectedMode != Inventory.Mode.Item;
+            float x = Input.mousePosition.x - mousePosition.x;
+            float y = Input.mousePosition.y - mousePosition.y;
+
+            if (x > 0)
+            {
+                if (y > 0)
+                {
+                    if (y > x)
+                        Select(0, Player);
+                    else
+                        Select(1, Player);
+                }
+                else
+                {
+                    if (Math.Abs(y) > x)
+                        Select(3, Player);
+                    else
+                        Select(2, Player);
+                }
+            }
+            else
+            {
+                if (y > 0)
+                {
+                    if (y > Math.Abs(x))
+                        Select(7, Player);
+                    else
+                        Select(6, Player);
+                }
+                else
+                {
+                    if (Math.Abs(y) > Math.Abs(x))
+                        Select(4, Player);
+                    else
+                        Select(5, Player);
+                }
+            }
         }
 
-        if (IsSwitchingItem)
+        private void Select(int i, BasePlayer Player)
         {
-            Player.Inventory.SelectedItemType = items[i];
+            if (items[i] == null)
+            {
+                isSwitchingItem = false;
+            }
+            else
+            {
+                isSwitchingItem = items[i] != Player.Inventory.SelectedItemType || Player.Inventory.SelectedMode != Inventory.Mode.Item;
+            }
+
+            if (IsSwitchingItem)
+            {
+                Player.Inventory.SelectedItemType = items[i];
+            }
         }
     }
 }

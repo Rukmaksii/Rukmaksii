@@ -1,13 +1,11 @@
-using System.Collections;
-using GameManagers;
-using Items;
-using model;
+using GameScene.GameManagers;
+using GameScene.model;
 using Unity.Mathematics;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace MonstersControler
+namespace GameScene.Monster
 {
     [RequireComponent(typeof(NetworkObject))]
     [RequireComponent(typeof(MonsterAI))]

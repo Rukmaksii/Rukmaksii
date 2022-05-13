@@ -1,17 +1,15 @@
-using Unity.Netcode;
-using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Map;
-using MonstersControler;
-using PlayerControllers;
-using UnityEditor;
+using GameScene.Map;
+using GameScene.Monster;
+using GameScene.PlayerControllers.BasePlayer;
+using Unity.Netcode;
+using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
-namespace GameManagers
+namespace GameScene.GameManagers
 {
     public class Gameloop : NetworkBehaviour
     {

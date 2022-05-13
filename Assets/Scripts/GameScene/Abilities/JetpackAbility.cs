@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using PlayerControllers;
-using UnityEngine;
+using GameScene.PlayerControllers.BasePlayer;
 
-namespace Abilities
+namespace GameScene.Abilities
 {
     public class JetpackAbility : BaseAbility
     {

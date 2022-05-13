@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using model;
+using GameScene.model;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace Map
+namespace GameScene.Map
 {
     public class BaseController : MonoBehaviour, IKillable
     {

@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using GameManagers;
-using Map;
-using Minions;
+using GameScene.GameManagers;
+using GameScene.Map;
+using GameScene.Minions;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace HUD
+namespace GameScene.HUD
 {
     public partial class HUDController : MonoBehaviour
     {

@@ -3,7 +3,7 @@ using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 
 
-namespace PlayerControllers
+namespace GameScene.PlayerControllers
 {
     /**
  * <summary>

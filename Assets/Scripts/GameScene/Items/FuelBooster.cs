@@ -1,4 +1,4 @@
-﻿namespace Items
+﻿namespace GameScene.Items
 {
     public class FuelBooster : BaseItem
     {

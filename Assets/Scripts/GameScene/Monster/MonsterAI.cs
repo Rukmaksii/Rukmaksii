@@ -1,45 +1,47 @@
 using System.Collections;
-using PlayerControllers;
+using GameScene.PlayerControllers.BasePlayer;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class MonsterAI : NetworkBehaviour
+namespace GameScene.Monster
 {
-    private float detectDistance = 35; //distance de detection du joueur
-    private float distanceAttack = 5f; //distance à laquelle le monstre peut attaquer
-    private Vector3 InitialPos; //position d'origine du monstre
-    private GameObject joueur; //référence vers le(s) joueur(s)
-    private bool canAttack = true; //le monstre peut attaquer ou non
-    public NavMeshAgent agent;
-    private float dist;
-    private float mindist = 1000f;
-
-
-    private void Start()
+    public class MonsterAI : NetworkBehaviour
     {
-        InitialPos = transform.position; //initialisation de la position d'origine
-    }
+        private float detectDistance = 35; //distance de detection du joueur
+        private float distanceAttack = 5f; //distance à laquelle le monstre peut attaquer
+        private Vector3 InitialPos; //position d'origine du monstre
+        private GameObject joueur; //référence vers le(s) joueur(s)
+        private bool canAttack = true; //le monstre peut attaquer ou non
+        public NavMeshAgent agent;
+        private float dist;
+        private float mindist = 1000f;
 
 
-    private void Update()
-    {
-        if(!agent.isOnNavMesh)
-            return;
-        
-        if (gameObject != null)
+        private void Start()
         {
-            foreach (var players in GameObject.FindGameObjectsWithTag("Player"))
+            InitialPos = transform.position; //initialisation de la position d'origine
+        }
+
+
+        private void Update()
+        {
+            if(!agent.isOnNavMesh)
+                return;
+        
+            if (gameObject != null)
             {
-                dist = Vector3.Distance(transform.position, players.transform.position);
-                if (dist < mindist)
+                foreach (var players in GameObject.FindGameObjectsWithTag("Player"))
                 {
-                    mindist = dist;
-                    joueur = players;
+                    dist = Vector3.Distance(transform.position, players.transform.position);
+                    if (dist < mindist)
+                    {
+                        mindist = dist;
+                        joueur = players;
+                    }
                 }
             }
-        }
-        if (joueur != null)
+            if (joueur != null)
             {
                 float distance = Vector3.Distance(transform.position, joueur.transform.position); //distance entre le monstre et le joueur
                 if (distance < detectDistance && distance > distanceAttack) //le joueur est visible mais pas à distance d'attaque
@@ -68,18 +70,19 @@ public class MonsterAI : NetworkBehaviour
                     agent.destination = InitialPos;
                 }
             }
-    }
+        }
 
-    IEnumerator Wait()
-    {
-        yield return new WaitForSeconds(1);
-        canAttack = true;
-    }
+        IEnumerator Wait()
+        {
+            yield return new WaitForSeconds(1);
+            canAttack = true;
+        }
 
 
-    private void OnDrawGizmosSelected() // permet de voir la sphere du champ de detection du monstre
-    {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, detectDistance);
+        private void OnDrawGizmosSelected() // permet de voir la sphere du champ de detection du monstre
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(transform.position, detectDistance);
+        }
     }
 }

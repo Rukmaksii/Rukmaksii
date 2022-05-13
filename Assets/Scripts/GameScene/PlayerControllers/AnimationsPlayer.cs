@@ -1,89 +1,89 @@
-using System.Collections;
-using System.Collections.Generic;
-using PlayerControllers;
 using Unity.Netcode;
 using UnityEngine;
 
-public class AnimationsPlayer : NetworkBehaviour
+namespace GameScene.PlayerControllers
 {
-    private Animator playerAnimator;
-
-    private BasePlayer player;
-
-    private bool fall;
-    private bool _Enabled;
-    private float TimeFromBoolStart = 0;
-
-    // Start is called before the first frame update
-    void Start()
+    public class AnimationsPlayer : NetworkBehaviour
     {
-        playerAnimator = GetComponent<Animator>();
-        player = GetComponentInParent<BasePlayer>();
-    }
+        private Animator playerAnimator;
 
-    // Update is called once per frame
-    void Update()
-    {
-        fall = !player.IsGrounded;
+        private BasePlayer.BasePlayer player;
 
-        if (fall && !_Enabled)
+        private bool fall;
+        private bool _Enabled;
+        private float TimeFromBoolStart = 0;
+
+        // Start is called before the first frame update
+        void Start()
         {
-            _Enabled = true;
-            TimeFromBoolStart = Time.realtimeSinceStartup;
+            playerAnimator = GetComponent<Animator>();
+            player = GetComponentInParent<BasePlayer.BasePlayer>();
         }
 
-        _Enabled = fall;
-
-        Vector3 velocity = player.Velocity;
-        playerAnimator.SetBool("fly", player.IsFlying);
-
-        playerAnimator.SetBool("isSprinting", player.IsRunning);
-
-        playerAnimator.SetBool("jump", velocity.y > 0);
-
-        if (playerAnimator.GetBool("grounded") && !playerAnimator.GetBool("jump"))
+        // Update is called once per frame
+        void Update()
         {
-            playerAnimator.SetBool("grounded", GetTimeSinceBool() < 0.5);
+            fall = !player.IsGrounded;
+
+            if (fall && !_Enabled)
+            {
+                _Enabled = true;
+                TimeFromBoolStart = Time.realtimeSinceStartup;
+            }
+
+            _Enabled = fall;
+
+            Vector3 velocity = player.Velocity;
+            playerAnimator.SetBool("fly", player.IsFlying);
+
+            playerAnimator.SetBool("isSprinting", player.IsRunning);
+
+            playerAnimator.SetBool("jump", velocity.y > 0);
+
+            if (playerAnimator.GetBool("grounded") && !playerAnimator.GetBool("jump"))
+            {
+                playerAnimator.SetBool("grounded", GetTimeSinceBool() < 0.5);
+            }
+            else
+            {
+                playerAnimator.SetBool("grounded", player.IsGrounded);
+            }
+
+
+            playerAnimator.SetBool("forward", false);
+            playerAnimator.SetBool("backward", false);
+            playerAnimator.SetBool("left", false);
+            playerAnimator.SetBool("right", false);
+
+            if (velocity.z >= 0.7) //forward
+            {
+                playerAnimator.SetBool("forward", true);
+            }
+            else if (velocity.z <= -0.7) //backward
+            {
+                playerAnimator.SetBool("backward", true);
+            }
+            else if (velocity.x < -0.7) //left
+            {
+                playerAnimator.SetBool("left", true);
+            }
+            else if (velocity.x > 0.7) //right
+            {
+                playerAnimator.SetBool("right", true);
+            }
         }
-        else
-        {
-            playerAnimator.SetBool("grounded", player.IsGrounded);
-        }
 
-
-        playerAnimator.SetBool("forward", false);
-        playerAnimator.SetBool("backward", false);
-        playerAnimator.SetBool("left", false);
-        playerAnimator.SetBool("right", false);
-
-        if (velocity.z >= 0.7) //forward
+        //Calculates how much time has the player been in the air
+        private float GetTimeSinceBool()
         {
-            playerAnimator.SetBool("forward", true);
-        }
-        else if (velocity.z <= -0.7) //backward
-        {
-            playerAnimator.SetBool("backward", true);
-        }
-        else if (velocity.x < -0.7) //left
-        {
-            playerAnimator.SetBool("left", true);
-        }
-        else if (velocity.x > 0.7) //right
-        {
-            playerAnimator.SetBool("right", true);
-        }
-    }
-
-    //Calculates how much time has the player been in the air
-    private float GetTimeSinceBool()
-    {
-        if (fall)
-        {
-            return Time.realtimeSinceStartup - TimeFromBoolStart;
-        }
-        else
-        {
-            return 0;
+            if (fall)
+            {
+                return Time.realtimeSinceStartup - TimeFromBoolStart;
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
 }

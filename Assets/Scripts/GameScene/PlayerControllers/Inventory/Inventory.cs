@@ -1,11 +1,11 @@
-﻿using Abilities;
-using Items;
-using PlayerControllers;
+﻿using GameScene.Abilities.model;
+using GameScene.Items;
+using GameScene.PlayerControllers.BasePlayer;
+using GameScene.Weapons;
 using Unity.Netcode;
 using UnityEngine;
-using Weapons;
 
-namespace model
+namespace GameScene.PlayerControllers.Inventory
 {
     public partial class Inventory : NetworkBehaviour
     {
@@ -19,18 +19,18 @@ namespace model
         }
 
 
-        private BasePlayer _player;
+        private BasePlayer.BasePlayer _player;
 
         /**
          * <value>the bound player <seealso cref="BasePlayer"/></value>
          */
-        public BasePlayer Player
+        public BasePlayer.BasePlayer Player
         {
             get
             {
                 if (_player is null)
                 {
-                    _player = GetComponent<BasePlayer>();
+                    _player = GetComponent<BasePlayer.BasePlayer>();
                     AbilityTree = new AbilityTree(_player, _player.RootAbility);
                 }
 
@@ -109,8 +109,18 @@ namespace model
                         SelectedItem.SwitchRender(false);
                     if (CurrentWeapon != null)
                         CurrentWeapon.SwitchRender(true);
+                    SetHandTargetsClientRpc();
+
+
                     break;
             }
+        }
+
+        [ClientRpc]
+        private void SetHandTargetsClientRpc()
+        {
+            if (CurrentWeapon != null && SelectedMode == Mode.Weapon)
+                Player.SetHandTargets(CurrentWeapon.RightHandTarget, CurrentWeapon.LeftHandTarget);
         }
 
 

@@ -1,11 +1,7 @@
-using System.Diagnostics;
-using GameManagers;
-using model;
 using UnityEngine;
 using UnityEngine.UI;
-using Debug = UnityEngine.Debug;
 
-namespace Menus
+namespace GameScene.Menus
 {
     public class EndScreen : MonoBehaviour
     {

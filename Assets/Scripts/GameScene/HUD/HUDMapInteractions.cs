@@ -1,10 +1,10 @@
-﻿using GameManagers;
-using Map;
-using PlayerControllers;
+﻿using GameScene.GameManagers;
+using GameScene.Map;
+using GameScene.PlayerControllers.BasePlayer;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace HUD
+namespace GameScene.HUD
 {
     public partial class HUDController
     {

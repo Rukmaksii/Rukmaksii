@@ -1,16 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
-using GameManagers;
-using model;
-using PlayerControllers;
+using GameScene.GameManagers;
+using GameScene.model;
+using GameScene.PlayerControllers.BasePlayer;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace Minions
+namespace GameScene.Minions
 {
     [RequireComponent(typeof(NetworkTransform))]
     //[RequireComponent(typeof(NetworkRigidbody))]

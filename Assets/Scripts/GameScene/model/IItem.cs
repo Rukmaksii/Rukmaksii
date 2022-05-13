@@ -1,4 +1,4 @@
-﻿namespace model
+﻿namespace GameScene.model
 {
     public enum ItemCategory
     {

@@ -1,13 +1,10 @@
 // ReSharper disable once RedundantUsingDirective
 
-using System;
-using model;
-using Netcode.Transports.PhotonRealtime;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UNET;
 using UnityEngine;
 
-namespace GameManagers
+namespace model
 {
     public class ConnectionManagerScript : MonoBehaviour
     {

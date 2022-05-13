@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using PlayerControllers;
+using GameScene.PlayerControllers.BasePlayer;
 using UnityEngine;
 
-namespace Map
+namespace GameScene.Map
 {
     public class ObjectiveController : MonoBehaviour
     {

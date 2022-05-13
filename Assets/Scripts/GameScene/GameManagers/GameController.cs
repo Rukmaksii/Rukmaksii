@@ -1,18 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
-using HUD;
-using Items;
-using Map;
-using Minions;
+using GameScene.HUD;
+using GameScene.Items;
+using GameScene.Map;
+using GameScene.Minions;
+using GameScene.model.Network;
+using GameScene.PlayerControllers.BasePlayer;
+using GameScene.Weapons;
+using LobbyScene;
 using model;
-using model.Network;
-using PlayerControllers;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
-using Weapons;
 
-namespace GameManagers
+namespace GameScene.GameManagers
 {
     enum GameState
     {

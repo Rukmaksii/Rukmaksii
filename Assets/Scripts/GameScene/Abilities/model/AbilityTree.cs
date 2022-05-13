@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using PlayerControllers;
+using GameScene.PlayerControllers.BasePlayer;
 
-namespace Abilities
+namespace GameScene.Abilities.model
 {
     public class AbilityTree
     {

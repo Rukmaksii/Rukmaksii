@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using GameScene.model;
+using GameScene.Weapons;
 using Unity.Netcode;
 using UnityEngine;
-using Weapons;
 
-namespace model
+namespace GameScene.PlayerControllers.Inventory
 {
     public partial class Inventory
     {

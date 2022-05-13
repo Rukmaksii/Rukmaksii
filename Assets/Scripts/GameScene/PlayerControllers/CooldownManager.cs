@@ -2,7 +2,7 @@ using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace PlayerControllers
+namespace GameScene.PlayerControllers
 {
     public class CooldownManager : NetworkBehaviour
     {

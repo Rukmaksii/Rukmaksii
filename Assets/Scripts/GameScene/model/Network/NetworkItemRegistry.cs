@@ -2,11 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Items;
+using GameScene.Items;
 using JetBrains.Annotations;
 using Unity.Netcode;
 
-namespace model.Network
+namespace GameScene.model.Network
 {
     public class NetworkItemRegistry : NetworkVariableBase,
         IReadOnlyDictionary<Type, NetworkItemRegistry.ItemContainer>

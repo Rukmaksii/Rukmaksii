@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace PlayerControllers
+namespace GameScene.PlayerControllers
 {
     public class Jetpack : MonoBehaviour
     {
@@ -10,7 +10,7 @@ namespace PlayerControllers
     */
         [SerializeField] private float reloadMultiplier = 2.5f;
 
-        public BasePlayer Player => GetComponent<BasePlayer>();
+        public BasePlayer.BasePlayer Player => GetComponent<BasePlayer.BasePlayer>();
 
         /**
          * <value>the max duration of the flight</value>

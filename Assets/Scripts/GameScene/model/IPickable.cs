@@ -1,6 +1,6 @@
-﻿using PlayerControllers;
+﻿using GameScene.PlayerControllers.BasePlayer;
 
-namespace model
+namespace GameScene.model
 {
     public interface IPickable
     {
