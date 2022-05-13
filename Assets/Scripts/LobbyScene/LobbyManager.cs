@@ -172,7 +172,8 @@ public class LobbyManager : NetworkBehaviour
             viewer.GetComponentsInChildren<Text>().First(e => e.name == "Pseudo").text = data.Pseudo;
 
             BasePlayer player;
-            if (data.ClassName != null && (player = ClassPrefabs.Select(go => go.GetComponent<BasePlayer>()).FirstOrDefault(p => p.ClassName == data.ClassName)) != null)
+            if (data.ClassName != null && (player = ClassPrefabs.Select(go => go.GetComponent<BasePlayer>())
+                    .FirstOrDefault(p => p.ClassName == data.ClassName)) != null)
             {
                 viewer.GetComponentsInChildren<Image>().First(e => e.name == "Image").sprite = player.Sprite;
             }
@@ -204,6 +205,16 @@ public class LobbyManager : NetworkBehaviour
             cv.GetComponent<Button>().onClick.AddListener(delegate
             {
                 ChangeClassServerRpc(NetworkManager.Singleton.LocalClientId, player.ClassName);
+            });
+        }
+
+        if (PlayerClass != null)
+        {
+            var cv = Instantiate(classCanvas, classViewport);
+            cv.transform.localPosition += offset * Vector3.up;
+            cv.GetComponent<Button>().onClick.AddListener(delegate
+            {
+                ChangeClassServerRpc(NetworkManager.Singleton.LocalClientId, null);
             });
         }
     }
