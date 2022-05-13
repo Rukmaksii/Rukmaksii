@@ -23,7 +23,7 @@ namespace model.Network
     {
         private readonly Dictionary<ulong, PlayerInfo> data = new Dictionary<ulong, PlayerInfo>();
         private readonly List<ScoreboardEvent> dirtyEvents = new List<ScoreboardEvent>();
-
+        
         public bool ContainsKey(ulong key)
         {
             return data.ContainsKey(key);
