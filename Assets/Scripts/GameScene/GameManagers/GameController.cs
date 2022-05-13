@@ -140,6 +140,7 @@ namespace GameScene.GameManagers
 
         void Start()
         {
+            DontDestroyOnLoad(this);
             GameObject.Find("Base1").GetComponent<BaseController>().UpdateTeamServerRpc(0);
             GameObject.Find("Base2").GetComponent<BaseController>().UpdateTeamServerRpc(1);
 

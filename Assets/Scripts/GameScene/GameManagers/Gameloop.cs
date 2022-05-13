@@ -58,9 +58,11 @@ namespace GameScene.GameManagers
                 if(ListOfMonster.Count < numberOfMonster)
                     SpawnMonsters(numberOfMonster - ListOfMonster.Count);
 
+                //detect end of game
                 if (base1.CurrentHealth == 0 || base2.CurrentHealth == 0)
                 {
                     NetworkManager.Singleton.SceneManager.LoadScene("EndScene", LoadSceneMode.Single);
+                    GetComponent<Gameloop>().enabled = false;
                 }
             }
             //deactivate the collision between each player and it's team's shield
