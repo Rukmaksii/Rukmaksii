@@ -172,7 +172,7 @@ public class LobbyManager : NetworkBehaviour
             viewer.GetComponentsInChildren<Text>().First(e => e.name == "Pseudo").text = data.Pseudo;
 
             BasePlayer player;
-            if ((player = PlayerClass) != null)
+            if (data.ClassName != null && (player = ClassPrefabs.Select(go => go.GetComponent<BasePlayer>()).FirstOrDefault(p => p.ClassName == data.ClassName)) != null)
             {
                 viewer.GetComponentsInChildren<Image>().First(e => e.name == "Image").sprite = player.Sprite;
             }

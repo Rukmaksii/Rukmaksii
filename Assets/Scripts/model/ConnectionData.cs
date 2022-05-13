@@ -43,12 +43,53 @@ namespace model
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
-            if (Pseudo != null)
-                serializer.SerializeValue(ref Pseudo);
-            if (RoomName != null)
-                serializer.SerializeValue(ref RoomName);
-            if (ClassName != null)
+            if (serializer.IsReader)
+            {
                 serializer.SerializeValue(ref ClassName);
+                if (ClassName.Length <= 0)
+                    ClassName = null;
+                
+                serializer.SerializeValue(ref Pseudo);
+                if (Pseudo.Length <= 0)
+                    Pseudo = null;
+                
+                serializer.SerializeValue(ref RoomName);
+                if (RoomName.Length <= 0)
+                    RoomName = null;
+            }
+            else
+            {
+                if (ClassName == null)
+                {
+                    var data = "";
+                    serializer.SerializeValue(ref data);
+                }
+                else
+                {
+                    serializer.SerializeValue(ref ClassName);
+                }
+
+                if (Pseudo == null)
+                {
+                    var data = "";
+                    serializer.SerializeValue(ref data);
+                }
+                else
+                {
+                    serializer.SerializeValue(ref Pseudo);
+                }
+
+                if (RoomName == null)
+                {
+                    var data = "";
+                    serializer.SerializeValue(ref data);
+                }
+                else
+                {
+                    serializer.SerializeValue(ref RoomName);
+                }
+            }
+
             serializer.SerializeValue(ref ConnectionType);
             serializer.SerializeValue(ref TeamId);
             serializer.SerializeValue(ref PlayerAmount);
