@@ -56,6 +56,18 @@ namespace GameScene.PlayerControllers.Inventory
 
             if (IsServer)
                 HandleModeRenderers(SelectedMode, true);
+
+            void OnWeaponChanged(NetworkBehaviourReference old, NetworkBehaviourReference newVal)
+            {
+                if (newVal.TryGet(out BaseWeapon weapon))
+                {
+                    Player.SetHandTargets(weapon.RightHandTarget, weapon.LeftHandTarget);
+                }
+            }
+
+            lightWeapon.OnValueChanged += OnWeaponChanged;
+            heavyWeapon.OnValueChanged += OnWeaponChanged;
+            closeRangeWeapon.OnValueChanged += OnWeaponChanged;
         }
 
         public void Drop()

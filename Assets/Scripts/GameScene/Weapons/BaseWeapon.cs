@@ -261,7 +261,8 @@ namespace GameScene.Weapons
 
 
             renderState.Value = render;
-            SwitchRenderers(render);
+            if (IsClient)
+                SwitchRenderers(render);
         }
 
         private void SwitchRenderers(bool render)
