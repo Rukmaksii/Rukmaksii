@@ -304,9 +304,10 @@ namespace GameScene.PlayerControllers.Inventory
 
                 if (weapon != null)
                     weapon.SwitchRender(true);
-                SwitchWeaponClientRpc(type);
                 selectedWeaponType.Value = type;
             }
+
+            SwitchWeaponClientRpc(type);
         }
 
         [ClientRpc]

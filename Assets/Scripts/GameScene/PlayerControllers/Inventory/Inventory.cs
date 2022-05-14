@@ -109,18 +109,8 @@ namespace GameScene.PlayerControllers.Inventory
                         SelectedItem.SwitchRender(false);
                     if (CurrentWeapon != null)
                         CurrentWeapon.SwitchRender(true);
-                    SetHandTargetsClientRpc();
-
-
                     break;
             }
-        }
-
-        [ClientRpc]
-        private void SetHandTargetsClientRpc()
-        {
-            if (CurrentWeapon != null && SelectedMode == Mode.Weapon)
-                Player.SetHandTargets(CurrentWeapon.RightHandTarget, CurrentWeapon.LeftHandTarget);
         }
 
 
