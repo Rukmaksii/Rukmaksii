@@ -41,11 +41,14 @@ namespace GameScene.PlayerControllers.BasePlayer
             private set => UpdateFlagsServerRpc(PlayerFlags.RUNNING, value);
         }
 
-        public Transform WeaponContainer { get; private set; }
+
+        [SerializeField] private Transform weaponContainer;
+
+        public Transform WeaponContainer => weaponContainer.transform;
 
         private CameraController cameraController;
 
-        protected RigBuilder RigBuilder;
+        [SerializeField] private RigBuilder rigBuilder;
 
         public CameraController CameraController => cameraController;
 
@@ -208,10 +211,11 @@ namespace GameScene.PlayerControllers.BasePlayer
         /**
          * <summary>the fire cast point and the camera </summary>
          */
-        private (Vector3, Vector3) aimVector = (Vector3.zero, Vector3.zero);
-        public Vector3 AimVector => aimVector.Item2;
+        private NetworkVariable<(Vector3, Vector3)> aimVector = new NetworkVariable<(Vector3, Vector3)>((Vector3.zero, Vector3.zero));
 
-        
+        public Vector3 AimVector => aimVector.Value.Item2;
+
+
         private bool itemWheel = false;
         public bool ItemWheel => itemWheel;
         private Vector3 mousePos = Vector3.zero;

@@ -107,7 +107,7 @@ namespace GameScene.PlayerControllers.BasePlayer
         [ServerRpc]
         public void UpdateAimVectorServerRpc(Vector3 castPoint, Vector3 direction)
         {
-            aimVector = (castPoint, direction);
+            aimVector.Value = (castPoint, direction);
         }
 
         [ServerRpc(RequireOwnership = false)]

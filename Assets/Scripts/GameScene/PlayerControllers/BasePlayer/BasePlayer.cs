@@ -54,7 +54,6 @@ namespace GameScene.PlayerControllers.BasePlayer
 
         void Start()
         {
-            SetupNestedComponents();
             var weapon = Inventory.CurrentWeapon;
             if (weapon != null)
             {
@@ -80,19 +79,6 @@ namespace GameScene.PlayerControllers.BasePlayer
             }
         }
 
-        private void SetupNestedComponents()
-        {
-            Transform[] transforms = GetComponentsInChildren<Transform>();
-            foreach (Transform t in transforms)
-            {
-                if (t.name == "weaponContainer")
-                {
-                    this.WeaponContainer = t;
-                }
-                else if (t.name == "ironman")
-                    RigBuilder = t.GetComponent<RigBuilder>();
-            }
-        }
 
         /**
          * <summary>moves the player to the spawn</summary>
@@ -114,8 +100,9 @@ namespace GameScene.PlayerControllers.BasePlayer
         // Update is called once per frame
         private void Update()
         {
-            
             if (IsOwner)
+                UpdateOwner();
+            if (IsClient)
                 UpdateClient();
             if (IsServer)
                 UpdateServer();
@@ -127,16 +114,16 @@ namespace GameScene.PlayerControllers.BasePlayer
         }
 
 
+        /**
+         * <summary>the function is called in <see cref="Update"/> if instance is server</summary>
+         */
         private void UpdateServer()
         {
             if (IsShooting)
                 this.Inventory.CurrentWeapon.Fire();
         }
 
-        /**
-         * <summary>the function is called in <see cref="Update"/> if instance is server</summary>
-         */
-        private void UpdateClient()
+        private void UpdateOwner()
         {
             var _deltaTime = Time.deltaTime;
 
@@ -185,6 +172,16 @@ namespace GameScene.PlayerControllers.BasePlayer
             controller.Move(transform.TransformDirection(res) * _deltaTime);
             UpdateVelocityServerRpc(res);
             UpdateCamera();
+        }
+
+        /// <summary>
+        ///     function ran in <see cref="Update"/> if client and not owner
+        /// </summary>
+        private void UpdateClient()
+        {
+            float additionalAngle = transform.InverseTransformVector(AimVector).y;
+            Debug.Log($"additional angle: {additionalAngle}");
+            // weaponContainer.RotateAround(camRotationAnchor, Vector3.left, additionalAngle * 90);
         }
 
         /**
@@ -291,10 +288,10 @@ namespace GameScene.PlayerControllers.BasePlayer
             RaycastHit hit;
 
             Vector3 castPoint, direction;
-            if (IsServer)
-                (castPoint, direction) = aimVector;
-            else
+            if (IsOwner)
                 (castPoint, direction) = (FireCastPoint, cameraController.Camera.transform.forward);
+            else
+                (castPoint, direction) = aimVector.Value;
 
             if (!Physics.Raycast(castPoint, direction, out hit, weaponRange))
 
@@ -305,8 +302,6 @@ namespace GameScene.PlayerControllers.BasePlayer
 
         public void SetHandTargets(Transform right, Transform left)
         {
-            if (RigBuilder == null)
-                SetupNestedComponents();
             foreach (var tr in GetComponentsInChildren<Transform>())
             {
                 if (tr.name == "RightHandIK")
@@ -314,14 +309,14 @@ namespace GameScene.PlayerControllers.BasePlayer
                     var ik = tr.GetComponent<TwoBoneIKConstraint>();
                     ik.data.target = right;
                     ik.weight = 1;
-                    RigBuilder.Build();
+                    rigBuilder.Build();
                 }
                 else if (tr.name == "LeftHandIK")
                 {
                     var ik = tr.GetComponent<TwoBoneIKConstraint>();
                     ik.data.target = left;
                     ik.weight = 1;
-                    RigBuilder.Build();
+                    rigBuilder.Build();
                 }
             }
         }
