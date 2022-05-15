@@ -22,6 +22,8 @@ TagManager:
   - RedPoint
   - ItemTest
   - BluePoint
+  - Grenade
+  - Shield
   layers:
   - Default
   - TransparentFX

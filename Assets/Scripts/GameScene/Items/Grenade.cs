@@ -1,4 +1,5 @@
-﻿using GameScene.model;
+﻿using GameScene.Map;
+using GameScene.model;
 using GameScene.PlayerControllers.BasePlayer;
 using Unity.Netcode;
 using UnityEngine;
@@ -29,6 +30,15 @@ namespace GameScene.Items
         protected override void OnConsume()
         {
             gameObject.GetComponent<Collider>().enabled = true;
+            foreach (GameObject shield in GameObject.FindGameObjectsWithTag("Shield"))
+            {
+                if (shield.GetComponent<ShieldController>() != null &&
+                    shield.GetComponent<ShieldController>().TeamId != Player.TeamId)
+                {
+                    Physics.IgnoreCollision(GetComponent<Collider>(), shield.GetComponent<MeshCollider>(), false);
+                    break;
+                }
+            }
         }
 
         protected override void TearDown()
