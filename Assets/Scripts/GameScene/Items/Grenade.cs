@@ -13,7 +13,6 @@ namespace GameScene.Items
         private readonly float ThrowForce = 30f;
         public ParticleSystem explosion;
         public override int Price { get; set; } = 50;
-        public bool primed = false;
 
         protected override void Setup()
         {
@@ -28,9 +27,10 @@ namespace GameScene.Items
             rb.AddForce(Player.AimVector * ThrowForce, ForceMode.Impulse);
         }
 
+
+        
         protected override void OnConsume()
         {
-            primed = true;
             gameObject.GetComponent<Collider>().enabled = true;
             foreach (GameObject shield in GameObject.FindGameObjectsWithTag("Shield"))
             {
