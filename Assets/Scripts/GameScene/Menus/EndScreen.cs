@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using GameManagers;
@@ -44,12 +45,33 @@ namespace GameScene.Menus
 
         private void DisplayStats()
         {
-            BasePlayer[] players = FindObjectsOfType<BasePlayer>();
+            List<Tuple<ulong,int>> players = new List<Tuple<ulong,int>>();
             
             foreach (ulong player in _scoreboard.Keys)
             {
+                if (players.Count == 0 || !_scoreboard[player].ContainsKey(PlayerInfoField.Kill))
+                    players.Add(new Tuple<ulong, int>(player,
+                        _scoreboard[player].ContainsKey(PlayerInfoField.Kill) ? _scoreboard[player][PlayerInfoField.Kill] : 0));
+                else
+                {
+                    int i = 0;
+                    while (i < players.Count)
+                    {
+                        if (_scoreboard[player][PlayerInfoField.Kill] >= players[i].Item2)
+                        {
+                            players.Insert(i,new Tuple<ulong, int>(player, _scoreboard[player][PlayerInfoField.Kill]));
+                            break;
+                        }
+
+                        i++;
+                    }
+                }
+            }
+            
+            foreach (Tuple<ulong,int> p in players)
+            {
                 BaseEntry baseEntry = Instantiate(baseEntryPrefab, holderScoreboard.transform).GetComponent<BaseEntry>();
-                baseEntry.Player = player;
+                baseEntry.Player = p.Item1;
                 baseEntry.Init();
             }
         }
