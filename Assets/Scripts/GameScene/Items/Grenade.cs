@@ -13,6 +13,7 @@ namespace GameScene.Items
         private readonly float ThrowForce = 30f;
         public ParticleSystem explosion;
         public override int Price { get; set; } = 50;
+        public bool primed = false;
 
         protected override void Setup()
         {
@@ -29,13 +30,14 @@ namespace GameScene.Items
 
         protected override void OnConsume()
         {
+            primed = true;
             gameObject.GetComponent<Collider>().enabled = true;
             foreach (GameObject shield in GameObject.FindGameObjectsWithTag("Shield"))
             {
                 if (shield.GetComponent<ShieldController>() != null &&
                     shield.GetComponent<ShieldController>().TeamId != Player.TeamId)
                 {
-                    Physics.IgnoreCollision(GetComponent<Collider>(), shield.GetComponent<MeshCollider>(), false);
+                    Physics.IgnoreCollision(GetComponent<Collider>(), shield.GetComponent<Collider>(), false);
                     break;
                 }
             }
@@ -54,7 +56,19 @@ namespace GameScene.Items
                 if (component != null)
                 {
                     if (!(component is BasePlayer && hit is CapsuleCollider))
+                    {
+                        if (component is BasePlayer @compPlayer)
+                        {
+                            if (@compPlayer.TeamId == Player.TeamId && @compPlayer != Player)
+                                return;
+                        }
+                        else if (component is BaseController @compBase)
+                        {
+                            if (@compBase.TeamId == Player.TeamId)
+                                return;
+                        }
                         component.TakeDamage(Damage);
+                    }
                 }
             }
         }
