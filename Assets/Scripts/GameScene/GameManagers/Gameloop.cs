@@ -61,6 +61,10 @@ namespace GameScene.GameManagers
                 //detect end of game
                 if (base1.CurrentHealth == 0 || base2.CurrentHealth == 0)
                 {
+                    if (base1.CurrentHealth == 0)
+                        GameController.Singleton.winningTeam = 1;
+                    else
+                        GameController.Singleton.winningTeam = 0;
                     NetworkManager.Singleton.SceneManager.LoadScene("EndScene", LoadSceneMode.Single);
                     GetComponent<Gameloop>().enabled = false;
                 }

@@ -88,13 +88,13 @@ namespace GameScene.GameManagers
 
         private BasePlayer localPlayer;
 
-
+        public int winningTeam;
+        
         [SerializeField] private int respawnTime = 5;
 
         public BasePlayer LocalPlayer => localPlayer;
 
         public HUDController HUDController => HUDController.Singleton;
-
 
         private Queue<BasePlayer> playersToEquip = new Queue<BasePlayer>();
 

@@ -16,12 +16,10 @@ namespace GameScene.Map
         
         void Start()
         {
-            
         }
 
         void Update()
         {
-            
         }
 
         public bool TakeDamage(int damage)

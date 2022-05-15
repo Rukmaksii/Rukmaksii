@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using GameScene.GameManagers;
+using GameScene.Map;
 using GameScene.model.Network;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace GameScene.Menus
+namespace GameScene.Menus.EndScreen
 {
     public class EndScreen : MonoBehaviour
     {
@@ -22,6 +23,7 @@ namespace GameScene.Menus
 
             _scoreboard = GameController.Singleton.Scoreboard;
 
+            DisplayWinner();
             DisplayStats();
         }
         
@@ -37,6 +39,10 @@ namespace GameScene.Menus
 
         private void DisplayWinner()
         {
+            if (GameController.Singleton.winningTeam == 0)
+                winner.text = "Blue team wins";
+            else
+                winner.text = "Red team wins";
         }
 
         private void DisplayStats()
