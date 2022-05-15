@@ -69,7 +69,7 @@ public class BaseEntry : MonoBehaviour
         if (!_scoreboard[Player].ContainsKey(PlayerInfoField.Kill))
             ratioField.text = "0";
         else if (!_scoreboard[Player].ContainsKey(PlayerInfoField.Deaths))
-            ratioField.text = $"{_scoreboard[Player].ContainsKey(PlayerInfoField.Kill)}";
+            ratioField.text = $"{_scoreboard[Player][PlayerInfoField.Kill]}";
         else
             ratioField.text = $"{_scoreboard[Player][PlayerInfoField.Kill] / _scoreboard[Player][PlayerInfoField.Deaths]}";
 
