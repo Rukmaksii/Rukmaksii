@@ -34,10 +34,10 @@ namespace GameScene.Items
             gameObject.GetComponent<Collider>().enabled = true;
             foreach (GameObject shield in GameObject.FindGameObjectsWithTag("Shield"))
             {
-                if (shield.GetComponent<ShieldController>() != null &&
-                    shield.GetComponent<ShieldController>().TeamId != Player.TeamId)
+                ShieldController shieldController = shield.GetComponent<ShieldController>();
+                if (shieldController != null && shieldController.TeamId != Player.TeamId)
                 {
-                    Physics.IgnoreCollision(GetComponent<Collider>(), shield.GetComponent<Collider>(), false);
+                    Physics.IgnoreCollision(gameObject.GetComponent<Collider>(), shield.GetComponent<MeshCollider>(), false);
                     break;
                 }
             }

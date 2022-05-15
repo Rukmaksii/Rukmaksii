@@ -49,6 +49,10 @@ namespace GameScene.GameManagers
         // Update is called once per frame
         void Update()
         {
+            if (shield1 != null && shield1.TeamId != 0)
+                shield1.UpdateTeamServerRpc(0);
+            if(shield2 != null && shield2.TeamId != 1)
+                shield2.UpdateTeamServerRpc(1);
             captureArea = GameObject.FindGameObjectsWithTag("CaptureArea");
             if (NetworkManager.Singleton.IsServer)
             {
