@@ -1,11 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using GameManagers;
-using Map;
-using model;
-using model.Network;
-using PlayerControllers;
+using GameScene.GameManagers;
+using GameScene.model.Network;
 using UnityEngine;
 using UnityEngine.UI;
 
