@@ -3,6 +3,7 @@ using GameScene.Items;
 using GameScene.PlayerControllers.BasePlayer;
 using GameScene.Shop;
 using GameScene.Weapons;
+using GameScene.Shop;
 using Unity.Netcode;
 using UnityEngine;
 

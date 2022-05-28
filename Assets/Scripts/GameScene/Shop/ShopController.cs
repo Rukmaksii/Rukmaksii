@@ -1,11 +1,8 @@
 using System;
-using System.Linq;
-using GameScene.GameManagers;
-using GameScene.PlayerControllers.BasePlayer;
-using GameScene.model;
+using model;
+using PlayerControllers;
 using Unity.Netcode;
 using UnityEngine;
-using GameScene.Weapons;
 
 namespace GameScene.Shop
 {
@@ -15,11 +12,7 @@ namespace GameScene.Shop
     {
         public void PickUp(BasePlayer player)
         {
-            var possibleWeapons = GameController.Singleton.WeaponPrefabs
-                .Select(go => go.GetComponent<BaseWeapon>())
-                .Where(bw => bw.GetType().GetInterfaces().Contains(player.WeaponInterface))
-                .ToList();
-            possibleWeapons.ForEach(Debug.Log);
+            player.OpenShop(this);
         }
 
         public void Drop()
