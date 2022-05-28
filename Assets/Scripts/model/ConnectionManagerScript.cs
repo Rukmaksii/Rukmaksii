@@ -1,10 +1,8 @@
 // ReSharper disable once RedundantUsingDirective
 
-using LobbyScene;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UNET;
 using UnityEngine;
-
 
 namespace model
 {

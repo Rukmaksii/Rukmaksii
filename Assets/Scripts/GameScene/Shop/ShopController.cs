@@ -1,11 +1,11 @@
 using System;
 using System.Linq;
-using GameManagers;
-using model;
-using PlayerControllers;
+using GameScene.GameManagers;
+using GameScene.PlayerControllers.BasePlayer;
+using GameScene.model;
 using Unity.Netcode;
 using UnityEngine;
-using Weapons;
+using GameScene.Weapons;
 
 namespace GameScene.Shop
 {

@@ -11,13 +11,6 @@ using UnityEngine.UI;
 
 namespace LobbyScene
 {
-    public enum GameState : byte
-    {
-        Lobby,
-        Game,
-        End
-    }
-
     public class LobbyManager : NetworkBehaviour
     {
         [SerializeField] private List<GameObject> classPrefabs = new List<GameObject>();
@@ -46,27 +39,6 @@ namespace LobbyScene
             ? PlayersRegistry[NetworkManager.Singleton.LocalClientId]
             : connectionData.Data;
 
-        private readonly NetworkVariable<GameState> gameState = new NetworkVariable<GameState>(GameState.Lobby);
-
-        public GameState GameState
-        {
-            get => gameState.Value;
-
-            set
-            {
-                if (!NetworkManager.Singleton.IsServer)
-                    throw new NotServerException("game state could not be set for non server client");
-
-                gameState.Value = value;
-                NetworkManager.Singleton.SceneManager.LoadScene(value switch
-                {
-                    GameState.Lobby => "LobbyScene",
-                    GameState.Game => "GameScene",
-                    _ => "EndScene"
-                }, LoadSceneMode.Single);
-            }
-        }
-
         public int PlayerCount => playerCount.Value;
 
         public bool CanStart
@@ -86,8 +58,7 @@ namespace LobbyScene
                 return validPlayers == PlayerCount;
             }
         }
-
-
+        
         public static LobbyManager Singleton { get; private set; }
 
         private void Awake()
@@ -116,9 +87,8 @@ namespace LobbyScene
         void Start()
         {
             DontDestroyOnLoad(gameObject);
-
 #if DEBUG
-
+            // in game scene at startup
             if (lobbyUI == null)
                 return;
 #endif
@@ -127,7 +97,6 @@ namespace LobbyScene
             {
                 if (!NetworkManager.Singleton.IsClient)
                     return;
-
 
                 if (NetworkManager.Singleton.IsServer)
                 {
@@ -165,17 +134,15 @@ namespace LobbyScene
             if (IsServer)
             {
                 startButton.gameObject.SetActive(true);
-                startButton.interactable = startButton.enabled = CanStart || true;
+                startButton.interactable = startButton.enabled = CanStart;
             }
         }
 
-        private List<ConnectionData> GetPlayersInTeam(int t) =>
-            PlayersRegistry.Values.Where(c => c.TeamId == t).ToList();
+        private List<ConnectionData> GetPlayersInTeam(int t) => PlayersRegistry.Values.Where(c => c.TeamId == t).ToList();
 
         private void FillPlayerViewers()
         {
-            var anchors = lobbyUI.GetComponentsInChildren<RectTransform>().Where(t => t.name.StartsWith("Anchor"))
-                .ToList();
+            var anchors = lobbyUI.GetComponentsInChildren<RectTransform>().Where(t => t.name.StartsWith("Anchor")).ToList();
             anchors.ForEach(a =>
             {
                 if (a.childCount == 1)
@@ -289,9 +256,7 @@ namespace LobbyScene
 
         public void StartGame()
         {
-            if (!IsServer)
-                throw new NotServerException("only the server can start the game");
-            GameState = GameState.Game;
+            NetworkManager.Singleton.SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
         }
 
         /// <summary>

@@ -1,7 +1,6 @@
 ﻿using System.Linq;
-using GameManagers;
-using GameScene.Shop;
-using model;
+using GameScene.model;
+using GameScene.Weapons;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
