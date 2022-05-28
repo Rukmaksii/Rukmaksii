@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using GameScene.model;
 using GameScene.Weapons;
-using GameManagers;
+using GameScene.GameManagers;
 using GameScene.Shop;
 using UnityEngine;
 using UnityEngine.InputSystem;

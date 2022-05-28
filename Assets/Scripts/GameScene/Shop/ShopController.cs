@@ -1,6 +1,6 @@
 using System;
-using model;
-using PlayerControllers;
+using GameScene.PlayerControllers.BasePlayer;
+using GameScene.model;
 using Unity.Netcode;
 using UnityEngine;
 
