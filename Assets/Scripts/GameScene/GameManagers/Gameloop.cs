@@ -152,10 +152,6 @@ namespace GameScene.GameManagers
             shield1.Activated.Value = true;
             shield2.Activated.Value = true;
         }
-        public void PossibleJoingame()
-        {
-
-        }
 
         public void SpawnMonsters(int number)
         {

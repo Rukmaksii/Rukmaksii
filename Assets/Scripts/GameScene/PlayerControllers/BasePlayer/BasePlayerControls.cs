@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using GameScene.model;
 using GameScene.Weapons;
 using GameScene.GameManagers;
+using GameScene.Items;
 using GameScene.Shop;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -247,12 +249,13 @@ namespace GameScene.PlayerControllers.BasePlayer
 
         public void OpenShop(ShopController shopController)
         {
-            var possibleWeapons = GameController.Singleton.WeaponPrefabs
+            List<BaseWeapon> possibleWeapons = GameController.Singleton.WeaponPrefabs
                 .Select(go => go.GetComponent<BaseWeapon>())
                 .Where(bw => bw.GetType().GetInterfaces().Contains(this.WeaponInterface))
                 .ToList();
+            List<BaseItem> possibleItems = new List<BaseItem>(); //change to the list of items
             possibleWeapons.ForEach(Debug.Log);
-            GameController.Singleton.HUDController.ShowShop();
+            Shop.ShopUI.ShopUI.Singleton.Init(possibleWeapons, possibleItems, this);
         }
         public void OnInventoryOpened(InputAction.CallbackContext ctx)
         {

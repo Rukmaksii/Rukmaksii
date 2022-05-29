@@ -12,7 +12,7 @@ namespace GameScene.Weapons
         public override float ReloadTime { get; } = 3f;
         public override int BulletsInRow { get; } = 1;
         public override float BulletsInRowSpacing { get; } = 0;
-        protected override int Price { get; } = 200;
+        public override int Price { get; } = 200;
         public override string Name { get; } = "handgun";
     }
 }
