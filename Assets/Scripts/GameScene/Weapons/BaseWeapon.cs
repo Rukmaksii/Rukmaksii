@@ -136,7 +136,7 @@ namespace GameScene.Weapons
 
         private AudioSource source;
 
-        protected abstract int Price { get; }
+        public abstract int Price { get; }
 
         private void Awake()
         {
