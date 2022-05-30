@@ -9,7 +9,6 @@ namespace GameScene.Menus
     {
         [SerializeField] private GameObject mainMenu;
         [SerializeField] private GameObject selectMenu;
-        [SerializeField] private GameObject serverMenu;
 
         [SerializeField] private Dropdown chosenClass;
         [SerializeField] private Dropdown chosenTeam;
@@ -20,7 +19,6 @@ namespace GameScene.Menus
         void Start()
         {
             selectMenu.SetActive(false);
-            serverMenu.SetActive(false);
         }
 
         // Update is called once per frame
@@ -28,23 +26,6 @@ namespace GameScene.Menus
         {
         }
 
-
-        public void OnPlay()
-        {
-            switch (chosenClass.value)
-            {
-                case 0:
-                    connectionData.Data.ClassName = "test class";
-                    break;
-                default:
-                    connectionData.Data.ClassName = "test class";
-                    break;
-            }
-
-            connectionData.Data.TeamId = chosenTeam.value;
-
-            SceneManager.LoadScene("GameScene");
-        }
 
         public void OnSingleplayer()
         {
@@ -62,9 +43,10 @@ namespace GameScene.Menus
 
         public void OnMultiplayer()
         {
-            connectionData.Data = new ConnectionData();
-
-            connectionData.Data.ConnectionType = "client";
+            connectionData.Data = new ConnectionData
+            {
+                ConnectionType = "client"
+            };
 
             SceneManager.LoadScene("LobbyScene");
 
@@ -72,15 +54,6 @@ namespace GameScene.Menus
             selectMenu.SetActive(true);
         }
 
-        public void OnServer()
-        {
-            connectionData.Data = new ConnectionData();
-
-            connectionData.Data.ConnectionType = "server";
-
-            mainMenu.SetActive(false);
-            OnPlay();
-        }
 
         public void OnOptions()
         {
