@@ -14,5 +14,6 @@ namespace GameScene.Weapons.CloseRangeWeapons
         public override float ReloadTime { get; } = 0.3f;
         public override int BulletsInRow { get; } = 0;
         public override float BulletsInRowSpacing { get; } = 0;
+        public override int Price { get; } = 42;
     }
 }
