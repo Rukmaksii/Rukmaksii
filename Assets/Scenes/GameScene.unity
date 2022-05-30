@@ -1553,9 +1553,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponPrefabs:
-  - {fileID: 1703911258719353816, guid: 5c2634991af77dd4a9e5f7d3b889489a, type: 3}
-  - {fileID: 1832220214755728926, guid: cdfcc14a598d813418f26286e60cc961, type: 3}
-  - {fileID: 1703911258719353816, guid: c366218389d754d659682565bbc931fd, type: 3}
+  - {fileID: 1703911258719353816, guid: 3dc848b872fc14d4a975bccda657d71f, type: 3}
+  - {fileID: 1703911258719353816, guid: 797992b6e195fa9469f98f72b20d4da5, type: 3}
+  - {fileID: 1703911258719353816, guid: da5696c4d8cfe354d8716f41458d0cee, type: 3}
   itemPrefabs:
   - {fileID: 5389904766975277859, guid: 9fde8f6081cd8e04a9350c6346afd875, type: 3}
   - {fileID: 6996424866522444411, guid: b51ef1203a18011438ef4aa7a5bca868, type: 3}

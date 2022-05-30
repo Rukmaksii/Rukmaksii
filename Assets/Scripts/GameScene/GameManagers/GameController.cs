@@ -247,7 +247,7 @@ namespace GameScene.GameManagers
             player.Money = 500;
             
             GameObject autoWeaponPrefab =
-                WeaponPrefabs.Find(go => go.name == "FamasPrefab");
+                WeaponPrefabs.Find(go => go.name == "GalilPrefab");
             GameObject weaponInstance = Instantiate(autoWeaponPrefab);
             var netObj = weaponInstance.GetComponent<NetworkObject>();
             netObj.Spawn(true);
@@ -255,7 +255,7 @@ namespace GameScene.GameManagers
 
 
             GameObject gunWeaponPrefab =
-                WeaponPrefabs.Find(go => go.name == "TestGunPrefab");
+                WeaponPrefabs.Find(go => go.name == "GlockPrefab");
             weaponInstance = Instantiate(gunWeaponPrefab);
             weaponInstance.GetComponent<NetworkObject>().Spawn(true);
             player.Inventory.AddWeapon(weaponInstance.GetComponent<BaseWeapon>());
