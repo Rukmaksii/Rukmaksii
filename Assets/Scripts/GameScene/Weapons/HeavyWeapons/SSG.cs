@@ -1,7 +1,7 @@
 ﻿using GameScene.model;
 using GameScene.PlayerControllers;
 
-namespace GameScene.Weapons
+namespace GameScene.Weapons.HeavyWeapons
 {
     public class SSG : BaseWeapon, SoldierClassPlayer.IWeapon
     {
