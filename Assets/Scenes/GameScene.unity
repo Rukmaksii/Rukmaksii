@@ -1103,16 +1103,6 @@ MonoBehaviour:
       SourceHashToOverride: 0
       OverridingTargetPrefab: {fileID: 0}
     - Override: 0
-      Prefab: {fileID: 1703911258719353816, guid: 5c2634991af77dd4a9e5f7d3b889489a, type: 3}
-      SourcePrefabToOverride: {fileID: 0}
-      SourceHashToOverride: 0
-      OverridingTargetPrefab: {fileID: 0}
-    - Override: 0
-      Prefab: {fileID: 1832220214755728926, guid: cdfcc14a598d813418f26286e60cc961, type: 3}
-      SourcePrefabToOverride: {fileID: 0}
-      SourceHashToOverride: 0
-      OverridingTargetPrefab: {fileID: 0}
-    - Override: 0
       Prefab: {fileID: 5389904766975277859, guid: 9fde8f6081cd8e04a9350c6346afd875, type: 3}
       SourcePrefabToOverride: {fileID: 0}
       SourceHashToOverride: 0
@@ -1124,6 +1114,16 @@ MonoBehaviour:
       OverridingTargetPrefab: {fileID: 0}
     - Override: 0
       Prefab: {fileID: 4312594427655019682, guid: d7469c63d5f610e4bbc70a88f7222e93, type: 3}
+      SourcePrefabToOverride: {fileID: 0}
+      SourceHashToOverride: 0
+      OverridingTargetPrefab: {fileID: 0}
+    - Override: 0
+      Prefab: {fileID: 1703911258719353816, guid: 797992b6e195fa9469f98f72b20d4da5, type: 3}
+      SourcePrefabToOverride: {fileID: 0}
+      SourceHashToOverride: 0
+      OverridingTargetPrefab: {fileID: 0}
+    - Override: 0
+      Prefab: {fileID: 1800387450937859543, guid: ddabf7c260aacbc468de5ac5b4da13a9, type: 3}
       SourcePrefabToOverride: {fileID: 0}
       SourceHashToOverride: 0
       OverridingTargetPrefab: {fileID: 0}
@@ -1993,6 +1993,67 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2401267248001338894, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
   m_PrefabInstance: {fileID: 1152622202}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2037961343
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1703911258719353816, guid: 797992b6e195fa9469f98f72b20d4da5, type: 3}
+      propertyPath: m_Name
+      value: GalilPrefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 2517461266033161424, guid: 797992b6e195fa9469f98f72b20d4da5, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 3466557693
+      objectReference: {fileID: 0}
+    - target: {fileID: 6064333869088992856, guid: 797992b6e195fa9469f98f72b20d4da5, type: 3}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6064333869088992856, guid: 797992b6e195fa9469f98f72b20d4da5, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 182.54
+      objectReference: {fileID: 0}
+    - target: {fileID: 6064333869088992856, guid: 797992b6e195fa9469f98f72b20d4da5, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -7.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 6064333869088992856, guid: 797992b6e195fa9469f98f72b20d4da5, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -171.867
+      objectReference: {fileID: 0}
+    - target: {fileID: 6064333869088992856, guid: 797992b6e195fa9469f98f72b20d4da5, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6064333869088992856, guid: 797992b6e195fa9469f98f72b20d4da5, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6064333869088992856, guid: 797992b6e195fa9469f98f72b20d4da5, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6064333869088992856, guid: 797992b6e195fa9469f98f72b20d4da5, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6064333869088992856, guid: 797992b6e195fa9469f98f72b20d4da5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6064333869088992856, guid: 797992b6e195fa9469f98f72b20d4da5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6064333869088992856, guid: 797992b6e195fa9469f98f72b20d4da5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 797992b6e195fa9469f98f72b20d4da5, type: 3}
 --- !u!4 &543450652286679806
 Transform:
   m_ObjectHideFlags: 0
