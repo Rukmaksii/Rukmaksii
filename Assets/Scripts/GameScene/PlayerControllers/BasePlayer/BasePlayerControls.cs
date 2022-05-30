@@ -243,15 +243,7 @@ namespace GameScene.PlayerControllers.BasePlayer
                 .Select(item => item.Item1)
                 .FirstOrDefault();
         }
-
-        public void OpenShop(ShopController shopController)
-        {
-            var possibleWeapons = GameController.Singleton.WeaponPrefabs
-                .Select(go => go.GetComponent<BaseWeapon>())
-                .Where(bw => bw.GetType().GetInterfaces().Contains(this.WeaponInterface))
-                .ToList();
-            possibleWeapons.ForEach(Debug.Log);
-        }
+        
         public void OnInventoryOpened(InputAction.CallbackContext ctx)
         {
             if (!IsOwner)
