@@ -302,7 +302,6 @@ MeshCollider:
 --- !u!1001 &203952033
 PrefabInstance:
   m_ObjectHideFlags: 0
-<<<<<<< HEAD
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 1738022806}
