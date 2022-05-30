@@ -5,7 +5,7 @@ namespace GameScene.PlayerControllers
 {
     public class SoldierClassPlayer : BasePlayer.BasePlayer
     {
-        public override string ClassName { get; } = "test class";
+        public override string ClassName { get; } = "Soldier";
         public override int MaxHealth { get; protected set; } = 100;
         public override RootAbility RootAbility { get; } = new TestClassRoot();
         protected override float movementSpeed { get; } = 7.5f;
@@ -22,7 +22,7 @@ namespace GameScene.PlayerControllers
 
         protected override float gravityMultiplier { get; } = 1f;
 
-        public override Type WeaponInterface { get; } = typeof(SoldierClassPlayer.IWeapon);
+        public override Type WeaponInterface { get; } = typeof(IWeapon);
 
         public interface IWeapon : model.IWeapon
         {
