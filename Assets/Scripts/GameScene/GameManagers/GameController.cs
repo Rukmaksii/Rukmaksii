@@ -245,8 +245,9 @@ namespace GameScene.GameManagers
 
             player.CurrentHealth = player.MaxHealth;
             player.Money = 500;
+            
             GameObject autoWeaponPrefab =
-                WeaponPrefabs.Find(go => go.name == "TestAutoPrefab");
+                WeaponPrefabs.Find(go => go.name == "FamasPrefab");
             GameObject weaponInstance = Instantiate(autoWeaponPrefab);
             var netObj = weaponInstance.GetComponent<NetworkObject>();
             netObj.Spawn(true);
