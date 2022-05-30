@@ -195,7 +195,16 @@ namespace GameScene.Weapons
                 }
             }
 
-            GetComponent<Rigidbody>().isKinematic = IsOwned;
+            var rb = GetComponent<Rigidbody>();
+            rb.isKinematic = IsOwned;
+
+            if (IsServer && !IsOwned)
+            {
+                if (rb.velocity.magnitude > 10f)
+                {
+                    rb.velocity = rb.velocity.normalized * 10f;
+                }
+            }
 
             if (IsOwner && IsOwned)
             {
