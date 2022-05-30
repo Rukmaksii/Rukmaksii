@@ -107,6 +107,7 @@ namespace GameScene.GameManagers
             }
 
             Singleton = this;
+            Physics.gravity = new Vector3(0, -19.62f, 0);
         }
 
         /**

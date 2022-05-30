@@ -71,7 +71,7 @@ namespace GameScene.PlayerControllers.BasePlayer
             }
         }
 
-        [SerializeField] private float gravity = -9.81f;
+        protected float gravityMultiplier { get; } = 1;
 
         /**
              * <value>stores the x,y,z inputs of the player</value>

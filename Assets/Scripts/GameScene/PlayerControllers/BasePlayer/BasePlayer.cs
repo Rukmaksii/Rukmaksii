@@ -154,7 +154,7 @@ namespace GameScene.PlayerControllers.BasePlayer
 
                 res = Movement * multiplier;
 
-                yVelocity += gravity * _deltaTime;
+                yVelocity += (gravityMultiplier * Physics.gravity * _deltaTime).y;
                 if (IsGrounded && yVelocity < 0f)
                     yVelocity = 0;
 
