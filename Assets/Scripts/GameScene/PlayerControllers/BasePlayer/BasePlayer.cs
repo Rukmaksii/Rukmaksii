@@ -180,7 +180,6 @@ namespace GameScene.PlayerControllers.BasePlayer
         private void UpdateClient()
         {
             float additionalAngle = transform.InverseTransformVector(AimVector).y;
-            Debug.Log($"additional angle: {additionalAngle}");
             // weaponContainer.RotateAround(camRotationAnchor, Vector3.left, additionalAngle * 90);
         }
 
