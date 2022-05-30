@@ -10,6 +10,7 @@ namespace GameScene.Shop
     [RequireComponent(typeof(NetworkObject))]
     public class ShopController : NetworkBehaviour, IPickable
     {
+        [SerializeField] public ShopUI.ShopUI ShopUI;
         public void PickUp(BasePlayer player)
         {
             player.OpenShop(this);
