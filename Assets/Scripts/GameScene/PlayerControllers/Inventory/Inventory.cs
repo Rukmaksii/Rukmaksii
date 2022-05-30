@@ -1,7 +1,7 @@
-﻿using GameScene.Abilities.model;
-using GameScene.Items;
-using GameScene.PlayerControllers.BasePlayer;
-using GameScene.Weapons;
+﻿using Abilities;
+using GameScene.Shop;
+using Items;
+using PlayerControllers;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -84,6 +84,8 @@ namespace GameScene.PlayerControllers.Inventory
                 AddWeapon(weapon);
             else if (go.TryGetComponent(out BaseItem item))
                 AddItem(item);
+            else if(go.TryGetComponent(out ShopController shop))
+                shop.PickUp(Player);
         }
 
         private void HandleModeRenderers(Mode mode, bool reset = false)
