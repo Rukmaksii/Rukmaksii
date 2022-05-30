@@ -71,7 +71,7 @@ namespace GameScene.PlayerControllers.BasePlayer
             }
         }
 
-        protected float gravityMultiplier { get; } = 1;
+        protected virtual float gravityMultiplier { get; } = 1;
 
         /**
              * <value>stores the x,y,z inputs of the player</value>
@@ -199,7 +199,7 @@ namespace GameScene.PlayerControllers.BasePlayer
         private Vector3 _dashDirection = Vector3.zero;
 
         // default value for fuel duration
-        public float DefaultFuelDuration { get; } = 10f;
+        public virtual float DefaultFuelDuration { get; } = 10f;
 
         [SerializeField] private int maxMinions = 2;
 
