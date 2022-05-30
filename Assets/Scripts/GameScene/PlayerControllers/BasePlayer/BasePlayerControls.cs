@@ -252,6 +252,7 @@ namespace GameScene.PlayerControllers.BasePlayer
                 .Where(bw => bw.GetType().GetInterfaces().Contains(this.WeaponInterface))
                 .ToList();
             possibleWeapons.ForEach(Debug.Log);
+            GameController.Singleton.HUDController.ShowShop();
         }
         public void OnInventoryOpened(InputAction.CallbackContext ctx)
         {

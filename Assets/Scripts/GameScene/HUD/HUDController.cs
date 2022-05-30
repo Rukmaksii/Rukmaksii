@@ -26,6 +26,7 @@ namespace GameScene.HUD
         [SerializeField] private GameObject itemSelector;
         [SerializeField] protected GameObject itemWheel;
         [SerializeField] protected Text MoneyLevel;
+        [SerializeField] protected GameObject shop;
 
         public float CanvasWidth => GetComponent<RectTransform>().rect.width;
         public float CanvasHeight => GetComponent<RectTransform>().rect.height;
@@ -62,6 +63,7 @@ namespace GameScene.HUD
             arrow.transform.SetParent(map.transform);
             
             SetupSprites();
+            HideShop();
         }
 
         void Update()
@@ -241,5 +243,17 @@ namespace GameScene.HUD
         {
             MoneyLevel.text = "Player's Money: " + money;
         }
+
+        
+        public void ShowShop()
+        {
+            shop.SetActive(true);
+        }
+
+        public void HideShop()
+        {
+            shop.SetActive(false);
+        }
+        
     }
 }

@@ -3,7 +3,30 @@ guid: e34307c521fab8ef0b03e46773f4a646
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - healthSlider: {instanceID: 0}
+  - healthCounter: {instanceID: 0}
+  - fuelSlider: {instanceID: 0}
+  - fuelCounter: {instanceID: 0}
+  - dashCooldown: {instanceID: 0}
+  - ammoCounter: {instanceID: 0}
+  - hitMarker: {instanceID: 0}
+  - weaponPlaceHolder: {instanceID: 0}
+  - currentStrategy: {instanceID: 0}
+  - itemSelector: {instanceID: 0}
+  - itemWheel: {instanceID: 0}
+  - MoneyLevel: {instanceID: 0}
+  - shop: {instanceID: 0}
+  - Crosshair: {instanceID: 0}
+  - capturingState: {instanceID: 0}
+  - map: {instanceID: 0}
+  - arrow: {instanceID: 0}
+  - pointParent: {instanceID: 0}
+  - redPointPrefab: {instanceID: 0}
+  - bluePointPrefab: {instanceID: 0}
+  - objOverlay1: {instanceID: 0}
+  - objOverlay2: {instanceID: 0}
+  - objOverlay3: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
