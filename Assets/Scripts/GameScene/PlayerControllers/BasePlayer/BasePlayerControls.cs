@@ -255,7 +255,7 @@ namespace GameScene.PlayerControllers.BasePlayer
                 .ToList();
             List<BaseItem> possibleItems = new List<BaseItem>(); //change to the list of items
             possibleWeapons.ForEach(Debug.Log);
-            Shop.ShopUI.ShopUI.Singleton.Init(possibleWeapons, possibleItems, this);
+            shopController.ShopUI.Init(possibleWeapons, possibleItems, this, GameController.Singleton.HUDController.transform);
         }
         public void OnInventoryOpened(InputAction.CallbackContext ctx)
         {
