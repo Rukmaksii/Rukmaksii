@@ -59,7 +59,7 @@ namespace GameScene.PlayerControllers
         /**
      * <value>the max height the player can reach flying</value>
      */
-        [SerializeField] private float maxHeight = 20f;
+        [SerializeField] private float maxHeight = 50f;
 
         /**
      * <value>the speed multiplier when the <see cref="Jetpack.IsSwift"/> flag is set</value>
