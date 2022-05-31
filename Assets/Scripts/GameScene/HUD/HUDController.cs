@@ -4,7 +4,6 @@ using GameScene.Items;
 using GameScene.Map;
 using GameScene.model;
 using GameScene.PlayerControllers.BasePlayer;
-using GameScene.Shop.ShopUI;
 using GameScene.Weapons;
 using UnityEngine;
 using UnityEngine.UI;
@@ -101,6 +100,8 @@ namespace GameScene.HUD
             }
 
             UpdateMap();
+
+            minionWheel.IsActive = true;
         }
 
         /**

@@ -28,7 +28,7 @@ namespace GameScene.HUD
                 active = value;
                 if (value)
                 {
-                    Activate(Mouse.current.position.ReadValue());
+                    transform.position = Mouse.current.position.ReadValue();
                 }
             }
         }
@@ -78,8 +78,5 @@ namespace GameScene.HUD
             }
         }
 
-        private void Activate(Vector2 position)
-        {
-        }
     }
 }
