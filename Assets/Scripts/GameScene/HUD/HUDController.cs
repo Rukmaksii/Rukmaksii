@@ -26,9 +26,7 @@ namespace GameScene.HUD
         [SerializeField] private GameObject itemSelector;
         [SerializeField] protected GameObject itemWheel;
         [SerializeField] protected Text MoneyLevel;
-        [SerializeField] private MinionWheelController minionWheel;
-        [SerializeField] private ShopUI shopUI;
-
+        [SerializeField] private GameObject minionWheel;
 
         public float CanvasWidth => GetComponent<RectTransform>().rect.width;
         public float CanvasHeight => GetComponent<RectTransform>().rect.height;
@@ -57,7 +55,7 @@ namespace GameScene.HUD
             SetMaxFuel(100);
 
             ShowHitMarker(false);
-            minionWheel.IsActive = false;
+            minionWheel.SetActive(false);
             BaseWeapon.targetHit += ShowHitMarker;
             ObjectiveController.OnPlayerInteract += DisplayCaptureState;
 
@@ -239,6 +237,16 @@ namespace GameScene.HUD
         {
             minionWheel.IsActive = false;
             return minionWheel.strategy;
+        }
+
+        public void ShowMinionSelection(Vector3 position)
+        {
+            
+        }
+
+        public IMinion.Strategy HideMinionSelection()
+        {
+            return IMinion.Strategy.Count;
         }
 
         public void HideItemSelector()
