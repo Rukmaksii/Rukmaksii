@@ -29,6 +29,7 @@
 .idea/
 .vsconfig
 ProjectSettings/RiderScriptEditorPersistedState.asset
+ProjectSettings/BurstAotSettings_StandaloneOSX.json
 
 # Gradle cache directory
 .gradle/
