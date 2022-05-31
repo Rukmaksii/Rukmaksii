@@ -17,6 +17,12 @@ namespace GameScene.PlayerControllers.BasePlayer
         AIMING = 2 * DASHING
     }
 
+    public enum PlayerState
+    {
+        Normal,
+        InShop,
+    }
+
     /**
  * <summary>
  *      The controller class for any player spawned in the game
@@ -74,7 +80,7 @@ namespace GameScene.PlayerControllers.BasePlayer
                 UpdateCamera();
 
                 Cursor.lockState = CursorLockMode.Locked;
-                playerState = BasePlayerState.PlayerState.Normal;
+                playerState = PlayerState.Normal;
             }
         }
 
@@ -124,7 +130,7 @@ namespace GameScene.PlayerControllers.BasePlayer
 
         private void UpdateOwner()
         {
-            if (playerState == BasePlayerState.PlayerState.Normal)
+            if (playerState == PlayerState.Normal)
             {
                 var _deltaTime = Time.deltaTime;
 

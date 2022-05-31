@@ -452,8 +452,9 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: -8936581399182346908}
-        m_TargetAssemblyTypeName: PlayerControllers.BasePlayer, Assembly-CSharp
-        m_MethodName: OnPickUp
+        m_TargetAssemblyTypeName: GameScene.PlayerControllers.BasePlayer.BasePlayer,
+          Assembly-CSharp
+        m_MethodName: OnInteract
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

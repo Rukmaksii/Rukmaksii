@@ -217,7 +217,7 @@ namespace GameScene.PlayerControllers.BasePlayer
             Inventory.Drop();
         }
 
-        public void OnPickUp(InputAction.CallbackContext ctx)
+        public void OnInteract(InputAction.CallbackContext ctx)
         {
             if (!IsOwner || focusedObject == null || !ctx.performed)
                 return;
@@ -254,7 +254,7 @@ namespace GameScene.PlayerControllers.BasePlayer
         {
             if(!IsOwner)
                 return;
-            if (playerState == BasePlayerState.PlayerState.Normal)
+            if (playerState == PlayerState.Normal)
             {
                 GameObject[] shops = GameObject.FindGameObjectsWithTag("Shop");
                 bool near = false;
@@ -269,7 +269,7 @@ namespace GameScene.PlayerControllers.BasePlayer
 
                 if (near)
                 {
-                    playerState = BasePlayerState.PlayerState.InShop;
+                    playerState = PlayerState.InShop;
                     Cursor.lockState = CursorLockMode.Confined;
                     List<BaseWeapon> possibleWeapons = GameController.Singleton.WeaponPrefabs
                         .Select(go => go.GetComponent<BaseWeapon>())
@@ -285,7 +285,7 @@ namespace GameScene.PlayerControllers.BasePlayer
             else
             {
                 Cursor.lockState = CursorLockMode.Locked;
-                playerState = BasePlayerState.PlayerState.Normal;
+                playerState = PlayerState.Normal;
                 if(currentShop != null)
                     Destroy(currentShop);
             }

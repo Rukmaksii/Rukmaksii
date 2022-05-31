@@ -239,7 +239,8 @@ namespace GameScene.PlayerControllers.BasePlayer
 
         public abstract Type WeaponInterface { get; }
 
-        public BasePlayerState.PlayerState playerState;
+        private PlayerState playerState;
+
 
         [SerializeField] protected ShopUI shopUI;
         private GameObject currentShop;
