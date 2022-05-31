@@ -11,43 +11,48 @@ namespace GameScene.Shop.ShopUI
     [RequireComponent(typeof(HorizontalLayoutGroup))]
     public class ShopContainer : MonoBehaviour
     {
-        private GameObject containerObj;
         private GameObject holderWeapons;
         private GameObject holderItems;
         private GameObject buyButton;
         private GameObject image;
         private List<BaseWeapon> listWeapons;
         private List<BaseItem> listItems;
-        private List<Holder> listBuyable;
+        private List<HolderWeapons> HolderWeaponsList;
+        private List<HolderItems> HolderItemsList;
         private BasePlayer player;
+        public bool IsWeapons { get; private set; }
 
         public void Init(List<BaseWeapon> listweapons, List<BaseItem> listitems, GameObject holderWeaponsObj, GameObject holderItemsObj,
-            GameObject buyButton, GameObject image, GameObject containerObj ,bool IsWeapons)
+            GameObject buyButton, GameObject image,bool IsWeapons)
         {
             player = GameController.Singleton.LocalPlayer;
             this.image = image;
             this.buyButton = buyButton;
-            this.containerObj = containerObj;
             listItems = listitems;
             listWeapons = listweapons;
+            this.IsWeapons = IsWeapons;
             if (IsWeapons)
             {
                 this.holderWeapons = holderWeaponsObj;
+                HolderWeaponsList = new List<HolderWeapons>();
                 foreach (BaseWeapon weapon in listWeapons)
                 {
                     HolderWeapons holderWeapons =
-                        Instantiate(this.holderWeapons, this.containerObj.transform).GetComponent<HolderWeapons>();
+                        Instantiate(this.holderWeapons, transform).GetComponent<HolderWeapons>();
                     holderWeapons.Init(weapon, this.buyButton, this.image);
+                    HolderWeaponsList.Add(holderWeapons);
                 }
             }
             else
             {
                 this.holderItems = holderItemsObj;
+                HolderItemsList = new List<HolderItems>();
                 foreach (BaseItem item in listItems)
                 {
                     HolderItems holderItems =
-                        Instantiate(this.holderItems, this.containerObj.transform).GetComponent<HolderItems>();
+                        Instantiate(this.holderItems, transform).GetComponent<HolderItems>();
                     holderItems.Init(item, this.buyButton, this.image);
+                    HolderItemsList.Add(holderItems);
                 }
             }
         }
@@ -56,20 +61,33 @@ namespace GameScene.Shop.ShopUI
         {
             if (listWeapons == null)
                 return;
-            
-            foreach (HolderItems holderItems in GetComponentsInChildren<HolderItems>())
+            if (IsWeapons)
             {
-                if (holderItems.item.Price > player.Money)
-                    holderItems.CanBuy(false);
-                else
-                    holderItems.CanBuy(true);
+                foreach (HolderWeapons holder in HolderWeaponsList)
+                {
+                    if (holder.weapon.Price < player.Money)
+                    {
+                        holder.CanBuy(true);
+                    }
+                    else
+                    {
+                        holder.CanBuy(false);
+                    }
+                }
             }
-            foreach (HolderWeapons holderWeapons in GetComponentsInChildren<HolderWeapons>())
+            else
             {
-                if (holderWeapons.weapon.Price > player.Money)
-                    holderWeapons.CanBuy(false);
-                else
-                    holderWeapons.CanBuy(true);
+                foreach (HolderItems holder in HolderItemsList)
+                {
+                    if (holder.item.Price < player.Money)
+                    {
+                        holder.CanBuy(true);
+                    }
+                    else
+                    {
+                        holder.CanBuy(false);
+                    }
+                }
             }
         }
     }
