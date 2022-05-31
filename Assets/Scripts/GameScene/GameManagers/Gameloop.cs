@@ -5,6 +5,7 @@ using ExitGames.Client.Photon.StructWrapping;
 using GameScene.Map;
 using GameScene.Monster;
 using GameScene.PlayerControllers.BasePlayer;
+using Unity.Mathematics;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -19,18 +20,19 @@ namespace GameScene.GameManagers
 
         private int objectiveDelay;
         private bool hasBeenChange;
-        private int numberOfMonster;
+        private const int numberOfMonster = 4;
 
         private GameObject[] captureArea;
-        
+
         private ShieldController shield1;
         private ShieldController shield2;
         private BaseController base1;
         private BaseController base2;
 
-        public List<MonsterController> ListOfMonster;
-        
-        public static Gameloop Singleton { get; private set;}
+        private int monsterCount = 0;
+
+        public static Gameloop Singleton { get; private set; }
+
         private void Awake()
         {
             if (Singleton != null && Singleton != this)
@@ -45,13 +47,11 @@ namespace GameScene.GameManagers
         // Start is called before the first frame update
         void Start()
         {
-            Debug.Log("Start");
-            numberOfMonster = 4;
-            ListOfMonster = new List<MonsterController>();
             if (NetworkManager.Singleton.IsServer)
             {
                 referenceTime.Value = DateTime.Now;
             }
+
             shield1 = GameObject.Find("Shield1").GetComponent<ShieldController>();
             shield2 = GameObject.Find("Shield2").GetComponent<ShieldController>();
             base1 = GameObject.Find("Base1").GetComponent<BaseController>();
@@ -77,8 +77,8 @@ namespace GameScene.GameManagers
                 //set the current time
                 currTime.Value = DateTime.Now;
                 //check if there are the right number of monster 
-                if(Singleton.ListOfMonster.Count < numberOfMonster)
-                    SpawnMonsters(numberOfMonster - Singleton.ListOfMonster.Count);
+                if (monsterCount < numberOfMonster)
+                    SpawnMonsters(numberOfMonster - monsterCount);
 
                 //detect end of game
                 if (base1.CurrentHealth == 0 || base2.CurrentHealth == 0)
@@ -91,6 +91,7 @@ namespace GameScene.GameManagers
                     GetComponent<Gameloop>().enabled = false;
                 }
             }
+
             //deactivate the collision between each player and it's team's shield
             foreach (BasePlayer player in GameController.Singleton.Players)
             {
@@ -101,7 +102,9 @@ namespace GameScene.GameManagers
                     {
                         Physics.IgnoreCollision(colliderchild, shield1.gameObject.GetComponent<MeshCollider>());
                     }
-                    Physics.IgnoreCollision(player.gameObject.GetComponent<Collider>(), shield1.gameObject.GetComponent<MeshCollider>());
+
+                    Physics.IgnoreCollision(player.gameObject.GetComponent<Collider>(),
+                        shield1.gameObject.GetComponent<MeshCollider>());
                 }
                 else
                 {
@@ -109,9 +112,12 @@ namespace GameScene.GameManagers
                     {
                         Physics.IgnoreCollision(colliderchild, shield2.gameObject.GetComponent<MeshCollider>());
                     }
-                    Physics.IgnoreCollision(player.gameObject.GetComponent<Collider>(), shield2.gameObject.GetComponent<MeshCollider>());
+
+                    Physics.IgnoreCollision(player.gameObject.GetComponent<Collider>(),
+                        shield2.gameObject.GetComponent<MeshCollider>());
                 }
             }
+
             //create the timer
             var timer = currTime.Value - referenceTime.Value;
             //Debug.Log($"{timer.Hours}:{timer.Minutes}:{timer.Seconds}");
@@ -121,6 +127,7 @@ namespace GameScene.GameManagers
                 hasBeenChange = true;
                 StartCoroutine(Wait1Second());
             }
+
             //for each capture point it checks if one of them is catured if so, it deactivates the ennemy's shield
             foreach (GameObject area in captureArea)
             {
@@ -151,6 +158,7 @@ namespace GameScene.GameManagers
             {
                 area.GetComponent<ObjectiveController>().ToggleCanCapture(false);
             }
+
             captureArea[Random.Range(0, captureArea.Length)]
                 .GetComponent<ObjectiveController>()
                 .ToggleCanCapture(true);
@@ -166,12 +174,22 @@ namespace GameScene.GameManagers
                 Vector3 pos = new Vector3(Random.Range(-115, 194), 10, Random.Range(-153, 138));
                 if (Physics.Raycast(pos, Vector3.down, out RaycastHit hit))
                 {
-                    GameObject instance = Instantiate(GameController.Singleton.MonsterPrefab, hit.point, Quaternion.identity);
+                    GameObject instance = Instantiate(GameController.Singleton.MonsterPrefab, hit.point,
+                        Quaternion.identity);
                     instance.GetComponent<NetworkObject>().Spawn();
                     instance.GetComponent<MonsterController>().Life =
                         instance.GetComponent<MonsterController>().MaxHealth;
+                    monsterCount++;
                 }
             }
+        }
+
+        public void RemoveMonster(MonsterController monsterController)
+        {
+            monsterController.DestroyServerRpc();
+            GameObject GrenadeInstance = Instantiate(GameController.Singleton.ItemPrefabs[1],
+                gameObject.transform.position, quaternion.identity);
+            GrenadeInstance.GetComponent<NetworkObject>().Spawn();
         }
 
         IEnumerator Wait1Second()
@@ -181,4 +199,3 @@ namespace GameScene.GameManagers
         }
     }
 }
-

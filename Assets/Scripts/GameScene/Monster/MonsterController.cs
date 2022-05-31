@@ -25,7 +25,7 @@ namespace GameScene.Monster
         // Start is called before the first frame update
         void Start()
         {
-            Gameloop.Singleton.ListOfMonster.Add(this);
+            
         }
 
 
@@ -50,11 +50,7 @@ namespace GameScene.Monster
 
         public void OnKill()
         {
-            Gameloop.Singleton.ListOfMonster.Remove(this);
-            DestroyServerRpc();
-            GameObject GrenadeInstance = Instantiate(GameController.Singleton.ItemPrefabs[1],
-                gameObject.transform.position, quaternion.identity);
-            GrenadeInstance.GetComponent<NetworkObject>().Spawn();
+            Gameloop.Singleton.RemoveMonster(this);
         }
 
         /**
@@ -68,7 +64,7 @@ namespace GameScene.Monster
         }
 
         [ServerRpc(RequireOwnership = false)]
-        private void DestroyServerRpc()
+        public void DestroyServerRpc()
         {
             GetComponent<NetworkObject>().Despawn();
         }
