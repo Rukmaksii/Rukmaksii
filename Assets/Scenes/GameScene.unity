@@ -1275,6 +1275,21 @@ MonoBehaviour:
       SourcePrefabToOverride: {fileID: 0}
       SourceHashToOverride: 0
       OverridingTargetPrefab: {fileID: 0}
+    - Override: 0
+      Prefab: {fileID: 1703911258719353816, guid: 4c405f1bbcb333247b91a38373014202, type: 3}
+      SourcePrefabToOverride: {fileID: 0}
+      SourceHashToOverride: 0
+      OverridingTargetPrefab: {fileID: 0}
+    - Override: 0
+      Prefab: {fileID: 1703911258719353816, guid: 611224ed3d0b7d44184797c08609aca1, type: 3}
+      SourcePrefabToOverride: {fileID: 0}
+      SourceHashToOverride: 0
+      OverridingTargetPrefab: {fileID: 0}
+    - Override: 0
+      Prefab: {fileID: 1703911258719353816, guid: 883df38a1262fdf4eaffa8b1c5f82fea, type: 3}
+      SourcePrefabToOverride: {fileID: 0}
+      SourceHashToOverride: 0
+      OverridingTargetPrefab: {fileID: 0}
     TickRate: 30
     ClientConnectionBufferTimeout: 10
     ConnectionApproval: 0
@@ -1819,6 +1834,9 @@ MonoBehaviour:
   - {fileID: 1703911258719353816, guid: 92ef1a3c2613f4940874222b66ee1b1e, type: 3}
   - {fileID: 1703911258719353816, guid: 83b0fc41496ba4e4fa9ef9397f25ada3, type: 3}
   - {fileID: 1703911258719353816, guid: d8e6d6566a013db44ba4c528ce7f44f8, type: 3}
+  - {fileID: 1703911258719353816, guid: 4c405f1bbcb333247b91a38373014202, type: 3}
+  - {fileID: 1703911258719353816, guid: 611224ed3d0b7d44184797c08609aca1, type: 3}
+  - {fileID: 1703911258719353816, guid: 883df38a1262fdf4eaffa8b1c5f82fea, type: 3}
   itemPrefabs:
   - {fileID: 5389904766975277859, guid: 9fde8f6081cd8e04a9350c6346afd875, type: 3}
   - {fileID: 6996424866522444411, guid: b51ef1203a18011438ef4aa7a5bca868, type: 3}
@@ -2040,9 +2058,9 @@ Transform:
   m_LocalPosition: {x: 48, y: -6.9904785, z: 60}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1410992868}
   - {fileID: 1824291867}
   - {fileID: 1880401944}
+  - {fileID: 1410992868}
   m_Father: {fileID: 623313042}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: -1.788, z: 0}

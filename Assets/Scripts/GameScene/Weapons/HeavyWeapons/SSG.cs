@@ -3,7 +3,7 @@ using GameScene.PlayerControllers;
 
 namespace GameScene.Weapons.HeavyWeapons
 {
-    public class SSG : BaseWeapon, SoldierClassPlayer.IWeapon
+    public class SSG : BaseWeapon, SoldierClassPlayer.IWeapon, ScoutClassPlayer.IWeapon
     {
         public override WeaponType Type { get; } = WeaponType.Heavy;
         public override float Range { get; } = 200f;
