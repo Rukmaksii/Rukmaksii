@@ -54,7 +54,7 @@ namespace GameScene.HUD
             SetMaxFuel(100);
 
             ShowHitMarker(false);
-            minionWheel.gameObject.SetActive(false);
+            // minionWheel.IsActive = false;
             BaseWeapon.targetHit += ShowHitMarker;
             ObjectiveController.OnPlayerInteract += DisplayCaptureState;
 
@@ -225,9 +225,9 @@ namespace GameScene.HUD
             itemSelector.SetActive(true);
         }
 
-        public void ShowMinionSelection(Vector3 position)
+        public void ShowMinionSelection()
         {
-            
+            minionWheel.IsActive = true;
         }
 
         public IMinion.Strategy HideMinionSelection()

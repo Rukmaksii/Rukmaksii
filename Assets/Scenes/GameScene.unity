@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657815, g: 0.49641192, b: 0.57481617, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -26076,6 +26076,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1821076053289487703, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
+      propertyPath: minionWheel
+      value: 
+      objectReference: {fileID: 1541217208}
+    - target: {fileID: 1821076053289487703, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
       propertyPath: pointParent
       value: 
       objectReference: {fileID: 883216455}
@@ -33773,6 +33777,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e6ab13ef361744b9854733125afbbe9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
   ListOfMonster: []
 --- !u!4 &1474703830 stripped
 Transform:
@@ -35354,6 +35359,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 478606, guid: a9cc5585b9634a9449920c03ec6bc243, type: 3}
   m_PrefabInstance: {fileID: 847858278}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1541217208 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4164498356723881790, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
+  m_PrefabInstance: {fileID: 1152622202}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92071b25a753d29418a870d1b3cfcba0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1555882658
 GameObject:
   m_ObjectHideFlags: 0
