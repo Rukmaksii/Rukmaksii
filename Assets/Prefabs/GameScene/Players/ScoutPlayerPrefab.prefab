@@ -207,8 +207,9 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+      - m_Target: {fileID: 1326279639458816894}
+        m_TargetAssemblyTypeName: GameScene.PlayerControllers.BasePlayer.BasePlayer,
+          Assembly-CSharp
         m_MethodName: OnMove
         m_Mode: 0
         m_Arguments:
@@ -223,8 +224,9 @@ MonoBehaviour:
     m_ActionName: Player/move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d,/Keyboard/upArrow,/Keyboard/downArrow,/Keyboard/leftArrow,/Keyboard/rightArrow]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+      - m_Target: {fileID: 1326279639458816894}
+        m_TargetAssemblyTypeName: GameScene.PlayerControllers.BasePlayer.BasePlayer,
+          Assembly-CSharp
         m_MethodName: OnRotation
         m_Mode: 0
         m_Arguments:
@@ -239,8 +241,9 @@ MonoBehaviour:
     m_ActionName: Player/rotation[/Mouse/delta]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+      - m_Target: {fileID: 1326279639458816894}
+        m_TargetAssemblyTypeName: GameScene.PlayerControllers.BasePlayer.BasePlayer,
+          Assembly-CSharp
         m_MethodName: OnJump
         m_Mode: 0
         m_Arguments:
@@ -255,8 +258,9 @@ MonoBehaviour:
     m_ActionName: Player/jump[/Keyboard/space]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+      - m_Target: {fileID: 1326279639458816894}
+        m_TargetAssemblyTypeName: GameScene.PlayerControllers.BasePlayer.BasePlayer,
+          Assembly-CSharp
         m_MethodName: OnRun
         m_Mode: 0
         m_Arguments:
@@ -271,8 +275,9 @@ MonoBehaviour:
     m_ActionName: Player/run[/Keyboard/ctrl]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+      - m_Target: {fileID: 1326279639458816894}
+        m_TargetAssemblyTypeName: GameScene.PlayerControllers.BasePlayer.BasePlayer,
+          Assembly-CSharp
         m_MethodName: OnDash
         m_Mode: 0
         m_Arguments:
@@ -287,8 +292,9 @@ MonoBehaviour:
     m_ActionName: Player/dash[/Keyboard/shift]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+      - m_Target: {fileID: 1326279639458816894}
+        m_TargetAssemblyTypeName: GameScene.PlayerControllers.BasePlayer.BasePlayer,
+          Assembly-CSharp
         m_MethodName: OnLowerJetpack
         m_Mode: 0
         m_Arguments:
@@ -303,8 +309,9 @@ MonoBehaviour:
     m_ActionName: Player/lowerJetpack[/Keyboard/tab]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+      - m_Target: {fileID: 1326279639458816894}
+        m_TargetAssemblyTypeName: GameScene.PlayerControllers.BasePlayer.BasePlayer,
+          Assembly-CSharp
         m_MethodName: OnFire
         m_Mode: 0
         m_Arguments:
@@ -319,8 +326,9 @@ MonoBehaviour:
     m_ActionName: Player/fire[/Mouse/leftButton]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerControllers.BasePlayer, Assembly-CSharp
+      - m_Target: {fileID: 1326279639458816894}
+        m_TargetAssemblyTypeName: GameScene.PlayerControllers.BasePlayer.BasePlayer,
+          Assembly-CSharp
         m_MethodName: OnReload
         m_Mode: 0
         m_Arguments:
@@ -335,8 +343,9 @@ MonoBehaviour:
     m_ActionName: Player/reload[/Keyboard/r]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerControllers.BasePlayer, Assembly-CSharp
+      - m_Target: {fileID: 1326279639458816894}
+        m_TargetAssemblyTypeName: GameScene.PlayerControllers.BasePlayer.BasePlayer,
+          Assembly-CSharp
         m_MethodName: OnWeaponSwitch
         m_Mode: 0
         m_Arguments:
@@ -351,8 +360,9 @@ MonoBehaviour:
     m_ActionName: Player/switchWeapon[/Mouse/scroll/y]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerControllers.BasePlayer, Assembly-CSharp
+      - m_Target: {fileID: 1326279639458816894}
+        m_TargetAssemblyTypeName: GameScene.PlayerControllers.BasePlayer.BasePlayer,
+          Assembly-CSharp
         m_MethodName: OnWeaponSwitch
         m_Mode: 0
         m_Arguments:
@@ -367,8 +377,9 @@ MonoBehaviour:
     m_ActionName: Player/changeWeapon[/Keyboard/1,/Keyboard/2,/Keyboard/3]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerControllers.BasePlayer, Assembly-CSharp
+      - m_Target: {fileID: 1326279639458816894}
+        m_TargetAssemblyTypeName: GameScene.PlayerControllers.BasePlayer.BasePlayer,
+          Assembly-CSharp
         m_MethodName: OnAim
         m_Mode: 0
         m_Arguments:
@@ -383,8 +394,9 @@ MonoBehaviour:
     m_ActionName: Player/aim[/Mouse/rightButton]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerControllers.BasePlayer, Assembly-CSharp
+      - m_Target: {fileID: 1326279639458816894}
+        m_TargetAssemblyTypeName: GameScene.PlayerControllers.BasePlayer.BasePlayer,
+          Assembly-CSharp
         m_MethodName: OnSpawnMinion
         m_Mode: 0
         m_Arguments:
@@ -399,8 +411,9 @@ MonoBehaviour:
     m_ActionName: Player/spawnMinion[/Keyboard/backquote]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerControllers.BasePlayer, Assembly-CSharp
+      - m_Target: {fileID: 1326279639458816894}
+        m_TargetAssemblyTypeName: GameScene.PlayerControllers.BasePlayer.BasePlayer,
+          Assembly-CSharp
         m_MethodName: OnChangeStrategy
         m_Mode: 0
         m_Arguments:
@@ -415,8 +428,9 @@ MonoBehaviour:
     m_ActionName: Player/changeminionstrategy[/Keyboard/x]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerControllers.BasePlayer, Assembly-CSharp
+      - m_Target: {fileID: 1326279639458816894}
+        m_TargetAssemblyTypeName: GameScene.PlayerControllers.BasePlayer.BasePlayer,
+          Assembly-CSharp
         m_MethodName: OnDrop
         m_Mode: 0
         m_Arguments:
@@ -431,8 +445,9 @@ MonoBehaviour:
     m_ActionName: Player/drop[/Keyboard/g]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerControllers.BasePlayer, Assembly-CSharp
+      - m_Target: {fileID: 1326279639458816894}
+        m_TargetAssemblyTypeName: GameScene.PlayerControllers.BasePlayer.BasePlayer,
+          Assembly-CSharp
         m_MethodName: OnPickUp
         m_Mode: 0
         m_Arguments:
@@ -447,8 +462,9 @@ MonoBehaviour:
     m_ActionName: Player/pickup[/Keyboard/f]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerControllers.BasePlayer, Assembly-CSharp
+      - m_Target: {fileID: 1326279639458816894}
+        m_TargetAssemblyTypeName: GameScene.PlayerControllers.BasePlayer.BasePlayer,
+          Assembly-CSharp
         m_MethodName: OnInventoryOpened
         m_Mode: 0
         m_Arguments:
@@ -463,13 +479,14 @@ MonoBehaviour:
     m_ActionName: Player/get items[/Keyboard/e]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 1
+      - m_Target: {fileID: 1326279639458816894}
+        m_TargetAssemblyTypeName: GameScene.PlayerControllers.BasePlayer.BasePlayer,
+          Assembly-CSharp
+        m_MethodName: OnShop
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
