@@ -63,7 +63,7 @@ namespace GameScene.PlayerControllers.Inventory
                 return;
             }
 
-            item.PickUp(Player);
+            item.Interact(Player);
             if (!itemRegistry.Any())
                 SelectedItemType = item.GetType();
             else
@@ -126,7 +126,7 @@ namespace GameScene.PlayerControllers.Inventory
         {
             var container = itemRegistry[SelectedItemType];
             if (container.TryPop(out BaseItem item))
-                item.Drop();
+                item.UnInteract();
             else
                 return;
 

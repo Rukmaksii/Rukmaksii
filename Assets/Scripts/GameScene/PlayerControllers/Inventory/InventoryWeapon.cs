@@ -220,7 +220,7 @@ namespace GameScene.PlayerControllers.Inventory
                 case WeaponType.Heavy:
                     if (heavyWeapon.Value.TryGet(out BaseWeapon oldWeapon))
                     {
-                        oldWeapon.Drop();
+                        oldWeapon.UnInteract();
                         oldWeapon.SwitchRender(true);
                     }
 
@@ -229,7 +229,7 @@ namespace GameScene.PlayerControllers.Inventory
                 case WeaponType.Light:
                     if (lightWeapon.Value.TryGet(out oldWeapon))
                     {
-                        oldWeapon.Drop();
+                        oldWeapon.UnInteract();
                         oldWeapon.SwitchRender(true);
                     }
 
@@ -238,7 +238,7 @@ namespace GameScene.PlayerControllers.Inventory
                 case WeaponType.CloseRange:
                     if (closeRangeWeapon.Value.TryGet(out oldWeapon))
                     {
-                        oldWeapon.Drop();
+                        oldWeapon.UnInteract();
                         oldWeapon.SwitchRender(true);
                     }
 
@@ -248,7 +248,7 @@ namespace GameScene.PlayerControllers.Inventory
 
 
             weaponRef.TryGet(out BaseWeapon weapon);
-            weapon.PickUp(Player);
+            weapon.Interact(Player);
             weapon.SwitchRender(true);
             SwitchWeaponServerRpc(type);
         }
@@ -259,7 +259,7 @@ namespace GameScene.PlayerControllers.Inventory
             if (!weaponRef.TryGet(out BaseWeapon weapon))
                 return;
 
-            weapon.Drop();
+            weapon.UnInteract();
             weapon.SwitchRender(true);
             switch (weapon.Type)
             {

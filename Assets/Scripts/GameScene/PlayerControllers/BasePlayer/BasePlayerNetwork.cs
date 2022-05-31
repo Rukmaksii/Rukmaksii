@@ -131,7 +131,7 @@ namespace GameScene.PlayerControllers.BasePlayer
                             drop.gameObject.GetComponent<Collider>());
                     }
 
-                    baseItem.Drop();
+                    baseItem.UnInteract();
                     baseItem.SwitchRender(true);
                     ListDropOne.Add(baseItem);
                 }

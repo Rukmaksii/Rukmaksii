@@ -17,7 +17,7 @@ namespace GameScene.Weapons
     [RequireComponent(typeof(ClientNetworkTransform))]
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(AudioSource))]
-    public abstract class BaseWeapon : NetworkBehaviour, IWeapon, IPickable
+    public abstract class BaseWeapon : NetworkBehaviour, IWeapon, IInteractable
     {
         [SerializeField] private Sprite sprite;
 
@@ -25,6 +25,8 @@ namespace GameScene.Weapons
         [SerializeField] private Transform model;
 
         public abstract WeaponType Type { get; }
+
+        public string InteractableName { get; } = "Weapon";
 
         private NetworkVariable<NetworkBehaviourReference> playerReference =
             new NetworkVariable<NetworkBehaviourReference>();
@@ -458,7 +460,7 @@ namespace GameScene.Weapons
         /// </summary>
         /// <param name="player">the new owner of the weapon</param>
         /// <exception cref="NotServerException">if not server</exception>
-        public void PickUp(BasePlayer player)
+        public void Interact(BasePlayer player)
         {
             if (!IsServer)
                 throw new NotServerException();
@@ -472,7 +474,7 @@ namespace GameScene.Weapons
         ///     unbinds the player from the weapon
         /// </summary>
         /// <exception cref="NotServerException">if not server</exception>
-        public void Drop()
+        public void UnInteract()
         {
             if (!IsServer)
                 throw new NotServerException();

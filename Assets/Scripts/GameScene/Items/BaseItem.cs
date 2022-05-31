@@ -57,7 +57,7 @@ namespace GameScene.Items
     [RequireComponent(typeof(ClientNetworkTransform))]
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(Collider))]
-    public abstract class BaseItem : NetworkBehaviour, IItem, IPickable
+    public abstract class BaseItem : NetworkBehaviour, IItem, IInteractable
     {
         public static readonly Dictionary<Type, ItemInfo> ItemInfos = new Dictionary<Type, ItemInfo>
         {
@@ -68,6 +68,8 @@ namespace GameScene.Items
                 typeof(Grenade), new ItemInfo("Grenade", ItemCategory.Other, 10, "Items/Grenade")
             }
         };
+
+        public string InteractableName { get; } = "Item";
 
 
         private NetworkVariable<NetworkBehaviourReference> playerReference =
@@ -224,7 +226,7 @@ namespace GameScene.Items
         protected abstract void OnConsume();
         protected abstract void TearDown();
 
-        public void PickUp(BasePlayer player)
+        public void Interact(BasePlayer player)
         {
             if (!IsServer)
                 throw new NotServerException();
@@ -233,7 +235,7 @@ namespace GameScene.Items
             NetworkObject.TrySetParent(Player.transform);
         }
 
-        public void Drop()
+        public void UnInteract()
         {
             if (!IsServer)
                 throw new NotServerException();
