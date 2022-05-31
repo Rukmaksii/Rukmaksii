@@ -4,6 +4,7 @@ using GameScene.Items;
 using GameScene.Map;
 using GameScene.model;
 using GameScene.PlayerControllers.BasePlayer;
+using GameScene.Shop.ShopUI;
 using GameScene.Weapons;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,9 +26,12 @@ namespace GameScene.HUD
         [SerializeField] protected GameObject itemWheel;
         [SerializeField] protected Text MoneyLevel;
         [SerializeField] private MinionWheelController minionWheel;
+        [SerializeField] private ShopUI shopUI;
 
         public float CanvasWidth => GetComponent<RectTransform>().rect.width;
         public float CanvasHeight => GetComponent<RectTransform>().rect.height;
+
+        public ShopUI ShopUI => shopUI;
 
 
         public Image Crosshair;
@@ -56,6 +60,7 @@ namespace GameScene.HUD
             ObjectiveController.OnPlayerInteract += DisplayCaptureState;
 
             capturingState.enabled = false;
+            shopUI.gameObject.SetActive(false);
 
             BasePlayer localPlayer = GameController.Singleton.LocalPlayer;
 

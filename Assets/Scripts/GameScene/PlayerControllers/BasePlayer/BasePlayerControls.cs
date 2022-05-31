@@ -4,6 +4,7 @@ using System.Linq;
 using GameScene.model;
 using GameScene.Weapons;
 using GameScene.GameManagers;
+using GameScene.HUD;
 using GameScene.Items;
 using GameScene.Shop;
 using GameScene.Shop.ShopUI;
@@ -279,15 +280,14 @@ namespace GameScene.PlayerControllers.BasePlayer
                         GameController.Singleton.ItemPrefabs
                             .Select(go => go.GetComponent<BaseItem>())
                             .ToList();
-                    currentShop = shopUI.Init(possibleWeapons, possibleItems, this, GameController.Singleton.HUDController.transform);
+                    HUDController.Singleton.ShopUI.Init(possibleWeapons, possibleItems, this);
                 }
             }
             else
             {
                 Cursor.lockState = CursorLockMode.Locked;
                 playerState = PlayerState.Normal;
-                if(currentShop != null)
-                    Destroy(currentShop);
+                HUDController.Singleton.ShopUI.Hide();
             }
         }
         public void OnInventoryOpened(InputAction.CallbackContext ctx)

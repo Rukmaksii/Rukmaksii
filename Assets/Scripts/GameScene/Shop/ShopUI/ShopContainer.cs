@@ -90,5 +90,11 @@ namespace GameScene.Shop.ShopUI
                 }
             }
         }
+
+        public void Deactivate()
+        {
+            HolderWeaponsList.ForEach(Destroy);
+            HolderItemsList.ForEach(Destroy);
+        }
     }
 }

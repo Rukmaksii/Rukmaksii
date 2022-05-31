@@ -242,7 +242,6 @@ namespace GameScene.PlayerControllers.BasePlayer
         private PlayerState playerState;
 
 
-        [SerializeField] protected ShopUI shopUI;
         private GameObject currentShop;
     }
 }
