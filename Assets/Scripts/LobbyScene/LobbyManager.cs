@@ -4,7 +4,6 @@ using System.Linq;
 using GameScene.PlayerControllers.BasePlayer;
 using model;
 using Unity.Netcode;
-using UnityEditor.Timeline.Actions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
