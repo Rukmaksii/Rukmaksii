@@ -33777,7 +33777,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e6ab13ef361744b9854733125afbbe9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-<<<<<<< HEAD
   ListOfMonster: []
 --- !u!4 &1474703830 stripped
 Transform:
