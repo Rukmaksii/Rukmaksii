@@ -163,6 +163,7 @@ namespace GameScene.PlayerControllers.BasePlayer
         /** <value>the duration of the dash in seconds</value> */
         protected virtual float dashDuration { get;} = 0.3f;
 
+
         protected virtual float dashForce { get; } = 30f;
 
         public abstract int MaxHealth { get; protected set; }
@@ -212,7 +213,8 @@ namespace GameScene.PlayerControllers.BasePlayer
         /**
          * <summary>the fire cast point and the camera </summary>
          */
-        private NetworkVariable<(Vector3, Vector3)> aimVector = new NetworkVariable<(Vector3, Vector3)>((Vector3.zero, Vector3.zero));
+        private NetworkVariable<(Vector3, Vector3)> aimVector =
+            new NetworkVariable<(Vector3, Vector3)>((Vector3.zero, Vector3.zero));
 
         public Vector3 AimVector => aimVector.Value.Item2;
 
