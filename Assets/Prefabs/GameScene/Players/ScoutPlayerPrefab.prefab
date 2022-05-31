@@ -633,7 +633,7 @@ MonoBehaviour:
   maxMinions: 2
   sprite: {fileID: 21300000, guid: 52d333f3390295e46b1a164b9ab08a4d, type: 3}
   playerState: 0
-  shopUI: {fileID: 0}
+  shopUI: {fileID: 7973647938559540354, guid: bee9cdd7a67c64db382b9698060a6a0a, type: 3}
 --- !u!1 &5270855994831848966
 GameObject:
   m_ObjectHideFlags: 0
@@ -1377,6 +1377,36 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f8ecba5b3fb8bb8488e4ffe6b00e48e2, type: 3}
+--- !u!4 &6096212309754905642 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2563496969622287784, guid: f8ecba5b3fb8bb8488e4ffe6b00e48e2, type: 3}
+  m_PrefabInstance: {fileID: 8577464079821468034}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2615743579458350727 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6000407479487422213, guid: f8ecba5b3fb8bb8488e4ffe6b00e48e2, type: 3}
+  m_PrefabInstance: {fileID: 8577464079821468034}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1528386017818396703 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7078722787440015773, guid: f8ecba5b3fb8bb8488e4ffe6b00e48e2, type: 3}
+  m_PrefabInstance: {fileID: 8577464079821468034}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3257548341861213249 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6502182839619065283, guid: f8ecba5b3fb8bb8488e4ffe6b00e48e2, type: 3}
+  m_PrefabInstance: {fileID: 8577464079821468034}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7979510925537676874 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1852576806548013000, guid: f8ecba5b3fb8bb8488e4ffe6b00e48e2, type: 3}
+  m_PrefabInstance: {fileID: 8577464079821468034}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2834152691323314874 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -3432401550182100168, guid: f8ecba5b3fb8bb8488e4ffe6b00e48e2, type: 3}
+  m_PrefabInstance: {fileID: 8577464079821468034}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8107604541472708201 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f8ecba5b3fb8bb8488e4ffe6b00e48e2, type: 3}
@@ -1387,39 +1417,9 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: f8ecba5b3fb8bb8488e4ffe6b00e48e2, type: 3}
   m_PrefabInstance: {fileID: 8577464079821468034}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &3257548341861213249 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6502182839619065283, guid: f8ecba5b3fb8bb8488e4ffe6b00e48e2, type: 3}
-  m_PrefabInstance: {fileID: 8577464079821468034}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &2834152691323314874 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -3432401550182100168, guid: f8ecba5b3fb8bb8488e4ffe6b00e48e2, type: 3}
-  m_PrefabInstance: {fileID: 8577464079821468034}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1528386017818396703 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7078722787440015773, guid: f8ecba5b3fb8bb8488e4ffe6b00e48e2, type: 3}
-  m_PrefabInstance: {fileID: 8577464079821468034}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1287473450571288443 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -1812909498023395591, guid: f8ecba5b3fb8bb8488e4ffe6b00e48e2, type: 3}
-  m_PrefabInstance: {fileID: 8577464079821468034}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &2615743579458350727 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6000407479487422213, guid: f8ecba5b3fb8bb8488e4ffe6b00e48e2, type: 3}
-  m_PrefabInstance: {fileID: 8577464079821468034}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &6096212309754905642 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2563496969622287784, guid: f8ecba5b3fb8bb8488e4ffe6b00e48e2, type: 3}
-  m_PrefabInstance: {fileID: 8577464079821468034}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &7979510925537676874 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1852576806548013000, guid: f8ecba5b3fb8bb8488e4ffe6b00e48e2, type: 3}
   m_PrefabInstance: {fileID: 8577464079821468034}
   m_PrefabAsset: {fileID: 0}
 --- !u!95 &2257048361428856076
