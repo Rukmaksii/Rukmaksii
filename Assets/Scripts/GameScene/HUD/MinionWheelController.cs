@@ -10,7 +10,7 @@ namespace GameScene.HUD
     [RequireComponent(typeof(GraphicRaycaster))]
     public class MinionWheelController : MonoBehaviour
     {
-        private bool active = false;
+        private bool active = true;
 
         public IMinion.Strategy strategy { get; private set; }
 
@@ -28,7 +28,8 @@ namespace GameScene.HUD
                 active = value;
                 if (value)
                 {
-                    transform.position = Mouse.current.position.ReadValue();
+                    basePosition = Mouse.current.position.ReadValue();
+                    transform.position = basePosition;
                 }
             }
         }
@@ -57,6 +58,8 @@ namespace GameScene.HUD
                 if (child.parent != transform)
                     continue;
 
+                Debug.Log(child);
+
 
                 RectTransform foundChild = null;
                 for (int i = 0; !foundElement && i < results.Count && foundChild == null; i++)
@@ -68,9 +71,11 @@ namespace GameScene.HUD
                     }
                 }
 
+                Vector3 scaleDirection = child.localPosition.normalized;
+                float scaleFactor = 1.3f;
+
                 if (foundChild != null)
                 {
-                    foundChild.localScale = new Vector3(1.3f, 1.3f, 1);
                     foundElement = true;
                     strategy = foundChild.name.ToLower() switch
                     {
@@ -79,11 +84,12 @@ namespace GameScene.HUD
                         "defend" => IMinion.Strategy.DEFEND,
                         _ => strategy
                     };
-
+                    foundChild.localScale = new Vector3(1.3f, 1.3f, 1);
                 }
                 else
                 {
-                    child.localScale = new Vector3(1, 1, 1);
+                    child.localScale = new Vector3(1f, 1f, 1);
+                    strategy = IMinion.Strategy.Count;
                 }
             }
         }
