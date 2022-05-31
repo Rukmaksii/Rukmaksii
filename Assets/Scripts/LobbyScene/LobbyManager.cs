@@ -233,8 +233,8 @@ namespace LobbyScene
             {
                 var cv = Instantiate(classCanvas, classViewport);
                 cv.transform.localPosition += offset * Vector3.up;
-                cv.GetComponent<Image>().sprite = player.Sprite;
-                offset -= classCanvas.GetComponent<RectTransform>().rect.height + 50;
+                cv.transform.Find("SpriteHolder").GetComponent<Image>().sprite = player.Sprite;
+                offset -= classCanvas.GetComponent<RectTransform>().rect.height + 250;
                 cv.GetComponent<Button>().onClick.AddListener(delegate
                 {
                     ChangeClassServerRpc(NetworkManager.Singleton.LocalClientId, player.ClassName);
