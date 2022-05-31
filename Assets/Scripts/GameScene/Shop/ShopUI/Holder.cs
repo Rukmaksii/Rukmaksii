@@ -14,7 +14,6 @@ namespace GameScene.Shop.ShopUI
         protected BasePlayer player;
         
         public abstract void CanBuy(bool flag);
-        protected abstract void UpdateUI();
         protected abstract void Buy();
     }
 }

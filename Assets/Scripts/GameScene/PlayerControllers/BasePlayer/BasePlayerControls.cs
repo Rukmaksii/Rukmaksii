@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GameScene.model;
 using GameScene.Weapons;
@@ -253,8 +254,10 @@ namespace GameScene.PlayerControllers.BasePlayer
                 .Select(go => go.GetComponent<BaseWeapon>())
                 .Where(bw => bw.GetType().GetInterfaces().Contains(this.WeaponInterface))
                 .ToList();
-            List<BaseItem> possibleItems = new List<BaseItem>(); //change to the list of items
-            possibleWeapons.ForEach(Debug.Log);
+            List<BaseItem> possibleItems =
+                GameController.Singleton.ItemPrefabs
+                    .Select(go => go.GetComponent<BaseItem>())
+                    .ToList();
             shopController.ShopUI.Init(possibleWeapons, possibleItems, this, GameController.Singleton.HUDController.transform);
         }
         public void OnInventoryOpened(InputAction.CallbackContext ctx)

@@ -13,38 +13,27 @@ namespace GameScene.Shop.ShopUI
         {
             player = GameManagers.GameController.Singleton.LocalPlayer;
             this.item = item;
-            this.buyButton = buyButton;
-            this.image = image;
+            this.image = Instantiate(image, transform);
+            this.buyButton = Instantiate(buyButton, transform);
             btn = this.buyButton.GetComponent<Button>();
             btn.onClick.AddListener(Buy);
             buttonColor = btn.colors;
             buttonColor.normalColor = Color.yellow;
             buttonColor.highlightedColor = Color.yellow;
             buttonColor.pressedColor = Color.green;
-            UpdateUI();
+            buttonColor.disabledColor = Color.gray;
+            float imageRatio =  this.item.Info.Sprite.rect.height / this.item.Info.Sprite.rect.width;
+            this.image.GetComponent<Image>().transform.localScale = new Vector3(1, imageRatio);
+            this.image.GetComponent<Image>().sprite = this.item.Info.Sprite;
+            this.buyButton.GetComponentInChildren<Text>().text = $"Buy: {this.item.Price}$";
+            CanBuy(true);
         }
-
-        protected override void UpdateUI()
-        {
-            image.GetComponent<Image>().sprite = item.Info.Sprite;
-            buyButton.GetComponentInChildren<Text>().text = $"Buy: {item.Price}$";
-        }
+        
 
         public override void CanBuy(bool canbuy)
         {
             btn.interactable = canbuy;
-            if (canbuy)
-            {
-                buttonColor.normalColor = Color.yellow;
-                buttonColor.highlightedColor = Color.yellow;
-                buttonColor.pressedColor = Color.green;
-            }
-            else
-            {
-                buttonColor.normalColor = Color.gray;
-                buttonColor.highlightedColor = Color.gray;
-                buttonColor.pressedColor = Color.gray;
-            }
+            btn.enabled = canbuy;
         }
 
         protected override void Buy()

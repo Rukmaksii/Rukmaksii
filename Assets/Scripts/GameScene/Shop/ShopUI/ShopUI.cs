@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using GameScene.Items;
 using GameScene.PlayerControllers.BasePlayer;
 using GameScene.Weapons;
@@ -10,7 +11,6 @@ namespace GameScene.Shop.ShopUI
 {
     public class ShopUI : MonoBehaviour
     {
-        [SerializeField] protected GameObject shop;
         [SerializeField] protected GameObject weaponsShop;
         [SerializeField] protected GameObject itemsShop;
         [SerializeField] protected GameObject shopContainer;
@@ -21,11 +21,17 @@ namespace GameScene.Shop.ShopUI
         [SerializeField] protected GameObject holderWeapons;
         [SerializeField] protected GameObject holderItems;
 
+        private GameObject shop;
+        private GameObject containerWeaponsObj;
+        private GameObject containerItemsObj;
+        private Text moneyText;
+        private Text Name;
+        private Button showWeaponsButton;
+        private Button showItemsButton;
+        
         private List<BaseWeapon> weapons;
         private List<BaseItem> items;
-
         private BasePlayer player;
-        private GameObject moneyText;
         
         public static ShopUI Singleton { get; private set; }
 
@@ -46,19 +52,31 @@ namespace GameScene.Shop.ShopUI
                 return;
             Cursor.lockState = CursorLockMode.Confined;
             shop = Instantiate(gameObject, HUD);
-            Instantiate(shopName, shop.transform);
-            moneyText = Instantiate(textMoney, shop.transform);
-            Instantiate(weaponsShop, shop.transform).GetComponent<Button>().interactable = true;
-            Instantiate(itemsShop, shop.transform).GetComponent<Button>().interactable = true;
+            Name = Instantiate(shopName, shop.transform).GetComponent<Text>();
+            moneyText = Instantiate(textMoney, shop.transform).GetComponent<Text>();
+            showWeaponsButton = Instantiate(weaponsShop, shop.transform).GetComponent<Button>();
+            showItemsButton = Instantiate(itemsShop, shop.transform).GetComponent<Button>();
             this.player = player;
             this.weapons = weapons;
             this.items = items;
             
 
-            shopName.GetComponent<Text>().text = "Shop";
-            weaponsShop.GetComponent<Button>().onClick.AddListener(showWeapons);
-            itemsShop.GetComponent<Button>().onClick.AddListener(showItems);
-            showWeapons();
+            Name.GetComponent<Text>().text = "Shop";
+            moneyText.GetComponent<Text>().text = $"Player's money : {this.player.Money}";
+            showWeaponsButton.interactable = true;
+            showItemsButton.interactable = true;
+            showWeaponsButton.onClick.AddListener(showWeapons);
+            showItemsButton.onClick.AddListener(showItems);
+            containerWeaponsObj = Instantiate(shopContainer, shop.transform);
+            ShopContainer containerWeapons = containerWeaponsObj.GetComponent<ShopContainer>();
+            containerWeapons.Init(weapons, items, holderWeapons, holderItems, buyButton, image, true);
+            
+            containerItemsObj = Instantiate(shopContainer, shop.transform);
+            ShopContainer containerItems = containerItemsObj.GetComponent<ShopContainer>();
+            containerItems.Init(this.weapons, this.items, holderWeapons, holderItems, buyButton, image, false);
+            
+            containerItemsObj.SetActive(false);
+            containerWeaponsObj.SetActive(false);
         }
         public void Update()
         {
@@ -70,16 +88,14 @@ namespace GameScene.Shop.ShopUI
 
         private void showWeapons()
         {
-            GameObject containerObj = Instantiate(shopContainer, shop.transform);
-            ShopContainer container = containerObj.GetComponent<ShopContainer>();
-            container.Init(weapons, items, holderWeapons, holderItems, buyButton, image, containerObj, true);
+            containerItemsObj.SetActive(false);
+            containerWeaponsObj.SetActive(true);
         }
 
         private void showItems()
         {
-            GameObject containerObj = Instantiate(shopContainer, shop.transform);
-            ShopContainer container = containerObj.GetComponent<ShopContainer>();
-            container.Init(weapons, items, holderWeapons, holderItems, buyButton, image, containerObj, false);
+            containerItemsObj.SetActive(true);
+            containerWeaponsObj.SetActive(false);
         }
     }
 }

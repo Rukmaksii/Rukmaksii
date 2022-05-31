@@ -1,3 +1,4 @@
+using ExitGames.Client.Photon.StructWrapping;
 using GameScene.Weapons;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,37 +18,22 @@ namespace GameScene.Shop.ShopUI
             this.buyButton = Instantiate(buyButton, gameObject.transform);
             btn = this.buyButton.GetComponent<Button>();
             btn.onClick.AddListener(Buy);
-            btn.interactable = true;
             buttonColor = btn.colors;
             buttonColor.normalColor = Color.yellow;
             buttonColor.highlightedColor = Color.yellow;
             buttonColor.pressedColor = Color.green;
-            UpdateUI();
+            buttonColor.disabledColor = Color.gray;
+            float imageRatio =  this.weapon.Sprite.rect.height / this.weapon.Sprite.rect.width;
+            this.image.GetComponent<Image>().transform.localScale = new Vector3(1, imageRatio);
+            this.image.GetComponent<Image>().sprite = this.weapon.Sprite;
+            this.buyButton.GetComponentInChildren<Text>().text = $"Buy: {this.weapon.Price}$";
+            CanBuy(true);
         }
 
-        protected override void UpdateUI()
+        public override void CanBuy(bool canBuy)
         {
-            float imageratio =  weapon.Sprite.rect.width / image.GetComponent<Image>().sprite.rect.width;
-            weapon.Sprite.texture.Resize((int)(weapon.Sprite.rect.width * imageratio), (int)(weapon.Sprite.rect.height * imageratio));
-            image.GetComponent<Image>().sprite = weapon.Sprite;
-            buyButton.GetComponentInChildren<Text>().text = $"Buy: {weapon.Price}$";
-        }
-
-        public override void CanBuy(bool canbuy)
-        {
-            btn.interactable = canbuy;
-            if (canbuy)
-            {
-                buttonColor.normalColor = Color.yellow;
-                buttonColor.highlightedColor = Color.yellow;
-                buttonColor.pressedColor = Color.green;
-            }
-            else
-            {
-                buttonColor.normalColor = Color.gray;
-                buttonColor.highlightedColor = Color.gray;
-                buttonColor.pressedColor = Color.gray;
-            }
+            btn.interactable = canBuy;
+            btn.enabled = canBuy;
         }
 
         protected override void Buy()
