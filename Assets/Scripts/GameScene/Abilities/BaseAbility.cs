@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using GameScene.model;
 using GameScene.PlayerControllers;
 using GameScene.PlayerControllers.BasePlayer;
+using UnityEngine;
 
 namespace GameScene.Abilities
 {
@@ -27,6 +28,8 @@ namespace GameScene.Abilities
          * the path to the sprite in resources/Abilities/
          */
         public string SpritePath;
+
+        public Sprite Sprite => Resources.Load<Sprite>(SpritePath);
     }
 
     public abstract class BaseAbility : IAbility
@@ -47,11 +50,20 @@ namespace GameScene.Abilities
         protected BasePlayer Player;
         public AbilityInfo Info => AbilityInfos[GetType()];
 
+        public Sprite Sprite => Info.Sprite;
+
+        public string Description => Info.Description;
+        public string Name => Info.Name;
+        public int Price => Info.Price;
+
         public abstract List<Type> Children { get; }
+        
 
 
         public BaseAbility(BasePlayer player)
         {
+            if (!AbilityInfos.ContainsKey(GetType()))
+                throw new Exception($"item {GetType().Name} is not referenced in BaseAbilitiy::AbilityInfos");
             Player = player;
         }
 
