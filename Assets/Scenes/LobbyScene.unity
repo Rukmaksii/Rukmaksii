@@ -458,7 +458,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1093, y: -245}
+  m_AnchoredPosition: {x: 1093, y: -215}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &276775584
@@ -948,7 +948,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 687, y: -245}
+  m_AnchoredPosition: {x: 687, y: -215}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1003406856 stripped
@@ -1510,7 +1510,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 687, y: -245}
+  m_AnchoredPosition: {x: 687, y: -215}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1710366994
@@ -1545,7 +1545,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 209, y: -245}
+  m_AnchoredPosition: {x: 209, y: -215}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1721108421
@@ -1580,7 +1580,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 209, y: -245}
+  m_AnchoredPosition: {x: 209, y: -215}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1729204983
@@ -1756,7 +1756,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1093, y: -245}
+  m_AnchoredPosition: {x: 1093, y: -215}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &1863616086
@@ -2105,7 +2105,7 @@ PrefabInstance:
     - target: {fileID: 5497009041965328532, guid: 890f1518db627bf40be490e3c33419ec, type: 3}
       propertyPath: classCanvas
       value: 
-      objectReference: {fileID: 4438531271051590850, guid: 213e04c229e65c34a8f606bbb6060abd, type: 3}
+      objectReference: {fileID: 4438531271051590850, guid: fb579e29b5ceb9847ae4ff2258fcb0c3, type: 3}
     - target: {fileID: 5497009041965328532, guid: 890f1518db627bf40be490e3c33419ec, type: 3}
       propertyPath: startButton
       value: 
