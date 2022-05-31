@@ -13,6 +13,7 @@ namespace GameScene.Weapons.HeavyWeapons
         public override float ReloadTime { get; } = 1.5f;
         public override int BulletsInRow { get; } = 1;
         public override float BulletsInRowSpacing { get; } = 0.1f;
+        public override int Price { get; } = 600;
         public override string Name { get; } = "UMP";
     }
 }

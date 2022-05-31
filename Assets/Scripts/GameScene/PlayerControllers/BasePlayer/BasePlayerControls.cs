@@ -1,6 +1,12 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using GameScene.model;
 using GameScene.Weapons;
+using GameScene.GameManagers;
+using GameScene.Items;
+using GameScene.Shop;
+using GameScene.Shop.ShopUI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
@@ -242,7 +248,48 @@ namespace GameScene.PlayerControllers.BasePlayer
                 .Select(item => item.Item1)
                 .FirstOrDefault();
         }
+        
 
+        public void OnShop(InputAction.CallbackContext ctx)
+        {
+            if(!IsOwner)
+                return;
+            if (playerState == BasePlayerState.PlayerState.Normal)
+            {
+                GameObject[] shops = GameObject.FindGameObjectsWithTag("Shop");
+                bool near = false;
+                foreach (GameObject shop in shops)
+                {
+                    if (Vector3.Distance(shop.transform.position, transform.position) < 2f)
+                    {
+                        near = true;
+                        break;
+                    }
+                }
+
+                if (near)
+                {
+                    playerState = BasePlayerState.PlayerState.InShop;
+                    Cursor.lockState = CursorLockMode.Confined;
+                    List<BaseWeapon> possibleWeapons = GameController.Singleton.WeaponPrefabs
+                        .Select(go => go.GetComponent<BaseWeapon>())
+                        .Where(bw => bw.GetType().GetInterfaces().Contains(this.WeaponInterface))
+                        .ToList();
+                    List<BaseItem> possibleItems =
+                        GameController.Singleton.ItemPrefabs
+                            .Select(go => go.GetComponent<BaseItem>())
+                            .ToList();
+                    currentShop = shopUI.Init(possibleWeapons, possibleItems, this, GameController.Singleton.HUDController.transform);
+                }
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                playerState = BasePlayerState.PlayerState.Normal;
+                if(currentShop != null)
+                    Destroy(currentShop);
+            }
+        }
         public void OnInventoryOpened(InputAction.CallbackContext ctx)
         {
             if (!IsOwner)

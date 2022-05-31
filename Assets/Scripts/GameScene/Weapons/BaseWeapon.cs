@@ -94,6 +94,7 @@ namespace GameScene.Weapons
         */
         public abstract float BulletsInRowSpacing { get; }
 
+        
         /**
         * <value>the number of remaining bullets to send in a bullet row</value>
         */
@@ -135,6 +136,7 @@ namespace GameScene.Weapons
 
         private AudioSource source;
 
+        public abstract int Price { get; }
 
         private void Awake()
         {

@@ -111,7 +111,7 @@ namespace GameScene.PlayerControllers.BasePlayer
         }
 
         [ServerRpc(RequireOwnership = false)]
-        private void UpdateMoneyServerRpc(int money)
+        public void UpdateMoneyServerRpc(int money)
         {
             this.money.Value = money;
         }

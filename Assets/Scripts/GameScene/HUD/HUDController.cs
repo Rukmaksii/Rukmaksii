@@ -4,6 +4,7 @@ using GameScene.Items;
 using GameScene.Map;
 using GameScene.model;
 using GameScene.PlayerControllers.BasePlayer;
+using GameScene.Shop.ShopUI;
 using GameScene.Weapons;
 using UnityEngine;
 using UnityEngine.UI;
@@ -60,7 +61,7 @@ namespace GameScene.HUD
             BasePlayer localPlayer = GameController.Singleton.LocalPlayer;
 
             arrow.transform.SetParent(map.transform);
-            
+
             SetupSprites();
         }
 
@@ -84,11 +85,9 @@ namespace GameScene.HUD
             SetCurrentStrategy(localPlayer.Strategy);
             SetMoney(localPlayer.Money);
             SetRemainingItems();
-            
-            
-            
 
-            itemWheel.SetActive(localPlayer.ItemWheel); 
+
+            itemWheel.SetActive(localPlayer.ItemWheel);
 
             // updating the capture circle UI if the player is on a point
             if (_capturePoint != null)
@@ -198,7 +197,8 @@ namespace GameScene.HUD
                 {
                     try
                     {
-                        ammos[i].text = GameController.Singleton.LocalPlayer.Inventory.ItemRegistry[wheel.items[i]].Count.ToString();
+                        ammos[i].text = GameController.Singleton.LocalPlayer.Inventory.ItemRegistry[wheel.items[i]]
+                            .Count.ToString();
                     }
                     catch (KeyNotFoundException)
                     {
@@ -233,8 +233,8 @@ namespace GameScene.HUD
             ItemWheel wheel = gameObject.AddComponent<ItemWheel>();
             Image[] sprites = itemWheel.GetComponentsInChildren<Image>();
             for (int i = 1; i < sprites.Length; i++)
-                if (wheel.items[i-1] != null)
-                    sprites[i].sprite = BaseItem.ItemInfos[wheel.items[i-1]].Sprite;
+                if (wheel.items[i - 1] != null)
+                    sprites[i].sprite = BaseItem.ItemInfos[wheel.items[i - 1]].Sprite;
         }
 
         private void SetMoney(int money)

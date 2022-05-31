@@ -22,7 +22,7 @@ namespace GameScene.Monster
             if (IsServer)
                 UpdateLifeServerRpc(maxHealth);
             GetComponent<MonsterAI>().agent = GetComponent<NavMeshAgent>();
-            GameManagers.Gameloop.ListOfMonster.Add(this);
+            Gameloop.Singleton.ListOfMonster.Add(this);
         }
 
 
@@ -47,7 +47,7 @@ namespace GameScene.Monster
 
         public void OnKill()
         {
-            Gameloop.ListOfMonster.Remove(this);
+            Gameloop.Singleton.ListOfMonster.Remove(this);
             DestroyServerRpc();
             GameObject GrenadeInstance = Instantiate(GameController.Singleton.ItemPrefabs[1],
                 gameObject.transform.position, quaternion.identity);

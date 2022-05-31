@@ -1,6 +1,7 @@
 ﻿using GameScene.Abilities.model;
 using GameScene.Items;
 using GameScene.PlayerControllers.BasePlayer;
+using GameScene.Shop;
 using GameScene.Weapons;
 using Unity.Netcode;
 using UnityEngine;
@@ -84,6 +85,8 @@ namespace GameScene.PlayerControllers.Inventory
                 AddWeapon(weapon);
             else if (go.TryGetComponent(out BaseItem item))
                 AddItem(item);
+            else if(go.TryGetComponent(out ShopController shop))
+                shop.PickUp(Player);
         }
 
         private void HandleModeRenderers(Mode mode, bool reset = false)
@@ -121,8 +124,18 @@ namespace GameScene.PlayerControllers.Inventory
                         SelectedItem.SwitchRender(false);
                     if (CurrentWeapon != null)
                         CurrentWeapon.SwitchRender(true);
+                    SetHandTargetsClientRpc();
+
+
                     break;
             }
+        }
+
+        [ClientRpc]
+        private void SetHandTargetsClientRpc()
+        {
+            if (CurrentWeapon != null && SelectedMode == Mode.Weapon)
+                Player.SetHandTargets(CurrentWeapon.RightHandTarget, CurrentWeapon.LeftHandTarget);
         }
 
 

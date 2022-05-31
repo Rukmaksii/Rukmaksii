@@ -27,7 +27,19 @@ namespace GameScene.GameManagers
         private BaseController base1;
         private BaseController base2;
 
-        public static List<MonsterController> ListOfMonster;
+        public List<MonsterController> ListOfMonster;
+        
+        public static Gameloop Singleton { get; private set;}
+        private void Awake()
+        {
+            if (Singleton != null && Singleton != this)
+            {
+                Destroy(this);
+                return;
+            }
+
+            Singleton = this;
+        }
 
         // Start is called before the first frame update
         void Start()
@@ -59,8 +71,8 @@ namespace GameScene.GameManagers
                 //set the current time
                 currTime.Value = DateTime.Now;
                 //check if there are the right number of monster 
-                if(ListOfMonster.Count < numberOfMonster)
-                    SpawnMonsters(numberOfMonster - ListOfMonster.Count);
+                if(Singleton.ListOfMonster.Count < numberOfMonster)
+                    SpawnMonsters(numberOfMonster - Singleton.ListOfMonster.Count);
 
                 //detect end of game
                 if (base1.CurrentHealth == 0 || base2.CurrentHealth == 0)
@@ -139,10 +151,6 @@ namespace GameScene.GameManagers
             //Activate all the shields
             shield1.Activated.Value = true;
             shield2.Activated.Value = true;
-        }
-        public void PossibleJoingame()
-        {
-
         }
 
         public void SpawnMonsters(int number)
