@@ -67,8 +67,6 @@ namespace GameScene.PlayerControllers.BasePlayer
 
             controller = GetComponent<CharacterController>();
 
-            GameController.Singleton.AddPlayer(this);
-
             if (IsOwner)
             {
                 GameObject playerCamera = GameObject.FindGameObjectWithTag("Player Camera");

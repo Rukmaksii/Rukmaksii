@@ -133,7 +133,7 @@ namespace LobbyScene
             if (IsServer)
             {
                 startButton.gameObject.SetActive(true);
-                startButton.interactable = startButton.enabled = CanStart;
+                startButton.interactable = startButton.enabled = CanStart || true;
             }
         }
 

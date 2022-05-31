@@ -14,15 +14,18 @@ namespace GameScene.Monster
         [SerializeField] private int maxHealth = 50;
         private readonly NetworkVariable<int> life = new NetworkVariable<int>(0);
 
-        public int Life => life.Value;
+        public int Life
+        {
+            get => life.Value;
+            set => UpdateLifeServerRpc(value);
+        }
+
+        public int MaxHealth => maxHealth;
 
         // Start is called before the first frame update
         void Start()
         {
-            if (IsServer)
-                UpdateLifeServerRpc(maxHealth);
-            GetComponent<MonsterAI>().agent = GetComponent<NavMeshAgent>();
-            Gameloop.Singleton.ListOfMonster.Add(this);
+            
         }
 
 
@@ -40,18 +43,14 @@ namespace GameScene.Monster
             }
             else
             {
-                UpdateLifeServerRpc(Life - damage);
+                Life -= damage;
                 return true;
             }
         }
 
         public void OnKill()
         {
-            Gameloop.Singleton.ListOfMonster.Remove(this);
-            DestroyServerRpc();
-            GameObject GrenadeInstance = Instantiate(GameController.Singleton.ItemPrefabs[1],
-                gameObject.transform.position, quaternion.identity);
-            GrenadeInstance.GetComponent<NetworkObject>().Spawn();
+            Gameloop.Singleton.RemoveMonster(this);
         }
 
         /**
@@ -65,7 +64,7 @@ namespace GameScene.Monster
         }
 
         [ServerRpc(RequireOwnership = false)]
-        private void DestroyServerRpc()
+        public void DestroyServerRpc()
         {
             GetComponent<NetworkObject>().Despawn();
         }

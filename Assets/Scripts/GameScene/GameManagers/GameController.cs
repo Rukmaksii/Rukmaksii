@@ -124,8 +124,11 @@ namespace GameScene.GameManagers
         /**
          * <summary>adds a player to the game controller</summary>
          */
-        public void AddPlayer(BasePlayer player)
+        [ClientRpc]
+        private void AddPlayerClientRpc(NetworkBehaviourReference playerRef)
         {
+            if(!playerRef.TryGet(out BasePlayer player))
+                return;
             if (player.IsOwner)
                 BindPlayer(player);
             players.Add(player);
@@ -242,7 +245,7 @@ namespace GameScene.GameManagers
         {
             if (!IsServer)
                 throw new NotServerException();
-
+            AddPlayerClientRpc(new NetworkBehaviourReference(player));
             player.CurrentHealth = player.MaxHealth;
             player.Money = 500;
             
