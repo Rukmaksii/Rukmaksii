@@ -100,8 +100,6 @@ namespace GameScene.HUD
             }
 
             UpdateMap();
-
-            minionWheel.IsActive = true;
         }
 
         /**
@@ -247,7 +245,8 @@ namespace GameScene.HUD
 
         public IMinion.Strategy HideMinionSelection()
         {
-            return IMinion.Strategy.Count;
+            minionWheel.IsActive = false;
+            return minionWheel.strategy;
         }
 
         public void HideItemSelector()

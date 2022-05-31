@@ -43,6 +43,8 @@ namespace GameScene.HUD
         // ReSharper disable Unity.PerformanceAnalysis
         void Update()
         {
+            if (!active)
+                return;
             PointerEventData ev = new PointerEventData(EventSystem.current);
             ev.position = Mouse.current.position.ReadValue();
             List<RaycastResult> results = new List<RaycastResult>();
@@ -68,8 +70,16 @@ namespace GameScene.HUD
 
                 if (foundChild != null)
                 {
-                    foundChild.localScale = new Vector3(1.3f, 1.3f, 0);
+                    foundChild.localScale = new Vector3(1.3f, 1.3f, 1);
                     foundElement = true;
+                    strategy = foundChild.name.ToLower() switch
+                    {
+                        "protect" => IMinion.Strategy.PROTECT,
+                        "attack" => IMinion.Strategy.ATTACK,
+                        "defend" => IMinion.Strategy.DEFEND,
+                        _ => strategy
+                    };
+
                 }
                 else
                 {
@@ -77,6 +87,5 @@ namespace GameScene.HUD
                 }
             }
         }
-
     }
 }
