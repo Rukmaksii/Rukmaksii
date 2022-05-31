@@ -32,6 +32,7 @@ namespace LobbyScene
         [SerializeField] private GameObject classCanvas;
         [SerializeField] private GameObject classDepoCanvas;
         [SerializeField] private RectTransform classViewport;
+        [SerializeField] private GameObject contentBox;
 
         [SerializeField] private Button startButton;
         [SerializeField] private Canvas lobbyUI;
@@ -236,13 +237,15 @@ namespace LobbyScene
                 Destroy(classViewport.GetChild(i).gameObject);
             }
 
-            float offset = 0;
+            
+            
+            float offset = - classCanvas.GetComponent<RectTransform>().rect.height / 2;
             foreach (var player in availableClasses)
             {
                 var cv = Instantiate(classCanvas, classViewport);
                 cv.transform.localPosition += offset * Vector3.up;
                 cv.transform.Find("SpriteHolder").GetComponent<Image>().sprite = player.Sprite;
-                offset -= classCanvas.GetComponent<RectTransform>().rect.height + 270;
+                offset -= classCanvas.GetComponent<RectTransform>().rect.height + 20;
                 cv.GetComponent<Button>().onClick.AddListener(delegate
                 {
                     ChangeClassServerRpc(NetworkManager.Singleton.LocalClientId, player.ClassName);
@@ -259,6 +262,8 @@ namespace LobbyScene
                     ChangeClassServerRpc(NetworkManager.Singleton.LocalClientId, null);
                 });
             }
+
+            classViewport.sizeDelta = new Vector2(classViewport.rect.width, - offset - classCanvas.GetComponent<RectTransform>().rect.height / 2);
         }
 
         [ServerRpc(RequireOwnership = false)]
