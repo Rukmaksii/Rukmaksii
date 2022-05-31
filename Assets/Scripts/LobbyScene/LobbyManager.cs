@@ -247,6 +247,7 @@ namespace LobbyScene
                 {
                     ChangeClassServerRpc(NetworkManager.Singleton.LocalClientId, player.ClassName);
                 });
+                cv.transform.Find("ClassName").GetComponent<Text>().text = player.ClassName;
             }
 
             if (PlayerClass != null)
@@ -264,13 +265,9 @@ namespace LobbyScene
         private void AddPlayerServerRpc(ulong playerId, ConnectionData data)
         {
             if (GetPlayersInTeam(0).Count > GetPlayersInTeam(1).Count)
-            {
                 data.TeamId = 1;
-            }
             else
-            {
                 data.TeamId = 0;
-            }
 
             PlayersRegistry[playerId] = data;
             if (IsClient)
