@@ -208,6 +208,7 @@ GameObject:
   - component: {fileID: 7360817794677645126}
   - component: {fileID: 5573026657021334229}
   - component: {fileID: 2692938686832076950}
+  - component: {fileID: 4501436165087888714}
   m_Layer: 5
   m_Name: MinionDeploy
   m_TagString: Untagged
@@ -275,6 +276,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4501436165087888714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6091074040974094531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92071b25a753d29418a870d1b3cfcba0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6605423291785199422
 GameObject:
   m_ObjectHideFlags: 0
