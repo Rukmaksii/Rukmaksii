@@ -55,7 +55,7 @@ namespace GameScene.HUD
             SetMaxFuel(100);
 
             ShowHitMarker(false);
-            // minionWheel.IsActive = false;
+            minionWheel.IsActive = false;
             BaseWeapon.targetHit += ShowHitMarker;
             ObjectiveController.OnPlayerInteract += DisplayCaptureState;
 
