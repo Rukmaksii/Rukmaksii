@@ -25,6 +25,7 @@ TagManager:
   - Grenade
   - Shield
   - WeaponsHolder
+  - Shop
   layers:
   - Default
   - TransparentFX

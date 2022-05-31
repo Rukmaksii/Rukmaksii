@@ -1,5 +1,6 @@
 using ExitGames.Client.Photon.StructWrapping;
 using GameScene.Weapons;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -38,7 +39,10 @@ namespace GameScene.Shop.ShopUI
 
         protected override void Buy()
         {
-            throw new System.NotImplementedException();
+            GameObject baseWeapon = Instantiate(weapon.gameObject);
+            baseWeapon.GetComponent<NetworkObject>().Spawn();
+            player.Inventory.AddWeapon(baseWeapon.GetComponent<BaseWeapon>());
+            player.UpdateMoneyServerRpc(player.Money - weapon.Price);
         }
     }
 }

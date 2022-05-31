@@ -1,4 +1,5 @@
 using GameScene.Items;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -38,7 +39,10 @@ namespace GameScene.Shop.ShopUI
 
         protected override void Buy()
         {
-            throw new System.NotImplementedException();
+            GameObject baseItem = Instantiate(item.gameObject);
+            baseItem.GetComponent<NetworkObject>().Spawn();
+            player.Inventory.AddItem(baseItem.GetComponent<BaseItem>());
+            player.UpdateMoneyServerRpc(player.Money - item.Price);
         }
     }
 }

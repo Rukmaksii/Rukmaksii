@@ -4,9 +4,11 @@ using GameScene.Abilities.model;
 using GameScene.GameManagers;
 using GameScene.Minions;
 using GameScene.model;
+using GameScene.Shop.ShopUI;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
+using UnityEngine.Serialization;
 
 namespace GameScene.PlayerControllers.BasePlayer
 {
@@ -235,5 +237,10 @@ namespace GameScene.PlayerControllers.BasePlayer
         public Sprite Sprite => sprite;
 
         public abstract Type WeaponInterface { get; }
+
+        public BasePlayerState.PlayerState playerState;
+
+        [SerializeField] protected ShopUI shopUI;
+        private GameObject currentShop;
     }
 }

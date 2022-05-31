@@ -76,6 +76,7 @@ namespace GameScene.PlayerControllers.BasePlayer
                 UpdateCamera();
 
                 Cursor.lockState = CursorLockMode.Locked;
+                playerState = BasePlayerState.PlayerState.Normal;
             }
         }
 
@@ -125,53 +126,56 @@ namespace GameScene.PlayerControllers.BasePlayer
 
         private void UpdateOwner()
         {
-            var _deltaTime = Time.deltaTime;
-
-            handleDash(_deltaTime);
-
-            focusedObject = GetClosestPickableObject(pickUpDistance);
-            if (focusedObject != null)
+            if (playerState == BasePlayerState.PlayerState.Normal)
             {
-                Vector2 scalars = CameraController.Camera.WorldToViewportPoint(focusedObject.transform.position);
-                GameController.Singleton.HUDController.ShowItemSelector(scalars);
-            }
-            else
-            {
-                GameController.Singleton.HUDController.HideItemSelector();
-            }
+                var _deltaTime = Time.deltaTime;
 
-            Vector3 res;
+                handleDash(_deltaTime);
 
-            if (!IsFlying)
-            {
-                var moveVector = Movement;
-
-                float multiplier = movementSpeed;
-                if (IsRunning)
+                focusedObject = GetClosestPickableObject(pickUpDistance);
+                if (focusedObject != null)
                 {
-                    multiplier *= runningSpeedMultiplier;
+                    Vector2 scalars = CameraController.Camera.WorldToViewportPoint(focusedObject.transform.position);
+                    GameController.Singleton.HUDController.ShowItemSelector(scalars);
+                }
+                else
+                {
+                    GameController.Singleton.HUDController.HideItemSelector();
                 }
 
-                res = Movement * multiplier;
+                Vector3 res;
 
-                yVelocity += (gravityMultiplier * Physics.gravity * _deltaTime).y;
-                if (IsGrounded && yVelocity < 0f)
-                    yVelocity = 0;
+                if (!IsFlying)
+                {
+                    var moveVector = Movement;
 
-                if (moveVector.y > 0)
-                    Jump();
+                    float multiplier = movementSpeed;
+                    if (IsRunning)
+                    {
+                        multiplier *= runningSpeedMultiplier;
+                    }
 
-                res.y = yVelocity;
+                    res = Movement * multiplier;
+
+                    yVelocity += (gravityMultiplier * Physics.gravity * _deltaTime).y;
+                    if (IsGrounded && yVelocity < 0f)
+                        yVelocity = 0;
+
+                    if (moveVector.y > 0)
+                        Jump();
+
+                    res.y = yVelocity;
+                }
+                else
+                {
+                    res = Jetpack.Velocity;
+                }
+
+
+                controller.Move(transform.TransformDirection(res) * _deltaTime);
+                UpdateVelocityServerRpc(res);
+                UpdateCamera();
             }
-            else
-            {
-                res = Jetpack.Velocity;
-            }
-
-
-            controller.Move(transform.TransformDirection(res) * _deltaTime);
-            UpdateVelocityServerRpc(res);
-            UpdateCamera();
         }
 
         /// <summary>
