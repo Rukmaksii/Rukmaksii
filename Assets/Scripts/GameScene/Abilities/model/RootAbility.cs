@@ -4,6 +4,7 @@
     {
         public RootAbility() : base(null)
         {
+            
         }
 
         public override void Apply()

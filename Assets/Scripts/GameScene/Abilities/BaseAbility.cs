@@ -62,7 +62,7 @@ namespace GameScene.Abilities
 
         public BaseAbility(BasePlayer player)
         {
-            if (!AbilityInfos.ContainsKey(GetType()))
+            if (player != null && !AbilityInfos.ContainsKey(GetType()))
                 throw new Exception($"item {GetType().Name} is not referenced in BaseAbilitiy::AbilityInfos");
             Player = player;
         }
