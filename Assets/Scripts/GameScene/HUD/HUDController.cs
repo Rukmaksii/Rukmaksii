@@ -27,7 +27,7 @@ namespace GameScene.HUD
         [SerializeField] private GameObject itemSelector;
         [SerializeField] protected GameObject itemWheel;
         [SerializeField] protected Text MoneyLevel;
-        [SerializeField] private GameObject minionWheel;
+        [SerializeField] private MinionWheelController minionWheel;
 
         public float CanvasWidth => GetComponent<RectTransform>().rect.width;
         public float CanvasHeight => GetComponent<RectTransform>().rect.height;
@@ -54,7 +54,7 @@ namespace GameScene.HUD
             SetMaxFuel(100);
 
             ShowHitMarker(false);
-            minionWheel.SetActive(false);
+            minionWheel.gameObject.SetActive(false);
             BaseWeapon.targetHit += ShowHitMarker;
             ObjectiveController.OnPlayerInteract += DisplayCaptureState;
 
