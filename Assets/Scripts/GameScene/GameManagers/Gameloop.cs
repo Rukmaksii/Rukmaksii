@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using ExitGames.Client.Photon.StructWrapping;
 using GameScene.Map;
 using GameScene.Monster;
 using GameScene.PlayerControllers.BasePlayer;
@@ -44,6 +45,7 @@ namespace GameScene.GameManagers
         // Start is called before the first frame update
         void Start()
         {
+            Debug.Log("Start");
             numberOfMonster = 4;
             ListOfMonster = new List<MonsterController>();
             if (NetworkManager.Singleton.IsServer)
@@ -157,7 +159,7 @@ namespace GameScene.GameManagers
             shield2.Activated.Value = true;
         }
 
-        public void SpawnMonsters(int number)
+        private void SpawnMonsters(int number)
         {
             for (int i = 0; i < number; i++)
             {
@@ -166,6 +168,8 @@ namespace GameScene.GameManagers
                 {
                     GameObject instance = Instantiate(GameController.Singleton.MonsterPrefab, hit.point, Quaternion.identity);
                     instance.GetComponent<NetworkObject>().Spawn();
+                    instance.GetComponent<MonsterController>().Life =
+                        instance.GetComponent<MonsterController>().MaxHealth;
                 }
             }
         }

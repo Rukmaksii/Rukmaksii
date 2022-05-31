@@ -21,6 +21,7 @@ namespace GameScene.Monster
         private void Start()
         {
             InitialPos = transform.position; //initialisation de la position d'origine
+            agent = GetComponent<NavMeshAgent>();
         }
 
 
