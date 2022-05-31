@@ -175,9 +175,9 @@ namespace LobbyScene
                 viewer.GetComponentsInChildren<Text>().First(e => e.name == "Pseudo").text = data.Pseudo;
 
                 if (data.TeamId == 0)
-                    viewer.transform.Find("BackgroundCircle").GetComponent<Image>().color = new Color(0, 160/255, 1);
+                    viewer.transform.Find("BackgroundCircle").GetComponent<Image>().color = new Color(0, 160f/255, 1);
                 else
-                    viewer.transform.Find("BackgroundCircle").GetComponent<Image>().color = new Color(226/255, 33/255, 0);
+                    viewer.transform.Find("BackgroundCircle").GetComponent<Image>().color = new Color(226f/255, 33f/255, 0);
 
                 BasePlayer player;
                 if (data.ClassName != null && (player = ClassPrefabs.Select(go => go.GetComponent<BasePlayer>())
