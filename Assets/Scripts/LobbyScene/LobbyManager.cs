@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using GameScene.PlayerControllers.BasePlayer;
 using model;
 using Unity.Netcode;
+using UnityEditor.Timeline.Actions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -28,6 +30,7 @@ namespace LobbyScene
 
         // a prefab for class selection in lobby
         [SerializeField] private GameObject classCanvas;
+        [SerializeField] private GameObject classDepoCanvas;
         [SerializeField] private RectTransform classViewport;
 
         [SerializeField] private Button startButton;
@@ -204,11 +207,16 @@ namespace LobbyScene
                 var viewer = Instantiate(playerViewer, parent);
                 viewer.GetComponentsInChildren<Text>().First(e => e.name == "Pseudo").text = data.Pseudo;
 
+                if (data.TeamId == 0)
+                    viewer.transform.Find("BackgroundCircle").GetComponent<Image>().color = new Color(0, 160/255, 1);
+                else
+                    viewer.transform.Find("BackgroundCircle").GetComponent<Image>().color = new Color(226/255, 33/255, 0);
+
                 BasePlayer player;
                 if (data.ClassName != null && (player = ClassPrefabs.Select(go => go.GetComponent<BasePlayer>())
                         .FirstOrDefault(p => p.ClassName == data.ClassName)) != null)
                 {
-                    viewer.GetComponentsInChildren<Image>().First(e => e.name == "Image").sprite = player.Sprite;
+                    viewer.transform.Find("Image").transform.Find("BackgroundImage").GetComponent<Image>().sprite = player.Sprite;
                 }
             }
 
@@ -243,7 +251,7 @@ namespace LobbyScene
 
             if (PlayerClass != null)
             {
-                var cv = Instantiate(classCanvas, classViewport);
+                var cv = Instantiate(classDepoCanvas, classViewport);
                 cv.transform.localPosition += offset * Vector3.up;
                 cv.GetComponent<Button>().onClick.AddListener(delegate
                 {
