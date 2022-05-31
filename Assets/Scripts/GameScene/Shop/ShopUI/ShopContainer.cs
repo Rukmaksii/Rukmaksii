@@ -17,8 +17,8 @@ namespace GameScene.Shop.ShopUI
         private GameObject image;
         private List<BaseWeapon> listWeapons;
         private List<BaseItem> listItems;
-        private List<HolderWeapons> HolderWeaponsList;
-        private List<HolderItems> HolderItemsList;
+        private List<HolderWeapons> HolderWeaponsList = new List<HolderWeapons>();
+        private List<HolderItems> HolderItemsList = new List<HolderItems>();
         private BasePlayer player;
         public bool IsWeapons { get; private set; }
 
