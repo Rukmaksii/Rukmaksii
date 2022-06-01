@@ -22,7 +22,7 @@ namespace GameScene.GameManagers
         private bool hasBeenChange;
         private const int numberOfMonster = 4;
 
-        private GameObject[] captureArea;
+        [SerializeField]private GameObject[] captureArea;
 
         private ShieldController shield1;
         private ShieldController shield2;
@@ -71,7 +71,7 @@ namespace GameScene.GameManagers
                     shield2.UpdateTeamServerRpc(1);
             }
 
-            captureArea = GameObject.FindGameObjectsWithTag("CaptureArea");
+            //captureArea = GameObject.FindGameObjectsWithTag("CaptureArea");
             if (NetworkManager.Singleton.IsServer)
             {
                 //set the current time
