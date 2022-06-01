@@ -41,7 +41,7 @@ namespace LobbyScene
         public GameState GameState
         {
             get => gameState.Value;
-            set
+            private set
             {
                 if (!IsServer)
                     throw new NotServerException($"client cannot set game state");
@@ -110,7 +110,7 @@ namespace LobbyScene
             NetworkManager.Singleton.ConnectionApprovalCallback +=
                 delegate(byte[] data, ulong clientId, NetworkManager.ConnectionApprovedDelegate callback)
                 {
-                    bool approve = SceneManager.GetActiveScene().name == "LobbyScene";
+                    bool approve = GameState == GameState.Lobby;
 
 #if DEBUG
                     approve |= _bypassVerification;
@@ -125,6 +125,8 @@ namespace LobbyScene
             if (lobbyUI == null)
             {
                 _bypassVerification = true;
+                if (IsServer)
+                    GameState = GameState.Playing;
                 return;
             }
 #endif
@@ -140,7 +142,8 @@ namespace LobbyScene
                     _roomName = connectionData.Data.RoomName;
                     roomName.text = _roomName;
                     PlayersRegistry[clientId] = connectionData.Data;
-                    FillPlayerViewers();
+                    if (GameState == GameState.Lobby)
+                        FillPlayerViewers();
                 }
                 else
                 {
@@ -150,12 +153,18 @@ namespace LobbyScene
 
             NetworkManager.Singleton.OnClientDisconnectCallback += (clientId) =>
             {
-                if (!NetworkManager.Singleton.IsServer)
-                    return;
 
-                PlayersRegistry.Remove(clientId);
                 if (NetworkManager.Singleton.IsClient)
-                    FillPlayerViewers();
+                {
+                    SceneManager.LoadScene("ConnectionScene");
+                }
+
+                if (NetworkManager.Singleton.IsServer && GameState == GameState.Lobby)
+                {
+                    PlayersRegistry.Remove(clientId);
+                    if (NetworkManager.Singleton.IsClient)
+                        FillPlayerViewers();
+                }
             };
 
             NetworkManager.Singleton.OnServerStarted += () =>
@@ -301,7 +310,10 @@ namespace LobbyScene
 
         public void StartGame()
         {
+            if (!IsServer)
+                throw new NotServerException($"non-server client cannot start game");
             NetworkManager.Singleton.SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
+            GameState = GameState.Playing;
         }
 
         public void CopyRoomCode()
