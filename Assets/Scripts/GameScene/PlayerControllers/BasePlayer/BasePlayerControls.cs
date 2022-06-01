@@ -189,7 +189,8 @@ namespace GameScene.PlayerControllers.BasePlayer
 
         public void OnAim(InputAction.CallbackContext ctx)
         {
-            if (!IsOwner || playerState != PlayerState.Normal && playerState != PlayerState.InMap && playerState != PlayerState.InSelectStrat)
+            if (!IsOwner || playerState != PlayerState.Normal && playerState != PlayerState.InMap
+                                                              && playerState != PlayerState.InSelectStrat)
                 return;
 
             if (playerState == PlayerState.InMap || playerState == PlayerState.InSelectStrat)
@@ -210,9 +211,8 @@ namespace GameScene.PlayerControllers.BasePlayer
                 IMinion.Strategy strat = GameController.Singleton.HUDController.HideMinionSelection();
                 if (strat != IMinion.Strategy.Count)
                 {
-                    Debug.Log(strat);
                     strategy = strat;
-                    var tr = this.transform;
+                    var tr = transform;
                     SpawnMinionServerRpc(strategy, GroundPosition - tr.forward, tr.rotation);
                 }
             }

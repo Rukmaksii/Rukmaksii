@@ -57,10 +57,9 @@ namespace GameScene.HUD
             {
                 if (child.parent != transform)
                     continue;
-                
 
                 RectTransform foundChild = null;
-                for (int i = 0; !foundElement && i < results.Count && foundChild == null; i++)
+                for (int i = 0; i < results.Count && foundChild == null; i++)
                 {
                     if (results[i].gameObject.GetComponent<RectTransform>().parent == child.transform ||
                         results[i].gameObject == child.gameObject)
@@ -68,10 +67,7 @@ namespace GameScene.HUD
                         foundChild = child;
                     }
                 }
-
-                Vector3 scaleDirection = child.localPosition.normalized;
-                float scaleFactor = 1.3f;
-
+                
                 if (foundChild != null)
                 {
                     foundElement = true;
@@ -83,13 +79,13 @@ namespace GameScene.HUD
                         _ => strategy
                     };
                     foundChild.localScale = new Vector3(1.3f, 1.3f, 1);
+                    break;
                 }
-                else
-                {
-                    child.localScale = new Vector3(1f, 1f, 1);
-                    strategy = IMinion.Strategy.Count;
-                }
+                child.localScale = new Vector3(1f, 1f, 1);
             }
+
+            if (!foundElement)
+                strategy = IMinion.Strategy.Count;
         }
     }
 }
