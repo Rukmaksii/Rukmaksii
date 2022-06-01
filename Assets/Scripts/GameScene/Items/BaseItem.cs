@@ -89,9 +89,9 @@ namespace GameScene.Items
 
         public ItemInfo Info => ItemInfos[GetType()];
 
-        public abstract float Duration { get; protected set; }
+        public abstract float Duration { get; }
 
-        public abstract int Price { get; set; }
+        public abstract int Price { get; }
 
         /// <summary>
         ///     the time after which the player can use another item
