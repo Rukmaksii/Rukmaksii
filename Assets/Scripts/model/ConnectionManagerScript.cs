@@ -98,7 +98,7 @@ namespace model
             // connectionData.Data.ClassName = "test class";
             connectionData.Data.TeamId = 0;
         }
-    }
-
 #endif
+
+    }
 }
