@@ -57,7 +57,7 @@ namespace GameScene.Items
     [RequireComponent(typeof(ClientNetworkTransform))]
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(Collider))]
-    public abstract class BaseItem : NetworkBehaviour, IItem, IInteractable
+    public abstract class BaseItem : NetworkBehaviour, IItem, IPickable
     {
         public static readonly Dictionary<Type, ItemInfo> ItemInfos = new Dictionary<Type, ItemInfo>
         {

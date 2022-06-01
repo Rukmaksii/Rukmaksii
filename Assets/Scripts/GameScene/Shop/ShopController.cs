@@ -1,7 +1,5 @@
-using System;
-using GameScene.PlayerControllers.BasePlayer;
 using GameScene.model;
-using Photon.Realtime;
+using GameScene.PlayerControllers.BasePlayer;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -12,9 +10,9 @@ namespace GameScene.Shop
     public class ShopController : NetworkBehaviour, IInteractable
     {
         [SerializeField] public ShopUI.ShopUI ShopUI;
+
         public void Interact(BasePlayer player)
         {
-            
         }
 
         public void UnInteract()

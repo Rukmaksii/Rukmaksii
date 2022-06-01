@@ -17,7 +17,7 @@ namespace GameScene.Weapons
     [RequireComponent(typeof(ClientNetworkTransform))]
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(AudioSource))]
-    public abstract class BaseWeapon : NetworkBehaviour, IWeapon, IInteractable
+    public abstract class BaseWeapon : NetworkBehaviour, IWeapon, IPickable
     {
         [SerializeField] private Sprite sprite;
 
