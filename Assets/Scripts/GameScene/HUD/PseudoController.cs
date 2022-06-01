@@ -1,18 +1,54 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
+using GameScene.GameManagers;
+using LobbyScene;
+using Unity.Netcode;
 using UnityEngine;
 
-public class PseudoController : MonoBehaviour
+namespace GameScene.HUD
 {
-    // Start is called before the first frame update
-    void Start()
+    public class PseudoController : MonoBehaviour
     {
-        
-    }
+        [SerializeField] private GameObject pseudoHolder;
+        [SerializeField] private float renderDistance = 20f;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+
+        private Dictionary<ulong, GameObject> pseudoDictionary = new Dictionary<ulong, GameObject>();
+
+        // Update is called once per frame
+        void Update()
+        {
+        }
+
+        private void HandlePseudos()
+        {
+            var localPlayer = GameController.Singleton.LocalPlayer;
+            if (localPlayer == null)
+                return;
+
+            foreach (var player in GameController.Singleton.Players)
+            {
+                if (player.OwnerClientId == NetworkManager.Singleton.LocalClientId)
+                    return;
+
+                if (!pseudoDictionary.ContainsKey(player.OwnerClientId))
+                    pseudoDictionary[player.OwnerClientId] = Instantiate(pseudoHolder);
+
+
+                bool shouldDisplay =
+                    Vector3.Distance(player.transform.position, localPlayer.transform.position) <=
+                    renderDistance;
+                pseudoDictionary[player.OwnerClientId].SetActive(shouldDisplay);
+            }
+        }
+
+        /**
+         * <returns>the pseudo associated with the given client id</returns>
+         */
+        private string GetPseudo(ulong id)
+        {
+            string pseudo = LobbyManager.Singleton.PlayersRegistry[id].Pseudo;
+            return String.IsNullOrEmpty(pseudo) ? $"Player {id}" : pseudo;
+        }
     }
 }
