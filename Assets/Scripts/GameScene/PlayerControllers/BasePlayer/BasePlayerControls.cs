@@ -189,10 +189,29 @@ namespace GameScene.PlayerControllers.BasePlayer
 
         public void OnAim(InputAction.CallbackContext ctx)
         {
-            if (!IsOwner || playerState != PlayerState.Normal)
+            if (!IsOwner || playerState != PlayerState.Normal && playerState != PlayerState.InSelectStrat)
                 return;
 
-            SetAim(!Inventory.CurrentWeapon.IsReloading && ctx.performed);
+            if (playerState == PlayerState.InSelectStrat)
+                OpenStratSelector(ctx);
+            else
+                SetAim(!Inventory.CurrentWeapon.IsReloading && ctx.performed);
+        }
+
+        private void OpenStratSelector(InputAction.CallbackContext ctx)
+        {
+            if (ctx.started)
+            {
+                GameController.Singleton.HUDController.ShowMinionSelection();
+            }
+            else if (ctx.canceled)
+            {
+                IMinion.Strategy strat = GameController.Singleton.HUDController.HideMinionSelection();
+                if (strat == IMinion.Strategy.Count)
+                {
+                    return;
+                }
+            }
         }
 
         public void OnChangeStrategy(InputAction.CallbackContext ctx)
