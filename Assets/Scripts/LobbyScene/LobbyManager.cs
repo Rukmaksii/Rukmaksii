@@ -60,7 +60,7 @@ namespace LobbyScene
                 return validPlayers == PlayerCount;
             }
         }
-        
+
         public static LobbyManager Singleton { get; private set; }
 
         private void Awake()
@@ -114,6 +114,16 @@ namespace LobbyScene
                 }
             };
 
+            NetworkManager.Singleton.OnClientDisconnectCallback += (clientId) =>
+            {
+                if (!NetworkManager.Singleton.IsServer)
+                    return;
+
+                PlayersRegistry.Remove(clientId);
+                if (NetworkManager.Singleton.IsClient)
+                    FillPlayerViewers();
+            };
+
             NetworkManager.Singleton.OnServerStarted += () =>
             {
                 if (NetworkManager.Singleton.IsServer)
@@ -142,11 +152,13 @@ namespace LobbyScene
             }
         }
 
-        private List<ConnectionData> GetPlayersInTeam(int t) => PlayersRegistry.Values.Where(c => c.TeamId == t).ToList();
+        private List<ConnectionData> GetPlayersInTeam(int t) =>
+            PlayersRegistry.Values.Where(c => c.TeamId == t).ToList();
 
         private void FillPlayerViewers()
         {
-            var anchors = lobbyUI.GetComponentsInChildren<RectTransform>().Where(t => t.name.StartsWith("Anchor")).ToList();
+            var anchors = lobbyUI.GetComponentsInChildren<RectTransform>().Where(t => t.name.StartsWith("Anchor"))
+                .ToList();
             anchors.ForEach(a =>
             {
                 if (a.childCount == 1)
@@ -180,15 +192,17 @@ namespace LobbyScene
                 viewer.GetComponentsInChildren<Text>().First(e => e.name == "Pseudo").text = data.Pseudo;
 
                 if (data.TeamId == 0)
-                    viewer.transform.Find("BackgroundCircle").GetComponent<Image>().color = new Color(0, 160f/255, 1);
+                    viewer.transform.Find("BackgroundCircle").GetComponent<Image>().color = new Color(0, 160f / 255, 1);
                 else
-                    viewer.transform.Find("BackgroundCircle").GetComponent<Image>().color = new Color(226f/255, 33f/255, 0);
+                    viewer.transform.Find("BackgroundCircle").GetComponent<Image>().color =
+                        new Color(226f / 255, 33f / 255, 0);
 
                 BasePlayer player;
                 if (data.ClassName != null && (player = ClassPrefabs.Select(go => go.GetComponent<BasePlayer>())
                         .FirstOrDefault(p => p.ClassName == data.ClassName)) != null)
                 {
-                    viewer.transform.Find("Image").transform.Find("BackgroundImage").GetComponent<Image>().sprite = player.Sprite;
+                    viewer.transform.Find("Image").transform.Find("BackgroundImage").GetComponent<Image>().sprite =
+                        player.Sprite;
                 }
             }
 
@@ -208,9 +222,8 @@ namespace LobbyScene
                 Destroy(classViewport.GetChild(i).gameObject);
             }
 
-            
-            
-            float offset = - classCanvas.GetComponent<RectTransform>().rect.height / 2;
+
+            float offset = -classCanvas.GetComponent<RectTransform>().rect.height / 2;
             foreach (var player in availableClasses)
             {
                 var cv = Instantiate(classCanvas, classViewport);
@@ -234,7 +247,8 @@ namespace LobbyScene
                 });
             }
 
-            classViewport.sizeDelta = new Vector2(classViewport.rect.width, - offset - classCanvas.GetComponent<RectTransform>().rect.height / 2);
+            classViewport.sizeDelta = new Vector2(classViewport.rect.width,
+                -offset - classCanvas.GetComponent<RectTransform>().rect.height / 2);
         }
 
         [ServerRpc(RequireOwnership = false)]
