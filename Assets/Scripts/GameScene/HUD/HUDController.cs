@@ -67,6 +67,8 @@ namespace GameScene.HUD
             arrow.transform.SetParent(map.transform);
 
             SetupSprites();
+
+            _mapLoc = pointParent.transform.localPosition;
         }
 
         void Update()

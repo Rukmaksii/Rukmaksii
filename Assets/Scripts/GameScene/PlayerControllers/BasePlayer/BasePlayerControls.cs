@@ -207,8 +207,13 @@ namespace GameScene.PlayerControllers.BasePlayer
             if (!IsOwner || !ctx.started || !(playerState == PlayerState.Normal))
                 return;
 
+            GameController.Singleton.HUDController.ScaleUp();
+            playerState = BasePlayerState.PlayerState.InShop;
+            Cursor.lockState = CursorLockMode.Confined;
+            /*
             var tr = this.transform;
             SpawnMinionServerRpc(strategy, GroundPosition - tr.forward, tr.rotation);
+            */
         }
 
         public void OnDrop(InputAction.CallbackContext ctx)

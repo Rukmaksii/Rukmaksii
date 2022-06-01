@@ -18,6 +18,7 @@ namespace GameScene.HUD
         [SerializeField] protected Image objOverlay2;
         [SerializeField] protected Image objOverlay3;
 
+        private Vector3 _mapLoc;
         private const float MapRatio = 385f/1000;
         private List<GameObject> redPoints = new List<GameObject>();
         private List<GameObject> bluePoints = new List<GameObject>();
@@ -126,6 +127,12 @@ namespace GameScene.HUD
                 objOverlay3.color = Color.black;
             else
                 objOverlay3.color = Color.white;
+        }
+
+        public void ScaleUp()
+        {
+            pointParent.transform.localPosition = new Vector3(0, 0, 0);
+            pointParent.transform.localScale = new Vector3(2.6f, 2.6f, 1);
         }
     }
 }
