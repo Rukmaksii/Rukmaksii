@@ -188,7 +188,7 @@ namespace GameScene.GameManagers
         {
             monsterController.DestroyServerRpc();
             GameObject GrenadeInstance = Instantiate(GameController.Singleton.ItemPrefabs[1],
-                gameObject.transform.position, quaternion.identity);
+                monsterController.gameObject.transform.position, quaternion.identity);
             GrenadeInstance.GetComponent<NetworkObject>().Spawn();
         }
 
