@@ -5322,6 +5322,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 478606, guid: a9cc5585b9634a9449920c03ec6bc243, type: 3}
   m_PrefabInstance: {fileID: 444385619}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &256776152 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8199741300951332443, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
+  m_PrefabInstance: {fileID: 1152622202}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &257725900 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 459958, guid: 9469bb1d3aa88ca40aa4079e96a27f8e, type: 3}
@@ -26248,7 +26253,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3766438021586479273, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000023198252
+      value: -0.0000070310107
       objectReference: {fileID: 0}
     - target: {fileID: 3794802371307484881, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
       propertyPath: m_AnchorMax.y
@@ -26419,6 +26424,14 @@ PrefabInstance:
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5854134667580313296, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
+      propertyPath: itemsView
+      value: 
+      objectReference: {fileID: 256776152}
+    - target: {fileID: 5854134667580313296, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
+      propertyPath: weaponsView
+      value: 
+      objectReference: {fileID: 1192716836}
+    - target: {fileID: 5854134667580313296, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
       propertyPath: itemsContainer
       value: 
       objectReference: {fileID: 15635854}
@@ -26496,7 +26509,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7235143801518404198, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.0000024899964
+      value: -0.000027452428
       objectReference: {fileID: 0}
     - target: {fileID: 7391540710560586573, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
       propertyPath: m_Pivot.x
@@ -27724,6 +27737,11 @@ Transform:
 Transform:
   m_CorrespondingSourceObject: {fileID: 459958, guid: 9469bb1d3aa88ca40aa4079e96a27f8e, type: 3}
   m_PrefabInstance: {fileID: 994306460}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1192716836 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2677579355613201823, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
+  m_PrefabInstance: {fileID: 1152622202}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1192978940
 PrefabInstance:

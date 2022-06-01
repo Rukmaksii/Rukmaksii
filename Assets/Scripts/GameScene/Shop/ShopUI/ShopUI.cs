@@ -19,6 +19,8 @@ namespace GameScene.Shop.ShopUI
         [SerializeField] protected GameObject image;
         [SerializeField] protected GameObject holderWeapons;
         [SerializeField] protected GameObject holderItems;
+        [SerializeField] protected GameObject itemsView;
+        [SerializeField] protected GameObject weaponsView;
 
 
         private List<BaseWeapon> weapons;
@@ -47,14 +49,30 @@ namespace GameScene.Shop.ShopUI
 
         public void ShowWeapons()
         {
-            itemsContainer.gameObject.SetActive(false);
+            weaponsView.SetActive(true);
             weaponsContainer.gameObject.SetActive(true);
+            itemsView.SetActive(false);
+            itemsContainer.gameObject.SetActive(false);
+            /*
+            //Deactivate parent of parent of item container
+            itemsContainer.GetComponentInParent<RectTransform>().parent.gameObject.SetActive(false);
+            //Activate parent of parent of weapon container
+            weaponsContainer.GetComponentInParent<RectTransform>().parent.gameObject.SetActive(true);
+            */
         }
 
         public void ShowItems()
         {
+            itemsView.SetActive(true);
             itemsContainer.gameObject.SetActive(true);
-            weaponsContainer.gameObject.SetActive(false);
+            weaponsView.SetActive(false);
+            weaponsContainer.gameObject.SetActive(true);
+            /*
+            //Deactivate parent of parent of weapon container
+            weaponsContainer.GetComponentInParent<RectTransform>().parent.gameObject.SetActive(false);
+            //Activate parent of parent of item container
+            itemsContainer.GetComponentInParent<RectTransform>().parent.gameObject.SetActive(true);
+            */
         }
 
         public void Hide()
