@@ -146,10 +146,15 @@ namespace GameScene.PlayerControllers.BasePlayer
                 if (focusedObject.TryGetComponent(out ShopController shop))
                 {
                     currentShop = shop;
+                } else if (playerState != PlayerState.InShop)
+                {
+                    currentShop = null;
                 }
             }
             else
             {
+                if(playerState == PlayerState.InShop)
+                    CloseShop();
                 GameController.Singleton.HUDController.HideItemSelector();
             }
 
