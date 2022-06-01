@@ -1,30 +1,3 @@
-﻿namespace GameScene.Items
-{
-    public class FuelBooster : BaseItem
-    {
-        public override float Duration { get; protected set; } = 3f;
-        public override int Price { get; set; } = 100;
-        protected override float ReadyCooldown { get; } = 3f;
-
-        // storing the old fuel value
-        private float oldFuelValue = 10f;
-
-        private float newFuelValue;
-
-        protected override void Setup()
-        {
-            oldFuelValue = Player.Jetpack.FuelDuration;
-            newFuelValue = 1f;
-            Player.Jetpack.FuelDuration = newFuelValue;
-        }
-
-        protected override void OnConsume()
-        {
-        }
-
-        protected override void TearDown()
-        {
-            Player.Jetpack.FuelDuration = oldFuelValue;
-        }
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:a7c0518cd5010f6af0c37c8f0ef8b97b010a1416352b57af29bb3a4c49405eb9
+size 806

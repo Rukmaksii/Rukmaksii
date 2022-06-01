@@ -1,19 +1,3 @@
-using GameScene.PlayerControllers.BasePlayer;
-using UnityEngine;
-using UnityEngine.UI;
-
-namespace GameScene.Shop.ShopUI
-{
-    [RequireComponent(typeof(VerticalLayoutGroup))]
-    public abstract class Holder:MonoBehaviour
-    {
-        protected GameObject image;
-        protected GameObject buyButton;
-        protected ColorBlock buttonColor;
-
-        protected BasePlayer player;
-        
-        public abstract void CanBuy(bool canBuy);
-        protected abstract void Buy();
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:59643d72398cdc1bdf72b0df8acafb3e757373598e9e34ac7bf78fbcfd714cad
+size 488

@@ -1,19 +1,3 @@
-﻿using GameScene.model;
-using GameScene.PlayerControllers;
-
-namespace GameScene.Weapons.HeavyWeapons
-{
-    public class AWM : BaseWeapon, ScoutClassPlayer.IWeapon
-    {
-        public override WeaponType Type { get; } = WeaponType.Heavy;
-        public override float Range { get; } = 200f;
-        public override int Damage { get; } = 60;
-        public override float Cooldown { get; } = 1f;
-        public override int MaxAmmo { get; } = 5;
-        public override float ReloadTime { get; } = 2f;
-        public override int BulletsInRow { get; } = 1;
-        public override float BulletsInRowSpacing { get; } = 0.1f;
-        public override int Price { get; } = 1500;
-        public override string Name { get; } = "AWM";
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:d6cf931f65b1cfbfe9357d5030f99fd48d15122ab45530c456e40915901d6abb
+size 737

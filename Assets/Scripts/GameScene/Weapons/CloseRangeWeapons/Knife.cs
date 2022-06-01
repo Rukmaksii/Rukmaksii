@@ -1,19 +1,3 @@
-﻿using GameScene.model;
-using GameScene.PlayerControllers;
-
-namespace GameScene.Weapons.CloseRangeWeapons
-{
-    public class Knife : BaseWeapon, SoldierClassPlayer.IWeapon, ScoutClassPlayer.IWeapon, TankClassPlayer.IWeapon
-    {
-        public override WeaponType Type { get; } = WeaponType.CloseRange;
-        public override float Range { get; } = 0.5f;
-        public override int Damage { get; } = 35;
-        public override string Name { get; } = "Knife";
-        public override float Cooldown { get; } = 0;
-        public override int MaxAmmo { get; } = 1;
-        public override float ReloadTime { get; } = 0.3f;
-        public override int BulletsInRow { get; } = 0;
-        public override float BulletsInRowSpacing { get; } = 0;
-        public override int Price { get; } = 42;
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:96c2e2899fbef3d3e5af83bb5a4d16234f817f5890917c12dda374efc70d9739
+size 818

@@ -1,21 +1,3 @@
-fileFormatVersion: 2
-guid: 5bbcce4f56c6de49dac15c008c1456c6
-TrueTypeFontImporter:
-  externalObjects: {}
-  serializedVersion: 4
-  fontSize: 16
-  forceTextureCase: -2
-  characterSpacing: 0
-  characterPadding: 1
-  includeFontData: 1
-  fontNames:
-  - The Bold Font
-  fallbackFontReferences: []
-  customCharacters: 
-  fontRenderingMode: 0
-  ascentCalculationMode: 1
-  useLegacyBoundsCalculation: 0
-  shouldRoundAdvanceValue: 1
-  userData: 
-  assetBundleName: 
-  assetBundleVariant: 
+version https://git-lfs.github.com/spec/v1
+oid sha256:27ba850391b8da7849b6dc6ebdc2d5333f10b6a3e7cd7d73ee61f92d7407ff35
+size 478

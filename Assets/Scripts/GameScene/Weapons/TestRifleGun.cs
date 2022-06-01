@@ -1,18 +1,3 @@
-﻿using GameScene.model;
-
-namespace GameScene.Weapons
-{
-    public class TestRifleGun : BaseWeapon
-    {
-        public override WeaponType Type { get; } = WeaponType.Heavy;
-        public override float Range { get; } = 100f;
-        public override int Damage { get; } = 3;
-        public override float Cooldown { get; } = 1f;
-        public override int MaxAmmo { get; } = 50;
-        public override float ReloadTime { get; } = 5f;
-        public override int BulletsInRow { get; } = 5;
-        public override float BulletsInRowSpacing { get; } = 0.1f;
-        public override int Price { get; } = 600;
-        public override string Name { get; } = "rifle";
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:8c80d1bc2522aa04c6f0219c625659dbecb6a5d416cea9d4d048b79ba1c78ccc
+size 690

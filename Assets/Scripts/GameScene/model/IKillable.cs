@@ -1,17 +1,3 @@
-﻿namespace GameScene.model
-{
-    public interface IKillable
-    {
-        /**
-         * <summary>inflicts <see cref="damage"/> to the <see cref="IKillable"/></summary>
-         * <param name="damage">the damages to be inflicted</param>
-         * <returns>true if the <see cref="IKillable"/> is still alive, false otherwise</returns>
-         */
-        public bool TakeDamage(int damage);
-
-        /**
-         * <summary>called when an <see cref="IKillable"/> is killed</summary>
-         */
-        public void OnKill();
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:b1a72cd4df4d98bbeb0766d688241a448a7b01df0802a1c308d451e32e2ed42b
+size 550

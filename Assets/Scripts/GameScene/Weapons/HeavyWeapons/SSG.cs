@@ -1,19 +1,3 @@
-﻿using GameScene.model;
-using GameScene.PlayerControllers;
-
-namespace GameScene.Weapons.HeavyWeapons
-{
-    public class SSG : BaseWeapon, SoldierClassPlayer.IWeapon, ScoutClassPlayer.IWeapon
-    {
-        public override WeaponType Type { get; } = WeaponType.Heavy;
-        public override float Range { get; } = 200f;
-        public override int Damage { get; } = 35;
-        public override float Cooldown { get; } = 0.8f;
-        public override int MaxAmmo { get; } = 5;
-        public override float ReloadTime { get; } = 2f;
-        public override int BulletsInRow { get; } = 1;
-        public override float BulletsInRowSpacing { get; } = 0.1f;
-        public override int Price { get; } = 1100;
-        public override string Name { get; } = "SSG";
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:8c46ee70c53e629000ede04b49f9213c2be0abcc5c5afe1e254f5fbaf7c5372a
+size 767

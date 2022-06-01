@@ -1,19 +1,3 @@
-﻿using GameScene.model;
-using GameScene.PlayerControllers;
-
-namespace GameScene.Weapons
-{
-    public class CZ75 : BaseWeapon, TankClassPlayer.IWeapon
-    {
-        public override WeaponType Type { get; } = WeaponType.Light;
-        public override float Range { get; } = 25f;
-        public override int Damage { get; } = 2;
-        public override float Cooldown { get; } = 0.08f;
-        public override int MaxAmmo { get; } = 15;
-        public override float ReloadTime { get; } = 2f;
-        public override int BulletsInRow { get; } = 1;
-        public override float BulletsInRowSpacing { get; } = 0.1f;
-        public override int Price { get; } = 300;
-        public override string Name { get; } = "CZ75";
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:fc95eb87c70e6267c0f946734e4efecc9e98aadc5d36aad88fd7f2259ae52588
+size 726

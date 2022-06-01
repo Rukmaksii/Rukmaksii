@@ -1,26 +1,3 @@
-using System;
-using GameScene.PlayerControllers.BasePlayer;
-using GameScene.model;
-using Photon.Realtime;
-using Unity.Netcode;
-using UnityEngine;
-
-namespace GameScene.Shop
-{
-    [RequireComponent(typeof(Rigidbody))]
-    [RequireComponent(typeof(NetworkObject))]
-    public class ShopController : NetworkBehaviour
-    {
-        [SerializeField] public ShopUI.ShopUI ShopUI;
-        public void PickUp(BasePlayer player)
-        {
-            
-        }
-
-        public void Drop()
-        {
-        }
-
-        public bool IsOwned { get; }
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:aa7f87e01292fba1ebf9d16e0c8c6c8f9d7fd81656008246c564bc954c335f6b
+size 545

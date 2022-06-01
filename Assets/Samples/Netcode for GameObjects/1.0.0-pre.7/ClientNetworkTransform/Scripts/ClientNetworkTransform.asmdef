@@ -1,8 +1,3 @@
-{
-	"name": "ClientNetworkTransform",
-    "rootNamespace": "Unity.Netcode.Samples",
-    "references": [
-        "Unity.Netcode.Runtime",
-        "Unity.Netcode.Components"
-    ]
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:bbcd0c2e19abea13100b2e04c21c15e9d21b516257e03296235779909180dd58
+size 179

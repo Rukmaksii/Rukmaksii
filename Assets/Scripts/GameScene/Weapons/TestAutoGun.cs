@@ -1,19 +1,3 @@
-﻿using GameScene.model;
-using GameScene.PlayerControllers;
-
-namespace GameScene.Weapons
-{
-    public class TestAutoGun : BaseWeapon, SoldierClassPlayer.IWeapon
-    {
-        public override WeaponType Type { get; } = WeaponType.Heavy;
-        public override float Range { get; } = 100f;
-        public override int Damage { get; } = 5;
-        public override float Cooldown { get; } = 0.1f;
-        public override int MaxAmmo { get; } = 30;
-        public override float ReloadTime { get; } = 5f;
-        public override int BulletsInRow { get; } = 1;
-        public override float BulletsInRowSpacing { get; } = 0.1f;
-        public override int Price { get; } = 1000;
-        public override string Name { get; } = "auto-rifle";
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:702961b7eb98618e6c659e8c77537619aac246bfe340da23aa81ae898c6d6153
+size 761

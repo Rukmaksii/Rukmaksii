@@ -1,19 +1,3 @@
-﻿using GameScene.model;
-using GameScene.PlayerControllers;
-
-namespace GameScene.Weapons.HeavyWeapons
-{
-    public class Famas : BaseWeapon, SoldierClassPlayer.IWeapon
-    {
-        public override WeaponType Type { get; } = WeaponType.Heavy;
-        public override float Range { get; } = 100f;
-        public override int Damage { get; } = 4;
-        public override float Cooldown { get; } = 0.45f;
-        public override int MaxAmmo { get; } = 27;
-        public override float ReloadTime { get; } = 1.5f;
-        public override int BulletsInRow { get; } = 3;
-        public override float BulletsInRowSpacing { get; } = 0.1f;
-        public override int Price { get; } = 750;
-        public override string Name { get; } = "Famas";
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:d65950226c4fda58878584ada72dd5cf2ae014b3131b8661b61074793e4fc482
+size 747

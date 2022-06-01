@@ -1,22 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using GameScene.PlayerControllers.BasePlayer;
-
-namespace GameScene.Abilities
-{
-    public class JetpackAbility : BaseAbility
-    {
-        private float multiplier = 1.1f;
-
-        public override List<Type> Children { get; } = new List<Type>();
-
-        public override void Apply()
-        {
-            Player.Jetpack.FuelDuration *= multiplier;
-        }
-
-        public JetpackAbility(BasePlayer player) : base(player)
-        {
-        }
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:40e944e2b6a3d1fd76e9c76c4fcc5a104788677dd0978ce35b799c3bf78c4376
+size 523
