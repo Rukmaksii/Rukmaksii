@@ -8,7 +8,6 @@ using UnityEngine.UI;
 
 namespace GameScene.Shop.ShopUI
 {
-    [RequireComponent(typeof(HorizontalLayoutGroup))]
     public class ShopContainer : MonoBehaviour
     {
         private GameObject holderWeapons;
@@ -17,8 +16,8 @@ namespace GameScene.Shop.ShopUI
         private GameObject image;
         private List<BaseWeapon> listWeapons;
         private List<BaseItem> listItems;
-        private List<HolderWeapons> HolderWeaponsList = new List<HolderWeapons>();
-        private List<HolderItems> HolderItemsList = new List<HolderItems>();
+        private List<HolderWeapons> holderWeaponsList = new List<HolderWeapons>();
+        private List<HolderItems> holderItemsList = new List<HolderItems>();
         private BasePlayer player;
         public bool IsWeapons { get; private set; }
 
@@ -34,25 +33,25 @@ namespace GameScene.Shop.ShopUI
             if (IsWeapons)
             {
                 this.holderWeapons = holderWeaponsObj;
-                HolderWeaponsList = new List<HolderWeapons>();
+                holderWeaponsList = new List<HolderWeapons>();
                 foreach (BaseWeapon weapon in listWeapons)
                 {
                     HolderWeapons holderWeapons =
                         Instantiate(this.holderWeapons, transform).GetComponent<HolderWeapons>();
                     holderWeapons.Init(weapon, this.buyButton, this.image);
-                    HolderWeaponsList.Add(holderWeapons);
+                    holderWeaponsList.Add(holderWeapons);
                 }
             }
             else
             {
                 this.holderItems = holderItemsObj;
-                HolderItemsList = new List<HolderItems>();
+                holderItemsList = new List<HolderItems>();
                 foreach (BaseItem item in listItems)
                 {
                     HolderItems holderItems =
                         Instantiate(this.holderItems, transform).GetComponent<HolderItems>();
                     holderItems.Init(item, this.buyButton, this.image);
-                    HolderItemsList.Add(holderItems);
+                    holderItemsList.Add(holderItems);
                 }
             }
         }
@@ -63,7 +62,7 @@ namespace GameScene.Shop.ShopUI
                 return;
             if (IsWeapons)
             {
-                foreach (HolderWeapons holder in HolderWeaponsList)
+                foreach (HolderWeapons holder in holderWeaponsList)
                 {
                     if (holder.weapon.Price < player.Money)
                     {
@@ -77,7 +76,7 @@ namespace GameScene.Shop.ShopUI
             }
             else
             {
-                foreach (HolderItems holder in HolderItemsList)
+                foreach (HolderItems holder in holderItemsList)
                 {
                     if (holder.item.Price < player.Money)
                     {
@@ -93,8 +92,15 @@ namespace GameScene.Shop.ShopUI
 
         public void Deactivate()
         {
-            HolderWeaponsList.ForEach(Destroy);
-            HolderItemsList.ForEach(Destroy);
+            foreach (HolderItems items in holderItemsList)
+            {
+                Destroy(items.gameObject);
+            }
+
+            foreach (HolderWeapons weapons in holderWeaponsList)
+            {
+                Destroy(weapons.gameObject);
+            }
         }
     }
 }

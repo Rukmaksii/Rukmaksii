@@ -39,7 +39,7 @@ namespace GameScene.Shop.ShopUI
             shopName.GetComponent<Text>().text = "Shop";
             textMoney.GetComponent<Text>().text = "";
 
-            weaponsContainer.Init(weapons, items, holderWeapons, holderItems, buyButton, image, true);
+            weaponsContainer.Init(this.weapons, this.items, holderWeapons, holderItems, buyButton, image, true);
 
             itemsContainer.Init(this.weapons, this.items, holderWeapons, holderItems, buyButton, image, false);
             ShowWeapons();
@@ -61,6 +61,8 @@ namespace GameScene.Shop.ShopUI
         {
             itemsContainer.Deactivate();
             weaponsContainer.Deactivate();
+            itemsContainer.gameObject.SetActive(false);
+            weaponsContainer.gameObject.SetActive(false);
         }
     }
 }

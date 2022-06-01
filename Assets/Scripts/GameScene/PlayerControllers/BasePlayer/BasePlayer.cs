@@ -130,56 +130,53 @@ namespace GameScene.PlayerControllers.BasePlayer
 
         private void UpdateOwner()
         {
-            if (playerState == PlayerState.Normal)
+            var _deltaTime = Time.deltaTime;
+
+            handleDash(_deltaTime);
+
+            focusedObject = GetClosestPickableObject(pickUpDistance);
+            if (focusedObject != null)
             {
-                var _deltaTime = Time.deltaTime;
-
-                handleDash(_deltaTime);
-
-                focusedObject = GetClosestPickableObject(pickUpDistance);
-                if (focusedObject != null)
-                {
-                    Vector2 scalars = CameraController.Camera.WorldToViewportPoint(focusedObject.transform.position);
-                    GameController.Singleton.HUDController.ShowItemSelector(scalars);
-                }
-                else
-                {
-                    GameController.Singleton.HUDController.HideItemSelector();
-                }
-
-                Vector3 res;
-
-                if (!IsFlying)
-                {
-                    var moveVector = Movement;
-
-                    float multiplier = movementSpeed;
-                    if (IsRunning)
-                    {
-                        multiplier *= runningSpeedMultiplier;
-                    }
-
-                    res = Movement * multiplier;
-
-                    yVelocity += (gravityMultiplier * Physics.gravity * _deltaTime).y;
-                    if (IsGrounded && yVelocity < 0f)
-                        yVelocity = 0;
-
-                    if (moveVector.y > 0)
-                        Jump();
-
-                    res.y = yVelocity;
-                }
-                else
-                {
-                    res = Jetpack.Velocity;
-                }
-
-
-                controller.Move(transform.TransformDirection(res) * _deltaTime);
-                UpdateVelocityServerRpc(res);
-                UpdateCamera();
+                Vector2 scalars = CameraController.Camera.WorldToViewportPoint(focusedObject.transform.position);
+                GameController.Singleton.HUDController.ShowItemSelector(scalars);
             }
+            else
+            {
+                GameController.Singleton.HUDController.HideItemSelector();
+            }
+
+            Vector3 res;
+
+            if (!IsFlying)
+            {
+                var moveVector = Movement;
+
+                float multiplier = movementSpeed;
+                if (IsRunning)
+                {
+                    multiplier *= runningSpeedMultiplier;
+                }
+
+                res = Movement * multiplier;
+
+                yVelocity += (gravityMultiplier * Physics.gravity * _deltaTime).y;
+                if (IsGrounded && yVelocity < 0f)
+                    yVelocity = 0;
+
+                if (moveVector.y > 0)
+                    Jump();
+
+                res.y = yVelocity;
+            }
+            else
+            {
+                res = Jetpack.Velocity;
+            }
+
+
+            controller.Move(transform.TransformDirection(res) * _deltaTime);
+            UpdateVelocityServerRpc(res);
+            UpdateCamera();
         }
 
         /// <summary>

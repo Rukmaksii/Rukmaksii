@@ -33,8 +33,7 @@ namespace GameScene.Shop.ShopUI
 
         public override void CanBuy(bool canBuy)
         {
-            btn.interactable = canBuy;
-            btn.enabled = canBuy;
+            btn.interactable = btn.enabled = canBuy;
         }
 
         protected override void Buy()
