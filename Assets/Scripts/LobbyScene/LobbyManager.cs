@@ -133,14 +133,13 @@ namespace LobbyScene
             PlayersRegistry.OnValueChanged += (@event) => { FillPlayerViewers(); };
             NetworkManager.Singleton.OnClientConnectedCallback += (clientId) =>
             {
+                _roomName = connectionData.Data.RoomName;
+                roomName.text = _roomName;
                 if (!NetworkManager.Singleton.IsClient)
                     return;
-
                 if (NetworkManager.Singleton.IsServer)
                 {
                     connectionData.Data.TeamId = 0;
-                    _roomName = connectionData.Data.RoomName;
-                    roomName.text = _roomName;
                     PlayersRegistry[clientId] = connectionData.Data;
                     if (GameState == GameState.Lobby)
                         FillPlayerViewers();
