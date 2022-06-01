@@ -85,8 +85,6 @@ namespace GameScene.PlayerControllers.Inventory
                 AddWeapon(weapon);
             else if (go.TryGetComponent(out BaseItem item))
                 AddItem(item);
-            else if(go.TryGetComponent(out ShopController shop))
-                shop.PickUp(Player);
         }
 
         private void HandleModeRenderers(Mode mode, bool reset = false)
