@@ -85,7 +85,7 @@ namespace GameScene.Items
             get => IsSpawned && playerReference.Value.TryGet(out BasePlayer res) ? res : null;
         }
 
-        public bool IsOwned => !(Player is null);
+        public bool IsInteractable => !(Player is null);
 
         public ItemInfo Info => ItemInfos[GetType()];
 
@@ -137,8 +137,8 @@ namespace GameScene.Items
             renderState.OnValueChanged += (old, val) => SwitchRenderers(val);
             SwitchRenderers(renderState.Value);
 
-            playerReference.OnValueChanged += (_, val) => SwitchColliders(!IsOwned);
-            SwitchColliders(!IsOwned);
+            playerReference.OnValueChanged += (_, val) => SwitchColliders(!IsInteractable);
+            SwitchColliders(!IsInteractable);
         }
 
         private void Update()
@@ -147,15 +147,15 @@ namespace GameScene.Items
                 return;
             if (!started)
             {
-                GetComponent<Rigidbody>().isKinematic = IsOwned;
-                if (IsOwner && IsOwned)
+                GetComponent<Rigidbody>().isKinematic = IsInteractable;
+                if (IsOwner && IsInteractable)
                     transform.localPosition = Player.transform.InverseTransformPoint(Player.WeaponContainer.position);
             }
 
             if (!IsServer)
                 return;
 
-            if (!IsOwned ||
+            if (!IsInteractable ||
                 !IsServer ||
                 State == ItemState.Consumed ||
                 consumedTime < 0)

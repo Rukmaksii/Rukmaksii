@@ -21,7 +21,7 @@ namespace GameScene.Shop
         {
         }
 
-        public bool IsOwned { get; }
+        public bool IsInteractable { get; }
         public string InteractableName { get; } = "Shop";
     }
 }

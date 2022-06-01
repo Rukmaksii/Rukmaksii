@@ -13,7 +13,7 @@ namespace GameScene.model
 
         void UnInteract();
 
-        public bool IsOwned { get; }
+        public bool IsInteractable { get; }
 
         string InteractableName { get; }
     }

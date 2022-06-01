@@ -52,7 +52,7 @@ namespace GameScene.Weapons
         /// <summary>
         ///     checks if the weapon is owned by a player
         /// </summary>
-        public bool IsOwned => !(Player is null);
+        public bool IsInteractable => !(Player is null);
 
         private Transform Shoulder;
 
@@ -144,7 +144,7 @@ namespace GameScene.Weapons
         {
             source = GetComponent<AudioSource>();
             renderState.OnValueChanged += (_, val) => SwitchRenderers(val);
-            playerReference.OnValueChanged += (_, val) => SwitchColliders(!IsOwned);
+            playerReference.OnValueChanged += (_, val) => SwitchColliders(!IsInteractable);
         }
 
         void Start()
@@ -200,9 +200,9 @@ namespace GameScene.Weapons
             }
 
             var rb = GetComponent<Rigidbody>();
-            rb.isKinematic = IsOwned;
+            rb.isKinematic = IsInteractable;
 
-            if (IsServer && !IsOwned)
+            if (IsServer && !IsInteractable)
             {
                 if (rb.velocity.magnitude > 10f)
                 {
@@ -210,7 +210,7 @@ namespace GameScene.Weapons
                 }
             }
 
-            if (IsOwner && IsOwned)
+            if (IsOwner && IsInteractable)
             {
                 if (Shoulder == null)
                     SetShoulder();

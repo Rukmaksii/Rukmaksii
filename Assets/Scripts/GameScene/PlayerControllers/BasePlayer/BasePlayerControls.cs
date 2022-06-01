@@ -263,7 +263,7 @@ namespace GameScene.PlayerControllers.BasePlayer
         {
             // ReSharper disable once Unity.PreferNonAllocApi
             return Physics.OverlapSphere(transform.TransformPoint(controller.center), distance)
-                .Where(cld => cld.gameObject.TryGetComponent(out IInteractable pickable) && !pickable.IsOwned)
+                .Where(cld => cld.gameObject.TryGetComponent(out IInteractable pickable) && !pickable.IsInteractable)
                 .Select(cld => cld.gameObject)
                 .ToArray();
         }

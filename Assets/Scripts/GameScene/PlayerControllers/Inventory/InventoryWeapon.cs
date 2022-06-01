@@ -314,7 +314,7 @@ namespace GameScene.PlayerControllers.Inventory
         private void SwitchWeaponClientRpc(WeaponType type)
         {
             BaseWeapon baseWeapon = GetWeaponByType(type);
-            if (baseWeapon != null && baseWeapon.IsOwned)
+            if (baseWeapon != null && baseWeapon.IsInteractable)
             {
                 Player.SetHandTargets(baseWeapon.RightHandTarget, baseWeapon.LeftHandTarget);
             }
