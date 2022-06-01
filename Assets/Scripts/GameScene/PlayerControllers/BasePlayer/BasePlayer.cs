@@ -141,7 +141,8 @@ namespace GameScene.PlayerControllers.BasePlayer
             if (focusedObject != null)
             {
                 Vector2 scalars = CameraController.Camera.WorldToViewportPoint(focusedObject.transform.position);
-                GameController.Singleton.HUDController.ShowItemSelector(scalars);
+                GameController.Singleton.HUDController.ShowItemSelector(scalars,
+                    focusedObject.GetComponent<IInteractable>().InteractableName);
                 if (focusedObject.TryGetComponent(out ShopController shop))
                 {
                     currentShop = shop;

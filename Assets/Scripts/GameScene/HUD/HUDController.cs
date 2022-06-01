@@ -222,11 +222,12 @@ namespace GameScene.HUD
             hitMarker.SetActive(status);
         }
 
-        public void ShowItemSelector(Vector2 screenPos)
+        public void ShowItemSelector(Vector2 screenPos, string itemName = null)
         {
             Vector2 positions = new Vector2(CanvasWidth * screenPos.x, CanvasHeight * screenPos.y);
             itemSelector.GetComponent<RectTransform>().anchoredPosition = positions;
             itemSelector.SetActive(true);
+            itemSelector.GetComponentInChildren<Text>().text = itemName;
         }
 
         public void ShowMinionSelection()
