@@ -535,7 +535,7 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLDecompressionFallback: 0
   scriptingDefineSymbols:
-    1: DEBU
+    1: DEBUG
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend: {}
