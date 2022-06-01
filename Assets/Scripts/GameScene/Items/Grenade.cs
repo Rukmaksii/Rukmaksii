@@ -8,11 +8,11 @@ namespace GameScene.Items
 {
     public class Grenade : BaseItem
     {
-        public override float Duration { get; protected set; } = 3f;
+        public override float Duration { get; } = 3f;
         private readonly int Damage = 50;
         private readonly float ThrowForce = 30f;
         public ParticleSystem explosion;
-        public override int Price { get; set; } = 50;
+        public override int Price { get; } = 50;
 
         protected override void Setup()
         {

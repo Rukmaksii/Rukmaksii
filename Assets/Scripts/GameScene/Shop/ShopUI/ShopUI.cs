@@ -81,6 +81,7 @@ namespace GameScene.Shop.ShopUI
             weaponsContainer.Deactivate();
             itemsContainer.gameObject.SetActive(false);
             weaponsContainer.gameObject.SetActive(false);
+            gameObject.SetActive(false);
         }
     }
 }

@@ -136,7 +136,7 @@ namespace GameScene.PlayerControllers.BasePlayer
 
             handleDash(_deltaTime);
 
-            focusedObject = GetClosestPickableObject(pickUpDistance);
+            focusedObject = GetClosestInteractableObject(pickUpDistance);
             if (focusedObject != null)
             {
                 Vector2 scalars = CameraController.Camera.WorldToViewportPoint(focusedObject.transform.position);
