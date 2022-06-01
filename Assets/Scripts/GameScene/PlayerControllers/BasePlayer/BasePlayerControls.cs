@@ -212,7 +212,8 @@ namespace GameScene.PlayerControllers.BasePlayer
                 {
                     Debug.Log(strat);
                     strategy = strat;
-                    
+                    var tr = this.transform;
+                    SpawnMinionServerRpc(strategy, GroundPosition - tr.forward, tr.rotation);
                 }
             }
         }
