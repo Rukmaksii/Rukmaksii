@@ -15,8 +15,9 @@ using UnityEngine.UI;
 
 namespace GameScene.GameManagers
 {
-    enum GameState
+    public enum GameState : byte
     {
+        Lobby,
         Menu,
         Playing,
         Ended

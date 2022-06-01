@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using GameScene.GameManagers;
 using GameScene.PlayerControllers.BasePlayer;
 using model;
 using Unity.Netcode;
@@ -35,6 +36,18 @@ namespace LobbyScene
         private bool _bypassVerification = false;
 #endif
 
+        private NetworkVariable<GameState> gameState = new NetworkVariable<GameState>(GameState.Lobby);
+
+        public GameState GameState
+        {
+            get => gameState.Value;
+            set
+            {
+                if (!IsServer)
+                    throw new NotServerException($"client cannot set game state");
+                gameState.Value = value;
+            }
+        }
 
         private NetworkVariable<int> playerCount = new NetworkVariable<int>();
 
