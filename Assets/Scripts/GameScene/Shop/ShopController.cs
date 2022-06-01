@@ -11,8 +11,10 @@ namespace GameScene.Shop
     {
         [SerializeField] public ShopUI.ShopUI ShopUI;
 
-        public void Interact(BasePlayer player)
+        public bool Interact(BasePlayer player)
         {
+
+            return true;
         }
 
         public void UnInteract()

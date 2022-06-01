@@ -460,7 +460,7 @@ namespace GameScene.Weapons
         /// </summary>
         /// <param name="player">the new owner of the weapon</param>
         /// <exception cref="NotServerException">if not server</exception>
-        public void Interact(BasePlayer player)
+        public bool Interact(BasePlayer player)
         {
             if (!IsServer)
                 throw new NotServerException();
@@ -468,6 +468,7 @@ namespace GameScene.Weapons
             NetworkObject.ChangeOwnership(player.OwnerClientId);
             NetworkObject.TrySetParent(player.transform);
             SetShoulder();
+            return true;
         }
 
         /// <summary>

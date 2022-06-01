@@ -4,7 +4,12 @@ namespace GameScene.model
 {
     public interface IInteractable
     {
-        void Interact(BasePlayer player);
+        
+        /**
+         * <param name="player">the player that interacts with the object</param>
+         * <returns>true if interaction has been made</returns>
+         */
+        bool Interact(BasePlayer player);
 
         void UnInteract();
 

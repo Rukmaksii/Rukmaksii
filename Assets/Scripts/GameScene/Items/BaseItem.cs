@@ -226,13 +226,14 @@ namespace GameScene.Items
         protected abstract void OnConsume();
         protected abstract void TearDown();
 
-        public void Interact(BasePlayer player)
+        public bool Interact(BasePlayer player)
         {
             if (!IsServer)
                 throw new NotServerException();
             Player = player;
             NetworkObject.ChangeOwnership(player.OwnerClientId);
             NetworkObject.TrySetParent(Player.transform);
+            return true;
         }
 
         public void UnInteract()
