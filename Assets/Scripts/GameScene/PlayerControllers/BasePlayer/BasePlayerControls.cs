@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using GameScene.GameManagers;
-using GameScene.HUD;
-using GameScene.Items;
+﻿using System.Linq;
 using GameScene.model;
+using GameScene.Shop;
 using GameScene.Weapons;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -256,7 +253,21 @@ namespace GameScene.PlayerControllers.BasePlayer
             if (!IsOwner || focusedObject == null || !ctx.performed)
                 return;
 
-            Inventory.PickUpObject(focusedObject);
+            if (currentShop != null)
+            {
+                if (playerState == PlayerState.Normal)
+                {
+                    OpenShop(currentShop);
+                }
+                else
+                {
+                    CloseShop();
+                }
+            }
+            else
+            {
+                Inventory.PickUpObject(focusedObject);
+            }
         }
 
         private GameObject[] GetSurroundingObjects(float distance)
@@ -283,56 +294,23 @@ namespace GameScene.PlayerControllers.BasePlayer
                 .FirstOrDefault();
         }
 
-        private void OpenShop()
+        private void OpenShop(ShopController controller)
         {
-            playerState = PlayerState.InShop;
-            Cursor.lockState = CursorLockMode.Confined;
-            List<BaseWeapon> possibleWeapons = GameController.Singleton.WeaponPrefabs
-                .Select(go => go.GetComponent<BaseWeapon>())
-                .Where(bw => bw.GetType().GetInterfaces().Contains(this.WeaponInterface))
-                .ToList();
-            List<BaseItem> possibleItems =
-                GameController.Singleton.ItemPrefabs
-                    .Select(go => go.GetComponent<BaseItem>())
-                    .ToList();
-            HUDController.Singleton.ShopUI.Init(possibleWeapons, possibleItems, this);
+            if (controller.Interact(this))
+            {
+                playerState = PlayerState.InShop;
+                Cursor.lockState = CursorLockMode.Confined;
+            }
         }
 
         private void CloseShop()
         {
+            currentShop.UnInteract();
             Cursor.lockState = CursorLockMode.Locked;
             playerState = PlayerState.Normal;
-            HUDController.Singleton.ShopUI.Hide();
+            currentShop = null;
         }
 
-
-        public void OnShop(InputAction.CallbackContext ctx)
-        {
-            if (!IsOwner)
-                return;
-            if (playerState == PlayerState.Normal)
-            {
-                GameObject[] shops = GameObject.FindGameObjectsWithTag("Shop");
-                bool near = false;
-                foreach (GameObject shop in shops)
-                {
-                    if (Vector3.Distance(shop.transform.position, transform.position) < 2f)
-                    {
-                        near = true;
-                        break;
-                    }
-                }
-
-                if (near)
-                {
-                    OpenShop();
-                }
-            }
-            else
-            {
-                CloseShop();
-            }
-        }
 
         public void OnInventoryOpened(InputAction.CallbackContext ctx)
         {

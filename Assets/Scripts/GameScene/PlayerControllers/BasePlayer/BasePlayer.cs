@@ -1,5 +1,6 @@
 using GameScene.GameManagers;
 using GameScene.model;
+using GameScene.Shop;
 using Unity.Netcode;
 using Unity.Netcode.Samples;
 using UnityEngine;
@@ -141,6 +142,10 @@ namespace GameScene.PlayerControllers.BasePlayer
             {
                 Vector2 scalars = CameraController.Camera.WorldToViewportPoint(focusedObject.transform.position);
                 GameController.Singleton.HUDController.ShowItemSelector(scalars);
+                if (focusedObject.TryGetComponent(out ShopController shop))
+                {
+                    currentShop = shop;
+                }
             }
             else
             {

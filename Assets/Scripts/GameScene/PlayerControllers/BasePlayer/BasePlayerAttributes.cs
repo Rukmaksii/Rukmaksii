@@ -4,6 +4,7 @@ using GameScene.Abilities.model;
 using GameScene.GameManagers;
 using GameScene.Minions;
 using GameScene.model;
+using GameScene.Shop;
 using GameScene.Shop.ShopUI;
 using Unity.Netcode;
 using UnityEngine;
@@ -242,6 +243,6 @@ namespace GameScene.PlayerControllers.BasePlayer
         private PlayerState playerState;
 
 
-        private GameObject currentShop;
+        private ShopController currentShop;
     }
 }
