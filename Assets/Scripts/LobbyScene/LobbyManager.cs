@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Data;
+using System.Windows;
 using System.Linq;
 using GameScene.PlayerControllers.BasePlayer;
 using model;
@@ -24,11 +25,13 @@ namespace LobbyScene
         [SerializeField] private GameObject classCanvas;
         [SerializeField] private GameObject classDepoCanvas;
         [SerializeField] private RectTransform classViewport;
-        [SerializeField] private GameObject contentBox;
-
+        [SerializeField] private Text roomName;
+        
         [SerializeField] private Button startButton;
         [SerializeField] private Canvas lobbyUI;
 
+        private string _roomName;
+        
         private NetworkVariable<int> playerCount = new NetworkVariable<int>();
 
         public readonly NetworkPlayersRegistry<ConnectionData> PlayersRegistry =
@@ -100,6 +103,8 @@ namespace LobbyScene
                 if (NetworkManager.Singleton.IsServer)
                 {
                     connectionData.Data.TeamId = 0;
+                    _roomName = connectionData.Data.RoomName;
+                    roomName.text = _roomName;
                     PlayersRegistry[clientId] = connectionData.Data;
                     FillPlayerViewers();
                 }
@@ -258,6 +263,11 @@ namespace LobbyScene
             NetworkManager.Singleton.SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
         }
 
+        public void CopyRoomCode()
+        {
+            GUIUtility.systemCopyBuffer = _roomName;
+        }
+        
         /// <summary>
         ///     changes the class of <see cref="player"/>
         /// </summary>

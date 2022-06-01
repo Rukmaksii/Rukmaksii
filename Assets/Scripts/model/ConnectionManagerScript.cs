@@ -1,5 +1,7 @@
 // ReSharper disable once RedundantUsingDirective
 
+using GameScene.model.Network;
+using Netcode.Transports.PhotonRealtime;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UNET;
 using UnityEngine;
@@ -37,7 +39,7 @@ namespace model
 #else
             NetworkManager.Singleton.NetworkConfig.NetworkTransport =
                 GetComponent<PhotonRealtimeTransport>();
-
+            GetComponent<PhotonRealtimeTransport>().RoomName = connectionData.Data.RoomName;
 
 #endif
         }
