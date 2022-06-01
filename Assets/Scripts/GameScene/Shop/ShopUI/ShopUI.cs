@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using GameScene.Items;
 using GameScene.PlayerControllers.BasePlayer;
@@ -45,6 +46,11 @@ namespace GameScene.Shop.ShopUI
 
             itemsContainer.Init(this.weapons, this.items, holderWeapons, holderItems, buyButton, image, false);
             ShowWeapons();
+        }
+
+        private void Update()
+        {
+            textMoney.GetComponent<Text>().text = $"Money: {player.Money}";
         }
 
         public void ShowWeapons()
