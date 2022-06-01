@@ -57,7 +57,6 @@ namespace GameScene.GameManagers
         public Vector3 SpawnPoint { get; private set; }
 
 
-        
         [SerializeField] private List<GameObject> weaponPrefabs = new List<GameObject>();
 
         public List<GameObject> WeaponPrefabs => weaponPrefabs;
@@ -89,7 +88,7 @@ namespace GameScene.GameManagers
         private BasePlayer localPlayer;
 
         public int winningTeam;
-        
+
         [SerializeField] private int respawnTime = 5;
 
         public BasePlayer LocalPlayer => localPlayer;
@@ -117,7 +116,7 @@ namespace GameScene.GameManagers
         {
             localPlayer = player;
 
-            
+
             player.UpdateTeamServerRpc(Parameters.TeamId);
         }
 
@@ -127,7 +126,7 @@ namespace GameScene.GameManagers
         [ClientRpc]
         private void AddPlayerClientRpc(NetworkBehaviourReference playerRef)
         {
-            if(!playerRef.TryGet(out BasePlayer player))
+            if (!playerRef.TryGet(out BasePlayer player))
                 return;
             if (player.IsOwner)
                 BindPlayer(player);
@@ -156,6 +155,8 @@ namespace GameScene.GameManagers
             deathScreen.name = deathScreenPrefab.name;
             deathScreen.GetComponent<Canvas>().worldCamera = Camera.current;
             deathScreen.SetActive(false);
+
+            
         }
 
         private void Update()
@@ -178,7 +179,8 @@ namespace GameScene.GameManagers
         public override void OnNetworkSpawn()
         {
             SetSpawnPoint();
-            string className = Parameters.ClassName ?? LobbyManager.Singleton.ClassPrefabs[0].GetComponent<BasePlayer>().ClassName;
+            string className = Parameters.ClassName ??
+                               LobbyManager.Singleton.ClassPrefabs[0].GetComponent<BasePlayer>().ClassName;
             if (IsClient)
                 SpawnPlayerServerRpc(className, NetworkManager.Singleton.LocalClientId,
                     SpawnPoint,
@@ -248,7 +250,7 @@ namespace GameScene.GameManagers
             AddPlayerClientRpc(new NetworkBehaviourReference(player));
             player.CurrentHealth = player.MaxHealth;
             player.Money = 500;
-            
+
             GameObject autoWeaponPrefab =
                 WeaponPrefabs.Find(go => go.name == "GalilPrefab");
             GameObject weaponInstance = Instantiate(autoWeaponPrefab);

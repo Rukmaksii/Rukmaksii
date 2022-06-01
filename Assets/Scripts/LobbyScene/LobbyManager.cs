@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.Data;
-using System.Windows;
 using System.Linq;
 using GameScene.PlayerControllers.BasePlayer;
 using model;
@@ -26,12 +24,18 @@ namespace LobbyScene
         [SerializeField] private GameObject classDepoCanvas;
         [SerializeField] private RectTransform classViewport;
         [SerializeField] private Text roomName;
-        
+
         [SerializeField] private Button startButton;
         [SerializeField] private Canvas lobbyUI;
 
         private string _roomName;
-        
+
+
+#if DEBUG
+        private bool _bypassVerification = false;
+#endif
+
+
         private NetworkVariable<int> playerCount = new NetworkVariable<int>();
 
         public readonly NetworkPlayersRegistry<ConnectionData> PlayersRegistry =
@@ -89,10 +93,27 @@ namespace LobbyScene
         void Start()
         {
             DontDestroyOnLoad(gameObject);
+
+            NetworkManager.Singleton.ConnectionApprovalCallback +=
+                delegate(byte[] data, ulong clientId, NetworkManager.ConnectionApprovedDelegate callback)
+                {
+                    bool approve = SceneManager.GetActiveScene().name == "LobbyScene";
+
+#if DEBUG
+                    approve |= _bypassVerification;
+#endif
+
+                    approve &= PlayersRegistry.Count < PlayerCount;
+
+                    callback(false, null, approve, Vector3.zero, Quaternion.identity);
+                };
 #if DEBUG
             // in game scene at startup
             if (lobbyUI == null)
+            {
+                _bypassVerification = true;
                 return;
+            }
 #endif
             PlayersRegistry.OnValueChanged += (@event) => { FillPlayerViewers(); };
             NetworkManager.Singleton.OnClientConnectedCallback += (clientId) =>
@@ -129,13 +150,6 @@ namespace LobbyScene
                 if (NetworkManager.Singleton.IsServer)
                 {
                     playerCount.Value = connectionData.Data.PlayerAmount;
-                    NetworkManager.Singleton.ConnectionApprovalCallback +=
-                        delegate(byte[] data, ulong clientId, NetworkManager.ConnectionApprovedDelegate cb)
-                        {
-                            bool createPlayer = true;
-                            bool approve = PlayersRegistry.Count < PlayerCount;
-                            cb(createPlayer, null, approve, Vector3.zero, Quaternion.identity);
-                        };
                 }
             };
         }
@@ -281,7 +295,7 @@ namespace LobbyScene
         {
             GUIUtility.systemCopyBuffer = _roomName;
         }
-        
+
         /// <summary>
         ///     changes the class of <see cref="player"/>
         /// </summary>

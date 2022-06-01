@@ -27,6 +27,7 @@ namespace model
 
         void Start()
         {
+            NetworkManager.Singleton.NetworkConfig.ConnectionApproval = true;
 #if DEBUG
             if (NetworkManager.Singleton.IsClient || NetworkManager.Singleton.IsHost)
             {
@@ -43,6 +44,7 @@ namespace model
 
 #endif
         }
+
 
         private void Update()
         {
@@ -99,6 +101,5 @@ namespace model
             connectionData.Data.TeamId = 0;
         }
 #endif
-
     }
 }
