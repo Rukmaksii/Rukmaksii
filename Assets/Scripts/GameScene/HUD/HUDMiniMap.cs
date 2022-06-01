@@ -129,10 +129,18 @@ namespace GameScene.HUD
                 objOverlay3.color = Color.white;
         }
 
-        public void ScaleUp()
+        public void ScaleUp(bool up)
         {
-            pointParent.transform.localPosition = new Vector3(0, 0, 0);
-            pointParent.transform.localScale = new Vector3(2.6f, 2.6f, 1);
+            if (up)
+            {
+                pointParent.transform.localPosition = new Vector3(0, 0, 0);
+                pointParent.transform.localScale = new Vector3(2.6f, 2.6f, 1);
+            }
+            else
+            {
+                pointParent.transform.localPosition = _mapLoc;
+                pointParent.transform.localScale = new Vector3(1, 1, 1);
+            }
         }
     }
 }

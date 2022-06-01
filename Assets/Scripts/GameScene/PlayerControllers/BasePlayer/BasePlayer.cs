@@ -21,6 +21,7 @@ namespace GameScene.PlayerControllers.BasePlayer
     {
         Normal,
         InShop,
+        InMap
     }
 
     /**

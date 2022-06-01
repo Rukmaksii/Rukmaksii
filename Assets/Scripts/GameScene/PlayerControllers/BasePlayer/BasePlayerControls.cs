@@ -24,7 +24,7 @@ namespace GameScene.PlayerControllers.BasePlayer
                  */
         public void OnMove(InputAction.CallbackContext ctx)
         {
-            if (!IsOwner || !(playerState == PlayerState.Normal))
+            if (!IsOwner || playerState != PlayerState.Normal)
                 return;
 
             if (ctx.performed)
@@ -50,7 +50,7 @@ namespace GameScene.PlayerControllers.BasePlayer
                  */
         public void OnRotation(InputAction.CallbackContext ctx)
         {
-            if (!IsOwner || cameraController == null || itemWheel || !(playerState == PlayerState.Normal))
+            if (!IsOwner || cameraController == null || itemWheel || playerState != PlayerState.Normal)
                 return;
             Vector2 rotation = ctx.ReadValue<Vector2>();
             UpdateRotationRpc(Vector3.up, rotation.x * sensitivity);
@@ -65,7 +65,7 @@ namespace GameScene.PlayerControllers.BasePlayer
                  */
         public void OnJump(InputAction.CallbackContext ctx)
         {
-            if (!IsOwner || !(playerState == PlayerState.Normal))
+            if (!IsOwner || playerState != PlayerState.Normal)
                 return;
 
 
@@ -93,7 +93,7 @@ namespace GameScene.PlayerControllers.BasePlayer
 
         public void OnLowerJetpack(InputAction.CallbackContext ctx)
         {
-            if (!IsOwner || !(playerState == PlayerState.Normal))
+            if (!IsOwner || playerState != PlayerState.Normal)
                 return;
 
             var currentMovement = Movement;
@@ -113,7 +113,7 @@ namespace GameScene.PlayerControllers.BasePlayer
 
         public void OnReload(InputAction.CallbackContext _)
         {
-            if (!IsOwner || !(playerState == PlayerState.Normal))
+            if (!IsOwner || playerState != PlayerState.Normal)
                 return;
             BaseWeapon weapon = Inventory.CurrentWeapon;
             if (weapon.CurrentAmmo < weapon.MaxAmmo)
@@ -128,7 +128,7 @@ namespace GameScene.PlayerControllers.BasePlayer
                  */
         public void OnRun(InputAction.CallbackContext ctx)
         {
-            if (!IsOwner || !(playerState == PlayerState.Normal))
+            if (!IsOwner || playerState != PlayerState.Normal)
                 return;
 
 
@@ -137,7 +137,7 @@ namespace GameScene.PlayerControllers.BasePlayer
 
         public void OnDash(InputAction.CallbackContext ctx)
         {
-            if (!IsOwner || !cdManager.RequestDash() || !(playerState == PlayerState.Normal))
+            if (!IsOwner || !cdManager.RequestDash() || playerState != PlayerState.Normal)
                 return;
 
             IsDashing = true;
@@ -151,7 +151,7 @@ namespace GameScene.PlayerControllers.BasePlayer
 
         public void OnFire(InputAction.CallbackContext ctx)
         {
-            if (!IsOwner || !(playerState == PlayerState.Normal))
+            if (!IsOwner || playerState != PlayerState.Normal)
                 return;
             if (Inventory.SelectedMode == PlayerControllers.Inventory.Inventory.Mode.Item)
             {
@@ -169,7 +169,7 @@ namespace GameScene.PlayerControllers.BasePlayer
 
         public void OnWeaponSwitch(InputAction.CallbackContext ctx)
         {
-            if (!IsOwner || IsAiming || !(playerState == PlayerState.Normal))
+            if (!IsOwner || IsAiming || playerState != PlayerState.Normal)
                 return;
 
             // mouse wheel control
@@ -189,7 +189,7 @@ namespace GameScene.PlayerControllers.BasePlayer
 
         public void OnAim(InputAction.CallbackContext ctx)
         {
-            if (!IsOwner || !(playerState == PlayerState.Normal))
+            if (!IsOwner || playerState != PlayerState.Normal)
                 return;
 
             SetAim(!Inventory.CurrentWeapon.IsReloading && ctx.performed);
@@ -197,28 +197,33 @@ namespace GameScene.PlayerControllers.BasePlayer
 
         public void OnChangeStrategy(InputAction.CallbackContext ctx)
         {
-            if (!IsOwner || !ctx.started || !(playerState == PlayerState.Normal))
+            if (!IsOwner || !ctx.started || playerState != PlayerState.Normal)
                 return;
             strategy = (IMinion.Strategy) ((1 + (int) strategy) % (int) IMinion.Strategy.Count);
         }
 
         public void OnSpawnMinion(InputAction.CallbackContext ctx)
         {
-            if (!IsOwner || !ctx.started || !(playerState == PlayerState.Normal))
+            if (!IsOwner || playerState != PlayerState.Normal && playerState != PlayerState.InMap)
                 return;
 
-            GameController.Singleton.HUDController.ScaleUp();
-            playerState = BasePlayerState.PlayerState.InShop;
-            Cursor.lockState = CursorLockMode.Confined;
-            /*
-            var tr = this.transform;
-            SpawnMinionServerRpc(strategy, GroundPosition - tr.forward, tr.rotation);
-            */
+            if (ctx.started)
+            {
+                GameController.Singleton.HUDController.ScaleUp(true);
+                playerState = PlayerState.InMap;
+                Cursor.lockState = CursorLockMode.Confined;
+            }
+            else if (ctx.canceled)
+            {
+                GameController.Singleton.HUDController.ScaleUp(false);
+                playerState = PlayerState.Normal;
+                Cursor.lockState = CursorLockMode.Locked;
+            }
         }
 
         public void OnDrop(InputAction.CallbackContext ctx)
         {
-            if (!IsOwner || !ctx.performed || !(playerState == PlayerState.Normal))
+            if (!IsOwner || !ctx.performed || playerState != PlayerState.Normal)
                 return;
             Inventory.Drop();
         }
@@ -298,7 +303,7 @@ namespace GameScene.PlayerControllers.BasePlayer
         }
         public void OnInventoryOpened(InputAction.CallbackContext ctx)
         {
-            if (!IsOwner || !(playerState == PlayerState.Normal))
+            if (!IsOwner || playerState != PlayerState.Normal)
                 return;
 
             if (ctx.started)
