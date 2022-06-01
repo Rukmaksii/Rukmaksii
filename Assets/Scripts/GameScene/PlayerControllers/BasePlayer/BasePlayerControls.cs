@@ -189,10 +189,10 @@ namespace GameScene.PlayerControllers.BasePlayer
 
         public void OnAim(InputAction.CallbackContext ctx)
         {
-            if (!IsOwner || playerState != PlayerState.Normal && playerState != PlayerState.InSelectStrat)
+            if (!IsOwner || playerState != PlayerState.Normal && playerState != PlayerState.InMap && playerState != PlayerState.InSelectStrat)
                 return;
 
-            if (playerState == PlayerState.InSelectStrat)
+            if (playerState == PlayerState.InMap || playerState == PlayerState.InSelectStrat)
                 OpenStratSelector(ctx);
             else
                 SetAim(!Inventory.CurrentWeapon.IsReloading && ctx.performed);
@@ -202,14 +202,17 @@ namespace GameScene.PlayerControllers.BasePlayer
         {
             if (ctx.started)
             {
+                playerState = PlayerState.InSelectStrat;
                 GameController.Singleton.HUDController.ShowMinionSelection();
             }
             else if (ctx.canceled)
             {
                 IMinion.Strategy strat = GameController.Singleton.HUDController.HideMinionSelection();
-                if (strat == IMinion.Strategy.Count)
+                if (strat != IMinion.Strategy.Count)
                 {
-                    return;
+                    Debug.Log(strat);
+                    strategy = strat;
+                    
                 }
             }
         }
@@ -223,7 +226,8 @@ namespace GameScene.PlayerControllers.BasePlayer
 
         public void OnSpawnMinion(InputAction.CallbackContext ctx)
         {
-            if (!IsOwner || playerState != PlayerState.Normal && playerState != PlayerState.InMap)
+            if (!IsOwner || playerState != PlayerState.Normal && playerState != PlayerState.InMap
+                                                              && playerState != PlayerState.InSelectStrat)
                 return;
 
             if (ctx.started)
@@ -234,6 +238,8 @@ namespace GameScene.PlayerControllers.BasePlayer
             }
             else if (ctx.canceled)
             {
+                if (playerState == PlayerState.InSelectStrat)
+                    GameController.Singleton.HUDController.HideMinionSelection();
                 GameController.Singleton.HUDController.ScaleUp(false);
                 playerState = PlayerState.Normal;
                 Cursor.lockState = CursorLockMode.Locked;

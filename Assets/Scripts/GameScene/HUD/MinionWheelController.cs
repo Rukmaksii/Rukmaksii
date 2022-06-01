@@ -57,9 +57,7 @@ namespace GameScene.HUD
             {
                 if (child.parent != transform)
                     continue;
-
-                Debug.Log(child);
-
+                
 
                 RectTransform foundChild = null;
                 for (int i = 0; !foundElement && i < results.Count && foundChild == null; i++)
