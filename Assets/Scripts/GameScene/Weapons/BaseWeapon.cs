@@ -26,7 +26,7 @@ namespace GameScene.Weapons
 
         public abstract WeaponType Type { get; }
 
-        public string InteractableName { get; } = "Weapon";
+        public string InteractableName => Name;
 
         private NetworkVariable<NetworkBehaviourReference> playerReference =
             new NetworkVariable<NetworkBehaviourReference>();

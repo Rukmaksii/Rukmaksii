@@ -69,7 +69,7 @@ namespace GameScene.Items
             }
         };
 
-        public string InteractableName { get; } = "Item";
+        public string InteractableName => Name;
 
 
         private NetworkVariable<NetworkBehaviourReference> playerReference =
