@@ -18,6 +18,7 @@ namespace GameScene.HUD
         [SerializeField] protected Image objOverlay2;
         [SerializeField] protected Image objOverlay3;
 
+        private const float MapRatio = 385f/1000;
         private List<GameObject> redPoints = new List<GameObject>();
         private List<GameObject> bluePoints = new List<GameObject>();
 
@@ -44,8 +45,8 @@ namespace GameScene.HUD
                 if (Vector3.Distance(monsterList[i].transform.localPosition, playerPosition) < 50)
                 {
                     GameObject point = redPoints[i];
-                    Vector3 monsterPos = monsterList[i].transform.position;
-                    point.transform.localPosition = new Vector3(monsterPos.x - 55, monsterPos.z + 15, 0);
+                    Vector3 monsterPos = monsterList[i].transform.localPosition;
+                    point.transform.localPosition = new Vector3(monsterPos.x * MapRatio, monsterPos.z * MapRatio, 0);
                 }
             }
         }
@@ -74,8 +75,8 @@ namespace GameScene.HUD
                 if (compo != null && compo.TeamId == GameController.Singleton.LocalPlayer.TeamId && Vector3.Distance(minionList[i].transform.localPosition, playerPosition) < 50)
                 {
                     GameObject point = bluePoints[i];
-                    Vector3 minionPos = minionList[i].transform.position;
-                    point.transform.localPosition = new Vector3(minionPos.x - 55, minionPos.z + 15, 0);
+                    Vector3 minionPos = minionList[i].transform.localPosition;
+                    point.transform.localPosition = new Vector3(minionPos.x * MapRatio, minionPos.z * MapRatio, 0);
                 }
             }
         }
@@ -83,7 +84,7 @@ namespace GameScene.HUD
         private void UpdateMap()
         {
             Vector3 playerPosition = GameController.Singleton.LocalPlayer.transform.localPosition;
-            arrow.transform.localPosition = new Vector3(playerPosition.x - 40, playerPosition.z + 15, 0);
+            arrow.transform.localPosition = new Vector3(playerPosition.x * MapRatio, playerPosition.z * MapRatio, 0);
             
             Quaternion camRotation = GameObject.FindGameObjectWithTag("Player Camera").transform.localRotation;
             arrow.transform.localRotation = new Quaternion(0, 0, -camRotation.y, camRotation.w);

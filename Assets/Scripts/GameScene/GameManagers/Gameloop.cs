@@ -20,7 +20,7 @@ namespace GameScene.GameManagers
 
         private int objectiveDelay;
         private bool hasBeenChange;
-        private const int numberOfMonster = 4;
+        private const int numberOfMonster = 20;
 
         [SerializeField]private GameObject[] captureArea;
 
