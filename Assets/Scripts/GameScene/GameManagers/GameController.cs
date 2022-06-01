@@ -5,6 +5,7 @@ using GameScene.Items;
 using GameScene.Map;
 using GameScene.Minions;
 using GameScene.model.Network;
+using GameScene.PlayerControllers;
 using GameScene.PlayerControllers.BasePlayer;
 using GameScene.Weapons;
 using LobbyScene;
@@ -28,6 +29,9 @@ namespace GameScene.GameManagers
     [RequireComponent(typeof(Gameloop))]
     public class GameController : NetworkBehaviour
     {
+        [SerializeField] private CameraController playerCamera;
+
+        public CameraController PlayerCamera => playerCamera;
         public static GameController Singleton { get; private set; }
 
         private List<BasePlayer> players = new List<BasePlayer>();
@@ -156,8 +160,6 @@ namespace GameScene.GameManagers
             deathScreen.name = deathScreenPrefab.name;
             deathScreen.GetComponent<Canvas>().worldCamera = Camera.current;
             deathScreen.SetActive(false);
-
-            
         }
 
         private void Update()
@@ -165,6 +167,7 @@ namespace GameScene.GameManagers
             ManageDeath();
             if (IsServer)
                 UpdateServer();
+
         }
 
         void UpdateServer()

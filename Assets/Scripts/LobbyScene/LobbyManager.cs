@@ -155,6 +155,7 @@ namespace LobbyScene
 
                 if (NetworkManager.Singleton.IsClient)
                 {
+                    Cursor.lockState = CursorLockMode.Confined;
                     SceneManager.LoadScene("ConnectionScene");
                 }
 

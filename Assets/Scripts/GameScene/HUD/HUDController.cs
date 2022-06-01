@@ -11,6 +11,7 @@ using UnityEngine.UI;
 
 namespace GameScene.HUD
 {
+    [RequireComponent(typeof(PseudoController))]
     public partial class HUDController : MonoBehaviour
     {
         [SerializeField] protected Slider healthSlider;
