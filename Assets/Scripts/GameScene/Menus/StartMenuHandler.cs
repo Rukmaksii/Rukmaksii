@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using model;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -20,6 +19,11 @@ namespace GameScene.Menus
         // Start is called before the first frame update
         void Start()
         {
+            if (DebugManager.IsDebug)
+            {
+                // allows full ip:port
+                roomInput.characterLimit = 21;
+            }
         }
 
         // Update is called once per frame
@@ -35,18 +39,24 @@ namespace GameScene.Menus
                 str += (char) rnd.Next(65, 91);
             return str;
         }
-        
+
         public void OnCreateRoom()
         {
             if (String.IsNullOrEmpty(nicknameInput.text))
                 return;
+
+            string roomName;
+            if (DebugManager.IsDebug)
+                roomName = roomInput.text;
+            else
+                roomName = GenerateRoomName();
 
             connectionData.Data = new ConnectionData
             {
                 Pseudo = nicknameInput.text,
                 ConnectionType = "host",
                 TeamId = 0,
-                RoomName = GenerateRoomName()
+                RoomName = roomName
             };
 
             SceneManager.LoadScene("LobbyScene");
@@ -58,12 +68,12 @@ namespace GameScene.Menus
         {
             if (String.IsNullOrEmpty(nicknameInput.text) || String.IsNullOrEmpty(roomInput.text))
                 return;
-            
+
             connectionData.Data = new ConnectionData
             {
                 Pseudo = nicknameInput.text,
                 ConnectionType = "client",
-                RoomName =  roomInput.text
+                RoomName = roomInput.text
             };
 
             SceneManager.LoadScene("LobbyScene");

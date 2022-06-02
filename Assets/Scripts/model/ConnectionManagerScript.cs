@@ -1,5 +1,6 @@
 // ReSharper disable once RedundantUsingDirective
 
+using System;
 using GameScene.model.Network;
 using Netcode.Transports.PhotonRealtime;
 using Unity.Netcode;
@@ -28,7 +29,7 @@ namespace model
         void Start()
         {
             NetworkManager.Singleton.NetworkConfig.ConnectionApproval = true;
-#if DEBUG
+#if TEST
             if (NetworkManager.Singleton.IsClient || NetworkManager.Singleton.IsHost)
             {
                 gameObject.SetActive(false);
@@ -38,9 +39,30 @@ namespace model
             NetworkManager.Singleton.NetworkConfig.NetworkTransport =
                 GetComponent<UNetTransport>();
 #else
-            NetworkManager.Singleton.NetworkConfig.NetworkTransport =
-                GetComponent<PhotonRealtimeTransport>();
-            GetComponent<PhotonRealtimeTransport>().RoomName = connectionData.Data.RoomName;
+            if (DebugManager.IsDebug)
+            {
+                var transport = GetComponent<UNetTransport>();
+                NetworkManager.Singleton.NetworkConfig.NetworkTransport = transport;
+                if (!String.IsNullOrEmpty(connectionData.Data.RoomName))
+                {
+                    var values = connectionData.Data.RoomName.Split(':');
+                    if (values.Length > 0)
+                    {
+                        transport.ConnectAddress = values[0];
+                        if (values.Length > 1 && int.TryParse(values[1], out int port))
+                        {
+                            transport.ConnectPort = port;
+                            transport.ServerListenPort = port;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                NetworkManager.Singleton.NetworkConfig.NetworkTransport =
+                    GetComponent<PhotonRealtimeTransport>();
+                GetComponent<PhotonRealtimeTransport>().RoomName = connectionData.Data.RoomName;
+            }
 
 #endif
         }
