@@ -18,10 +18,6 @@ namespace GameScene.HUD
         // Update is called once per frame
         void Update()
         {
-        }
-
-        private void HandlePseudos()
-        {
             var localPlayer = GameController.Singleton.LocalPlayer;
             if (localPlayer == null)
                 return;
@@ -29,10 +25,10 @@ namespace GameScene.HUD
             foreach (var player in GameController.Singleton.Players)
             {
                 if (player.OwnerClientId == NetworkManager.Singleton.LocalClientId)
-                    return;
+                    continue;
 
                 if (!pseudoDictionary.ContainsKey(player.OwnerClientId))
-                    pseudoDictionary[player.OwnerClientId] = Instantiate(pseudoHolder);
+                    pseudoDictionary[player.OwnerClientId] = Instantiate(pseudoHolder, gameObject.transform);
 
 
                 bool shouldDisplay =

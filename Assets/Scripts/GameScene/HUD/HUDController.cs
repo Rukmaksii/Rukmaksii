@@ -29,6 +29,7 @@ namespace GameScene.HUD
         [SerializeField] private MinionWheelController minionWheel;
         [SerializeField] private ShopUI shopUI;
 
+
         public float CanvasWidth => GetComponent<RectTransform>().rect.width;
         public float CanvasHeight => GetComponent<RectTransform>().rect.height;
 
