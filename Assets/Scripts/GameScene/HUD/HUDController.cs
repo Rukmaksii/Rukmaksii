@@ -30,6 +30,7 @@ namespace GameScene.HUD
         [SerializeField] private MinionWheelController minionWheel;
         [SerializeField] private ShopUI shopUI;
         [SerializeField] private GameObject timer;
+        [SerializeField] protected GameObject abilityTree;
 
 
         public float CanvasWidth => GetComponent<RectTransform>().rect.width;
@@ -96,6 +97,7 @@ namespace GameScene.HUD
 
 
             itemWheel.SetActive(localPlayer.ItemWheel);
+            abilityTree.SetActive(localPlayer.IsAbilityTreeOpened);
 
             // updating the capture circle UI if the player is on a point
             if (_capturePoint != null)

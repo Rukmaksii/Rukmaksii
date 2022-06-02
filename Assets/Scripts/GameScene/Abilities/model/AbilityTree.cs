@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GameScene.PlayerControllers.BasePlayer;
 
 namespace GameScene.Abilities.model
@@ -7,13 +8,15 @@ namespace GameScene.Abilities.model
     public class AbilityTree
     {
         private readonly BasePlayer player;
-        public BaseAbility CurrentAbility { get; private set; }
+        public BaseAbility CurrentAbility => BoughtAbilities.Last();
         public readonly List<BaseAbility> Abilities = new List<BaseAbility>();
+
+        private List<BaseAbility> BoughtAbilities { get; } = new List<BaseAbility>();
 
         public AbilityTree(BasePlayer player, BaseAbility currentAbility)
         {
             this.player = player;
-            CurrentAbility = currentAbility;
+            BoughtAbilities.Add(currentAbility);
         }
 
         public void ChooseAbility(Type t)
@@ -24,8 +27,9 @@ namespace GameScene.Abilities.model
 
         private void InstantiateAbility(Type t)
         {
-            CurrentAbility = (BaseAbility) t.GetConstructor(new Type[] {typeof(BasePlayer)})!.Invoke(new object[] {player});
-            CurrentAbility.Apply();
+            BaseAbility next = (BaseAbility) t.GetConstructor(new Type[] {typeof(BasePlayer)})!.Invoke(new object[] {player});
+            next.Apply();
+            BoughtAbilities.Add(next);
         }
     }
 }

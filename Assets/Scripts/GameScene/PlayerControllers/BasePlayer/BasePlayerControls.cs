@@ -336,5 +336,14 @@ namespace GameScene.PlayerControllers.BasePlayer
                     Inventory.ChangeMode(PlayerControllers.Inventory.Inventory.Mode.Weapon);
             }
         }
+        
+        public void OnAbilityTreeOpened(InputAction.CallbackContext ctx)
+        {
+            if (!IsOwner || playerState != PlayerState.Normal || !ctx.performed)
+                return;
+
+            isAbilityTreeOpened = !isAbilityTreeOpened;
+            Cursor.lockState = isAbilityTreeOpened ? CursorLockMode.Confined : CursorLockMode.Locked;
+        }
     }
 }

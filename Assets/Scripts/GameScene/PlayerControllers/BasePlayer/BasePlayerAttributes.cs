@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using GameScene.Abilities;
 using GameScene.Abilities.model;
 using GameScene.GameManagers;
 using GameScene.Minions;
@@ -219,8 +220,11 @@ namespace GameScene.PlayerControllers.BasePlayer
 
 
         private bool itemWheel = false;
+        private bool isAbilityTreeOpened = false;
         public bool ItemWheel => itemWheel;
         private Vector3 mousePos = Vector3.zero;
+
+        public bool IsAbilityTreeOpened => isAbilityTreeOpened;
 
         private NetworkVariable<int> money = new NetworkVariable<int>();
 
