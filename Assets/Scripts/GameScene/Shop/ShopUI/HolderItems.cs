@@ -14,6 +14,7 @@ namespace GameScene.Shop.ShopUI
         {
             player = GameManagers.GameController.Singleton.LocalPlayer;
             this.item = item;
+            Instantiate(holderName, gameObject.transform).GetComponent<Text>().text = this.item.Name;
             this.image = Instantiate(image, transform);
             this.buyButton = Instantiate(buyButton, transform);
             btn = this.buyButton.GetComponent<Button>();
