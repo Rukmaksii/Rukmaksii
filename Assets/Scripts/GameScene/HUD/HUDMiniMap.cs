@@ -17,11 +17,19 @@ namespace GameScene.HUD
         [SerializeField] protected Image objOverlay1;
         [SerializeField] protected Image objOverlay2;
         [SerializeField] protected Image objOverlay3;
+        [SerializeField] private Sprite capLock;
+        [SerializeField] private Sprite capOpen;
 
         private Vector3 _mapLoc;
         private const float MapRatio = 385f/1000;
         private List<GameObject> redPoints = new List<GameObject>();
         private List<GameObject> bluePoints = new List<GameObject>();
+
+        private Color colorT1 = Color.blue;
+        private Color colorT2 = Color.red;
+        private Color colorNeutral = Color.gray;
+        private Color colorOpen = Color.green;
+
 
         private void UpdateMonster()
         {
@@ -102,31 +110,46 @@ namespace GameScene.HUD
             ObjectiveController obj2 = GameObject.Find("Objective3").GetComponentInChildren<ObjectiveController>();
 
             if (obj1.CurrentState == ObjectiveController.State.Captured && obj1.CapturingTeam == 0)
-                objOverlay1.color = Color.blue;
+                objOverlay1.color = colorT1;
             else if (obj1.CurrentState == ObjectiveController.State.Captured && obj1.CapturingTeam == 1)
-                objOverlay1.color = Color.red;
+                objOverlay1.color = colorT2;
             else if (obj1.CanCapture)
-                objOverlay1.color = Color.black;
+                objOverlay1.color = colorOpen;
             else
-                objOverlay1.color = Color.white;
-            
+                objOverlay1.color = colorNeutral;
+
             if (obj2.CurrentState == ObjectiveController.State.Captured && obj2.CapturingTeam == 0)
-                objOverlay2.color = Color.blue;
+                objOverlay2.color = colorT1;
             else if (obj2.CurrentState == ObjectiveController.State.Captured && obj1.CapturingTeam == 1)
-                objOverlay2.color = Color.red;
+                objOverlay2.color = colorT2;
             else if (obj2.CanCapture)
-                objOverlay2.color = Color.black;
+                objOverlay2.color = colorOpen;
             else
-                objOverlay2.color = Color.white;
+                objOverlay2.color = colorNeutral;
             
             if (obj3.CurrentState == ObjectiveController.State.Captured && obj3.CapturingTeam == 0)
-                objOverlay3.color = Color.blue;
+                objOverlay3.color = colorT1;
             else if (obj3.CurrentState == ObjectiveController.State.Captured && obj1.CapturingTeam == 1)
-                objOverlay3.color = Color.red;
+                objOverlay3.color = colorT2;
             else if (obj3.CanCapture)
-                objOverlay3.color = Color.black;
+                objOverlay3.color = colorOpen;
             else
-                objOverlay3.color = Color.white;
+                objOverlay3.color = colorNeutral;
+            
+            if (objOverlay1.color == colorOpen)
+                objOverlay1.sprite = capOpen;
+            else
+                objOverlay1.sprite = capLock;
+            
+            if (objOverlay2.color == colorOpen)
+                objOverlay2.sprite = capOpen;
+            else
+                objOverlay2.sprite = capLock;
+            
+            if (objOverlay3.color == colorOpen)
+                objOverlay3.sprite = capOpen;
+            else
+                objOverlay3.sprite = capLock;
         }
 
         public void ScaleUp(bool up)
