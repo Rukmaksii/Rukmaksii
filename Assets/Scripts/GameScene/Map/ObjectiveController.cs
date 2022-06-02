@@ -77,7 +77,7 @@ namespace GameScene.Map
         {
             if (state == State.Neutral)
             {
-                captureArea.GetComponent<MeshRenderer>().material = neutralMaterial;
+                captureArea.GetComponent<MeshRenderer>().materials[1].color = neutralMaterial.color;
                 currentProgress = 0;
                 capturingTeam = -1;
                 controllingTeam = -1;
@@ -144,9 +144,9 @@ namespace GameScene.Map
             else if (state == State.Captured)
             {
                 if (capturingTeam == 0)
-                    captureArea.GetComponent<MeshRenderer>().material = firstTeamMaterial;
+                    captureArea.GetComponent<MeshRenderer>().materials[1].color = firstTeamMaterial.color;
                 else if (capturingTeam == 1)
-                    captureArea.GetComponent<MeshRenderer>().material = secondTeamMaterial;
+                    captureArea.GetComponent<MeshRenderer>().materials[1].color = secondTeamMaterial.color;
             }
         }
 
