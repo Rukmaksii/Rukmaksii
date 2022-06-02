@@ -34174,9 +34174,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1152622203}
     - target: {fileID: 1821076053289487703, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
-      propertyPath: abilityTree
-      value: 
-      objectReference: {fileID: 5712741472030464462, guid: a265d55bd6a02d348ac64f56b7be2ac2, type: 3}
       propertyPath: capLock
       value: 
       objectReference: {fileID: 21300000, guid: b745ffdc7557aa941871e8ab22c7ea7e, type: 3}
@@ -34184,6 +34181,10 @@ PrefabInstance:
       propertyPath: capOpen
       value: 
       objectReference: {fileID: 21300000, guid: 95019f04afeb26f4d998cbc1d3c09bcb, type: 3}
+    - target: {fileID: 1821076053289487703, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
+      propertyPath: abilityTree
+      value: 
+      objectReference: {fileID: 5712741472030464462, guid: a265d55bd6a02d348ac64f56b7be2ac2, type: 3}
     - target: {fileID: 1821076053289487703, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
       propertyPath: minionWheel
       value: 
