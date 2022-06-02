@@ -32,7 +32,7 @@ namespace GameScene.PlayerControllers.Inventory
                 if (_player is null)
                 {
                     _player = GetComponent<BasePlayer.BasePlayer>();
-                    AbilityTree = new AbilityTree(_player, _player.RootAbility);
+                    AbilityTree = new AbilityTree(_player);
                 }
 
                 return _player;

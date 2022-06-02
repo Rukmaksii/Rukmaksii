@@ -13,10 +13,10 @@ namespace GameScene.Abilities.model
 
         public List<BaseAbility> BoughtAbilities { get; } = new List<BaseAbility>();
 
-        public AbilityTree(BasePlayer player, BaseAbility currentAbility)
+        public AbilityTree(BasePlayer player)
         {
             this.player = player;
-            BoughtAbilities.Add(currentAbility);
+            BoughtAbilities.Add(player.RootAbility);
         }
 
         
