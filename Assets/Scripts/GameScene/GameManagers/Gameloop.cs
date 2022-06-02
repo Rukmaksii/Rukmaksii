@@ -8,6 +8,7 @@ using GameScene.PlayerControllers.BasePlayer;
 using Unity.Mathematics;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
@@ -171,15 +172,25 @@ namespace GameScene.GameManagers
         {
             for (int i = 0; i < number; i++)
             {
-                Vector3 pos = new Vector3(Random.Range(-115, 194), 10, Random.Range(-153, 138));
-                if (Physics.Raycast(pos, Vector3.down, out RaycastHit hit))
+                Vector3 pos = new Vector3(Random.Range(-285, 280), 60, Random.Range(-280, 275));
+                Physics.Raycast(pos, Vector3.down, out RaycastHit hit);
+                while (Vector3.Distance(hit.point, new Vector3(0,0,0)) < 150)
                 {
-                    GameObject instance = Instantiate(GameController.Singleton.MonsterPrefab, hit.point,
+                    pos = new Vector3(Random.Range(-285, 280), 60, Random.Range(-280, 275));
+                    Physics.Raycast(pos, Vector3.down, out hit);
+                }
+                GameObject instance = Instantiate(GameController.Singleton.MonsterPrefab, hit.point,
                         Quaternion.identity);
-                    instance.GetComponent<NetworkObject>().Spawn();
+                instance.GetComponent<NetworkObject>().Spawn();
+                if (instance.GetComponent<NavMeshAgent>().isOnNavMesh)
+                {
                     instance.GetComponent<MonsterController>().Life =
                         instance.GetComponent<MonsterController>().MaxHealth;
                     monsterCount++;
+                }
+                else
+                {
+                    instance.GetComponent<NetworkObject>().Despawn();
                 }
             }
         }

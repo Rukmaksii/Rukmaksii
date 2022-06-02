@@ -23,18 +23,20 @@ namespace GameScene.Map
         }
 
         private new MeshCollider collider;
+        private MeshRenderer meshRenderer;
     
         // Start is called before the first frame update
         void Start()
         {
             activated.Value = true;
             collider = gameObject.GetComponent<MeshCollider>();
+            meshRenderer = gameObject.GetComponent<MeshRenderer>();
         }
 
         // Update is called once per frame
         void Update()
         {
-            collider.enabled = activated.Value;
+            collider.enabled = meshRenderer.enabled = activated.Value;
         }
 
         [ServerRpc]
