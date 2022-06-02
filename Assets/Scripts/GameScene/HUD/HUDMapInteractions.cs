@@ -22,7 +22,7 @@ namespace GameScene.HUD
         {
             if (player == GameController.Singleton.LocalPlayer)
             {
-                if (state)
+                if (state && area.CurrentState != ObjectiveController.State.Captured)
                 {
                     _capturePoint = area;
                     capturingState.enabled = true;

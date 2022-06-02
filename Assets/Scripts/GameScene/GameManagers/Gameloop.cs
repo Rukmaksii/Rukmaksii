@@ -25,7 +25,7 @@ namespace GameScene.GameManagers
         private bool hasBeenChange;
         private const int numberOfMonster = 20;
 
-        [SerializeField]private GameObject[] captureArea;
+        [SerializeField] private GameObject[] captureArea;
 
         private ShieldController shield1;
         private ShieldController shield2;
@@ -35,6 +35,11 @@ namespace GameScene.GameManagers
         private int monsterCount = 0;
         private bool deactivateAllCapturePoints = false;
         private int timeToEnd = 20;
+
+        private bool unshielded = false;
+        private int selectedObjective;
+
+        public int SelectedObjective => selectedObjective;
 
         public static Gameloop Singleton { get; private set; }
         
@@ -78,7 +83,7 @@ namespace GameScene.GameManagers
                     shield2.UpdateTeamServerRpc(1);
             }
             
-	    if (NetworkManager.Singleton.IsServer)
+	        if (NetworkManager.Singleton.IsServer)
             {
                 //set the current time
                 currTime.Value = DateTime.Now;
@@ -127,7 +132,7 @@ namespace GameScene.GameManagers
             //create the timer
             var timer = currTime.Value - referenceTime.Value;
             HUDController.Singleton.SetTimer(MakeBeautyTimer(timer), timer.Minutes >= timeToEnd);
-
+            
             if (IsServer)
             {
                 if (timer.Minutes >= timeToEnd)
@@ -143,32 +148,55 @@ namespace GameScene.GameManagers
                     hasBeenChange = true;
                     StartCoroutine(Wait1Second());
                 }
-                
-                //for each capture point it checks if one of them is catured if so, it deactivates the ennemy's shield
-                foreach (GameObject area in captureArea)
+
+                if (!unshielded)
                 {
-                    ObjectiveController objective = area.GetComponent<ObjectiveController>();
-                    if (objective.CurrentState is ObjectiveController.State.Captured)
+                    //for each capture point it checks if one of them is catured if so, it deactivates the ennemy's shield
+                    foreach (GameObject area in captureArea)
                     {
-                        if (objective.CapturingTeam != shield1.TeamId)
+                        ObjectiveController objective = area.GetComponent<ObjectiveController>();
+                        if (objective.CurrentState is ObjectiveController.State.Captured)
                         {
-                            throwAnnouncement?.Invoke("shield1");
-                            //Debug.Log("shield 1 deactivated");
-                            shield1.Activated.Value = false;
-                            shield2.Activated.Value = true;
-                        }
-                        else
-                        {
-                            //Debug.Log("shield 2 deactivated");
-                            throwAnnouncement?.Invoke("shield2");
-                            shield1.Activated.Value = true;
-                            shield2.Activated.Value = false;
+                            if (objective.CapturingTeam != shield1.TeamId)
+                            {
+                                throwAnnouncement?.Invoke("shield1");
+                                shield1.Activated.Value = false;
+                                shield2.Activated.Value = true;
+                            }
+                            else
+                            {
+                                throwAnnouncement?.Invoke("shield2");
+                                shield1.Activated.Value = true;
+                                shield2.Activated.Value = false;
+                            }
+                            unshielded = true;
+                            break;
                         }
                     }
                 }
             }
+            else
+            {
+                if (!unshielded && (shield1.Activated.Value != shield2.Activated.Value))
+                {
+                    unshielded = true;
+                    int status = !shield1.Activated.Value ? 1 : 2;
+                    throwAnnouncement?.Invoke($"shield{status}");
+                }
+                else if (unshielded && (shield1.Activated.Value == shield2.Activated.Value))
+                {
+                    foreach (ObjectiveController obj in GameObject.Find("Map").GetComponentsInChildren<ObjectiveController>())
+                    {
+                        if (obj.CanCapture)
+                        {
+                            selectedObjective = obj.ObjectiveId;
+                            break;
+                        }
+                    }
+                    throwAnnouncement?.Invoke($"objective{selectedObjective}");
+                }
+            }
         }
-
 
         public void ChangeCapturePoints()
         {
@@ -177,15 +205,17 @@ namespace GameScene.GameManagers
                 area.GetComponent<ObjectiveController>().ToggleCanCapture(false);
             }
 
-            int selected = Random.Range(0, captureArea.Length);
-            captureArea[selected]
+            selectedObjective = Random.Range(0, captureArea.Length);
+            captureArea[selectedObjective]
                 .GetComponent<ObjectiveController>()
                 .ToggleCanCapture(true);
-            throwAnnouncement?.Invoke($"objective{selected}");
+            throwAnnouncement?.Invoke($"objective{selectedObjective}");
             
             //Activate all the shields
             shield1.Activated.Value = true;
             shield2.Activated.Value = true;
+            
+            unshielded = false;
         }
 
         private void DeactivateCapturePoints()

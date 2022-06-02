@@ -26,6 +26,10 @@ namespace GameScene.Map
         /** <value>the GameObject used to trigger capture</value> */
         [SerializeField] private GameObject captureArea;
 
+        [SerializeField] private int objectiveId;
+
+        public int ObjectiveId => objectiveId;
+
         private float currentProgress = 0f;
 
         /** <value>the capture progress</value> */
@@ -65,7 +69,7 @@ namespace GameScene.Map
         private NetworkVariable<bool> canCapture = new NetworkVariable<bool>(false);
 
         public bool CanCapture => canCapture.Value;
-
+        
         // Start is called before the first frame update
         void Start()
         {

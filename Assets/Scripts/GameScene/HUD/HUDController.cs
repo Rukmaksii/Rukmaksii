@@ -68,7 +68,8 @@ namespace GameScene.HUD
 
             capturingState.enabled = false;
             shopUI.gameObject.SetActive(false);
-
+            announcementField.gameObject.SetActive(false);
+            
             arrow.transform.SetParent(map.transform);
 
             SetupSprites();
@@ -270,9 +271,10 @@ namespace GameScene.HUD
         public void SetTimer(string timing, bool End)
         {
             timer.GetComponent<Text>().text = timing;
-            if(End)
+            if (End)
                 timer.GetComponent<Text>().color = Color.red;
-        
+        }
+
         public void DisplayAnnouncement(string code)
         {
             announcementField.gameObject.SetActive(true);
@@ -286,14 +288,13 @@ namespace GameScene.HUD
             announcementField.text = message;
 
             StartCoroutine(WaitFor(5));
-            
-            announcementField.text = "";
-            announcementField.gameObject.SetActive(false);
         }
 
-        private IEnumerator WaitFor(int sec)
+        IEnumerator WaitFor(int sec)
         {
             yield return new WaitForSeconds(sec);
+            announcementField.gameObject.SetActive(false);
+
         }
     }
 }
