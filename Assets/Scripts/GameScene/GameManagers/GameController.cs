@@ -302,7 +302,9 @@ namespace GameScene.GameManagers
 
         public void Disconnect()
         {
-            NetworkManager.Singleton.Shutdown();
+            if (NetworkManager.Singleton.IsClient)
+                NetworkManager.Singleton.Shutdown();
+            LobbyManager.Singleton.UnloadGame();
         }
     }
 }

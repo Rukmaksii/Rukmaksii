@@ -152,11 +152,9 @@ namespace LobbyScene
 
             NetworkManager.Singleton.OnClientDisconnectCallback += (clientId) =>
             {
-                if (!NetworkManager.Singleton.IsServer)
-                    
+                if (!NetworkManager.Singleton.IsServer || clientId == NetworkManager.ServerClientId)
                 {
-                    Cursor.lockState = CursorLockMode.Confined;
-                    SceneManager.LoadScene("ConnectionScene");
+                    UnloadGame();
                 }
 
                 if (NetworkManager.Singleton.IsServer && GameState == GameState.Lobby)
@@ -174,6 +172,14 @@ namespace LobbyScene
                     playerCount.Value = connectionData.Data.PlayerAmount;
                 }
             };
+        }
+
+        public void UnloadGame()
+        {
+            Cursor.lockState = CursorLockMode.None;
+            SceneManager.LoadScene("ConnectionScene");
+            Destroy(Singleton);
+            Destroy(GameController.Singleton.gameObject);
         }
 
         // Update is called once per frame
