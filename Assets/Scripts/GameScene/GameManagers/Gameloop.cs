@@ -37,6 +37,8 @@ namespace GameScene.GameManagers
         private int timeToEnd = 20;
 
         public static Gameloop Singleton { get; private set; }
+        
+        public static event Action<string> throwAnnouncement;
 
         private void Awake()
         {
@@ -76,8 +78,7 @@ namespace GameScene.GameManagers
                     shield2.UpdateTeamServerRpc(1);
             }
             
-            //captureArea = GameObject.FindGameObjectsWithTag("CaptureArea");
-            if (NetworkManager.Singleton.IsServer)
+	    if (NetworkManager.Singleton.IsServer)
             {
                 //set the current time
                 currTime.Value = DateTime.Now;
@@ -151,6 +152,7 @@ namespace GameScene.GameManagers
                     {
                         if (objective.CapturingTeam != shield1.TeamId)
                         {
+                            throwAnnouncement?.Invoke("shield1");
                             //Debug.Log("shield 1 deactivated");
                             shield1.Activated.Value = false;
                             shield2.Activated.Value = true;
@@ -158,6 +160,7 @@ namespace GameScene.GameManagers
                         else
                         {
                             //Debug.Log("shield 2 deactivated");
+                            throwAnnouncement?.Invoke("shield2");
                             shield1.Activated.Value = true;
                             shield2.Activated.Value = false;
                         }
@@ -174,9 +177,12 @@ namespace GameScene.GameManagers
                 area.GetComponent<ObjectiveController>().ToggleCanCapture(false);
             }
 
-            captureArea[Random.Range(0, captureArea.Length)]
+            int selected = Random.Range(0, captureArea.Length);
+            captureArea[selected]
                 .GetComponent<ObjectiveController>()
                 .ToggleCanCapture(true);
+            throwAnnouncement?.Invoke($"objective{selected}");
+            
             //Activate all the shields
             shield1.Activated.Value = true;
             shield2.Activated.Value = true;

@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using GameScene.GameManagers;
 using GameScene.Items;
 using GameScene.Map;
@@ -31,7 +33,7 @@ namespace GameScene.HUD
         [SerializeField] private ShopUI shopUI;
         [SerializeField] private GameObject timer;
         [SerializeField] protected GameObject abilityTree;
-
+        [SerializeField] private Text announcementField;
 
         public float CanvasWidth => GetComponent<RectTransform>().rect.width;
         public float CanvasHeight => GetComponent<RectTransform>().rect.height;
@@ -72,6 +74,7 @@ namespace GameScene.HUD
             SetupSprites();
 
             _mapLoc = pointParent.transform.localPosition;
+            Gameloop.throwAnnouncement += DisplayAnnouncement;
         }
 
         void Update()
@@ -269,6 +272,28 @@ namespace GameScene.HUD
             timer.GetComponent<Text>().text = timing;
             if(End)
                 timer.GetComponent<Text>().color = Color.red;
+        
+        public void DisplayAnnouncement(string code)
+        {
+            announcementField.gameObject.SetActive(true);
+            string message = "";
+
+            if (code.StartsWith("shield"))
+                message = $"Team {code[code.Length - 1]}'s shield has been destroyed!";
+            if (code.StartsWith("objective"))
+                message = $"Objective {code[code.Length - 1]} has been enabled!";
+
+            announcementField.text = message;
+
+            StartCoroutine(WaitFor(5));
+            
+            announcementField.text = "";
+            announcementField.gameObject.SetActive(false);
+        }
+
+        private IEnumerator WaitFor(int sec)
+        {
+            yield return new WaitForSeconds(sec);
         }
     }
 }
