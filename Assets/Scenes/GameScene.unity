@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -34367,7 +34367,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3766438021586479273, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000045584573
+      value: 0.000029641233
       objectReference: {fileID: 0}
     - target: {fileID: 3794802371307484881, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
       propertyPath: m_AnchorMax.y
@@ -34687,7 +34687,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7235143801518404198, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00008257698
+      value: 0.000060543192
       objectReference: {fileID: 0}
     - target: {fileID: 7391540710560586573, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
       propertyPath: m_Pivot.x
@@ -44055,7 +44055,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e6ab13ef361744b9854733125afbbe9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  captureArea: []
+  captureArea:
+  - {fileID: 427677630}
+  - {fileID: 742113955}
+  - {fileID: 1118386082}
 --- !u!4 &1474703830 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 478606, guid: a9cc5585b9634a9449920c03ec6bc243, type: 3}
@@ -63020,7 +63023,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2088060682565154640, guid: 96780c7d35e0643eb9a58d66a8a9e5e0, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 530
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 2211072364868345537, guid: 96780c7d35e0643eb9a58d66a8a9e5e0, type: 3}
       propertyPath: m_AnchorMax.x
