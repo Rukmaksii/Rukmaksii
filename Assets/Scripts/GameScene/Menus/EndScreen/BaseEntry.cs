@@ -1,6 +1,8 @@
+using System;
 using GameScene.GameManagers;
 using GameScene.model.Network;
 using GameScene.PlayerControllers.BasePlayer;
+using LobbyScene;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,7 +23,6 @@ namespace GameScene.Menus.EndScreen
         [SerializeField] private Image backRatio;
         [SerializeField] private Image backDamage;
 
-        private BasePlayer Player;
         public ulong playerId;
         private NetworkScoreboard _scoreboard;
         
@@ -36,10 +37,7 @@ namespace GameScene.Menus.EndScreen
             int team = 0;
             foreach (BasePlayer p in GameController.Singleton.Players)
                 if (p.OwnerClientId == playerId)
-                {
                     team = p.TeamId;
-                    Player = p;
-                }
 
             if (team == 0)
             {
@@ -60,7 +58,8 @@ namespace GameScene.Menus.EndScreen
                 backDamage.color = new Color(0.9725f,0.4823f,0.4823f, 1);
             }
 
-            nameField.text = "Bob";
+            string pseudo = LobbyManager.Singleton.PlayersRegistry[playerId].Pseudo;
+            nameField.text = String.IsNullOrEmpty(pseudo) ? $"Player {playerId}" : pseudo;
            
             if (_scoreboard[playerId].ContainsKey(PlayerInfoField.Kill))
                 killField.text = $"{_scoreboard[playerId][PlayerInfoField.Kill]}";
