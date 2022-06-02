@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using ExitGames.Client.Photon.StructWrapping;
+using GameScene.HUD;
 using GameScene.Map;
 using GameScene.Monster;
 using GameScene.PlayerControllers.BasePlayer;
@@ -10,6 +11,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 namespace GameScene.GameManagers
@@ -71,7 +73,7 @@ namespace GameScene.GameManagers
                 if (shield2 != null && shield2.TeamId != 1)
                     shield2.UpdateTeamServerRpc(1);
             }
-
+            
             //captureArea = GameObject.FindGameObjectsWithTag("CaptureArea");
             if (NetworkManager.Singleton.IsServer)
             {
@@ -121,7 +123,7 @@ namespace GameScene.GameManagers
 
             //create the timer
             var timer = currTime.Value - referenceTime.Value;
-            
+            HUDController.Singleton.SetTimer(MakeBeautyTimer(timer));
 
             if (IsServer)
             {
@@ -210,6 +212,14 @@ namespace GameScene.GameManagers
         {
             yield return new WaitForSeconds(1);
             hasBeenChange = false;
+        }
+
+        private string MakeBeautyTimer(TimeSpan timeSpan)
+        {
+            string seconds = timeSpan.Seconds / 10 == 0 ? $"0{timeSpan.Seconds}" : $"{timeSpan.Seconds}";
+            string minutes = timeSpan.Minutes / 10 == 0 ? $"0{timeSpan.Minutes}" : $"{timeSpan.Minutes}";
+            string hours = timeSpan.Hours / 10 == 0 ? $"0{timeSpan.Hours}" : $"{timeSpan.Hours}";
+            return $"{hours}:{minutes}:{seconds}";
         }
     }
 }

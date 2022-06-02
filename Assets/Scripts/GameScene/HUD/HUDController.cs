@@ -7,6 +7,7 @@ using GameScene.PlayerControllers.BasePlayer;
 using GameScene.Shop.ShopUI;
 using GameScene.Weapons;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace GameScene.HUD
@@ -28,14 +29,15 @@ namespace GameScene.HUD
         [SerializeField] protected Text MoneyLevel;
         [SerializeField] private MinionWheelController minionWheel;
         [SerializeField] private ShopUI shopUI;
+        [SerializeField] private GameObject timer;
 
 
         public float CanvasWidth => GetComponent<RectTransform>().rect.width;
         public float CanvasHeight => GetComponent<RectTransform>().rect.height;
 
         public ShopUI ShopUI => shopUI;
-
-
+        
+        
         public Image Crosshair;
 
         public static HUDController Singleton { get; private set; }
@@ -258,6 +260,11 @@ namespace GameScene.HUD
         private void SetMoney(int money)
         {
             MoneyLevel.text = "Player's Money: " + money;
+        }
+
+        public void SetTimer(string timing)
+        {
+            timer.GetComponent<Text>().text = timing;
         }
     }
 }

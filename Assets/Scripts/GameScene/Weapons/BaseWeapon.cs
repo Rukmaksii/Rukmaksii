@@ -10,6 +10,7 @@ using GameScene.PlayerControllers.BasePlayer;
 using Unity.Netcode;
 using Unity.Netcode.Samples;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace GameScene.Weapons
 {
@@ -281,7 +282,10 @@ namespace GameScene.Weapons
         private void SwitchRenderers(bool render)
         {
             foreach (var renderer in GetComponentsInChildren<MeshRenderer>())
+            {
                 renderer.enabled = render;
+                renderer.shadowCastingMode = ShadowCastingMode.Off;
+            }
         }
 
         private void SwitchColliders(bool collide)
