@@ -13,17 +13,21 @@ namespace GameScene.Menus
 
         [SerializeField] private InputField nicknameInput;
         [SerializeField] private InputField roomInput;
+        [SerializeField] private Image debugImage;
 
         [SerializeField] private ConnectionScriptableObject connectionData;
 
         // Start is called before the first frame update
         void Start()
         {
+#if !UNET
             if (DebugManager.IsDebug)
             {
                 // allows full ip:port
                 roomInput.characterLimit = 21;
+                debugImage.gameObject.SetActive(true);
             }
+#endif
         }
 
         // Update is called once per frame

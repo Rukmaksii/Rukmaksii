@@ -32,7 +32,7 @@ namespace LobbyScene
         private string _roomName;
 
 
-#if DEBUG
+#if UNET
         private bool _bypassVerification = false;
 #endif
 
@@ -112,7 +112,7 @@ namespace LobbyScene
                 {
                     bool approve = GameState == GameState.Lobby;
 
-#if DEBUG
+#if UNET
                     approve |= _bypassVerification;
 #endif
 
@@ -120,7 +120,7 @@ namespace LobbyScene
 
                     callback(false, null, approve, Vector3.zero, Quaternion.identity);
                 };
-#if DEBUG
+#if UNET
             // in game scene at startup
             if (lobbyUI == null)
             {

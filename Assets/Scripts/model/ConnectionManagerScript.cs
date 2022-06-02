@@ -29,7 +29,7 @@ namespace model
         void Start()
         {
             NetworkManager.Singleton.NetworkConfig.ConnectionApproval = true;
-#if TEST
+#if UNET
             if (NetworkManager.Singleton.IsClient || NetworkManager.Singleton.IsHost)
             {
                 gameObject.SetActive(false);
@@ -87,7 +87,7 @@ namespace model
             }
         }
 
-#if DEBUG
+#if UNET
         private void OnGUI()
         {
             GUILayout.BeginArea(new Rect(10, 10, 300, 300));
