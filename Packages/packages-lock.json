@@ -208,6 +208,16 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.unity.shadergraph": {
+      "version": "10.8.1",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.render-pipelines.core": "10.8.1",
+        "com.unity.searcher": "4.3.2"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.sysroot": {
       "version": "2.0.0",
       "depth": 1,
