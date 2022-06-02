@@ -28,7 +28,6 @@ namespace GameScene.Map
         // Start is called before the first frame update
         void Start()
         {
-            activated.Value = true;
             collider = gameObject.GetComponent<MeshCollider>();
             meshRenderer = gameObject.GetComponent<MeshRenderer>();
         }

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4645415084687018665}
   - component: {fileID: 4645415084687018664}
   - component: {fileID: 4645415084687018667}
+  - component: {fileID: 7343991709121008987}
   m_Layer: 0
   m_Name: Area
   m_TagString: Ground
@@ -112,7 +113,22 @@ MonoBehaviour:
   secondTeamMaterial: {fileID: 2100000, guid: 78e00f019cb9fd34bb6afeb29b7478bf, type: 2}
   neutralMaterial: {fileID: 4637519048616892231, guid: ed6d50ba91cd312468bcf481c0645ab1, type: 3}
   captureArea: {fileID: 8316045321158119969}
-  canCapture: 0
+--- !u!114 &7343991709121008987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4645415084687018645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 951099334
+  AlwaysReplicateAsRoot: 0
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1 &4645415085196719986
 GameObject:
   m_ObjectHideFlags: 0

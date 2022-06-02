@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using GameScene.PlayerControllers.BasePlayer;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace GameScene.Map
 {
-    public class ObjectiveController : MonoBehaviour
+    public class ObjectiveController : NetworkBehaviour
     {
         public enum State
         {
@@ -61,10 +62,9 @@ namespace GameScene.Map
         public static event Action<ObjectiveController, BasePlayer, bool> OnPlayerInteract;
 
         /** <value>boolean that indicates whether the objectives can be captured or not*/
-        public bool canCapture = false;
+        private NetworkVariable<bool> canCapture = new NetworkVariable<bool>(false);
 
-        public bool CanCapture => canCapture;
-        // TODO: public static event Action<bool> OnCaptured;
+        public bool CanCapture => canCapture.Value;
 
         // Start is called before the first frame update
         void Start()
@@ -81,7 +81,7 @@ namespace GameScene.Map
                 currentProgress = 0;
                 capturingTeam = -1;
                 controllingTeam = -1;
-                if (!canCapture)
+                if (!CanCapture)
                     return;
                 if (capturingPlayersList.Count != 0)
                 {
@@ -170,7 +170,7 @@ namespace GameScene.Map
 
         public void ToggleCanCapture(bool status)
         {
-            canCapture = status;
+            canCapture.Value = status;
             state = State.Neutral;
         }
     }

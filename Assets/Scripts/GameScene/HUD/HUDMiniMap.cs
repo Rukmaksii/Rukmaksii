@@ -105,7 +105,7 @@ namespace GameScene.HUD
                 objOverlay1.color = Color.blue;
             else if (obj1.CurrentState == ObjectiveController.State.Captured && obj1.CapturingTeam == 1)
                 objOverlay1.color = Color.red;
-            else if (obj1.canCapture)
+            else if (obj1.CanCapture)
                 objOverlay1.color = Color.black;
             else
                 objOverlay1.color = Color.white;
@@ -114,7 +114,7 @@ namespace GameScene.HUD
                 objOverlay2.color = Color.blue;
             else if (obj2.CurrentState == ObjectiveController.State.Captured && obj1.CapturingTeam == 1)
                 objOverlay2.color = Color.red;
-            else if (obj2.canCapture)
+            else if (obj2.CanCapture)
                 objOverlay2.color = Color.black;
             else
                 objOverlay2.color = Color.white;
@@ -123,7 +123,7 @@ namespace GameScene.HUD
                 objOverlay3.color = Color.blue;
             else if (obj3.CurrentState == ObjectiveController.State.Captured && obj1.CapturingTeam == 1)
                 objOverlay3.color = Color.red;
-            else if (obj3.canCapture)
+            else if (obj3.CanCapture)
                 objOverlay3.color = Color.black;
             else
                 objOverlay3.color = Color.white;

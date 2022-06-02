@@ -121,35 +121,38 @@ namespace GameScene.GameManagers
 
             //create the timer
             var timer = currTime.Value - referenceTime.Value;
-            //Debug.Log($"{timer.Hours}:{timer.Minutes}:{timer.Seconds}");
-            if (timer.Minutes % objectiveDelay == 0 && timer.Seconds == 0 && !hasBeenChange)
-            {
-                ChangeCapturePoints();
-                hasBeenChange = true;
-                StartCoroutine(Wait1Second());
-            }
+            
 
-            //for each capture point it checks if one of them is catured if so, it deactivates the ennemy's shield
-            foreach (GameObject area in captureArea)
+            if (IsServer)
             {
-                ObjectiveController objective = area.GetComponent<ObjectiveController>();
-                if (objective.CurrentState is ObjectiveController.State.Captured)
+                if (timer.Minutes % objectiveDelay == 0 && timer.Seconds == 0 && !hasBeenChange)
                 {
-                    if (objective.CapturingTeam != shield1.TeamId)
+                    ChangeCapturePoints();
+                    hasBeenChange = true;
+                    StartCoroutine(Wait1Second());
+                }
+                
+                //for each capture point it checks if one of them is catured if so, it deactivates the ennemy's shield
+                foreach (GameObject area in captureArea)
+                {
+                    ObjectiveController objective = area.GetComponent<ObjectiveController>();
+                    if (objective.CurrentState is ObjectiveController.State.Captured)
                     {
-                        //Debug.Log("shield 1 deactivated");
-                        shield1.Activated.Value = false;
-                        shield2.Activated.Value = true;
-                    }
-                    else
-                    {
-                        //Debug.Log("shield 2 deactivated");
-                        shield1.Activated.Value = true;
-                        shield2.Activated.Value = false;
+                        if (objective.CapturingTeam != shield1.TeamId)
+                        {
+                            //Debug.Log("shield 1 deactivated");
+                            shield1.Activated.Value = false;
+                            shield2.Activated.Value = true;
+                        }
+                        else
+                        {
+                            //Debug.Log("shield 2 deactivated");
+                            shield1.Activated.Value = true;
+                            shield2.Activated.Value = false;
+                        }
                     }
                 }
             }
-            //Debug.Log(ListOfMonster.Count);
         }
 
 
