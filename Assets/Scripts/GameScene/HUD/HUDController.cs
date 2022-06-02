@@ -267,6 +267,19 @@ namespace GameScene.HUD
             for (int i = 1; i < sprites.Length; i++)
                 if (wheel.items[i - 1] != null)
                     sprites[i].sprite = BaseItem.ItemInfos[wheel.items[i - 1]].Sprite;
+
+            Image[] abilitySprites = abilityTree.GetComponentsInChildren<Image>();
+            BasePlayer player = GameController.Singleton.LocalPlayer;
+            int j = 1;
+            int n = player.Inventory.AbilityTree.Abilities.Count;
+            for (int i = 0; i < abilitySprites.Length; i++)
+                if (abilitySprites[i].CompareTag("BAbility"))
+                {
+                    if (j > n)
+                        break;
+                    abilitySprites[i].sprite = player.Inventory.AbilityTree.Abilities[j].Sprite;
+                    j++;
+                }
         }
 
         private void SetMoney(int money)
