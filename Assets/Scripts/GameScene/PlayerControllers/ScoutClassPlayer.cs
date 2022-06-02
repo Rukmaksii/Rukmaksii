@@ -7,7 +7,7 @@ namespace GameScene.PlayerControllers
     {
         public override string ClassName { get; } = "Scout";
         public override int MaxHealth { get; protected set; } = 75;
-        public override RootAbility RootAbility { get; } = new TestClassRoot();
+        public override RootAbility RootAbility { get; } = new ScoutClassRoot();
         protected override float movementSpeed { get; } = 7.5f;
 
         protected override float runningSpeedMultiplier { get; } = 2.25f;
