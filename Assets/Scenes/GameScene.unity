@@ -30522,7 +30522,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3535731227432769694, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
       propertyPath: m_Spacing.y
-      value: 40
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 3535731227432769694, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
       propertyPath: m_Padding.m_Top
@@ -30614,7 +30614,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3968667213328902264, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
       propertyPath: m_Spacing.y
-      value: 40
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 3968667213328902264, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
       propertyPath: m_ConstraintCount
