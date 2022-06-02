@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using GameScene.GameManagers;
+using GameScene.PlayerControllers.BasePlayer;
 using LobbyScene;
 using Unity.Netcode;
 using UnityEngine;
@@ -12,6 +13,8 @@ namespace GameScene.HUD
     {
         [SerializeField] private GameObject pseudoHolder;
         [SerializeField] private float renderDistance = 20f;
+        [SerializeField] private Color teamColor;
+        [SerializeField] private Color enemyColor;
 
 
         private Dictionary<ulong, GameObject> pseudoDictionary = new Dictionary<ulong, GameObject>();
@@ -29,8 +32,12 @@ namespace GameScene.HUD
                     continue;
 
                 if (!pseudoDictionary.ContainsKey(player.OwnerClientId))
-                    pseudoDictionary[player.OwnerClientId] = Instantiate(pseudoHolder, gameObject.transform);
-
+                {
+                    var holder = Instantiate(pseudoHolder, gameObject.transform).GetComponent<RectTransform>();
+                    pseudoDictionary[player.OwnerClientId] = holder.gameObject;
+                    holder.anchorMin = Vector2.zero;
+                    holder.anchorMax = Vector2.zero;
+                }
 
                 bool shouldDisplay =
                     Vector3.Distance(player.transform.position, localPlayer.transform.position) <=
@@ -39,8 +46,11 @@ namespace GameScene.HUD
                 obj.SetActive(shouldDisplay);
                 if (shouldDisplay)
                 {
-                    obj.GetComponentInChildren<Text>().text = GetPseudo(player.OwnerClientId);
-                    obj.GetComponent<RectTransform>().anchoredPosition = PseudoPosition(player.gameObject);
+                    var textObj = obj.GetComponentInChildren<Text>();
+                    textObj.text = GetPseudo(player.OwnerClientId);
+                    obj.GetComponent<RectTransform>().anchoredPosition = PseudoPosition(player);
+                    var color = player.TeamId == localPlayer.TeamId ? teamColor : enemyColor;
+                    textObj.color = color;
                 }
             }
         }
@@ -54,17 +64,17 @@ namespace GameScene.HUD
             return String.IsNullOrEmpty(pseudo) ? $"Player {id}" : pseudo;
         }
 
-        private Vector2 PseudoPosition(GameObject obj)
+        private Vector2 PseudoPosition(BasePlayer player)
         {
             var hud = GetComponent<HUDController>();
             Vector2 scalars = GameController
-                    .Singleton
-                    .LocalPlayer
-                    .CameraController
-                    .Camera
-                    .WorldToViewportPoint(
-                        obj.transform.position
-                    );
+                .Singleton
+                .LocalPlayer
+                .CameraController
+                .Camera
+                .WorldToViewportPoint(
+                    player.PseudoPosition
+                );
             Debug.Log(scalars);
             return new Vector2(scalars.x * hud.CanvasWidth, scalars.y * hud.CanvasHeight);
         }

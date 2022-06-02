@@ -1398,6 +1398,7 @@ GameObject:
   - component: {fileID: 1152498889243306704}
   - component: {fileID: 8236327550364332911}
   - component: {fileID: 1821076053289487703}
+  - component: {fileID: 6870695526070840235}
   m_Layer: 5
   m_Name: UI
   m_TagString: PlayerHUD
@@ -1534,6 +1535,22 @@ MonoBehaviour:
   objOverlay1: {fileID: 5569512289845357860}
   objOverlay2: {fileID: 2940116795911529105}
   objOverlay3: {fileID: 6795285736657003542}
+--- !u!114 &6870695526070840235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6371553158960861218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8113d7301b426b4d87b06cd5296fecf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pseudoHolder: {fileID: 365839764560845198, guid: aa079885489f8574e9e67cb117006d84, type: 3}
+  renderDistance: 20
+  teamColor: {r: 0.11764707, g: 0.7254902, b: 0.82745105, a: 1}
+  enemyColor: {r: 0.99607843, g: 0, b: 0, a: 1}
 --- !u!1 &6755304173120000148
 GameObject:
   m_ObjectHideFlags: 0

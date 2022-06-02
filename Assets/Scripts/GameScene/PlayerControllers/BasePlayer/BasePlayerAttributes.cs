@@ -5,11 +5,9 @@ using GameScene.GameManagers;
 using GameScene.Minions;
 using GameScene.model;
 using GameScene.Shop;
-using GameScene.Shop.ShopUI;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
-using UnityEngine.Serialization;
 
 namespace GameScene.PlayerControllers.BasePlayer
 {
@@ -162,7 +160,7 @@ namespace GameScene.PlayerControllers.BasePlayer
         public Jetpack Jetpack => GetComponent<Jetpack>();
 
         /** <value>the duration of the dash in seconds</value> */
-        protected virtual float dashDuration { get;} = 0.3f;
+        protected virtual float dashDuration { get; } = 0.3f;
 
 
         protected virtual float dashForce { get; } = 30f;
@@ -244,5 +242,7 @@ namespace GameScene.PlayerControllers.BasePlayer
 
 
         private ShopController currentShop;
+
+        public Vector3 PseudoPosition => transform.position + controller.transform.up * controller.height / 2;
     }
 }
