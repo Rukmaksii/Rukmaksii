@@ -280,10 +280,23 @@ namespace GameScene.HUD
             announcementField.gameObject.SetActive(true);
             string message = "";
 
+            if (code.StartsWith("objective"))
+            {
+                switch (code[code.Length - 1])
+                {
+                    case '0':
+                        message = "Center objective has been enabled!";
+                        break;
+                    case '1':
+                        message = "South-West objective has been enabled!";
+                        break;
+                    case '2':
+                        message = "North-Est objective has been enabled!";
+                        break;
+                }
+            }
             if (code.StartsWith("shield"))
                 message = $"Team {code[code.Length - 1]}'s shield has been destroyed!";
-            if (code.StartsWith("objective"))
-                message = $"Objective {code[code.Length - 1]} has been enabled!";
 
             announcementField.text = message;
 
