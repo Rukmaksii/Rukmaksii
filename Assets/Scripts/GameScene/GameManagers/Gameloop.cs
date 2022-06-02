@@ -142,7 +142,6 @@ namespace GameScene.GameManagers
                     shield1.Activated.Value = shield2.Activated.Value = false;
                     if(!deactivateAllCapturePoints)
                         DeactivateCapturePoints();
-                    throwAnnouncement?.Invoke("end");
                     return;
                 }
                 if (timer.Minutes % objectiveDelay == 0 && timer.Seconds == 0 && !hasBeenChange)
@@ -154,7 +153,7 @@ namespace GameScene.GameManagers
 
                 if (!unshielded)
                 {
-                    //for each capture point it checks if one of them is catured if so, it deactivates the ennemy's shield
+                    //for each capture point it checks if one of them is captured if so, it deactivates the enemy's shield
                     foreach (GameObject area in captureArea)
                     {
                         ObjectiveController objective = area.GetComponent<ObjectiveController>();
@@ -228,7 +227,7 @@ namespace GameScene.GameManagers
             {
                 area.GetComponent<ObjectiveController>().ToggleCanCapture(false);
             }
-
+            throwAnnouncement?.Invoke("end");
             deactivateAllCapturePoints = true;
         }
 
