@@ -345,5 +345,12 @@ namespace GameScene.PlayerControllers.BasePlayer
             isAbilityTreeOpened = !isAbilityTreeOpened;
             Cursor.lockState = isAbilityTreeOpened ? CursorLockMode.Confined : CursorLockMode.Locked;
         }
+
+        public void OnEscape(InputAction.CallbackContext ctx)
+        {
+            if (!IsOwner || !ctx.performed)
+                return;
+            
+        }
     }
 }

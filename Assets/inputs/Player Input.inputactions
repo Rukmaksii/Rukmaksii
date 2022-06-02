@@ -148,6 +148,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "escape",
+                    "type": "Button",
+                    "id": "bb47069a-875b-4997-a62d-b5b9c9a5014e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -445,6 +454,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "get items",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f824fc65-d1e6-4c14-a688-d3b3de35f26e",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "escape",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

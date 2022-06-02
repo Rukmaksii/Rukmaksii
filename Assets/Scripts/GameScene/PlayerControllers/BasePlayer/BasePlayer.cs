@@ -26,7 +26,8 @@ namespace GameScene.PlayerControllers.BasePlayer
         Normal,
         InShop,
         InMap,
-        InSelectStrat
+        InSelectStrat,
+        Escaped
     }
 
     /**
