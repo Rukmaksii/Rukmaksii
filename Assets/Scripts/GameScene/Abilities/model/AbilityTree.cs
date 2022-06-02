@@ -11,7 +11,7 @@ namespace GameScene.Abilities.model
         public BaseAbility CurrentAbility => BoughtAbilities.Last();
         public readonly List<BaseAbility> Abilities = new List<BaseAbility>();
 
-        private List<BaseAbility> BoughtAbilities { get; } = new List<BaseAbility>();
+        public List<BaseAbility> BoughtAbilities { get; } = new List<BaseAbility>();
 
         public AbilityTree(BasePlayer player, BaseAbility currentAbility)
         {
@@ -19,17 +19,28 @@ namespace GameScene.Abilities.model
             BoughtAbilities.Add(currentAbility);
         }
 
-        public void ChooseAbility(Type t)
+        
+        public bool ChooseAbility(Type t)
         {
             if (CurrentAbility == null)
-                return;
+                return false;
+            if (!CurrentAbility.Children.Contains(t))
+                return false;
+
+            var ab = InstantiateAbility(t);
+            if (player.Money < ab.Price)
+                return false;
+
+            player.Money -= ab.Price;
+            ab.Apply();
+            BoughtAbilities.Add(ab);
+
+            return true;
         }
 
-        private void InstantiateAbility(Type t)
+        private BaseAbility InstantiateAbility(Type t)
         {
-            BaseAbility next = (BaseAbility) t.GetConstructor(new Type[] {typeof(BasePlayer)})!.Invoke(new object[] {player});
-            next.Apply();
-            BoughtAbilities.Add(next);
+            return (BaseAbility) t.GetConstructor(new Type[] {typeof(BasePlayer)})!.Invoke(new object[] {player});
         }
     }
 }
