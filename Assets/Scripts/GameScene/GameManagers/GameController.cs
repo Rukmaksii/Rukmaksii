@@ -121,8 +121,6 @@ namespace GameScene.GameManagers
         {
             localPlayer = player;
 
-
-            player.UpdateTeamServerRpc(Parameters.TeamId);
         }
 
         /**
@@ -251,6 +249,7 @@ namespace GameScene.GameManagers
         {
             if (!IsServer)
                 throw new NotServerException();
+            player.UpdateTeamServerRpc(LobbyManager.Singleton.PlayersRegistry[player.OwnerClientId].TeamId);
             AddPlayerClientRpc(new NetworkBehaviourReference(player));
             player.CurrentHealth = player.MaxHealth;
             player.Money = 500;

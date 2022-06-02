@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using GameScene.GameManagers;
 using GameScene.model;
 using GameScene.Shop;
 using GameScene.Weapons;
