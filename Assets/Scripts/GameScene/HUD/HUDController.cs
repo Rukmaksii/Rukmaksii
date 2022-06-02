@@ -262,9 +262,11 @@ namespace GameScene.HUD
             MoneyLevel.text = "Player's Money: " + money;
         }
 
-        public void SetTimer(string timing)
+        public void SetTimer(string timing, bool End)
         {
             timer.GetComponent<Text>().text = timing;
+            if(End)
+                timer.GetComponent<Text>().color = Color.red;
         }
     }
 }

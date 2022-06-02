@@ -33,6 +33,8 @@ namespace GameScene.GameManagers
         private BaseController base2;
 
         private int monsterCount = 0;
+        private bool deactivateAllCapturePoints = false;
+        private int timeToEnd = 20;
 
         public static Gameloop Singleton { get; private set; }
 
@@ -123,10 +125,17 @@ namespace GameScene.GameManagers
 
             //create the timer
             var timer = currTime.Value - referenceTime.Value;
-            HUDController.Singleton.SetTimer(MakeBeautyTimer(timer));
+            HUDController.Singleton.SetTimer(MakeBeautyTimer(timer), timer.Minutes >= timeToEnd);
 
             if (IsServer)
             {
+                if (timer.Minutes >= timeToEnd)
+                {
+                    shield1.Activated.Value = shield2.Activated.Value = false;
+                    if(!deactivateAllCapturePoints)
+                        DeactivateCapturePoints();
+                    return;
+                }
                 if (timer.Minutes % objectiveDelay == 0 && timer.Seconds == 0 && !hasBeenChange)
                 {
                     ChangeCapturePoints();
@@ -171,6 +180,16 @@ namespace GameScene.GameManagers
             //Activate all the shields
             shield1.Activated.Value = true;
             shield2.Activated.Value = true;
+        }
+
+        private void DeactivateCapturePoints()
+        {
+            foreach (GameObject area in captureArea)
+            {
+                area.GetComponent<ObjectiveController>().ToggleCanCapture(false);
+            }
+
+            deactivateAllCapturePoints = true;
         }
 
         private void SpawnMonsters(int number)
