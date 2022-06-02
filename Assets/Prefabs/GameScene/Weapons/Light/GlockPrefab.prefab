@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: -4867680179919758976}
   - component: {fileID: 7668312232002167735}
   - component: {fileID: 8579539592254229805}
-  - component: {fileID: 4584762193520176688}
   - component: {fileID: 3042485063871871373}
   - component: {fileID: 7461342231815233131}
+  - component: {fileID: 6359820572808905880}
   m_Layer: 0
   m_Name: GlockPrefab
   m_TagString: Untagged
@@ -135,21 +135,8 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 90
   m_CollisionDetection: 0
---- !u!65 &4584762193520176688
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1703911258719353816}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.02, y: 0.04, z: 0.71}
-  m_Center: {x: 0, y: 0.06, z: -0.03}
 --- !u!82 &3042485063871871373
 AudioSource:
   m_ObjectHideFlags: 0
@@ -262,6 +249,20 @@ MonoBehaviour:
   model: {fileID: 7546618572983536699}
   _rightHandTarget: {fileID: 4019410171986237488}
   _leftHandTarget: {fileID: 2236446764998146802}
+--- !u!136 &6359820572808905880
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1703911258719353816}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.17451155
+  m_Height: 0.3739329
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6190136766239210298
 GameObject:
   m_ObjectHideFlags: 0
