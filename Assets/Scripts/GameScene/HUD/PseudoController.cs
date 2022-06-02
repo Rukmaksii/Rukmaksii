@@ -19,6 +19,16 @@ namespace GameScene.HUD
 
         private Dictionary<ulong, GameObject> pseudoDictionary = new Dictionary<ulong, GameObject>();
 
+        private void Start()
+        {
+            NetworkManager.Singleton.OnClientDisconnectCallback +=
+                delegate(ulong clientId)
+                {
+                    if (clientId != NetworkManager.ServerClientId)
+                        Destroy(pseudoDictionary[clientId]);
+                };
+        }
+
         // Update is called once per frame
         void Update()
         {
@@ -28,7 +38,7 @@ namespace GameScene.HUD
 
             foreach (var player in GameController.Singleton.Players)
             {
-                if (player.OwnerClientId == NetworkManager.Singleton.LocalClientId)
+                if (player.OwnerClientId == localPlayer.OwnerClientId)
                     continue;
 
                 if (!pseudoDictionary.ContainsKey(player.OwnerClientId))
@@ -75,7 +85,6 @@ namespace GameScene.HUD
                 .WorldToViewportPoint(
                     player.PseudoPosition
                 );
-            Debug.Log(scalars);
             return new Vector2(scalars.x * hud.CanvasWidth, scalars.y * hud.CanvasHeight);
         }
     }

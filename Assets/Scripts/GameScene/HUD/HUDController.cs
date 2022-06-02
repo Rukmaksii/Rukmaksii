@@ -64,8 +64,6 @@ namespace GameScene.HUD
             capturingState.enabled = false;
             shopUI.gameObject.SetActive(false);
 
-            BasePlayer localPlayer = GameController.Singleton.LocalPlayer;
-
             arrow.transform.SetParent(map.transform);
 
             SetupSprites();

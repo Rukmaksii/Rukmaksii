@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using GameScene.HUD;
 using GameScene.Items;
 using GameScene.Map;
@@ -34,18 +35,17 @@ namespace GameScene.GameManagers
         public CameraController PlayerCamera => playerCamera;
         public static GameController Singleton { get; private set; }
 
-        private List<BasePlayer> players = new List<BasePlayer>();
-
         public readonly NetworkScoreboard Scoreboard = new NetworkScoreboard();
 
         public List<BasePlayer> Players
-        {
-            get
-            {
-                players = players.FindAll(p => p != null && p.gameObject != null);
-                return players;
-            }
-        }
+            => NetworkManager
+                .Singleton
+                .SpawnManager
+                .SpawnedObjects
+                .Values
+                .Where(obj => obj.IsPlayerObject)
+                .Select(obj => obj.GetComponent<BasePlayer>())
+                .ToList();
 
         private List<BaseMinion> minions = new List<BaseMinion>();
 
@@ -96,7 +96,15 @@ namespace GameScene.GameManagers
 
         [SerializeField] private int respawnTime = 5;
 
-        public BasePlayer LocalPlayer => localPlayer;
+        public BasePlayer LocalPlayer
+        {
+            get
+            {
+                if (localPlayer == null && NetworkManager.Singleton.LocalClient.PlayerObject != null)
+                    localPlayer = NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<BasePlayer>();
+                return localPlayer;
+            }
+        }
 
         public HUDController HUDController => HUDController.Singleton;
 
@@ -120,20 +128,6 @@ namespace GameScene.GameManagers
         private void BindPlayer(BasePlayer player)
         {
             localPlayer = player;
-
-        }
-
-        /**
-         * <summary>adds a player to the game controller</summary>
-         */
-        [ClientRpc]
-        private void AddPlayerClientRpc(NetworkBehaviourReference playerRef)
-        {
-            if (!playerRef.TryGet(out BasePlayer player))
-                return;
-            if (player.IsOwner)
-                BindPlayer(player);
-            players.Add(player);
         }
 
         /**
@@ -165,7 +159,6 @@ namespace GameScene.GameManagers
             ManageDeath();
             if (IsServer)
                 UpdateServer();
-
         }
 
         void UpdateServer()
@@ -250,7 +243,6 @@ namespace GameScene.GameManagers
             if (!IsServer)
                 throw new NotServerException();
             player.UpdateTeamServerRpc(LobbyManager.Singleton.PlayersRegistry[player.OwnerClientId].TeamId);
-            AddPlayerClientRpc(new NetworkBehaviourReference(player));
             player.CurrentHealth = player.MaxHealth;
             player.Money = 500;
 

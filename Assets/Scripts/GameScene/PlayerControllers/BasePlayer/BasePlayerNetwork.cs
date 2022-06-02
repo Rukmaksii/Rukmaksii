@@ -98,7 +98,7 @@ namespace GameScene.PlayerControllers.BasePlayer
         }
 
 
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         public void UpdateTeamServerRpc(int teamId)
         {
             this.teamId.Value = teamId;
