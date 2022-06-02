@@ -54,10 +54,10 @@ namespace GameScene.Map
         /** <value>the list of all players on an objective</value> */
         private List<BasePlayer> capturingPlayersList = new List<BasePlayer>();
 
+        public List<BasePlayer> CapturingPlayers => capturingPlayersList;
+
         public float MaxProgress => maxProgress;
-
-        public List<BasePlayer> CapturingPlayersList => capturingPlayersList;
-
+        
         public static event Action<ObjectiveController, BasePlayer, bool> OnPlayerInteract;
 
         /** <value>boolean that indicates whether the objectives can be captured or not*/
@@ -85,8 +85,8 @@ namespace GameScene.Map
                     return;
                 if (capturingPlayersList.Count != 0)
                 {
-                    capturingTeam = CapturingPlayersList[0].TeamId;
-                    controllingTeam = CapturingPlayersList[0].TeamId;
+                    capturingTeam = CapturingPlayers[0].TeamId;
+                    controllingTeam = CapturingPlayers[0].TeamId;
                     this.state = State.Capuring;
                 }
             }
@@ -96,7 +96,7 @@ namespace GameScene.Map
                 (List<BasePlayer> t1PlayerList, List<BasePlayer> t2PlayerList) =
                     (new List<BasePlayer>(), new List<BasePlayer>(0));
 
-                foreach (BasePlayer player in CapturingPlayersList)
+                foreach (BasePlayer player in CapturingPlayers)
                 {
                     if (player.TeamId == 0)
                         t1PlayerList.Add(player);

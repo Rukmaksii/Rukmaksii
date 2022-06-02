@@ -1,4 +1,7 @@
+using System.Collections.Generic;
+using System.Linq;
 using GameScene.GameManagers;
+using GameScene.Map;
 using GameScene.model;
 using Unity.Netcode;
 using Unity.Netcode.Samples;
@@ -226,6 +229,17 @@ namespace GameScene.PlayerControllers.BasePlayer
         {
             OnKillServerRpc();
             CurrentHealth = 0;
+
+            List<ObjectiveController> objectives = GameObject.Find("Objectives")
+                .GetComponentsInChildren<ObjectiveController>().ToList();
+            foreach (ObjectiveController obj in objectives)
+            {
+                if (obj.CapturingPlayers.Contains(this))
+                {
+                    obj.CapturingPlayers.Remove(this);
+                    break;
+                }
+            }
         }
 
 

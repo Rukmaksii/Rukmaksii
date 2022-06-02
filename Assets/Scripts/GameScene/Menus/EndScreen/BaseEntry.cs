@@ -21,7 +21,8 @@ namespace GameScene.Menus.EndScreen
         [SerializeField] private Image backRatio;
         [SerializeField] private Image backDamage;
 
-        public ulong Player;
+        private BasePlayer Player;
+        public ulong playerId;
         private NetworkScoreboard _scoreboard;
         
         public void Init()
@@ -34,8 +35,11 @@ namespace GameScene.Menus.EndScreen
         {
             int team = 0;
             foreach (BasePlayer p in GameController.Singleton.Players)
-                if (p.OwnerClientId == Player)
+                if (p.OwnerClientId == playerId)
+                {
                     team = p.TeamId;
+                    Player = p;
+                }
 
             if (team == 0)
             {
@@ -55,28 +59,28 @@ namespace GameScene.Menus.EndScreen
                 backRatio.color = new Color(0.9725f,0.4823f,0.4823f, 1);
                 backDamage.color = new Color(0.9725f,0.4823f,0.4823f, 1);
             }
-            
+
             nameField.text = "Bob";
            
-            if (_scoreboard[Player].ContainsKey(PlayerInfoField.Kill))
-                killField.text = $"{_scoreboard[Player][PlayerInfoField.Kill]}";
+            if (_scoreboard[playerId].ContainsKey(PlayerInfoField.Kill))
+                killField.text = $"{_scoreboard[playerId][PlayerInfoField.Kill]}";
             else
                 killField.text = "0";
             
-            if (_scoreboard[Player].ContainsKey(PlayerInfoField.Deaths))
-                deathField.text = $"{_scoreboard[Player][PlayerInfoField.Deaths]}";
+            if (_scoreboard[playerId].ContainsKey(PlayerInfoField.Deaths))
+                deathField.text = $"{_scoreboard[playerId][PlayerInfoField.Deaths]}";
             else
                 deathField.text = "0";
 
-            if (!_scoreboard[Player].ContainsKey(PlayerInfoField.Kill))
+            if (!_scoreboard[playerId].ContainsKey(PlayerInfoField.Kill))
                 ratioField.text = "0";
-            else if (!_scoreboard[Player].ContainsKey(PlayerInfoField.Deaths))
-                ratioField.text = $"{_scoreboard[Player][PlayerInfoField.Kill]}";
+            else if (!_scoreboard[playerId].ContainsKey(PlayerInfoField.Deaths))
+                ratioField.text = $"{_scoreboard[playerId][PlayerInfoField.Kill]}";
             else
-                ratioField.text = $"{_scoreboard[Player][PlayerInfoField.Kill] / _scoreboard[Player][PlayerInfoField.Deaths]}";
+                ratioField.text = $"{_scoreboard[playerId][PlayerInfoField.Kill] / _scoreboard[playerId][PlayerInfoField.Deaths]}";
 
-            if (_scoreboard[Player].ContainsKey(PlayerInfoField.DamagesDone))
-                damageField.text = $"{_scoreboard[Player][PlayerInfoField.DamagesDone]}";
+            if (_scoreboard[playerId].ContainsKey(PlayerInfoField.DamagesDone))
+                damageField.text = $"{_scoreboard[playerId][PlayerInfoField.DamagesDone]}";
             else
                 damageField.text = "0";
         }
