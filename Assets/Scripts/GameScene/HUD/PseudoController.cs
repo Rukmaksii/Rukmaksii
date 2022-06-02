@@ -4,6 +4,7 @@ using GameScene.GameManagers;
 using LobbyScene;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace GameScene.HUD
 {
@@ -34,7 +35,13 @@ namespace GameScene.HUD
                 bool shouldDisplay =
                     Vector3.Distance(player.transform.position, localPlayer.transform.position) <=
                     renderDistance;
-                pseudoDictionary[player.OwnerClientId].SetActive(shouldDisplay);
+                GameObject obj = pseudoDictionary[player.OwnerClientId];
+                obj.SetActive(shouldDisplay);
+                if (shouldDisplay)
+                {
+                    obj.GetComponentInChildren<Text>().text = GetPseudo(player.OwnerClientId);
+                    obj.GetComponent<RectTransform>().anchoredPosition = PseudoPosition(player.gameObject);
+                }
             }
         }
 
@@ -45,6 +52,21 @@ namespace GameScene.HUD
         {
             string pseudo = LobbyManager.Singleton.PlayersRegistry[id].Pseudo;
             return String.IsNullOrEmpty(pseudo) ? $"Player {id}" : pseudo;
+        }
+
+        private Vector2 PseudoPosition(GameObject obj)
+        {
+            var hud = GetComponent<HUDController>();
+            Vector2 scalars = GameController
+                    .Singleton
+                    .LocalPlayer
+                    .CameraController
+                    .Camera
+                    .WorldToViewportPoint(
+                        obj.transform.position
+                    );
+            Debug.Log(scalars);
+            return new Vector2(scalars.x * hud.CanvasWidth, scalars.y * hud.CanvasHeight);
         }
     }
 }
