@@ -73,9 +73,9 @@ GameObject:
   - component: {fileID: -4867680179919758976}
   - component: {fileID: 7668312232002167735}
   - component: {fileID: 8579539592254229805}
-  - component: {fileID: 4584762193520176688}
   - component: {fileID: 3042485063871871373}
   - component: {fileID: 108843537861545186}
+  - component: {fileID: 5990268380363338078}
   m_Layer: 0
   m_Name: UMPPrefab
   m_TagString: Untagged
@@ -195,21 +195,8 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 90
   m_CollisionDetection: 0
---- !u!65 &4584762193520176688
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1703911258719353816}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.02, y: 0.04, z: 0.71}
-  m_Center: {x: 0, y: 0.06, z: -0.03}
 --- !u!82 &3042485063871871373
 AudioSource:
   m_ObjectHideFlags: 0
@@ -322,6 +309,20 @@ MonoBehaviour:
   model: {fileID: 4135892544572312469}
   _rightHandTarget: {fileID: 3723640951867524714}
   _leftHandTarget: {fileID: 6676279830288924362}
+--- !u!136 &5990268380363338078
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1703911258719353816}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.2
+  m_Height: 0.4
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &4135892544572444947
 PrefabInstance:
   m_ObjectHideFlags: 0
