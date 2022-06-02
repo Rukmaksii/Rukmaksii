@@ -876,6 +876,101 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &2697854580992878151
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7776305232451748771}
+  - component: {fileID: 2720073418678378802}
+  - component: {fileID: 7492599514068224392}
+  - component: {fileID: 6379560637518949771}
+  m_Layer: 0
+  m_Name: Ramp
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7776305232451748771
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2697854580992878151}
+  m_LocalRotation: {x: -0.5148996, y: -0, z: -0, w: 0.8572505}
+  m_LocalPosition: {x: -0.0424, y: -0.0244, z: -0.0195}
+  m_LocalScale: {x: 0.0175, y: 0.01, z: 0.06233236}
+  m_Children: []
+  m_Father: {fileID: 6329912429275009166}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: -61.981, y: 0, z: 0}
+--- !u!33 &2720073418678378802
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2697854580992878151}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &7492599514068224392
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2697854580992878151}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 6098594751077100779, guid: 95113a85cfb047745aa267d9c41bc3c0, type: 3}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &6379560637518949771
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2697854580992878151}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 0.9999996, z: 0.9999996}
+  m_Center: {x: 0, y: -0.00000095366795, z: 0.00003051756}
 --- !u!1 &2936540742759406552
 GameObject:
   m_ObjectHideFlags: 0
@@ -2222,7 +2317,7 @@ GameObject:
   - component: {fileID: 6839277853402831154}
   m_Layer: 0
   m_Name: House_Rukmaksii_3_final
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2247,6 +2342,7 @@ Transform:
   - {fileID: 1052221378189273731}
   - {fileID: 1456192210612563565}
   - {fileID: 4735617986643266169}
+  - {fileID: 7776305232451748771}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2337,8 +2433,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.09999999, y: 0.1504482, z: 0.0012681829}
-  m_Center: {x: -0.049999993, y: 0.07522417, z: 0.00063418224}
+  m_Size: {x: 0.09999999, y: 0.15044823, z: 0.043201517}
+  m_Center: {x: -0.049999993, y: 0.07522418, z: -0.020332497}
 --- !u!65 &8534330520145241993
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2350,8 +2446,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.058567237, y: 0.086432315, z: 0.0012681829}
-  m_Center: {x: -0.029283619, y: 0.193584, z: 0.00063418224}
+  m_Size: {x: 0.058567237, y: 0.086432315, z: 0.042965904}
+  m_Center: {x: -0.029283619, y: 0.193584, z: -0.019610072}
 --- !u!65 &6839277853402831154
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2363,8 +2459,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.0418301, y: 0.026836973, z: 0.0012681829}
-  m_Center: {x: -0.079084836, y: 0.22338167, z: 0.00063418224}
+  m_Size: {x: 0.0418301, y: 0.026836973, z: 0.042868488}
+  m_Center: {x: -0.079084836, y: 0.22338216, z: -0.020165987}
 --- !u!1 &7053981553088354609
 GameObject:
   m_ObjectHideFlags: 0
