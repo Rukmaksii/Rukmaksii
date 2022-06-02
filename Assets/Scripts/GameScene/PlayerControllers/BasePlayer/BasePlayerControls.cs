@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using GameScene.GameManagers;
+using GameScene.HUD;
 using GameScene.model;
 using GameScene.Shop;
 using GameScene.Weapons;
@@ -336,7 +337,7 @@ namespace GameScene.PlayerControllers.BasePlayer
                     Inventory.ChangeMode(PlayerControllers.Inventory.Inventory.Mode.Weapon);
             }
         }
-        
+
         public void OnAbilityTreeOpened(InputAction.CallbackContext ctx)
         {
             if (!IsOwner || playerState != PlayerState.Normal || !ctx.performed)
@@ -350,7 +351,16 @@ namespace GameScene.PlayerControllers.BasePlayer
         {
             if (!IsOwner || !ctx.performed)
                 return;
-            
+
+
+            if (playerState == PlayerState.Escaped)
+            {
+                HUDController.Singleton.HideEscapeMenu();
+            }
+            else
+            {
+                HUDController.Singleton.ShowEscapeMenu();
+            }
         }
     }
 }

@@ -244,6 +244,12 @@ namespace GameScene.PlayerControllers.BasePlayer
 
         private PlayerState playerState;
 
+        public PlayerState PlayerState
+        {
+            get => playerState;
+            set => playerState = value;
+        }
+
 
         private ShopController currentShop;
 

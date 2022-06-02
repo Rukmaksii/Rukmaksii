@@ -152,8 +152,8 @@ namespace LobbyScene
 
             NetworkManager.Singleton.OnClientDisconnectCallback += (clientId) =>
             {
-                if (NetworkManager.Singleton.IsClient && NetworkManager.Singleton.LocalClientId == clientId ||
-                    clientId == NetworkManager.ServerClientId)
+                if (!NetworkManager.Singleton.IsServer)
+                    
                 {
                     Cursor.lockState = CursorLockMode.Confined;
                     SceneManager.LoadScene("ConnectionScene");

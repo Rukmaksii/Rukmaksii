@@ -299,5 +299,10 @@ namespace GameScene.GameManagers
                 basePlayer.OnRespawn();
             }
         }
+
+        public void Disconnect()
+        {
+            NetworkManager.Singleton.Shutdown();
+        }
     }
 }

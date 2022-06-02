@@ -34,6 +34,9 @@ namespace GameScene.HUD
         [SerializeField] private GameObject timer;
         [SerializeField] protected GameObject abilityTree;
         [SerializeField] private Text announcementField;
+        [SerializeField] private GameObject escapeMenu;
+
+        public GameObject EscapeMenu => escapeMenu;
 
         public float CanvasWidth => GetComponent<RectTransform>().rect.width;
         public float CanvasHeight => GetComponent<RectTransform>().rect.height;
@@ -134,9 +137,9 @@ namespace GameScene.HUD
         }
 
         /**
-         * <summary>sets the player's current health </summary>
-         * <param name="health">int for the current health</param>
-         */
+             * <summary>sets the player's current health </summary>
+             * <param name="health">int for the current health</param>
+             */
         public void SetHealth(int health)
         {
             healthSlider.maxValue = GameController.Singleton.LocalPlayer.MaxHealth;
@@ -308,6 +311,20 @@ namespace GameScene.HUD
             yield return new WaitForSeconds(sec);
             announcementField.gameObject.SetActive(false);
 
+        }
+
+        public void ShowEscapeMenu()
+        {
+            escapeMenu.SetActive(true);
+            Cursor.lockState = CursorLockMode.None;
+            GameController.Singleton.LocalPlayer.PlayerState = PlayerState.Escaped;
+        }
+
+        public void HideEscapeMenu()
+        {
+            escapeMenu.SetActive(false);
+            Cursor.lockState = CursorLockMode.Locked;
+            GameController.Singleton.LocalPlayer.PlayerState = PlayerState.Normal;
         }
     }
 }
