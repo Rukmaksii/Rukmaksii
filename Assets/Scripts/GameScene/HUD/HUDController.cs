@@ -8,6 +8,7 @@ using GameScene.model;
 using GameScene.PlayerControllers.BasePlayer;
 using GameScene.Shop.ShopUI;
 using GameScene.Weapons;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -42,6 +43,7 @@ namespace GameScene.HUD
         public float CanvasHeight => GetComponent<RectTransform>().rect.height;
 
         public ShopUI ShopUI => shopUI;
+        public bool isActivated;
         
         
         public Image Crosshair;
@@ -79,6 +81,7 @@ namespace GameScene.HUD
 
             _mapLoc = pointParent.transform.localPosition;
             Gameloop.throwAnnouncement += DisplayAnnouncement;
+            DisplayAnnouncement($"objective{Gameloop.Singleton.SelectedObjective}");
         }
 
         void Update()
@@ -277,7 +280,7 @@ namespace GameScene.HUD
             if (End)
                 timer.GetComponent<Text>().color = Color.red;
         }
-
+        
         public void DisplayAnnouncement(string code)
         {
             announcementField.gameObject.SetActive(true);
@@ -299,7 +302,10 @@ namespace GameScene.HUD
                 }
             }
             if (code.StartsWith("shield"))
-                message = $"Team {code[code.Length - 1]}'s shield has been destroyed!";
+                message = $"Team {code[code.Length - 1]}'s shield has been deactivated!";
+
+            if (code.StartsWith("end"))
+                message = $"All shields had been deactivated !!";
 
             announcementField.text = message;
 

@@ -35,9 +35,11 @@ namespace GameScene.GameManagers
         private int monsterCount = 0;
         private bool deactivateAllCapturePoints = false;
         private int timeToEnd = 20;
+        private TimeSpan timer;
 
         private bool unshielded = false;
         private int selectedObjective;
+        
 
         public int SelectedObjective => selectedObjective;
 
@@ -129,8 +131,8 @@ namespace GameScene.GameManagers
                 }
             }
 
-            //create the timer
-            var timer = currTime.Value - referenceTime.Value;
+            //set the timer
+            timer = currTime.Value - referenceTime.Value;
             HUDController.Singleton.SetTimer(MakeBeautyTimer(timer), timer.Minutes >= timeToEnd);
             
             if (IsServer)
@@ -140,6 +142,7 @@ namespace GameScene.GameManagers
                     shield1.Activated.Value = shield2.Activated.Value = false;
                     if(!deactivateAllCapturePoints)
                         DeactivateCapturePoints();
+                    throwAnnouncement?.Invoke("end");
                     return;
                 }
                 if (timer.Minutes % objectiveDelay == 0 && timer.Seconds == 0 && !hasBeenChange)
@@ -209,7 +212,8 @@ namespace GameScene.GameManagers
             captureArea[selectedObjective]
                 .GetComponent<ObjectiveController>()
                 .ToggleCanCapture(true);
-            throwAnnouncement?.Invoke($"objective{selectedObjective}");
+            if(timer.Minutes != 0)
+                throwAnnouncement?.Invoke($"objective{selectedObjective}");
             
             //Activate all the shields
             shield1.Activated.Value = true;
