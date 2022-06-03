@@ -363,8 +363,7 @@ namespace GameScene.HUD
         public void SetTimer(string timing, bool End)
         {
             timer.GetComponent<Text>().text = timing;
-            if (End)
-                timer.GetComponent<Text>().color = Color.red;
+            timer.GetComponent<Text>().color = End ? Color.red : Color.white;
         }
         
         public void DisplayAnnouncement(string code)
