@@ -170,7 +170,8 @@ namespace GameScene.PlayerControllers.BasePlayer
         public Jetpack Jetpack => GetComponent<Jetpack>();
 
         /** <value>the duration of the dash in seconds</value> */
-        public virtual float dashDuration { get; set; } = 0.3f;
+        protected virtual float dashDuration { get; } = 0.3f;
+        public float EffectiveDashDuration { get; set; }
 
 
         protected virtual float dashForce { get; } = 30f;

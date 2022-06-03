@@ -16,7 +16,7 @@ namespace GameScene.PlayerControllers
 
         public override float DefaultFuelDuration { get; } = 10;
 
-        public override float dashDuration { get; set; } = .3f;
+        protected override float dashDuration { get; } = .3f;
 
         protected override float dashForce { get; } = 30f;
 

@@ -84,6 +84,7 @@ namespace GameScene.PlayerControllers.BasePlayer
             EffectiveJumpForce = jumpForce;
             EffectiveMovementSpeed = movementSpeed;
             EffectiveGravityMultiplier = gravityMultiplier;
+            EffectiveDashDuration = dashDuration;
 
             if (IsOwner)
             {
@@ -298,7 +299,7 @@ namespace GameScene.PlayerControllers.BasePlayer
         {
             if (!IsDashing)
                 return;
-            if (dashStartedSince > dashDuration)
+            if (dashStartedSince > EffectiveDashDuration)
             {
                 this.IsDashing = false;
             }
