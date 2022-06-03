@@ -3,6 +3,7 @@ using System.Linq;
 using GameScene.GameManagers;
 using GameScene.HUD;
 using GameScene.Items;
+using GameScene.Map;
 using GameScene.model;
 using GameScene.PlayerControllers.BasePlayer;
 using GameScene.Weapons;
@@ -16,6 +17,7 @@ namespace GameScene.Shop
     public class ShopController : NetworkBehaviour, IInteractable
     {
         [SerializeField] public ShopUI.ShopUI ShopUI;
+        [SerializeField] private ObjectiveController objectiveController;
 
         public bool Interact(BasePlayer player)
         {
@@ -37,7 +39,10 @@ namespace GameScene.Shop
             HUDController.Singleton.ShopUI.Hide();
         }
 
-        public bool IsInteractable { get; }
+        public bool IsInteractable =>
+            !(objectiveController.CurrentState == ObjectiveController.State.Captured &&
+            GameController.Singleton.LocalPlayer.TeamId == objectiveController.ControllingTeam);
+
         public string InteractableName { get; } = "Shop";
     }
 }

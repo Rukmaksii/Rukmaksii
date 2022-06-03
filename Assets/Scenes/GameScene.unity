@@ -7660,7 +7660,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 9d932a79f5fb71e4cb8f52a8fae148bd, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9d932a79f5fb71e4cb8f52a8fae148bd, type: 3}
       propertyPath: m_LocalScale.x
@@ -7716,7 +7716,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 9d932a79f5fb71e4cb8f52a8fae148bd, type: 3}
       propertyPath: m_Name
-      value: Shop_final 1 (2)
+      value: Shop_final 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d932a79f5fb71e4cb8f52a8fae148bd, type: 3}
@@ -7752,6 +7752,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShopUI: {fileID: 1152622203}
+  objectiveController: {fileID: 742113957}
 --- !u!114 &321791013
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11328,6 +11329,17 @@ MonoBehaviour:
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+--- !u!114 &427677632 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4645415084687018667, guid: 45d20bddbb40f0c71bd7fdbd455cbafa, type: 3}
+  m_PrefabInstance: {fileID: 89636089}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 427677630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a62e8c7e3292b34eac7dab6747ca749, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &428646987
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22603,6 +22615,17 @@ MonoBehaviour:
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+--- !u!114 &742113957 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4645415084687018667, guid: 45d20bddbb40f0c71bd7fdbd455cbafa, type: 3}
+  m_PrefabInstance: {fileID: 1556667951}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 742113955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a62e8c7e3292b34eac7dab6747ca749, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &743978992 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 478606, guid: a9cc5585b9634a9449920c03ec6bc243, type: 3}
@@ -32749,7 +32772,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1d7b40d1dad85fd49acb6668cd0b1f0b, type: 3}
       propertyPath: m_LocalScale.y
-      value: 49999.992
+      value: 49999.996
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1d7b40d1dad85fd49acb6668cd0b1f0b, type: 3}
       propertyPath: m_LocalScale.z
@@ -32949,6 +32972,17 @@ MonoBehaviour:
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+--- !u!114 &1118386084 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4645415084687018667, guid: 45d20bddbb40f0c71bd7fdbd455cbafa, type: 3}
+  m_PrefabInstance: {fileID: 766531084}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1118386082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a62e8c7e3292b34eac7dab6747ca749, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1118654654
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -41726,7 +41760,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 9d932a79f5fb71e4cb8f52a8fae148bd, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9d932a79f5fb71e4cb8f52a8fae148bd, type: 3}
       propertyPath: m_LocalScale.x
@@ -41782,7 +41816,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 9d932a79f5fb71e4cb8f52a8fae148bd, type: 3}
       propertyPath: m_Name
-      value: Shop_final 1 (1)
+      value: Shop_final 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d932a79f5fb71e4cb8f52a8fae148bd, type: 3}
@@ -41818,6 +41852,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShopUI: {fileID: 1152622203}
+  objectiveController: {fileID: 1118386084}
 --- !u!114 &1395853965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46515,6 +46550,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShopUI: {fileID: 1152622203}
+  objectiveController: {fileID: 427677632}
 --- !u!4 &1555110206 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9d932a79f5fb71e4cb8f52a8fae148bd, type: 3}
