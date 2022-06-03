@@ -4,11 +4,11 @@ using GameScene.PlayerControllers.BasePlayer;
 
 namespace GameScene.Abilities
 {
-    public class SpeedAbility : BaseAbility
+    public class SuperSpeedAbility : BaseAbility
     {
-        private float multiplier = 1.5f;
+        private float multiplier = 3f;
 
-        public override List<Type> Children { get; } = new List<Type>{typeof(JumpAbility), typeof(SuperSpeedAbility)};
+        public override List<Type> Children { get; } = new List<Type>{typeof(JumpAbility)};
 
         
         public override void Apply()
@@ -17,7 +17,7 @@ namespace GameScene.Abilities
             Player.Jetpack.JetpackForce *= multiplier;
         }
 
-        public SpeedAbility(BasePlayer player) : base(player)
+        public SuperSpeedAbility(BasePlayer player) : base(player)
         {
         }
     }

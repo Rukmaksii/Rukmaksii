@@ -13,12 +13,12 @@ namespace GameScene.Abilities
          * the name of the ability
          */
         public string Name;
-        
+
         /**
          * the description of the stats changes applied by the ability
          */
         public string Description;
-        
+
         /**
          * the cost of the ability
          */
@@ -82,14 +82,32 @@ namespace GameScene.Abilities
                 }
             },
             {
-            typeof(PickupRangeAbility), new AbilityInfo()
+                typeof(PickupRangeAbility), new AbilityInfo()
+                {
+                    Name = "Pickup Range Ability",
+                    Description = "+100% of pickup range",
+                    Price = 200,
+                    SpritePath = "Abilities/Luffy"
+                }
+            },
             {
-                Name = "Pickup Range Ability",
-                Description = "+100% of pickup range",
-                Price = 200,
-                SpritePath = "Abilities/Luffy"
+                typeof(LowGravityAbility), new AbilityInfo()
+                {
+                    Name = "LowGravity Ability",
+                    Description = "-30% of Gravity",
+                    Price = 200,
+                    SpritePath = "Abilities/Newton"
+                }
+            },
+            {
+                typeof(SuperSpeedAbility), new AbilityInfo()
+                {
+                    Name = "Super Speed Ability",
+                    Description = "+300% of movement speed",
+                    Price = 300,
+                    SpritePath = "Abilities/Sanic"
+                }
             }
-        }
         };
 
         protected BasePlayer Player;
@@ -102,7 +120,6 @@ namespace GameScene.Abilities
         public int Price => Info.Price;
 
         public abstract List<Type> Children { get; }
-        
 
 
         public BaseAbility(BasePlayer player)

@@ -20,7 +20,7 @@ namespace GameScene.PlayerControllers
 
         protected override float dashForce { get; } = 45f;
 
-        protected override float gravityMultiplier { get; } = 1.3f;
+        public override float gravityMultiplier { get; set; } = 1.3f;
 
         public override Type WeaponInterface { get; } = typeof(IWeapon);
 
