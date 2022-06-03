@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -56322,7 +56322,7 @@ GameObject:
   - component: {fileID: 1878128175}
   - component: {fileID: 1878128176}
   m_Layer: 0
-  m_Name: Point Light (1)
+  m_Name: Point Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -62343,13 +62343,26 @@ GameObject:
   - component: {fileID: 2952748206607104433}
   - component: {fileID: 1089505593475730811}
   - component: {fileID: 109413799662770103}
+  - component: {fileID: 1449683956256713903}
   m_Layer: 0
-  m_Name: Base 2
-  m_TagString: Ground
+  m_Name: Base2
+  m_TagString: Base
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1449683956256713903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1449683956256713902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bab028fae1338d74da927ab83949e5ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1449683957499213354
 GameObject:
   m_ObjectHideFlags: 0
@@ -62362,13 +62375,26 @@ GameObject:
   - component: {fileID: 2952748205431710517}
   - component: {fileID: 1089505594651252735}
   - component: {fileID: 109413798690802995}
+  - component: {fileID: 1449683957499213355}
   m_Layer: 0
-  m_Name: Base 1
-  m_TagString: Ground
+  m_Name: Base1
+  m_TagString: Base
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1449683957499213355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1449683957499213354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bab028fae1338d74da927ab83949e5ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &2257885937968346644
 Transform:
   m_ObjectHideFlags: 0
@@ -62406,26 +62432,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2993223880083330146}
-  - component: {fileID: 2504496095793843930}
   m_Layer: 0
-  m_Name: Base1
+  m_Name: EntireBase1
   m_TagString: Base
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2504496095793843930
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2504496095793843928}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bab028fae1338d74da927ab83949e5ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2504496096969233500
 GameObject:
   m_ObjectHideFlags: 0
@@ -62435,26 +62448,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2993223881055293158}
-  - component: {fileID: 2504496096969233502}
   m_Layer: 0
-  m_Name: Base2
+  m_Name: EntireBase2
   m_TagString: Base
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2504496096969233502
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2504496096969233500}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bab028fae1338d74da927ab83949e5ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!33 &2952748205431710517
 MeshFilter:
   m_ObjectHideFlags: 0
