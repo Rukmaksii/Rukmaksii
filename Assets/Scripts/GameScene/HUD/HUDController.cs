@@ -284,6 +284,7 @@ namespace GameScene.HUD
             int n = player.Inventory.AbilityTree.Abilities.Count;
             foreach (Image sprite in abilitySprites)
             {
+                sprite.GetComponentInChildren<Image>().enabled = j > n;
                 if (sprite.CompareTag("BAbility"))
                 {
                     if (j > n)
@@ -310,11 +311,14 @@ namespace GameScene.HUD
                     sprite.enabled = false;
                     continue;
                 }
+
+                sprite.sprite = BaseAbility.AbilityInfos[lastAbility.Children[j]].Sprite;
                 Text[] texts = sprite.GetComponentsInChildren<Text>();
                 texts[0].text = BaseAbility.AbilityInfos[lastAbility.Children[j]].Name;
                 texts[1].text = BaseAbility.AbilityInfos[lastAbility.Children[j]].Description;
                 texts[2].text = BaseAbility.AbilityInfos[lastAbility.Children[j]].Price.ToString();
                 sprite.enabled = true;
+                j++;
             }
 
         }

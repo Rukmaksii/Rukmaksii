@@ -1,9 +1,11 @@
+using System.Collections.Generic;
+using System.Net.Http.Headers;
 using GameScene.GameManagers;
 using GameScene.model;
-using Unity.Mathematics;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 namespace GameScene.Monster
 {
@@ -12,6 +14,8 @@ namespace GameScene.Monster
     public class MonsterController : NetworkBehaviour, IKillable
     {
         [SerializeField] private int maxHealth = 50;
+
+        [SerializeField] private List<Material> materials = new List<Material>();
         private readonly NetworkVariable<int> life = new NetworkVariable<int>(0);
 
         public int Life
@@ -25,7 +29,8 @@ namespace GameScene.Monster
         // Start is called before the first frame update
         void Start()
         {
-            
+            gameObject.GetComponentInChildren<SkinnedMeshRenderer>().material =
+                materials[Random.Range(0, materials.Count)];
         }
 
 
