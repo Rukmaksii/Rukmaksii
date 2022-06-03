@@ -145,8 +145,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firstTeamMaterial: {fileID: 2100000, guid: 7d48136ae0434664dad52e299c89a45f, type: 2}
   secondTeamMaterial: {fileID: 2100000, guid: 78e00f019cb9fd34bb6afeb29b7478bf, type: 2}
-  neutralMaterial: {fileID: 2100000, guid: ff757ae0158a9bb46aa7f2672d132540, type: 2}
-  captureArea: {fileID: 6677394755455435328}
+  neutralMaterial: {fileID: 4637519048616892231, guid: ed6d50ba91cd312468bcf481c0645ab1, type: 3}
+  captureArea: {fileID: 8316045321158119969}
   objectiveId: 0
 --- !u!114 &6757048585293782873
 MonoBehaviour:
