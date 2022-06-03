@@ -34913,12 +34913,33 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1821076053289487703, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
   m_PrefabInstance: {fileID: 1152622202}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1152622207}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e34307c521fab8ef0b03e46773f4a646, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1152622207 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6371553158960861218, guid: 0880c5bbc0ef8cb479a8cfc8e6431876, type: 3}
+  m_PrefabInstance: {fileID: 1152622202}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1152622208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1152622207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 4225539129
+  AlwaysReplicateAsRoot: 0
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1001 &1153665973
 PrefabInstance:
   m_ObjectHideFlags: 0

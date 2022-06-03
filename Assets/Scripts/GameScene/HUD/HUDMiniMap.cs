@@ -2,12 +2,13 @@
 using GameScene.GameManagers;
 using GameScene.Map;
 using GameScene.Minions;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace GameScene.HUD
 {
-    public partial class HUDController : MonoBehaviour
+    public partial class HUDController
     {
         [SerializeField] protected GameObject map;
         [SerializeField] protected Image arrow;

@@ -175,16 +175,9 @@ namespace GameScene.Map
             }
         }
         
-        [ServerRpc]
-        public void ToggleCanCaptureServerRpc(bool status)
+        public void ToggleCanCapture(bool status)
         {
             canCapture.Value = status;
-            state = State.Neutral;
-        }
-
-        [ClientRpc]
-        public void ToggleCanCaptureClientRpc(bool status)
-        {
             state = State.Neutral;
         }
     }

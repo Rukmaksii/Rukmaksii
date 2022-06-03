@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ using UnityEngine.UI;
 namespace GameScene.HUD
 {
     [RequireComponent(typeof(PseudoController))]
-    public partial class HUDController : MonoBehaviour
+    public partial class HUDController : NetworkBehaviour
     {
         [SerializeField] protected Slider healthSlider;
         [SerializeField] protected Text healthCounter;
@@ -87,9 +88,8 @@ namespace GameScene.HUD
             SetupSprites();
 
             _mapLoc = pointParent.transform.localPosition;
-            Gameloop.throwAnnouncement += DisplayAnnouncement;
-            DisplayAnnouncement($"objective{Gameloop.Singleton.SelectedObjective}");
-            
+            Gameloop.throwAnnouncement += DisplayAnnouncementClientRpc;
+
             SetupButtons();
             abilityBoughtSprites = abilityBought.GetComponentsInChildren<Image>();
             abilityShopSprites = abilityShop.GetComponentsInChildren<Image>();
@@ -99,7 +99,7 @@ namespace GameScene.HUD
                 UpdateAbilities();
             }
         }
-
+        
         void Update()
         {
             var localPlayer = GameController.Singleton.LocalPlayer;
@@ -360,15 +360,18 @@ namespace GameScene.HUD
             MoneyLevel.text = "Player's Money: " + money;
         }
 
-        public void SetTimer(string timing, bool End)
+        [ClientRpc]
+        public void SetTimerClientRpc(string timing, bool End)
         {
             timer.GetComponent<Text>().text = timing;
             timer.GetComponent<Text>().color = End ? Color.red : Color.white;
         }
         
-        public void DisplayAnnouncement(string code)
+        [ClientRpc]
+        private void DisplayAnnouncementClientRpc(string code)
         {
             announcementField.gameObject.SetActive(true);
+            announcementField.color = Color.white;
             string message = "";
 
             if (code.StartsWith("objective"))
@@ -376,10 +379,10 @@ namespace GameScene.HUD
                 switch (code[code.Length - 1])
                 {
                     case '0':
-                        message = "South-West objective has been enabled!";
+                        message = "North-West objective has been enabled!";
                         break;
                     case '1':
-                        message = "North-Est objective has been enabled!";
+                        message = "South-Est objective has been enabled!";
                         break;
                     case '2':
                         message = "Central objective has been enabled!";
@@ -390,7 +393,10 @@ namespace GameScene.HUD
                 message = $"Team {code[code.Length - 1]}'s shield has been deactivated!";
 
             if (code.StartsWith("end"))
+            {
                 message = $"All shields had been deactivated !!";
+                announcementField.color = Color.red;
+            }
 
             announcementField.text = message;
 
@@ -401,7 +407,6 @@ namespace GameScene.HUD
         {
             yield return new WaitForSeconds(sec);
             announcementField.gameObject.SetActive(false);
-
         }
 
         public void ShowEscapeMenu()

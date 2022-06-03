@@ -21,9 +21,9 @@ namespace GameScene.GameManagers
         private NetworkVariable<DateTime> referenceTime = new NetworkVariable<DateTime>();
         private NetworkVariable<DateTime> currTime = new NetworkVariable<DateTime>();
 
-        private const int objectiveDelay = 2;
-        private bool hasBeenChange;
-        private const int numberOfMonster = 20;
+        private const int ObjectiveDelay = 2;
+        private bool hasBeenChange = false;
+        private const int NumberOfMonster = 20;
 
         [SerializeField] private GameObject[] captureArea;
 
@@ -70,7 +70,6 @@ namespace GameScene.GameManagers
             shield2 = GameObject.Find("Shield2").GetComponent<ShieldController>();
             base1 = GameObject.Find("Base1").GetComponent<BaseController>();
             base2 = GameObject.Find("Base2").GetComponent<BaseController>();
-            hasBeenChange = false;
         }
 
         // Update is called once per frame
@@ -87,13 +86,14 @@ namespace GameScene.GameManagers
             //If a client spawn without reference time it ask the server to reset it
             if(referenceTime.Value == DateTime.MinValue)
                 SetReferenceTimeServerRpc();
+            
             if (NetworkManager.Singleton.IsServer)
             {
                 //set the current time
                 currTime.Value = DateTime.Now;
                 //check if there are the right number of monster 
-                if (monsterCount < numberOfMonster)
-                    SpawnMonsters(numberOfMonster - monsterCount);
+                if (monsterCount < NumberOfMonster)
+                    SpawnMonsters(NumberOfMonster - monsterCount);
 
                 //detect end of game
                 if (base1.CurrentHealth == 0 || base2.CurrentHealth == 0)
@@ -104,6 +104,55 @@ namespace GameScene.GameManagers
                         GameController.Singleton.winningTeam = 0;
                     NetworkManager.Singleton.SceneManager.LoadScene("EndScene", LoadSceneMode.Single);
                     GetComponent<Gameloop>().enabled = false;
+                }
+                //set the timer
+                timer = currTime.Value - referenceTime.Value;
+                
+                //display the timer on every HUD
+                HUDController.Singleton.SetTimerClientRpc(MakeBeautyTimer(timer), timer.Minutes >= timeToEnd);
+                
+                //detect a too long game
+                if (timer.Minutes >= timeToEnd)
+                {
+                    shield1.Activated.Value = shield2.Activated.Value = false;
+                    if(!deactivateAllCapturePoints)
+                        DeactivateCapturePoints();
+                    return;
+                }
+                
+                //Change the objective that can be captured every ObjectiveDelay
+                if (((timer.Minutes != 0 && timer.Minutes % ObjectiveDelay == 0 && timer.Seconds == 0) 
+                    || (timer.Minutes == 0 && timer.Seconds == 5)) &&  !hasBeenChange)
+                {
+                    ChangeCapturePoints();
+                    hasBeenChange = true;
+                    StartCoroutine(Wait1Second());
+                }
+                //If any shield has been deactivated
+                if (!unshielded)
+                {
+                    //for each capture point it checks if one of them is captured if so, it deactivates the enemy's shield
+                    foreach (GameObject area in captureArea)
+                    {
+                        ObjectiveController objective = area.GetComponent<ObjectiveController>();
+                        if (objective.CurrentState is ObjectiveController.State.Captured)
+                        {
+                            if (objective.CapturingTeam != shield1.TeamId)
+                            {
+                                throwAnnouncement?.Invoke("shield1");
+                                shield1.Activated.Value = false;
+                                shield2.Activated.Value = true;
+                            }
+                            else
+                            {
+                                throwAnnouncement?.Invoke("shield2");
+                                shield1.Activated.Value = true;
+                                shield2.Activated.Value = false;
+                            }
+                            unshielded = true;
+                            break;
+                        }
+                    }
                 }
             }
 
@@ -132,94 +181,20 @@ namespace GameScene.GameManagers
                         shield2.gameObject.GetComponent<MeshCollider>());
                 }
             }
-
-            //set the timer
-            timer = currTime.Value - referenceTime.Value;
-            HUDController.Singleton.SetTimer(MakeBeautyTimer(timer), timer.Minutes >= timeToEnd);
-            
-            if (IsServer)
-            {
-                if (timer.Minutes >= timeToEnd)
-                {
-                    shield1.Activated.Value = shield2.Activated.Value = false;
-                    if(!deactivateAllCapturePoints)
-                        DeactivateCapturePoints();
-                    return;
-                }
-                if (timer.Minutes % objectiveDelay == 0 && timer.Seconds == 0 && !hasBeenChange)
-                {
-                    ChangeCapturePoints();
-                    hasBeenChange = true;
-                    StartCoroutine(Wait1Second());
-                }
-
-                if (!unshielded)
-                {
-                    //for each capture point it checks if one of them is captured if so, it deactivates the enemy's shield
-                    foreach (GameObject area in captureArea)
-                    {
-                        ObjectiveController objective = area.GetComponent<ObjectiveController>();
-                        if (objective.CurrentState is ObjectiveController.State.Captured)
-                        {
-                            if (objective.CapturingTeam != shield1.TeamId)
-                            {
-                                throwAnnouncement?.Invoke("shield1");
-                                shield1.Activated.Value = false;
-                                shield2.Activated.Value = true;
-                            }
-                            else
-                            {
-                                throwAnnouncement?.Invoke("shield2");
-                                shield1.Activated.Value = true;
-                                shield2.Activated.Value = false;
-                            }
-                            unshielded = true;
-                            break;
-                        }
-                    }
-                }
-            }
-            /*
-            else
-            {
-                if (!unshielded && (shield1.Activated.Value != shield2.Activated.Value))
-                {
-                    unshielded = true;
-                    int status = !shield1.Activated.Value ? 1 : 2;
-                    throwAnnouncement?.Invoke($"shield{status}");
-                }
-                else if (unshielded && (shield1.Activated.Value == shield2.Activated.Value))
-                {
-                    foreach (ObjectiveController obj in GameObject.Find("Map").GetComponentsInChildren<ObjectiveController>())
-                    {
-                        if (obj.CanCapture)
-                        {
-                            selectedObjective = obj.ObjectiveId;
-                            obj.ToggleCanCaptureClientRpc(false);
-                            break;
-                        }
-                    }
-                    captureArea[SelectedObjective].GetComponent<ObjectiveController>().ToggleCanCaptureClientRpc(true);
-                    throwAnnouncement?.Invoke($"objective{selectedObjective}");
-                }
-            }*/
         }
 
         public void ChangeCapturePoints()
         {
             foreach (GameObject area in captureArea)
             {
-                area.GetComponent<ObjectiveController>().ToggleCanCaptureServerRpc(false);
-                area.GetComponent<ObjectiveController>().ToggleCanCaptureClientRpc(false);
+                area.GetComponent<ObjectiveController>().ToggleCanCapture(false);
             }
 
             selectedObjective = Random.Range(0, captureArea.Length);
             captureArea[selectedObjective].GetComponent<ObjectiveController>()
-                .ToggleCanCaptureServerRpc(true);
-            captureArea[selectedObjective].GetComponent<ObjectiveController>()
-                .ToggleCanCaptureClientRpc(true);
-            if(timer.Minutes != 0)
-                throwAnnouncement?.Invoke($"objective{selectedObjective}");
+                .ToggleCanCapture(true);
+            
+            throwAnnouncement?.Invoke($"objective{selectedObjective}");
             
             //Activate all the shields
             shield1.Activated.Value = true;
@@ -232,8 +207,7 @@ namespace GameScene.GameManagers
         {
             foreach (GameObject area in captureArea)
             { 
-                area.GetComponent<ObjectiveController>().ToggleCanCaptureServerRpc(false);
-                area.GetComponent<ObjectiveController>().ToggleCanCaptureClientRpc(false);
+                area.GetComponent<ObjectiveController>().ToggleCanCapture(false);
             }
             throwAnnouncement?.Invoke("end");
             deactivateAllCapturePoints = true;
