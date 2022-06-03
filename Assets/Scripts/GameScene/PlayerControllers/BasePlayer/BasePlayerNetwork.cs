@@ -58,12 +58,6 @@ namespace GameScene.PlayerControllers.BasePlayer
         }
 
         //[ServerRpc]
-        public void UpdatePositionRpc(Vector3 position)
-        {
-            controller.Move(position);
-        }
-
-        //[ServerRpc]
         public void UpdateRotationRpc(Vector3 direction, float angle)
         {
             transform.Rotate(direction, angle);

@@ -102,9 +102,7 @@ namespace GameScene.PlayerControllers.BasePlayer
             if (!IsOwner)
                 return;
             var pos = GameController.Singleton.SpawnPoint;
-            pos.y += 30;
-
-            UpdatePositionRpc(pos);
+            transform.position = pos;
         }
 
         void Awake()
