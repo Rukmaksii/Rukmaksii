@@ -12,7 +12,7 @@ namespace GameScene.Abilities
 
         public override void Apply()
         {
-            Player.dashDuration *= multiplier;
+            Player.EffectiveDashDuration *= multiplier;
         }
 
         public DashAbility(BasePlayer player) : base(player)
