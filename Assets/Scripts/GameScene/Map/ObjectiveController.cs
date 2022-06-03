@@ -174,10 +174,17 @@ namespace GameScene.Map
                 capturingPlayersList.Remove(collider.GetComponent<BasePlayer>());
             }
         }
-
-        public void ToggleCanCapture(bool status)
+        
+        [ServerRpc]
+        public void ToggleCanCaptureServerRpc(bool status)
         {
             canCapture.Value = status;
+            state = State.Neutral;
+        }
+
+        [ClientRpc]
+        public void ToggleCanCaptureClientRpc(bool status)
+        {
             state = State.Neutral;
         }
     }

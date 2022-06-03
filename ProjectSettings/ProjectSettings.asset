@@ -535,7 +535,7 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLDecompressionFallback: 0
   scriptingDefineSymbols:
-    1: UNETefigziuefhize
+    1: UNET
   additionalCompilerArguments:
     1: []
   platformArchitecture: {}
