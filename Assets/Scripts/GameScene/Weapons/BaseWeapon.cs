@@ -350,7 +350,6 @@ namespace GameScene.Weapons
                 return false;
 
             var scoreboard = GameController.Singleton.Scoreboard;
-            Debug.Log(hit);
             if (hit.CompareTag("Player"))
             {
                 BasePlayer enemyPlayer = hit.GetComponent<BasePlayer>();
@@ -388,7 +387,6 @@ namespace GameScene.Weapons
             else if (hit.CompareTag("Base"))
             {
                 BaseController baseObject = hit.GetComponent<BaseController>();
-                Debug.Log(baseObject.TeamId);
                 if (baseObject == null || Player.TeamId == baseObject.TeamId)
                     return false;
 

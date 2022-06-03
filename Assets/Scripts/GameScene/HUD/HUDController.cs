@@ -372,10 +372,10 @@ namespace GameScene.HUD
                 switch (code[code.Length - 1])
                 {
                     case '0':
-                        message = "North-West objective has been enabled!";
+                        message = "South-West objective has been enabled!";
                         break;
                     case '1':
-                        message = "South-Est objective has been enabled!";
+                        message = "North-Est objective has been enabled!";
                         break;
                     case '2':
                         message = "Central objective has been enabled!";
