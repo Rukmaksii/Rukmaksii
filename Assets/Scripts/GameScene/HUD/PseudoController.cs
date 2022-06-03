@@ -51,8 +51,8 @@ namespace GameScene.HUD
 
                 // ReSharper disable twice Unity.InefficientPropertyAccess
                 bool shouldDisplay =
-                    Vector3.Dot(localPlayer.transform.forward,
-                        localPlayer.transform.position - player.transform.position) > 0 &&
+                    Vector3.Dot(localPlayer.CameraController.transform.forward,
+                        player.transform.position - localPlayer.transform.position) > 0 &&
 
                     Vector3.Distance(player.transform.position, localPlayer.transform.position) <=
                     renderDistance && player.CurrentHealth > 0;

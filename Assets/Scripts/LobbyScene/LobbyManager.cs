@@ -64,6 +64,8 @@ namespace LobbyScene
         {
             get
             {
+                if (DebugManager.ByPassCount)
+                    return true;
                 if (PlayersRegistry.Count < PlayerCount)
                     return false;
                 int validPlayers = 0;
