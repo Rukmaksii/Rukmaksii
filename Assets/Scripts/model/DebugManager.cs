@@ -14,7 +14,7 @@ namespace model
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
                 root = Environment.GetEnvironmentVariable("USERPROFILE");
             else
-                root = "~";
+                root = Environment.GetEnvironmentVariable("HOME");
             IsDebug = File.Exists($"{root}/.rukmaksii-debug");
         }
     }
