@@ -106,17 +106,25 @@ namespace LobbyScene
         void Start()
         {
             DontDestroyOnLoad(gameObject);
+            if (!NetworkManager.Singleton.IsServer)
+                startButton.gameObject.SetActive(NetworkManager.Singleton.IsServer);
 
             NetworkManager.Singleton.ConnectionApprovalCallback +=
                 delegate(byte[] data, ulong clientId, NetworkManager.ConnectionApprovedDelegate callback)
                 {
                     bool approve = GameState == GameState.Lobby;
 
+
+                    if (PlayersRegistry.Count >= 4)
+                    {
+                        playerCount.Value = 6;
+                    }
+
+                    approve &= PlayersRegistry.Count < PlayerCount;
+
 #if UNET
                     approve |= _bypassVerification;
 #endif
-
-                    approve &= PlayersRegistry.Count < PlayerCount;
 
                     callback(false, null, approve, Vector3.zero, Quaternion.identity);
                 };
@@ -159,6 +167,8 @@ namespace LobbyScene
 
                 if (NetworkManager.Singleton.IsServer && GameState == GameState.Lobby)
                 {
+                    if (PlayersRegistry.Count == 4)
+                        playerCount.Value = 4;
                     PlayersRegistry.Remove(clientId);
                     if (NetworkManager.Singleton.IsClient)
                         FillPlayerViewers();
@@ -193,7 +203,7 @@ namespace LobbyScene
             {
                 startButton.gameObject.SetActive(true);
                 // TODO : removes can start by pass
-                startButton.interactable = startButton.enabled = CanStart || true;
+                startButton.interactable = startButton.enabled = CanStart;
             }
         }
 
@@ -299,10 +309,10 @@ namespace LobbyScene
         [ServerRpc(RequireOwnership = false)]
         private void AddPlayerServerRpc(ulong playerId, ConnectionData data)
         {
-            if (GetPlayersInTeam(0).Count > GetPlayersInTeam(1).Count)
-                data.TeamId = 1;
-            else
+            if (GetPlayersInTeam(1).Count >= GetPlayersInTeam(0).Count)
                 data.TeamId = 0;
+            else
+                data.TeamId = 1;
 
             PlayersRegistry[playerId] = data;
             if (IsClient)
