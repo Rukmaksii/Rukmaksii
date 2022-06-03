@@ -34,12 +34,7 @@ namespace GameScene.Menus.EndScreen
 
         private void UpdateInfos()
         {
-            int team = 0;
-            foreach (BasePlayer p in GameController.Singleton.Players)
-                if (p.OwnerClientId == playerId)
-                    team = p.TeamId;
-
-            if (team == 0)
+            if (playerId == 0)
             {
                 backField.color = new Color(0.1568f,0.7843137f,1f, 1);
                 backName.color = new Color(0.1960f,0.4509f,0.9411f, 1);
