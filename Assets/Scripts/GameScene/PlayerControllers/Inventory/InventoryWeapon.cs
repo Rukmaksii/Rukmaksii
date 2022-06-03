@@ -203,7 +203,7 @@ namespace GameScene.PlayerControllers.Inventory
         {
             int offset = (int) CurrentWeapon.Type;
             bool switched = false;
-            for (int i = offset - 1; i > 0 && !switched; i--)
+            for (int i = offset - 1; i >= 0 && !switched; i--)
             {
                 WeaponType t = (WeaponType) i;
                 switched = SwitchWeapon(t);
