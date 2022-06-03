@@ -344,6 +344,11 @@ namespace GameScene.PlayerControllers.BasePlayer
             if (!IsOwner || !ctx.performed)
                 return;
 
+            if (playerState != PlayerState.Normal)
+            {
+                return;
+            }
+            
             if (playerState == PlayerState.InAbilityTree)
             {
                 HUDController.Singleton.HideAbilityTree();
@@ -359,6 +364,11 @@ namespace GameScene.PlayerControllers.BasePlayer
             if (!IsOwner || !ctx.performed)
                 return;
 
+            if (playerState == PlayerState.InAbilityTree)
+            {
+                HUDController.Singleton.HideAbilityTree();
+                return;
+            }
 
             if (playerState == PlayerState.Escaped)
             {

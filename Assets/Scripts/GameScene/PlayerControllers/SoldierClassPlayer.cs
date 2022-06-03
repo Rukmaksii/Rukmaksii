@@ -6,7 +6,7 @@ namespace GameScene.PlayerControllers
     public class SoldierClassPlayer : BasePlayer.BasePlayer
     {
         public override string ClassName { get; } = "Soldier";
-        public override int MaxHealth { get; protected set; } = 100;
+        public override int MaxHealth { get; set; } = 100;
         public override RootAbility RootAbility { get; } = new SoldierClassRoot();
         protected override float movementSpeed { get; } = 7.5f;
 

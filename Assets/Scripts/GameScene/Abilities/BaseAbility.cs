@@ -44,6 +44,15 @@ namespace GameScene.Abilities
                     Price = 500,
                     SpritePath = "Abilities/Jetpack"
                 }
+            },
+            {
+                typeof(HealthAbility), new AbilityInfo()
+                {
+                    Name = "Health Ability",
+                    Description = "+20 Health points",
+                    Price = 300,
+                    SpritePath = "Abilities/Health"
+                }
             }
         };
 

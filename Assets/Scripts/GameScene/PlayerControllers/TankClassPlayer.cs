@@ -6,7 +6,7 @@ namespace GameScene.PlayerControllers
     public class TankClassPlayer : BasePlayer.BasePlayer
     {
         public override string ClassName { get; } = "Tank";
-        public override int MaxHealth { get; protected set; } = 125;
+        public override int MaxHealth { get; set; } = 125;
         public override RootAbility RootAbility { get; } = new TankClassRoot();
         protected override float movementSpeed { get; } = 5f;
 

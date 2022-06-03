@@ -166,7 +166,7 @@ namespace GameScene.PlayerControllers.BasePlayer
 
         protected virtual float dashForce { get; } = 30f;
 
-        public abstract int MaxHealth { get; protected set; }
+        public abstract int MaxHealth { get; set; }
 
         /** <value>current player health</value> */
         private readonly NetworkVariable<int> currentHealth = new NetworkVariable<int>(1);

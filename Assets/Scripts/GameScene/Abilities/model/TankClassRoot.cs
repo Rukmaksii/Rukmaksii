@@ -5,6 +5,9 @@ namespace GameScene.Abilities.model
 {
     public class TankClassRoot : RootAbility
     {
-        public override List<Type> Children { get; } = new List<Type> { };
+        public override List<Type> Children { get; } = new List<Type>
+        {
+            typeof(HealthAbility)
+        };
     }
 }
