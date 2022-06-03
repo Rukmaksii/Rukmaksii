@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using GameScene.GameManagers;
 using GameScene.Map;
 using GameScene.model;
@@ -164,9 +165,13 @@ namespace GameScene.PlayerControllers.BasePlayer
             }
 
             Vector3 res;
+            
+            if(playerState != PlayerState.Normal)
+                Movement = Vector3.zero;
 
             if (!IsFlying)
             {
+                
                 var moveVector = Movement;
 
                 float multiplier = movementSpeed;
