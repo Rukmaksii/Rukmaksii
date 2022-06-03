@@ -21,7 +21,7 @@ namespace GameScene.GameManagers
         private NetworkVariable<DateTime> referenceTime = new NetworkVariable<DateTime>();
         private NetworkVariable<DateTime> currTime = new NetworkVariable<DateTime>();
 
-        private int objectiveDelay;
+        private const int objectiveDelay = 5;
         private bool hasBeenChange;
         private const int numberOfMonster = 20;
 
@@ -70,7 +70,6 @@ namespace GameScene.GameManagers
             shield2 = GameObject.Find("Shield2").GetComponent<ShieldController>();
             base1 = GameObject.Find("Base1").GetComponent<BaseController>();
             base2 = GameObject.Find("Base2").GetComponent<BaseController>();
-            objectiveDelay = 5;
             hasBeenChange = false;
         }
 
@@ -84,6 +83,10 @@ namespace GameScene.GameManagers
                 if (shield2 != null && shield2.TeamId != 1)
                     shield2.UpdateTeamServerRpc(1);
             }
+            
+            //If a client spawn without reference time it ask the server to reset it
+            if(referenceTime == null)
+                SetReferenceTimeServerRpc();
             
 	        if (NetworkManager.Singleton.IsServer)
             {
@@ -278,6 +281,12 @@ namespace GameScene.GameManagers
             string minutes = timeSpan.Minutes / 10 == 0 ? $"0{timeSpan.Minutes}" : $"{timeSpan.Minutes}";
             string hours = timeSpan.Hours / 10 == 0 ? $"0{timeSpan.Hours}" : $"{timeSpan.Hours}";
             return $"{hours}:{minutes}:{seconds}";
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void SetReferenceTimeServerRpc()
+        {
+            referenceTime.Value = DateTime.Now;
         }
     }
 }
