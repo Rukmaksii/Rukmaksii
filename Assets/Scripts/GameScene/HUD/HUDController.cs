@@ -93,6 +93,11 @@ namespace GameScene.HUD
             SetupButtons();
             abilityBoughtSprites = abilityBought.GetComponentsInChildren<Image>();
             abilityShopSprites = abilityShop.GetComponentsInChildren<Image>();
+            var localPlayer = GameController.Singleton.LocalPlayer;
+            if (localPlayer != null && localPlayer.Inventory != null && localPlayer.Inventory.AbilityTree != null)
+            {
+                UpdateAbilities();
+            }
         }
 
         void Update()

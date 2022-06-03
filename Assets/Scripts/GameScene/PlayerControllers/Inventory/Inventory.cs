@@ -34,8 +34,10 @@ namespace GameScene.PlayerControllers.Inventory
                 {
                     _player = GetComponent<BasePlayer.BasePlayer>();
                     AbilityTree = new AbilityTree(_player);
-                    
-                    HUDController.Singleton.UpdateAbilities();
+                    if (HUDController.Singleton != null)
+                    {
+                        HUDController.Singleton.UpdateAbilities();
+                    }
                 }
 
                 return _player;
