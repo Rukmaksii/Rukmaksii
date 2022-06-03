@@ -244,7 +244,7 @@ namespace GameScene.GameManagers
                 throw new NotServerException();
             player.UpdateTeamServerRpc(LobbyManager.Singleton.PlayersRegistry[player.OwnerClientId].TeamId);
             player.CurrentHealth = player.MaxHealth;
-            player.Money = 5000;
+            player.Money = 500;
 
             GameObject autoWeaponPrefab =
                 WeaponPrefabs.Find(go => go.name == "GalilPrefab");
