@@ -105,33 +105,33 @@ namespace GameScene.HUD
 
         private void UpdateObjectives()
         {
+            ObjectiveController obj0 = GameObject.Find("Objective0").GetComponentInChildren<ObjectiveController>();
             ObjectiveController obj1 = GameObject.Find("Objective1").GetComponentInChildren<ObjectiveController>();
-            ObjectiveController obj3 = GameObject.Find("Objective2").GetComponentInChildren<ObjectiveController>();
-            ObjectiveController obj2 = GameObject.Find("Objective3").GetComponentInChildren<ObjectiveController>();
+            ObjectiveController obj2 = GameObject.Find("Objective2").GetComponentInChildren<ObjectiveController>();
 
-            if (obj1.CurrentState == ObjectiveController.State.Captured && obj1.CapturingTeam == 0)
+            if (obj0.CurrentState == ObjectiveController.State.Captured && obj0.CapturingTeam == 0)
                 objOverlay1.color = colorT1;
-            else if (obj1.CurrentState == ObjectiveController.State.Captured && obj1.CapturingTeam == 1)
+            else if (obj0.CurrentState == ObjectiveController.State.Captured && obj0.CapturingTeam == 1)
                 objOverlay1.color = colorT2;
-            else if (obj1.CanCapture)
+            else if (obj0.CanCapture)
                 objOverlay1.color = colorOpen;
             else
                 objOverlay1.color = colorNeutral;
 
             if (obj2.CurrentState == ObjectiveController.State.Captured && obj2.CapturingTeam == 0)
                 objOverlay2.color = colorT1;
-            else if (obj2.CurrentState == ObjectiveController.State.Captured && obj1.CapturingTeam == 1)
+            else if (obj2.CurrentState == ObjectiveController.State.Captured && obj0.CapturingTeam == 1)
                 objOverlay2.color = colorT2;
             else if (obj2.CanCapture)
                 objOverlay2.color = colorOpen;
             else
                 objOverlay2.color = colorNeutral;
             
-            if (obj3.CurrentState == ObjectiveController.State.Captured && obj3.CapturingTeam == 0)
+            if (obj1.CurrentState == ObjectiveController.State.Captured && obj1.CapturingTeam == 0)
                 objOverlay3.color = colorT1;
-            else if (obj3.CurrentState == ObjectiveController.State.Captured && obj1.CapturingTeam == 1)
+            else if (obj1.CurrentState == ObjectiveController.State.Captured && obj0.CapturingTeam == 1)
                 objOverlay3.color = colorT2;
-            else if (obj3.CanCapture)
+            else if (obj1.CanCapture)
                 objOverlay3.color = colorOpen;
             else
                 objOverlay3.color = colorNeutral;
