@@ -20,7 +20,8 @@ namespace GameScene.Menus
         // Start is called before the first frame update
         void Start()
         {
-#if !UNET
+#if UNET
+#else
             if (DebugManager.IsDebug)
             {
                 // allows full ip:port
