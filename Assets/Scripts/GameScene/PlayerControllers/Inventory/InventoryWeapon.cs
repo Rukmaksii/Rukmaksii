@@ -158,7 +158,7 @@ namespace GameScene.PlayerControllers.Inventory
             switch (type)
             {
                 case WeaponType.Heavy:
-                    if (heavyWeapon != null)
+                    if (HeavyWeapon != null)
                     {
                         SelectedWeaponType = WeaponType.Heavy;
                         switched = true;
@@ -166,7 +166,7 @@ namespace GameScene.PlayerControllers.Inventory
 
                     break;
                 case WeaponType.Light:
-                    if (lightWeapon != null)
+                    if (LightWeapon != null)
                     {
                         SelectedWeaponType = WeaponType.Light;
                         switched = true;
@@ -174,7 +174,7 @@ namespace GameScene.PlayerControllers.Inventory
 
                     break;
                 case WeaponType.CloseRange:
-                    if (closeRangeWeapon != null)
+                    if (CloseRangeWeapon != null)
                     {
                         SelectedWeaponType = WeaponType.CloseRange;
                         switched = true;
