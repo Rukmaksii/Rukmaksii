@@ -12,7 +12,7 @@ namespace GameScene.Abilities
 
         public override void Apply()
         {
-            Player.jumpForce *= multiplier;
+            Player.EffectiveJumpForce *= multiplier;
         }
 
         public JumpAbility(BasePlayer player) : base(player)

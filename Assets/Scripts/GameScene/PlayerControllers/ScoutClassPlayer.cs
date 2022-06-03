@@ -12,7 +12,7 @@ namespace GameScene.PlayerControllers
 
         protected override float runningSpeedMultiplier { get; } = 2.25f;
 
-        public override float jumpForce { get; set; } = 7.5f;
+        protected override float jumpForce { get; } = 7.5f;
 
         public override float DefaultFuelDuration { get; } = 12.5f;
 

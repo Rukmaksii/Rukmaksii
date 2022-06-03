@@ -81,6 +81,7 @@ namespace GameScene.PlayerControllers.BasePlayer
             cdManager = GetComponent<CooldownManager>();
 
             controller = GetComponent<CharacterController>();
+            EffectiveJumpForce = jumpForce;
 
             if (IsOwner)
             {
@@ -103,10 +104,6 @@ namespace GameScene.PlayerControllers.BasePlayer
                 return;
             var pos = GameController.Singleton.SpawnPoint;
             transform.position = pos;
-        }
-
-        void Awake()
-        {
         }
 
         // Update is called once per frame
@@ -216,7 +213,7 @@ namespace GameScene.PlayerControllers.BasePlayer
         {
             if (IsGrounded)
             {
-                yVelocity = jumpForce;
+                yVelocity = EffectiveJumpForce;
             }
         }
 

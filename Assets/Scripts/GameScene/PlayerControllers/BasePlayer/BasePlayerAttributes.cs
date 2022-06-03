@@ -22,7 +22,8 @@ namespace GameScene.PlayerControllers.BasePlayer
                 */
         protected virtual float runningSpeedMultiplier { get; } = 2f;
 
-        public virtual float jumpForce { get; set; } = 5f;
+        protected virtual float jumpForce { get; } = 5f;
+        public float EffectiveJumpForce { get; set; }
 
         /**
                 * <value>the mouse sensitivity</value>
