@@ -53,6 +53,33 @@ namespace GameScene.Abilities
                     Price = 300,
                     SpritePath = "Abilities/Health"
                 }
+            },
+            {
+                typeof(DashAbility), new AbilityInfo()
+                {
+                    Name = "Dash Ability",
+                    Description = "+0.5s of dash duration",
+                    Price = 200,
+                    SpritePath = "Abilities/Dash"
+                }
+            },
+            {
+                typeof(JumpAbility), new AbilityInfo()
+                {
+                    Name = "Jump Ability",
+                    Description = "+100% of jump force",
+                    Price = 400,
+                    SpritePath = "Abilities/Jump"
+                }
+            },
+            {
+                typeof(SpeedAbility), new AbilityInfo()
+                {
+                    Name = "Speed Ability",
+                    Description = "+30% of movement speed",
+                    Price = 300,
+                    SpritePath = "Abilities/Speed"
+                }
             }
         };
 

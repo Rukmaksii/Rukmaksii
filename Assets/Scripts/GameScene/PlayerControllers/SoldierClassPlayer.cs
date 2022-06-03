@@ -8,15 +8,15 @@ namespace GameScene.PlayerControllers
         public override string ClassName { get; } = "Soldier";
         public override int MaxHealth { get; set; } = 100;
         public override RootAbility RootAbility { get; } = new SoldierClassRoot();
-        protected override float movementSpeed { get; } = 7.5f;
+        public override float movementSpeed { get; set; } = 7.5f;
 
         protected override float runningSpeedMultiplier { get; } = 1.75f;
 
-        protected override float jumpForce { get; } = 5;
+        public override float jumpForce { get; set; } = 5;
 
         public override float DefaultFuelDuration { get; } = 10;
 
-        protected override float dashDuration { get; } = .3f;
+        public override float dashDuration { get; set; } = .3f;
 
         protected override float dashForce { get; } = 30f;
 

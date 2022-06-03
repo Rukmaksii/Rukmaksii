@@ -15,14 +15,14 @@ namespace GameScene.PlayerControllers.BasePlayer
     public abstract partial class BasePlayer
     {
         public abstract string ClassName { get; }
-        protected virtual float movementSpeed { get; } = 5f;
+        public virtual float movementSpeed { get; set; } = 5f;
 
         /**
                 * <value>the speed multiplier when running</value>
                 */
         protected virtual float runningSpeedMultiplier { get; } = 2f;
 
-        protected virtual float jumpForce { get; } = 5f;
+        public virtual float jumpForce { get; set; } = 5f;
 
         /**
                 * <value>the mouse sensitivity</value>
@@ -161,7 +161,7 @@ namespace GameScene.PlayerControllers.BasePlayer
         public Jetpack Jetpack => GetComponent<Jetpack>();
 
         /** <value>the duration of the dash in seconds</value> */
-        protected virtual float dashDuration { get; } = 0.3f;
+        public virtual float dashDuration { get; set; } = 0.3f;
 
 
         protected virtual float dashForce { get; } = 30f;

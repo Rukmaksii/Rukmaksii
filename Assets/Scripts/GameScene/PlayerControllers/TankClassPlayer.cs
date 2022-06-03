@@ -8,15 +8,15 @@ namespace GameScene.PlayerControllers
         public override string ClassName { get; } = "Tank";
         public override int MaxHealth { get; set; } = 125;
         public override RootAbility RootAbility { get; } = new TankClassRoot();
-        protected override float movementSpeed { get; } = 5f;
+        public override float movementSpeed { get; set; } = 5f;
 
         protected override float runningSpeedMultiplier { get; } = 1.75f;
 
-        protected override float jumpForce { get; } = 3;
+        public override float jumpForce { get; set; } = 3;
 
         public override float DefaultFuelDuration { get; } = 7.5f;
 
-        protected override float dashDuration { get; } = .2f;
+        public override float dashDuration { get; set; } = .2f;
 
         protected override float dashForce { get; } = 22.5f;
 

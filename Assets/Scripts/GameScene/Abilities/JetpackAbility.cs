@@ -8,8 +8,9 @@ namespace GameScene.Abilities
     {
         private float multiplier = 1.1f;
 
-        public override List<Type> Children { get; } = new List<Type>();
+        public override List<Type> Children { get; } = new List<Type>{typeof(JumpAbility), typeof(SpeedAbility)};
 
+        
         public override void Apply()
         {
             Player.Jetpack.FuelDuration *= multiplier;

@@ -344,7 +344,7 @@ namespace GameScene.PlayerControllers.BasePlayer
             if (!IsOwner || !ctx.performed)
                 return;
 
-            if (playerState != PlayerState.Normal)
+            if (playerState != PlayerState.Normal && playerState != PlayerState.InAbilityTree)
             {
                 return;
             }
