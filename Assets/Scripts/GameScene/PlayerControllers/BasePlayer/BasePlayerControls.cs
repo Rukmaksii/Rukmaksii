@@ -284,15 +284,16 @@ namespace GameScene.PlayerControllers.BasePlayer
         private GameObject GetClosestInteractableObject(float distance)
         {
             return GetSurroundingObjects(distance)
-                .Select(go =>
+                .Where(go =>
                 {
-                    var position = cameraController.Camera.WorldToViewportPoint(go.transform.position);
-                    var screenPos = new Vector2(position.x, position.y);
-                    return (go, screenPos);
+                    var transform1 = transform;
+                    Vector3 direction = go.transform.position - transform1.position;
+                    float product = Vector3.Dot(direction, transform1.forward);
+
+
+                    return product > 0;
                 })
-                .Where(item => item.Item2.y > 0 && item.Item2.y < 1 && item.Item2.x > 0 && item.Item2.x < 1)
-                .OrderBy(item => Vector2.Distance(new Vector2(.5F, .5F), item.Item2))
-                .Select(item => item.Item1)
+                .OrderBy(go => Vector2.Distance(new Vector2(.5F, .5F), cameraController.Camera.WorldToViewportPoint(go.transform.position)))
                 .FirstOrDefault();
         }
 
