@@ -53,6 +53,10 @@ namespace GameScene.HUD
 
         public static HUDController Singleton { get; private set; }
 
+        private Image[] abilityBoughtSprites;
+
+        private Image[] abilityShopSprites;
+
         private void Awake()
         {
             if (Singleton != null && Singleton != this)
@@ -85,6 +89,10 @@ namespace GameScene.HUD
             _mapLoc = pointParent.transform.localPosition;
             Gameloop.throwAnnouncement += DisplayAnnouncement;
             DisplayAnnouncement($"objective{Gameloop.Singleton.SelectedObjective}");
+            
+            SetupButtons();
+            abilityBoughtSprites = abilityBought.GetComponentsInChildren<Image>();
+            abilityShopSprites = abilityShop.GetComponentsInChildren<Image>();
         }
 
         void Update()
@@ -107,7 +115,6 @@ namespace GameScene.HUD
             SetCurrentStrategy(localPlayer.Strategy);
             SetMoney(localPlayer.Money);
             SetRemainingItems();
-            UpdateAbilities();
 
 
             itemWheel.SetActive(localPlayer.ItemWheel);
@@ -272,43 +279,53 @@ namespace GameScene.HUD
                     sprites[i].sprite = BaseItem.ItemInfos[wheel.items[i - 1]].Sprite;
         }
 
-        private void UpdateAbilities()
+        private void SetupButtons()
         {
-            Image[] abilitySprites = abilityBought.GetComponentsInChildren<Image>();
+            int i = 0;
+            foreach (var button in abilityShop.GetComponentsInChildren<Button>())
+            {
+                int copy = i;
+                button.onClick.AddListener(delegate
+                {
+                    Buy(copy);
+                });
+                i++;
+            }
+        }
+
+        public void UpdateAbilities()
+        {
             BasePlayer player = GameController.Singleton.LocalPlayer;
             int j = 1;
-            if (player.Inventory.AbilityTree == null)
+            
+            int n = player.Inventory.AbilityTree.BoughtAbilities.Count;
+            foreach (Image sprite in abilityBoughtSprites)
             {
-                return;
-            }
-            int n = player.Inventory.AbilityTree.Abilities.Count;
-            foreach (Image sprite in abilitySprites)
-            {
-                sprite.GetComponentInChildren<Image>().enabled = j > n;
                 if (sprite.CompareTag("BAbility"))
                 {
-                    if (j > n)
+                    if (j >= n)
                     {
-                        sprite.enabled = false;
+                        sprite.gameObject.SetActive(false);
                         continue;
                     }
-                    sprite.sprite = player.Inventory.AbilityTree.Abilities[j].Sprite;
-                    sprite.enabled = true;
+                    sprite.sprite = player.Inventory.AbilityTree.BoughtAbilities[j].Sprite;
+                    sprite.gameObject.SetActive(true);
                     j++;
                 }
             }
 
             j = 0;
             BaseAbility lastAbility = player.Inventory.AbilityTree.CurrentAbility;
-            abilitySprites = abilityShop.GetComponentsInChildren<Image>();
             n = lastAbility.Children.Count;
-            foreach (Image sprite in abilitySprites)
+            foreach (Image sprite in abilityShopSprites)
             {
                 if (sprite.name == "Price")
-                    break;
-                if (j > n)
                 {
-                    sprite.enabled = false;
+                    continue;
+                }
+                if (j >= n || player.Inventory.AbilityTree.BoughtAbilities.Count >= 6)
+                {
+                    sprite.gameObject.SetActive(false);
                     continue;
                 }
 
@@ -317,10 +334,20 @@ namespace GameScene.HUD
                 texts[0].text = BaseAbility.AbilityInfos[lastAbility.Children[j]].Name;
                 texts[1].text = BaseAbility.AbilityInfos[lastAbility.Children[j]].Description;
                 texts[2].text = BaseAbility.AbilityInfos[lastAbility.Children[j]].Price.ToString();
-                sprite.enabled = true;
+                sprite.gameObject.SetActive(true);
                 j++;
             }
 
+        }
+
+        public void Buy(int i)
+        {
+            BasePlayer player = GameController.Singleton.LocalPlayer;
+            if (player.Inventory.AbilityTree.BoughtAbilities.Count < 6)
+            {
+                player.Inventory.AbilityTree.ChooseAbility(player.Inventory.AbilityTree.CurrentAbility.Children[i]);
+                UpdateAbilities();
+            }
         }
 
         private void SetMoney(int money)

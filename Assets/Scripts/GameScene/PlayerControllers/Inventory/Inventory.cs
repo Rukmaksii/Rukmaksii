@@ -1,4 +1,5 @@
 ﻿using GameScene.Abilities.model;
+using GameScene.HUD;
 using GameScene.Items;
 using GameScene.PlayerControllers.BasePlayer;
 using GameScene.Shop;
@@ -33,6 +34,8 @@ namespace GameScene.PlayerControllers.Inventory
                 {
                     _player = GetComponent<BasePlayer.BasePlayer>();
                     AbilityTree = new AbilityTree(_player);
+                    
+                    HUDController.Singleton.UpdateAbilities();
                 }
 
                 return _player;
