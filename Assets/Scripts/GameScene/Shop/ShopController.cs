@@ -41,7 +41,7 @@ namespace GameScene.Shop
 
         public bool IsInteractable =>
             !(objectiveController.CurrentState == ObjectiveController.State.Captured &&
-            GameController.Singleton.LocalPlayer.TeamId == objectiveController.ControllingTeam);
+              GameController.Singleton.LocalPlayer.TeamId == objectiveController.ControllingTeam);
 
         public string InteractableName { get; } = "Shop";
     }
