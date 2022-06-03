@@ -68,10 +68,10 @@ namespace GameScene.PlayerControllers.BasePlayer
             var moveVector = Movement;
 
             if (ctx.interaction is MultiTapInteraction multiTapInteraction &&
-                multiTapInteraction.tapCount > 1 &&
-                ctx.time - ctx.startTime < 0.3)
+                multiTapInteraction.tapCount > 1)
             {
-                if (ctx.performed)
+                if (ctx.performed &&
+                    ctx.time - ctx.startTime < 0.3)
                 {
                     moveVector.y = 0;
                     yVelocity = 0;
