@@ -81,7 +81,8 @@ namespace GameScene.PlayerControllers.BasePlayer
             }
         }
 
-        public virtual float gravityMultiplier { get; set; } = 1;
+        protected virtual float gravityMultiplier { get; } = 1;
+        public float EffectiveGravityMultiplier { get; set; }
 
         /**
              * <value>stores the x,y,z inputs of the player</value>

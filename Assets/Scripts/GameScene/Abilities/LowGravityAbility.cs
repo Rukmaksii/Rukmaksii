@@ -13,7 +13,7 @@ namespace GameScene.Abilities
         
         public override void Apply()
         {
-            Player.gravityMultiplier *= multiplier;
+            Player.EffectiveGravityMultiplier *= multiplier;
         }
 
         public LowGravityAbility(BasePlayer player) : base(player)

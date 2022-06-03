@@ -83,6 +83,7 @@ namespace GameScene.PlayerControllers.BasePlayer
             controller = GetComponent<CharacterController>();
             EffectiveJumpForce = jumpForce;
             EffectiveMovementSpeed = movementSpeed;
+            EffectiveGravityMultiplier = gravityMultiplier;
 
             if (IsOwner)
             {
@@ -178,7 +179,7 @@ namespace GameScene.PlayerControllers.BasePlayer
 
                 res = Movement * multiplier;
 
-                yVelocity += (gravityMultiplier * Physics.gravity * _deltaTime).y;
+                yVelocity += (EffectiveGravityMultiplier * Physics.gravity * _deltaTime).y;
                 if (IsGrounded && yVelocity < 0f)
                     yVelocity = 0;
 
