@@ -180,6 +180,7 @@ namespace GameScene.GameManagers
                     }
                 }
             }
+            /*
             else
             {
                 if (!unshielded && (shield1.Activated.Value != shield2.Activated.Value))
@@ -201,9 +202,8 @@ namespace GameScene.GameManagers
                     }
                     captureArea[SelectedObjective].GetComponent<ObjectiveController>().ToggleCanCaptureClientRpc(true);
                     throwAnnouncement?.Invoke($"objective{selectedObjective}");
-                    
                 }
-            }
+            }*/
         }
 
         public void ChangeCapturePoints()
@@ -211,12 +211,14 @@ namespace GameScene.GameManagers
             foreach (GameObject area in captureArea)
             {
                 area.GetComponent<ObjectiveController>().ToggleCanCaptureServerRpc(false);
+                area.GetComponent<ObjectiveController>().ToggleCanCaptureClientRpc(false);
             }
 
             selectedObjective = Random.Range(0, captureArea.Length);
-            captureArea[selectedObjective]
-                .GetComponent<ObjectiveController>()
+            captureArea[selectedObjective].GetComponent<ObjectiveController>()
                 .ToggleCanCaptureServerRpc(true);
+            captureArea[selectedObjective].GetComponent<ObjectiveController>()
+                .ToggleCanCaptureClientRpc(true);
             if(timer.Minutes != 0)
                 throwAnnouncement?.Invoke($"objective{selectedObjective}");
             
@@ -230,11 +232,9 @@ namespace GameScene.GameManagers
         private void DeactivateCapturePoints()
         {
             foreach (GameObject area in captureArea)
-            {
-                if (IsServer)
-                    area.GetComponent<ObjectiveController>().ToggleCanCaptureServerRpc(false);
-                else if (IsClient)
-                    area.GetComponent<ObjectiveController>().ToggleCanCaptureClientRpc(false);
+            { 
+                area.GetComponent<ObjectiveController>().ToggleCanCaptureServerRpc(false);
+                area.GetComponent<ObjectiveController>().ToggleCanCaptureClientRpc(false);
             }
             throwAnnouncement?.Invoke("end");
             deactivateAllCapturePoints = true;

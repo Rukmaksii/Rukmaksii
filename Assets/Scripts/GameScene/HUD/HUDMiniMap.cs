@@ -120,7 +120,7 @@ namespace GameScene.HUD
 
             if (obj2.CurrentState == ObjectiveController.State.Captured && obj2.CapturingTeam == 0)
                 objOverlay2.color = colorT1;
-            else if (obj2.CurrentState == ObjectiveController.State.Captured && obj0.CapturingTeam == 1)
+            else if (obj2.CurrentState == ObjectiveController.State.Captured && obj2.CapturingTeam == 1)
                 objOverlay2.color = colorT2;
             else if (obj2.CanCapture)
                 objOverlay2.color = colorOpen;
@@ -129,7 +129,7 @@ namespace GameScene.HUD
             
             if (obj1.CurrentState == ObjectiveController.State.Captured && obj1.CapturingTeam == 0)
                 objOverlay3.color = colorT1;
-            else if (obj1.CurrentState == ObjectiveController.State.Captured && obj0.CapturingTeam == 1)
+            else if (obj1.CurrentState == ObjectiveController.State.Captured && obj1.CapturingTeam == 1)
                 objOverlay3.color = colorT2;
             else if (obj1.CanCapture)
                 objOverlay3.color = colorOpen;
