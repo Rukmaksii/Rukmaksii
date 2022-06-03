@@ -49,9 +49,13 @@ namespace GameScene.HUD
                     holder.anchorMax = Vector2.zero;
                 }
 
+                // ReSharper disable twice Unity.InefficientPropertyAccess
                 bool shouldDisplay =
+                    Vector3.Dot(localPlayer.transform.forward,
+                        localPlayer.transform.position - player.transform.position) > 0 &&
+
                     Vector3.Distance(player.transform.position, localPlayer.transform.position) <=
-                    renderDistance;
+                    renderDistance && player.CurrentHealth > 0;
                 GameObject obj = pseudoDictionary[player.OwnerClientId];
                 obj.SetActive(shouldDisplay);
                 if (shouldDisplay)
