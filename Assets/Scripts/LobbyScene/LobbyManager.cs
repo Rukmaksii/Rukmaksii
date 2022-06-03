@@ -178,8 +178,10 @@ namespace LobbyScene
         {
             Cursor.lockState = CursorLockMode.None;
             SceneManager.LoadScene("ConnectionScene");
-            Destroy(Singleton);
+            Destroy(Singleton.gameObject);
+            Destroy(ConnectionManagerScript.Singleton.gameObject);
             Destroy(GameController.Singleton.gameObject);
+            NetworkManager.Singleton.Shutdown();
         }
 
         // Update is called once per frame
