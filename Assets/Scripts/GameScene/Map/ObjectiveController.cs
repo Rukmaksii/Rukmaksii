@@ -79,6 +79,9 @@ namespace GameScene.Map
         // Update is called once per frame
         void Update()
         {
+            if (!CanCapture)
+                state = State.Neutral;
+            
             if (state == State.Neutral)
             {
                 captureArea.GetComponent<MeshRenderer>().materials[1].color = neutralMaterial.color;
