@@ -113,6 +113,7 @@ MonoBehaviour:
   secondTeamMaterial: {fileID: 2100000, guid: 78e00f019cb9fd34bb6afeb29b7478bf, type: 2}
   neutralMaterial: {fileID: 4637519048616892231, guid: ed6d50ba91cd312468bcf481c0645ab1, type: 3}
   captureArea: {fileID: 8316045321158119969}
+  objectiveId: 0
 --- !u!114 &7343991709121008987
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -326,6 +327,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 4c1b8b68df1bbf04f88af620f27e0952, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 6b2aadbb98d0db848bc583966668135e, type: 2}
     - target: {fileID: 919132149155446097, guid: 4c1b8b68df1bbf04f88af620f27e0952, type: 3}
       propertyPath: m_Name
       value: Objective
