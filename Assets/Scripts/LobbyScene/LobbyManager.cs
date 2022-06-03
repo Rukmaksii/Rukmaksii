@@ -192,7 +192,8 @@ namespace LobbyScene
             SceneManager.LoadScene("ConnectionScene");
             Destroy(Singleton.gameObject);
             Destroy(ConnectionManagerScript.Singleton.gameObject);
-            Destroy(GameController.Singleton.gameObject);
+            if (GameController.Singleton != null)
+                Destroy(GameController.Singleton.gameObject);
             NetworkManager.Singleton.Shutdown();
         }
 
