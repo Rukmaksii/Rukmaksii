@@ -32,6 +32,12 @@ namespace GameScene.PlayerControllers.BasePlayer
 
         [SerializeField] private float pickUpDistance = 10F;
 
+        public float PickUpDistance
+        {
+            get => pickUpDistance;
+            set => pickUpDistance = value;
+        }
+
         private GameObject focusedObject = null;
 
 

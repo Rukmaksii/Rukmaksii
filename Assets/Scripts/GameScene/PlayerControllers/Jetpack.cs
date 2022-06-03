@@ -51,6 +51,12 @@ namespace GameScene.PlayerControllers
          */
         [SerializeField] private float jetpackForce = 20f;
 
+        public float JetpackForce
+        {
+            get => jetpackForce;
+            set => jetpackForce = value;
+        }
+
         /**
          * <value>the minimum amount of fuel required to start the engines</value>
          */

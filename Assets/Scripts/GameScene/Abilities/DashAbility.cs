@@ -8,7 +8,7 @@ namespace GameScene.Abilities
     {
         private float multiplier = 0.5f;
 
-        public override List<Type> Children { get; } = new List<Type>();
+        public override List<Type> Children { get; } = new List<Type>{typeof(PickupRangeAbility)};
 
         public override void Apply()
         {

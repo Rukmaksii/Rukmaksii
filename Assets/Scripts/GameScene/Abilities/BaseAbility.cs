@@ -76,11 +76,20 @@ namespace GameScene.Abilities
                 typeof(SpeedAbility), new AbilityInfo()
                 {
                     Name = "Speed Ability",
-                    Description = "+30% of movement speed",
+                    Description = "+50% of movement speed",
                     Price = 300,
                     SpritePath = "Abilities/Speed"
                 }
+            },
+            {
+            typeof(PickupRangeAbility), new AbilityInfo()
+            {
+                Name = "Pickup Range Ability",
+                Description = "+100% of pickup range",
+                Price = 200,
+                SpritePath = "Abilities/Luffy"
             }
+        }
         };
 
         protected BasePlayer Player;

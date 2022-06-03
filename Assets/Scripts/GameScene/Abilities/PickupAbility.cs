@@ -4,19 +4,19 @@ using GameScene.PlayerControllers.BasePlayer;
 
 namespace GameScene.Abilities
 {
-    public class HealthAbility : BaseAbility
+    public class PickupRangeAbility : BaseAbility
     {
-        private int multiplier = 20;
+        private float multiplier = 2f;
 
         public override List<Type> Children { get; } = new List<Type>();
 
+        
         public override void Apply()
         {
-            Player.MaxHealth += multiplier;
-            Player.CurrentHealth += multiplier;
+            Player.PickUpDistance *= multiplier;
         }
 
-        public HealthAbility(BasePlayer player) : base(player)
+        public PickupRangeAbility(BasePlayer player) : base(player)
         {
         }
     }
