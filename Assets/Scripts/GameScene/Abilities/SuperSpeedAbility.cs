@@ -13,7 +13,7 @@ namespace GameScene.Abilities
         
         public override void Apply()
         {
-            Player.movementSpeed *= multiplier;
+            Player.EffectiveMovementSpeed *= multiplier;
             Player.Jetpack.JetpackForce *= multiplier;
         }
 

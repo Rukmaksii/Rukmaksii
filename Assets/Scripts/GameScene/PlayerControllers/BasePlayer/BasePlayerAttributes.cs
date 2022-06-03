@@ -15,7 +15,8 @@ namespace GameScene.PlayerControllers.BasePlayer
     public abstract partial class BasePlayer
     {
         public abstract string ClassName { get; }
-        public virtual float movementSpeed { get; set; } = 5f;
+        protected virtual float movementSpeed { get; } = 5f;
+        public float EffectiveMovementSpeed { get; set; }
 
         /**
                 * <value>the speed multiplier when running</value>

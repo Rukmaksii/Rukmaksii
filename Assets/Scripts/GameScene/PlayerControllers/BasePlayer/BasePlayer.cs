@@ -82,6 +82,7 @@ namespace GameScene.PlayerControllers.BasePlayer
 
             controller = GetComponent<CharacterController>();
             EffectiveJumpForce = jumpForce;
+            EffectiveMovementSpeed = movementSpeed;
 
             if (IsOwner)
             {
@@ -169,7 +170,7 @@ namespace GameScene.PlayerControllers.BasePlayer
                 
                 var moveVector = Movement;
 
-                float multiplier = movementSpeed;
+                float multiplier = EffectiveMovementSpeed;
                 if (IsRunning)
                 {
                     multiplier *= runningSpeedMultiplier;

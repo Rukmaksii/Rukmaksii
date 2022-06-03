@@ -8,7 +8,7 @@ namespace GameScene.PlayerControllers
         public override string ClassName { get; } = "Tank";
         public override int MaxHealth { get; set; } = 125;
         public override RootAbility RootAbility { get; } = new TankClassRoot();
-        public override float movementSpeed { get; set; } = 5f;
+        protected override float movementSpeed { get; } = 5f;
 
         protected override float runningSpeedMultiplier { get; } = 1.75f;
 
