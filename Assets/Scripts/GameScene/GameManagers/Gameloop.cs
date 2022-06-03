@@ -85,10 +85,9 @@ namespace GameScene.GameManagers
             }
             
             //If a client spawn without reference time it ask the server to reset it
-            if(referenceTime == null)
+            if(referenceTime.Value == DateTime.MinValue)
                 SetReferenceTimeServerRpc();
-            
-	        if (NetworkManager.Singleton.IsServer)
+            if (NetworkManager.Singleton.IsServer)
             {
                 //set the current time
                 currTime.Value = DateTime.Now;
