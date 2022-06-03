@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using GameScene.Abilities;
 using GameScene.GameManagers;
 using GameScene.Items;
 using GameScene.Map;
@@ -34,6 +35,8 @@ namespace GameScene.HUD
         [SerializeField] private ShopUI shopUI;
         [SerializeField] private GameObject timer;
         [SerializeField] protected GameObject abilityTree;
+        [SerializeField] protected GameObject abilityShop;
+        [SerializeField] protected GameObject abilityBought;
         [SerializeField] private Text announcementField;
         [SerializeField] private GameObject escapeMenu;
 
@@ -104,10 +107,10 @@ namespace GameScene.HUD
             SetCurrentStrategy(localPlayer.Strategy);
             SetMoney(localPlayer.Money);
             SetRemainingItems();
+            UpdateAbilities();
 
 
             itemWheel.SetActive(localPlayer.ItemWheel);
-            abilityTree.SetActive(localPlayer.IsAbilityTreeOpened);
 
             // updating the capture circle UI if the player is on a point
             if (_capturePoint != null)
@@ -267,19 +270,53 @@ namespace GameScene.HUD
             for (int i = 1; i < sprites.Length; i++)
                 if (wheel.items[i - 1] != null)
                     sprites[i].sprite = BaseItem.ItemInfos[wheel.items[i - 1]].Sprite;
+        }
 
-            Image[] abilitySprites = abilityTree.GetComponentsInChildren<Image>();
+        private void UpdateAbilities()
+        {
+            Image[] abilitySprites = abilityBought.GetComponentsInChildren<Image>();
             BasePlayer player = GameController.Singleton.LocalPlayer;
             int j = 1;
+            if (player.Inventory.AbilityTree == null)
+            {
+                return;
+            }
             int n = player.Inventory.AbilityTree.Abilities.Count;
-            for (int i = 0; i < abilitySprites.Length; i++)
-                if (abilitySprites[i].CompareTag("BAbility"))
+            foreach (Image sprite in abilitySprites)
+            {
+                if (sprite.CompareTag("BAbility"))
                 {
                     if (j > n)
-                        break;
-                    abilitySprites[i].sprite = player.Inventory.AbilityTree.Abilities[j].Sprite;
+                    {
+                        sprite.enabled = false;
+                        continue;
+                    }
+                    sprite.sprite = player.Inventory.AbilityTree.Abilities[j].Sprite;
+                    sprite.enabled = true;
                     j++;
                 }
+            }
+
+            j = 0;
+            BaseAbility lastAbility = player.Inventory.AbilityTree.CurrentAbility;
+            abilitySprites = abilityShop.GetComponentsInChildren<Image>();
+            n = lastAbility.Children.Count;
+            foreach (Image sprite in abilitySprites)
+            {
+                if (sprite.name == "Price")
+                    break;
+                if (j > n)
+                {
+                    sprite.enabled = false;
+                    continue;
+                }
+                Text[] texts = sprite.GetComponentsInChildren<Text>();
+                texts[0].text = BaseAbility.AbilityInfos[lastAbility.Children[j]].Name;
+                texts[1].text = BaseAbility.AbilityInfos[lastAbility.Children[j]].Description;
+                texts[2].text = BaseAbility.AbilityInfos[lastAbility.Children[j]].Price.ToString();
+                sprite.enabled = true;
+            }
+
         }
 
         private void SetMoney(int money)
@@ -342,6 +379,20 @@ namespace GameScene.HUD
         public void HideEscapeMenu()
         {
             escapeMenu.SetActive(false);
+            Cursor.lockState = CursorLockMode.Locked;
+            GameController.Singleton.LocalPlayer.PlayerState = PlayerState.Normal;
+        }
+        
+        public void ShowAbilityTree()
+        {
+            abilityTree.SetActive(true);
+            Cursor.lockState = CursorLockMode.Confined;
+            GameController.Singleton.LocalPlayer.PlayerState = PlayerState.InAbilityTree;
+        }
+
+        public void HideAbilityTree()
+        {
+            abilityTree.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
             GameController.Singleton.LocalPlayer.PlayerState = PlayerState.Normal;
         }

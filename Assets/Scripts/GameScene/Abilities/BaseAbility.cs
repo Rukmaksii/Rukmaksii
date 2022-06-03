@@ -37,7 +37,7 @@ namespace GameScene.Abilities
         public readonly static Dictionary<Type, AbilityInfo> AbilityInfos = new Dictionary<Type, AbilityInfo>()
         {
             {
-                typeof(Jetpack), new AbilityInfo()
+                typeof(JetpackAbility), new AbilityInfo()
                 {
                     Name = "Jetpack Ability",
                     Description = "+10% for jetpack",

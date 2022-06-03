@@ -157,6 +157,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "abilityTree",
+                    "type": "Button",
+                    "id": "813634d6-ca0f-4a84-8632-1a5f8d74dea9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -465,6 +474,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "escape",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "57a59490-f90e-41ef-a5b8-2fcfb81a0950",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "abilityTree",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

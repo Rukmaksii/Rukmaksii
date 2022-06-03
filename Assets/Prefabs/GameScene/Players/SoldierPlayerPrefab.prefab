@@ -497,6 +497,23 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: bb47069a-875b-4997-a62d-b5b9c9a5014e
     m_ActionName: Player/escape[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: -8936581399182346908}
+        m_TargetAssemblyTypeName: GameScene.PlayerControllers.BasePlayer.BasePlayer,
+          Assembly-CSharp
+        m_MethodName: OnAbilityTreeOpened
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 813634d6-ca0f-4a84-8632-1a5f8d74dea9
+    m_ActionName: Player/abilityTree[/Keyboard/r]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player

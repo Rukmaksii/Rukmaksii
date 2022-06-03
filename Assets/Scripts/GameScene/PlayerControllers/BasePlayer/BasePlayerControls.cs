@@ -340,11 +340,17 @@ namespace GameScene.PlayerControllers.BasePlayer
 
         public void OnAbilityTreeOpened(InputAction.CallbackContext ctx)
         {
-            if (!IsOwner || playerState != PlayerState.Normal || !ctx.performed)
+            if (!IsOwner || !ctx.performed)
                 return;
 
-            isAbilityTreeOpened = !isAbilityTreeOpened;
-            Cursor.lockState = isAbilityTreeOpened ? CursorLockMode.Confined : CursorLockMode.Locked;
+            if (playerState == PlayerState.InAbilityTree)
+            {
+                HUDController.Singleton.HideAbilityTree();
+            }
+            else
+            {
+                HUDController.Singleton.ShowAbilityTree();
+            }
         }
 
         public void OnEscape(InputAction.CallbackContext ctx)
