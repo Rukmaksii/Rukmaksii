@@ -8,10 +8,7 @@ namespace GameScene.Abilities
     {
         private float multiplier = 1.1f;
 
-        public override List<Type> Children { get; } = new List<Type>
-        {
-            typeof(JetpackAbility)
-        };
+        public override List<Type> Children { get; } = new List<Type>();
 
         public override void Apply()
         {
