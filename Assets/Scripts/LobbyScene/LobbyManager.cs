@@ -366,9 +366,7 @@ namespace LobbyScene
 
         public void OnQuit()
         {
-            if (NetworkManager.Singleton.IsClient)
-                NetworkManager.Singleton.Shutdown();
-            Singleton.UnloadGame();
+            UnloadGame();
         }
     }
 }
