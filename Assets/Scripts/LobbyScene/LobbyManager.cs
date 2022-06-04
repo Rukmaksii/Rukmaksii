@@ -363,5 +363,12 @@ namespace LobbyScene
             if (NetworkManager.Singleton.IsClient)
                 FillPlayerViewers();
         }
+
+        public void OnQuit()
+        {
+            if (NetworkManager.Singleton.IsClient)
+                NetworkManager.Singleton.Shutdown();
+            Singleton.UnloadGame();
+        }
     }
 }
