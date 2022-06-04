@@ -390,11 +390,11 @@ namespace GameScene.HUD
                 }
             }
             if (code.StartsWith("shield"))
-                message = $"Team {code[code.Length - 1]}'s shield has been deactivated!";
+                message = $"Team {code[code.Length - 1]}'s shield has been disabled!";
 
             if (code.StartsWith("end"))
             {
-                message = $"All shields had been deactivated !!";
+                message = "All shields have been disabled!";
                 announcementField.color = Color.red;
             }
 
