@@ -21,7 +21,7 @@ namespace GameScene.GameManagers
         private DateTime referenceTime;
         private DateTime currTime;
 
-        private const int ObjectiveDelay = 2;
+        private const int ObjectiveDelay = 5;
         private bool hasBeenChange = false;
         private const int NumberOfMonster = 20;
 
