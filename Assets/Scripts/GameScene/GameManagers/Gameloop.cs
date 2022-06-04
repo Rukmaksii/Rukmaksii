@@ -18,8 +18,8 @@ namespace GameScene.GameManagers
 {
     public class Gameloop : NetworkBehaviour
     {
-        private NetworkVariable<DateTime> referenceTime = new NetworkVariable<DateTime>();
-        private NetworkVariable<DateTime> currTime = new NetworkVariable<DateTime>();
+        private DateTime referenceTime;
+        private DateTime currTime;
 
         private const int ObjectiveDelay = 2;
         private bool hasBeenChange = false;
@@ -63,7 +63,7 @@ namespace GameScene.GameManagers
         {
             if (NetworkManager.Singleton.IsServer)
             {
-                referenceTime.Value = DateTime.Now;
+                referenceTime = DateTime.Now;
             }
 
             shield1 = GameObject.Find("Shield1").GetComponent<ShieldController>();
@@ -82,15 +82,11 @@ namespace GameScene.GameManagers
                 if (shield2 != null && shield2.TeamId != 1)
                     shield2.UpdateTeamServerRpc(1);
             }
-            
-            //If a client spawn without reference time it ask the server to reset it
-            if(referenceTime.Value == DateTime.MinValue)
-                SetReferenceTimeServerRpc();
-            
+
             if (NetworkManager.Singleton.IsServer)
             {
                 //set the current time
-                currTime.Value = DateTime.Now;
+                currTime = DateTime.Now;
                 //check if there are the right number of monster 
                 if (monsterCount < NumberOfMonster)
                     SpawnMonsters(NumberOfMonster - monsterCount);
@@ -106,7 +102,7 @@ namespace GameScene.GameManagers
                     GetComponent<Gameloop>().enabled = false;
                 }
                 //set the timer
-                timer = currTime.Value - referenceTime.Value;
+                timer = currTime - referenceTime;
                 
                 //display the timer on every HUD
                 HUDController.Singleton.SetTimerClientRpc(MakeBeautyTimer(timer), timer.Minutes >= timeToEnd);
@@ -243,9 +239,10 @@ namespace GameScene.GameManagers
         public void RemoveMonster(MonsterController monsterController)
         {
             monsterController.DestroyServerRpc();
-            GameObject GrenadeInstance = Instantiate(GameController.Singleton.ItemPrefabs[1],
+            int selectedItem = Random.Range(0, GameController.Singleton.ItemPrefabs.Count);
+            GameObject itemInstance = Instantiate(GameController.Singleton.ItemPrefabs[selectedItem],
                 monsterController.gameObject.transform.position, quaternion.identity);
-            GrenadeInstance.GetComponent<NetworkObject>().Spawn();
+            itemInstance.GetComponent<NetworkObject>().Spawn();
         }
 
         IEnumerator Wait1Second()
@@ -260,12 +257,6 @@ namespace GameScene.GameManagers
             string minutes = timeSpan.Minutes / 10 == 0 ? $"0{timeSpan.Minutes}" : $"{timeSpan.Minutes}";
             string hours = timeSpan.Hours / 10 == 0 ? $"0{timeSpan.Hours}" : $"{timeSpan.Hours}";
             return $"{hours}:{minutes}:{seconds}";
-        }
-
-        [ServerRpc(RequireOwnership = false)]
-        private void SetReferenceTimeServerRpc()
-        {
-            referenceTime.Value = DateTime.Now;
         }
     }
 }

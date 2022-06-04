@@ -364,7 +364,11 @@ namespace GameScene.Weapons
                     scoreboard.UpdateData(Player.OwnerClientId, PlayerInfoField.Kill, 1, true);
                 }
 
-                enemyPlayer.TakeDamage(this.Damage);
+                if (!enemyPlayer.TakeDamage(this.Damage))
+                {
+                    Player.UpdateMoneyServerRpc(Player.Money + enemyPlayer.Money/2);
+                    enemyPlayer.UpdateMoneyServerRpc(enemyPlayer.Money/2);
+                }
             }
             else if (hit.CompareTag("Minion"))
             {
