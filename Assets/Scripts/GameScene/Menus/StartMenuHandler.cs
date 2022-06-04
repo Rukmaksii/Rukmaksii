@@ -86,13 +86,6 @@ namespace GameScene.Menus
             mainMenu.SetActive(false);
         }
 
-
-        public void OnOptions()
-        {
-            // TODO: add an option tab
-            Debug.Log("Entering options menu");
-        }
-
         public void OnQuit()
         {
             Debug.Log("Quitting the game");
