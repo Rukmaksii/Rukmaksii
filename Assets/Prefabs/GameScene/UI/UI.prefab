@@ -1402,6 +1402,7 @@ GameObject:
   - component: {fileID: 8236327550364332911}
   - component: {fileID: 1821076053289487703}
   - component: {fileID: 6870695526070840235}
+  - component: {fileID: -950845822201506315}
   m_Layer: 5
   m_Name: UI
   m_TagString: PlayerHUD
@@ -1566,6 +1567,22 @@ MonoBehaviour:
   renderDistance: 20
   teamColor: {r: 0.11764707, g: 0.7254902, b: 0.82745105, a: 1}
   enemyColor: {r: 0.99607843, g: 0, b: 0, a: 1}
+--- !u!114 &-950845822201506315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6371553158960861218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 951099334
+  AlwaysReplicateAsRoot: 0
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1 &6755304173120000148
 GameObject:
   m_ObjectHideFlags: 0
@@ -3006,14 +3023,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 94c62c6be39112543833f286b6079b86, type: 3}
---- !u!224 &3228475958618132764 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 8259317642967736973, guid: 94c62c6be39112543833f286b6079b86, type: 3}
-  m_PrefabInstance: {fileID: 6796816281047135121}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1605462244314477507 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5193946704093478994, guid: 94c62c6be39112543833f286b6079b86, type: 3}
+  m_PrefabInstance: {fileID: 6796816281047135121}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &3228475958618132764 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8259317642967736973, guid: 94c62c6be39112543833f286b6079b86, type: 3}
   m_PrefabInstance: {fileID: 6796816281047135121}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8218295868274173970

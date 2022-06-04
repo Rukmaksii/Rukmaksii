@@ -20,6 +20,11 @@ namespace GameScene.HUD
         [SerializeField] protected Image objOverlay3;
         [SerializeField] private Sprite capLock;
         [SerializeField] private Sprite capOpen;
+        [SerializeField] private Sprite shield;
+        [SerializeField] private Sprite brokenShield;
+        [SerializeField] private Image baseOverlay1;
+        [SerializeField] private Image baseOverlay2;
+
 
         private Vector3 _mapLoc;
         private const float MapRatio = 385f/1000;
@@ -100,6 +105,7 @@ namespace GameScene.HUD
             arrow.transform.localRotation = new Quaternion(0, 0, -camRotation.y, camRotation.w);
             
             UpdateObjectives();
+            UpdateBases();
             UpdateMonster();
             UpdateMinion();
         }
@@ -165,6 +171,22 @@ namespace GameScene.HUD
                 pointParent.transform.localPosition = _mapLoc;
                 pointParent.transform.localScale = new Vector3(1, 1, 1);
             }
+        }
+
+        private void UpdateBases()
+        {
+            ShieldController shield1 = GameObject.Find("Shield1").GetComponentInChildren<ShieldController>();
+            ShieldController shield2 = GameObject.Find("Shield2").GetComponentInChildren<ShieldController>();
+
+            if (shield1.Activated.Value)
+                baseOverlay1.sprite = shield;
+            else
+                baseOverlay1.sprite = brokenShield;
+
+            if (shield2.Activated.Value)
+                baseOverlay2.sprite = shield;
+            else
+                baseOverlay2.sprite = brokenShield;
         }
     }
 }
