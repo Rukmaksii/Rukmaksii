@@ -338,7 +338,7 @@ namespace GameScene.HUD
                 Text[] texts = sprite.GetComponentsInChildren<Text>();
                 texts[0].text = BaseAbility.AbilityInfos[lastAbility.Children[j]].Name;
                 texts[1].text = BaseAbility.AbilityInfos[lastAbility.Children[j]].Description;
-                texts[2].text = BaseAbility.AbilityInfos[lastAbility.Children[j]].Price.ToString();
+                texts[2].text = BaseAbility.AbilityInfos[lastAbility.Children[j]].Price.ToString() + "$";
                 sprite.gameObject.SetActive(true);
                 j++;
             }
