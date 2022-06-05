@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using GameScene.GameManagers;
 using GameScene.Map;
 using GameScene.model.Network;
+using LobbyScene;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,7 +35,7 @@ namespace GameScene.Menus.EndScreen
         
         public void OnQuit()
         {
-            Application.Quit();
+            FindObjectOfType<LobbyManager>().UnloadGame();
         }
 
         private void DisplayWinner()
