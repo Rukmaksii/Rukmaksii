@@ -284,7 +284,9 @@ MonoBehaviour:
   weaponContainer: {fileID: 3340845036120665003}
   rigBuilder: {fileID: 471944451678220014}
   maxMinions: 2
-  sprite: {fileID: 21300000, guid: 9d084329ebf0b854e9db4900eb7bc897, type: 3}
+  sprite: {fileID: 21300000, guid: c43d0964a2bccd44f8a438967c2365bb, type: 3}
+  damageMultiplier: 1
+  healing: 0
 --- !u!114 &1260994430873029613
 MonoBehaviour:
   m_ObjectHideFlags: 0
