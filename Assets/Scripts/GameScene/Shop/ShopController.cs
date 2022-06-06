@@ -28,6 +28,7 @@ namespace GameScene.Shop
             List<BaseItem> possibleItems =
                 GameController.Singleton.ItemPrefabs
                     .Select(go => go.GetComponent<BaseItem>())
+                    .Where(go => go.GetType() != typeof(Money))
                     .ToList();
             HUDController.Singleton.ShopUI.Init(possibleWeapons, possibleItems, player);
 
