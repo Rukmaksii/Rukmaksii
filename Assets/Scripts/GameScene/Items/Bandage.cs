@@ -17,7 +17,7 @@ namespace GameScene.Items
         protected override void Setup()
         {
             (_baseSpeed, Player.EffectiveMovementSpeed) = (Player.EffectiveMovementSpeed, Player.EffectiveMovementSpeed/4);
-            (_baseForce, Player.Jetpack.JetpackForce) = (Player.Jetpack.JetpackForce, Player.Jetpack.JetpackForce/4);
+            (_baseForce, Player.JetpackForce) = (Player.JetpackForce, Player.JetpackForce/4);
 
             Player.healing = true;
         }
@@ -37,7 +37,7 @@ namespace GameScene.Items
                 Player.CurrentHealth = Player.CurrentHealth + HealingAmount;
 
             Player.EffectiveMovementSpeed = _baseSpeed;
-            Player.Jetpack.JetpackForce = _baseForce;
+            Player.JetpackForce = _baseForce;
         }
     }
 }

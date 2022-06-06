@@ -69,7 +69,6 @@ namespace GameScene.Items
             },
             {
                 typeof(Money), new ItemInfo("Money", ItemCategory.Other, 0, "Items/Money")
-                typeof(Grenade), new ItemInfo("Grenade", ItemCategory.Other, 10, "Items/Grenade")
             },
             {
                 typeof(Bandage), new ItemInfo("Bandage", ItemCategory.Heal, 5, "Items/Bandage")

@@ -207,7 +207,7 @@ namespace LobbyScene
             {
                 startButton.gameObject.SetActive(true);
                 // TODO : removes can start by pass
-                startButton.interactable = startButton.enabled = CanStart;
+                startButton.interactable = startButton.enabled = CanStart || true;
             }
         }
 
