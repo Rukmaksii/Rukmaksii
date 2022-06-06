@@ -9,7 +9,7 @@ namespace GameScene.Items
     public class Grenade : BaseItem
     {
         public override float Duration { get; } = 3f;
-        private readonly int Damage = 50;
+        private readonly int Damage = 30;
         private readonly float ThrowForce = 30f;
         public ParticleSystem explosion;
         public override int Price { get; } = 50;

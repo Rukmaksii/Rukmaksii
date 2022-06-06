@@ -6,9 +6,9 @@ namespace GameScene.Map
 {
     public class BaseController : MonoBehaviour, IKillable
     {
-        private int currentHealth = 100;
+        private int _currentHealth = 30000;
 
-        public int CurrentHealth => currentHealth;
+        public int CurrentHealth => _currentHealth;
 
         private int teamId = -1;
 
@@ -24,14 +24,14 @@ namespace GameScene.Map
 
         public bool TakeDamage(int damage)
         {
-            if (currentHealth - damage < 0)
+            if (_currentHealth - damage < 0)
             {
-                currentHealth = 0;
+                _currentHealth = 0;
                 OnKill();
                 return false;
             }
 
-            currentHealth -= damage;
+            _currentHealth -= damage;
             return true;
         }
 
