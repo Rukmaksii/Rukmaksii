@@ -14,7 +14,7 @@ namespace GameScene.Abilities
         public override void Apply()
         {
             Player.EffectiveMovementSpeed *= multiplier;
-            Player.Jetpack.JetpackForce *= multiplier;
+            Player.JetpackForce *= multiplier;
         }
 
         public SpeedAbility(BasePlayer player) : base(player)

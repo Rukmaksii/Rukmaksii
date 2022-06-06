@@ -6,7 +6,7 @@ namespace GameScene.Abilities
 {
     public class SuperSpeedAbility : BaseAbility
     {
-        private float multiplier = 3f;
+        private float multiplier = 2.5f;
 
         public override List<Type> Children { get; } = new List<Type>{typeof(JumpAbility)};
 
@@ -14,7 +14,7 @@ namespace GameScene.Abilities
         public override void Apply()
         {
             Player.EffectiveMovementSpeed *= multiplier;
-            Player.Jetpack.JetpackForce *= multiplier;
+            Player.JetpackForce *= multiplier;
         }
 
         public SuperSpeedAbility(BasePlayer player) : base(player)

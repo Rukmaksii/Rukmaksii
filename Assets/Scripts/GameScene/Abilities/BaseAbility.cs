@@ -77,7 +77,7 @@ namespace GameScene.Abilities
                 {
                     Name = "Speed Ability",
                     Description = "+50% of movement speed",
-                    Price = 300,
+                    Price = 500,
                     SpritePath = "Abilities/Speed"
                 }
             },
@@ -103,8 +103,8 @@ namespace GameScene.Abilities
                 typeof(SuperSpeedAbility), new AbilityInfo()
                 {
                     Name = "Super Speed Ability",
-                    Description = "+300% of movement speed",
-                    Price = 300,
+                    Description = "+150% of movement speed",
+                    Price = 1500,
                     SpritePath = "Abilities/Sanic"
                 }
             },

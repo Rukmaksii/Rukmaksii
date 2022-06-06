@@ -9,6 +9,8 @@ namespace GameScene.PlayerControllers
         public override int MaxHealth { get; set; } = 125;
         public override RootAbility RootAbility { get; } = new TankClassRoot();
         protected override float movementSpeed { get; } = 5f;
+        public override float JetpackForce { get; set; } = 14f;
+
 
         protected override float runningSpeedMultiplier { get; } = 1.75f;
 

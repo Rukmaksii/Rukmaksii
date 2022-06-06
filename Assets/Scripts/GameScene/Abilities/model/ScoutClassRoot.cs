@@ -7,7 +7,8 @@ namespace GameScene.Abilities.model
     {
         public override List<Type> Children { get; } = new List<Type>
         {
-            typeof(JetpackAbility)
+            typeof(JetpackAbility),
+            typeof(SuperSpeedAbility)
         };
     }
 }
