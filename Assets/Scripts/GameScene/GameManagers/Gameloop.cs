@@ -118,7 +118,7 @@ namespace GameScene.GameManagers
                 
                 //Change the objective that can be captured every ObjectiveDelay
                 if (((timer.Minutes != 0 && timer.Minutes % ObjectiveDelay == 0 && timer.Seconds == 0) 
-                    || (timer.Minutes == 0 && timer.Seconds == 5)) &&  !hasBeenChange)
+                    || (timer.Minutes == 0 && timer.Seconds == 15)) &&  !hasBeenChange)
                 {
                     ChangeCapturePoints();
                     hasBeenChange = true;
