@@ -6,7 +6,7 @@ namespace GameScene.Map
 {
     public class BaseController : MonoBehaviour, IKillable
     {
-        private int _currentHealth = 30000;
+        private int _currentHealth = 3;
 
         public int CurrentHealth => _currentHealth;
 

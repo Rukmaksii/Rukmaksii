@@ -244,6 +244,7 @@ namespace GameScene.PlayerControllers.BasePlayer
         public void OnKill()
         {
             OnKillServerRpc();
+            MoveToSpawn();
             CurrentHealth = 0;
 
             List<ObjectiveController> objectives = GameObject.Find("Objectives")
@@ -262,7 +263,6 @@ namespace GameScene.PlayerControllers.BasePlayer
         public void OnRespawn()
         {
             GameController.Singleton.deathScreen.SetActive(false);
-            MoveToSpawn();
         }
 
         private void SetAim(bool aim)
