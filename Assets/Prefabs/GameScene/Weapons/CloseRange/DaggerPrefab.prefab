@@ -245,7 +245,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c30904a8c6cc4ae582b079d588a54ea6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sprite: {fileID: 21300000, guid: 1d5e8d39d3ccac42987ddb54a9d46a07, type: 3}
+  sprite: {fileID: 21300000, guid: 803491eaf0ccfc845a08df8eb5cb0335, type: 3}
   model: {fileID: 9220036197713555210}
   _rightHandTarget: {fileID: 2478092486711663531}
   _leftHandTarget: {fileID: 3122203038293918685}
