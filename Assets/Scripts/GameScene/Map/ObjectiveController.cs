@@ -46,7 +46,7 @@ namespace GameScene.Map
 
 
         /** <value>the progress needed to capture a point</value> */
-        private float maxProgress = 5;
+        private float maxProgress = 90;
 
         /** <value>the progress speed</value> */
         private float progressSpeed = 1f;
