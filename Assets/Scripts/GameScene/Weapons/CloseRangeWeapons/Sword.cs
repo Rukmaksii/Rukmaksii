@@ -6,7 +6,7 @@ namespace GameScene.Weapons.CloseRangeWeapons
     public class Sword : BaseWeapon, TankClassPlayer.IWeapon
     {
         public override WeaponType Type { get; } = WeaponType.CloseRange;
-        public override float Range { get; } = 0.5f;
+        public override float Range { get; } = 1.5f;
         public override int Damage { get; } = 35;
         public override string Name { get; } = "Knife";
         public override float Cooldown { get; } = 0;
@@ -14,6 +14,6 @@ namespace GameScene.Weapons.CloseRangeWeapons
         public override float ReloadTime { get; } = 0.3f;
         public override int BulletsInRow { get; } = 0;
         public override float BulletsInRowSpacing { get; } = 0;
-        public override int Price { get; } = 300;
+        public override int Price { get; } = 280;
     }
 }
