@@ -107,8 +107,14 @@ namespace GameScene.Minions
         protected Transform target;
         protected NavMeshAgent agent;
 
+        protected SkinnedMeshRenderer[] Rends;
+
+        [SerializeField] private List<Material> mats = new List<Material>();
+
         void Start()
         {
+            Rends = gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
+            ChangeMaterials();
             agent = GetComponent<NavMeshAgent>();
             UpdateHealthServerRpc(MaxHealth);
             GameController.Singleton.RegisterMinion(this);
@@ -162,6 +168,14 @@ namespace GameScene.Minions
                 }
             }
             
+        }
+
+        private void ChangeMaterials()
+        {
+            foreach (var mat in Rends)
+            {
+                mat.material = mats[teamId.Value];
+            }
         }
 
         /**

@@ -6769,6 +6769,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lookRadius: 30
   closeRangeRadius: 7
+  mats:
+  - {fileID: -1656143644435511931, guid: 0bb517631c04f1a4dbbf9b5cc7a71a12, type: 3}
+  - {fileID: -6629797300637803691, guid: ed6d50ba91cd312468bcf481c0645ab1, type: 3}
 --- !u!195 &640260630743152289
 NavMeshAgent:
   m_ObjectHideFlags: 0
