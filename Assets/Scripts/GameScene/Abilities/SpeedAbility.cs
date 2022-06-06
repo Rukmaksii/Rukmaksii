@@ -8,7 +8,7 @@ namespace GameScene.Abilities
     {
         private float multiplier = 1.5f;
 
-        public override List<Type> Children { get; } = new List<Type>{typeof(JumpAbility), typeof(SuperSpeedAbility)};
+        public override List<Type> Children { get; } = new List<Type>{typeof(SpeedAbility), typeof(JumpAbility), typeof(SuperSpeedAbility)};
 
         
         public override void Apply()

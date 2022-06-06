@@ -8,7 +8,7 @@ namespace GameScene.Abilities
     {
         private int multiplier = 20;
 
-        public override List<Type> Children { get; } = new List<Type>();
+        public override List<Type> Children { get; } = new List<Type> {typeof(HealthAbility), typeof(JumpAbility), typeof(PickupRangeAbility)};
 
         public override void Apply()
         {
