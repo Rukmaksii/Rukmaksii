@@ -364,6 +364,12 @@ namespace GameScene.PlayerControllers.BasePlayer
             if (!IsOwner || !ctx.performed)
                 return;
 
+            if (playerState == PlayerState.InShop)
+            {
+                CloseShop();
+                return;
+            }
+            
             if (playerState == PlayerState.InAbilityTree)
             {
                 HUDController.Singleton.HideAbilityTree();
