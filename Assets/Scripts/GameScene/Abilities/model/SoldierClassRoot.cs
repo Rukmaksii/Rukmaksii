@@ -7,7 +7,9 @@ namespace GameScene.Abilities.model
     {
         public override List<Type> Children { get; } = new List<Type>
         {
-            typeof(DashAbility)
+            typeof(DashAbility),
+            typeof(PickupRangeAbility),
+            typeof(SpeedAbility)
         };
     }
 }

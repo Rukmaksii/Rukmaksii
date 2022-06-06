@@ -8,7 +8,8 @@ namespace GameScene.Abilities.model
         public override List<Type> Children { get; } = new List<Type>
         {
             typeof(HealthAbility),
-            typeof(DamageMultiplierAbility)
+            typeof(DamageMultiplierAbility),
+            typeof(LowGravityAbility)
         };
     }
 }
