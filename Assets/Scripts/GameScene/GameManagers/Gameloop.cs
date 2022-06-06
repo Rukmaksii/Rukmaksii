@@ -243,6 +243,7 @@ namespace GameScene.GameManagers
             GameObject itemInstance = Instantiate(GameController.Singleton.ItemPrefabs[selectedItem],
                 monsterController.gameObject.transform.position, quaternion.identity);
             itemInstance.GetComponent<NetworkObject>().Spawn();
+            monsterCount--;
         }
 
         IEnumerator Wait1Second()
