@@ -65,7 +65,10 @@ namespace GameScene.Items
                 typeof(FuelBooster), new ItemInfo("Fuel Booster", ItemCategory.Other, 3, "Items/JerryCan")
             },
             {
-                typeof(Grenade), new ItemInfo("Grenade", ItemCategory.Other, 10, "Items/Grenade")
+                typeof(Grenade), new ItemInfo("Grenade", ItemCategory.Attack, 10, "Items/Grenade")
+            },
+            {
+                typeof(Money), new ItemInfo("Money", ItemCategory.Other, 0, "Items/Money")
             }
         };
 
