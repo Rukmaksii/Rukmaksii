@@ -141,6 +141,8 @@ namespace GameScene.Weapons
 
         public abstract int Price { get; }
 
+        private int updatedDamage;
+
         private void Awake()
         {
             source = GetComponent<AudioSource>();
@@ -343,6 +345,8 @@ namespace GameScene.Weapons
                 throw new NotServerException();
             PlaySoundClientRPC();
 
+            updatedDamage = (int)Math.Floor(Damage * Player.damageMultiplier);
+
             currentAmmo.Value--;
             GameObject hit;
 
@@ -358,13 +362,13 @@ namespace GameScene.Weapons
                     return false;
                 }
 
-                scoreboard.UpdateData(Player.OwnerClientId, PlayerInfoField.DamagesDone, this.Damage, true);
-                if (this.Damage >= enemyPlayer.CurrentHealth)
+                scoreboard.UpdateData(Player.OwnerClientId, PlayerInfoField.DamagesDone, this.updatedDamage, true);
+                if (this.updatedDamage >= enemyPlayer.CurrentHealth)
                 {
                     scoreboard.UpdateData(Player.OwnerClientId, PlayerInfoField.Kill, 1, true);
                 }
 
-                if (!enemyPlayer.TakeDamage(this.Damage))
+                if (!enemyPlayer.TakeDamage(this.updatedDamage))
                 {
                     Player.UpdateMoneyServerRpc(Player.Money + enemyPlayer.Money/2);
                     enemyPlayer.UpdateMoneyServerRpc(enemyPlayer.Money/2);
@@ -376,17 +380,17 @@ namespace GameScene.Weapons
                 if (minion == null || Player.TeamId == minion.TeamId)
                     return false;
 
-                minion.TakeDamage(this.Damage);
+                minion.TakeDamage(this.updatedDamage);
             }
             else if (hit.CompareTag("Monster"))
             {
                 MonsterController monster = hit.GetComponent<MonsterController>();
-                if (this.Damage >= monster.Life)
+                if (this.updatedDamage >= monster.Life)
                 {
                     scoreboard.UpdateData(Player.OwnerClientId, PlayerInfoField.MonstersKilled, 1, true);
                 }
 
-                monster.TakeDamage(this.Damage);
+                monster.TakeDamage(this.updatedDamage);
             }
             else if (hit.CompareTag("Base"))
             {
@@ -394,7 +398,7 @@ namespace GameScene.Weapons
                 if (baseObject == null || Player.TeamId == baseObject.TeamId)
                     return false;
 
-                baseObject.TakeDamage(this.Damage);
+                baseObject.TakeDamage(this.updatedDamage);
             }
             else
             {

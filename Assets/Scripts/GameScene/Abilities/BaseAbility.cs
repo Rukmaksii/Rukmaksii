@@ -107,6 +107,15 @@ namespace GameScene.Abilities
                     Price = 300,
                     SpritePath = "Abilities/Sanic"
                 }
+            },
+            {
+                typeof(DamageMultiplierAbility), new AbilityInfo()
+                {
+                    Name = "Damage Multiplier Ability",
+                    Description = "+30% of damage done",
+                    Price = 500,
+                    SpritePath = "Abilities/Stronk"
+                }
             }
         };
 
