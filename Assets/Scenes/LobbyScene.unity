@@ -1503,7 +1503,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1160950229}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.9666644
+  m_Size: 0.9999977
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2654,7 +2654,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8406294580101352140, guid: ecc805deacc476d479b30fe306bb4a98, type: 3}
       propertyPath: NetworkConfig.NetworkPrefabs.Array.size
-      value: 22
+      value: 23
       objectReference: {fileID: 0}
     - target: {fileID: 8406294580101352140, guid: ecc805deacc476d479b30fe306bb4a98, type: 3}
       propertyPath: NetworkConfig.NetworkPrefabs.Array.data[5].Prefab
@@ -2724,5 +2724,9 @@ PrefabInstance:
       propertyPath: NetworkConfig.NetworkPrefabs.Array.data[21].Prefab
       value: 
       objectReference: {fileID: 1703911258719353816, guid: 883df38a1262fdf4eaffa8b1c5f82fea, type: 3}
+    - target: {fileID: 8406294580101352140, guid: ecc805deacc476d479b30fe306bb4a98, type: 3}
+      propertyPath: NetworkConfig.NetworkPrefabs.Array.data[22].Prefab
+      value: 
+      objectReference: {fileID: 7843953776653374618, guid: 3054d151d21c242778372b5da04d98a7, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ecc805deacc476d479b30fe306bb4a98, type: 3}
