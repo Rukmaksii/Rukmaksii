@@ -264,14 +264,26 @@ namespace GameScene.GameManagers
                 ItemPrefabs.Find(go => go.name == "FuelBoosterPrefab");
             GameObject grenadePrefab =
                 ItemPrefabs.Find(go => go.name == "Grenade");
+            GameObject bandagePrefab =
+                ItemPrefabs.Find(go => go.name == "Bandage");
+            GameObject medkitPrefab =
+                ItemPrefabs.Find(go => go.name == "Medkit");
             FuelBooster itemInstance = Instantiate(fuelBoosterPrefab).GetComponent<FuelBooster>();
             for (int i = 0; i < 10; i++)
             {
                 Grenade grenade = Instantiate(grenadePrefab).GetComponent<Grenade>();
                 grenade.NetworkObject.Spawn(true);
                 player.Inventory.AddItem(grenade);
+                
+                Bandage bandage = Instantiate(bandagePrefab).GetComponent<Bandage>();
+                bandage.NetworkObject.Spawn(true);
+                player.Inventory.AddItem(bandage);
             }
 
+            Medkit medkit = Instantiate(medkitPrefab).GetComponent<Medkit>();
+            medkit.NetworkObject.Spawn(true);
+            player.Inventory.AddItem(medkit);
+            
             itemInstance.NetworkObject.Spawn(true);
             player.Inventory.AddItem(itemInstance);
         }

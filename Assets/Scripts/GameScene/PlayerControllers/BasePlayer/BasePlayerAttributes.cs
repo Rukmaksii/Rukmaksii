@@ -265,5 +265,6 @@ namespace GameScene.PlayerControllers.BasePlayer
         public Vector3 PseudoPosition => transform.position + controller.transform.up * controller.height * 2 / 3;
 
         public float damageMultiplier = 1;
+        public bool healing = false;
     }
 }

@@ -7,7 +7,7 @@ namespace GameScene.Items
 {
     public class ItemWheel : MonoBehaviour
     {
-        public Type[] items = {typeof(FuelBooster), typeof(Grenade), null, null, null, null, null, null};
+        public Type[] items = {typeof(FuelBooster), typeof(Grenade), typeof(Bandage), typeof(Medkit), null, null, null, null};
 
         private bool isSwitchingItem;
 
