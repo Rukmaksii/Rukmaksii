@@ -67,8 +67,8 @@ namespace GameScene.HUD
                         foundChild = child;
                     }
                 }
-                
-                if (foundChild != null)
+
+                if (foundChild != null && !foundElement)
                 {
                     foundElement = true;
                     strategy = foundChild.name.ToLower() switch
@@ -79,9 +79,9 @@ namespace GameScene.HUD
                         _ => strategy
                     };
                     foundChild.localScale = new Vector3(1.3f, 1.3f, 1);
-                    break;
                 }
-                child.localScale = new Vector3(1f, 1f, 1);
+                else
+                    child.localScale = new Vector3(1f, 1f, 1);
             }
 
             if (!foundElement)
