@@ -49,7 +49,7 @@ namespace GameScene.PlayerControllers
         /**
          * <value>the force that will be applied to the Player by the jetpack</value>
          */
-        [SerializeField] private float jetpackForce => Player.JetpackForce;
+        private float jetpackForce => Player.JetpackForce;
 
         /**
          * <value>the minimum amount of fuel required to start the engines</value>
