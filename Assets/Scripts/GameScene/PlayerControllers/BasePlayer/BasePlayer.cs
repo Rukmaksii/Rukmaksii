@@ -95,8 +95,6 @@ namespace GameScene.PlayerControllers.BasePlayer
                 Cursor.lockState = CursorLockMode.Locked;
                 playerState = PlayerState.Normal;
             }
-            
-            DontDestroyOnLoad(this);
         }
 
 

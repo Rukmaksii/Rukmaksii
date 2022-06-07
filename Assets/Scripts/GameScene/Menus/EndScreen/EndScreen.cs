@@ -74,8 +74,7 @@ namespace GameScene.Menus.EndScreen
             foreach (Tuple<ulong,int> p in players)
             {
                 BaseEntry baseEntry = Instantiate(baseEntryPrefab, holderScoreboard.transform).GetComponent<BaseEntry>();
-                baseEntry.playerId = p.Item1;
-                baseEntry.Init();
+                baseEntry.PlayerId = p.Item1;
             }
         }
     }
