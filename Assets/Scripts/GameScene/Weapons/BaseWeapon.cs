@@ -426,7 +426,8 @@ namespace GameScene.Weapons
                 AudioSource.PlayClipAtPoint(sourceFire, gameObject.transform.position);
             else
             {
-                AudioSource.PlayClipAtPoint(sourceReload, transform.position);
+                if(sourceReload != null)
+                    AudioSource.PlayClipAtPoint(sourceReload, transform.position);
             }
         }
 

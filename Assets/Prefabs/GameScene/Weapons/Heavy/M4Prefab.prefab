@@ -183,7 +183,7 @@ MonoBehaviour:
   _rightHandTarget: {fileID: 5981485832566132869}
   _leftHandTarget: {fileID: 3345535122223591879}
   sourceFire: {fileID: 8300000, guid: c4da82d742a5649ad844ab4c04241458, type: 3}
-  sourceReload: {fileID: 0}
+  sourceReload: {fileID: 8300000, guid: bf69f8447d3516546a34063c56bfbea4, type: 3}
 --- !u!136 &3218221826785842258
 CapsuleCollider:
   m_ObjectHideFlags: 0
