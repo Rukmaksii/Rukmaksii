@@ -18,8 +18,9 @@ namespace GameScene.GameManagers
 {
     public class Gameloop : NetworkBehaviour
     {
-        private DateTime referenceTime;
+        private NetworkVariable<DateTime> referenceTime = new NetworkVariable<DateTime>();
         private DateTime currTime;
+        public DateTime ReferenceTime => referenceTime.Value;
 
         private const int ObjectiveDelay = 5;
         private bool hasBeenChange = false;
@@ -39,12 +40,12 @@ namespace GameScene.GameManagers
 
         private bool unshielded = false;
         private int selectedObjective;
-        
+
 
         public int SelectedObjective => selectedObjective;
 
         public static Gameloop Singleton { get; private set; }
-        
+
         public static event Action<string> throwAnnouncement;
 
         private void Awake()
@@ -63,7 +64,7 @@ namespace GameScene.GameManagers
         {
             if (NetworkManager.Singleton.IsServer)
             {
-                referenceTime = DateTime.Now;
+                referenceTime.Value = DateTime.Now;
             }
 
             shield1 = GameObject.Find("Shield1").GetComponent<ShieldController>();
@@ -85,8 +86,6 @@ namespace GameScene.GameManagers
 
             if (NetworkManager.Singleton.IsServer)
             {
-                //set the current time
-                currTime = DateTime.Now;
                 //check if there are the right number of monster 
                 if (monsterCount < NumberOfMonster)
                     SpawnMonsters(NumberOfMonster - monsterCount);
@@ -101,29 +100,35 @@ namespace GameScene.GameManagers
                     NetworkManager.Singleton.SceneManager.LoadScene("EndScene", LoadSceneMode.Single);
                     GetComponent<Gameloop>().enabled = false;
                 }
-                //set the timer
-                timer = currTime - referenceTime;
-                
-                //display the timer on every HUD
-                HUDController.Singleton.SetTimerClientRpc(MakeBeautyTimer(timer), timer.Minutes >= timeToEnd);
-                
+            }
+            //set the current time
+            currTime = DateTime.Now;
+
+            //set the timer
+            timer = currTime - referenceTime.Value;
+            //display the timer on the HUD
+            HUDController.Singleton.DisplayTimer(timer.ToString(@"hh\:mm\:ss"), timer.Minutes >= timeToEnd);
+
+            if (IsServer)
+            {
                 //detect a too long game
                 if (timer.Minutes >= timeToEnd)
                 {
                     shield1.Activated.Value = shield2.Activated.Value = false;
-                    if(!deactivateAllCapturePoints)
+                    if (!deactivateAllCapturePoints)
                         DeactivateCapturePoints();
                     return;
                 }
-                
+
                 //Change the objective that can be captured every ObjectiveDelay
-                if (((timer.Minutes != 0 && timer.Minutes % ObjectiveDelay == 0 && timer.Seconds == 0) 
-                    || (timer.Minutes == 0 && timer.Seconds == 15)) &&  !hasBeenChange)
+                if (((timer.Minutes != 0 && timer.Minutes % ObjectiveDelay == 0 && timer.Seconds == 0)
+                     || (timer.Minutes == 0 && timer.Seconds == 15)) && !hasBeenChange)
                 {
                     ChangeCapturePoints();
                     hasBeenChange = true;
                     StartCoroutine(Wait1Second());
                 }
+
                 //If any shield has been deactivated
                 if (!unshielded)
                 {
@@ -145,12 +150,14 @@ namespace GameScene.GameManagers
                                 shield1.Activated.Value = true;
                                 shield2.Activated.Value = false;
                             }
+
                             unshielded = true;
                             break;
                         }
                     }
                 }
             }
+
 
             //deactivate the collision between each player and it's team's shield
             foreach (BasePlayer player in GameController.Singleton.Players)
@@ -189,22 +196,23 @@ namespace GameScene.GameManagers
             selectedObjective = Random.Range(0, captureArea.Length);
             captureArea[selectedObjective].GetComponent<ObjectiveController>()
                 .ToggleCanCapture(true);
-            
+
             throwAnnouncement?.Invoke($"objective{selectedObjective}");
-            
+
             //Activate all the shields
             shield1.Activated.Value = true;
             shield2.Activated.Value = true;
-            
+
             unshielded = false;
         }
 
         private void DeactivateCapturePoints()
         {
             foreach (GameObject area in captureArea)
-            { 
+            {
                 area.GetComponent<ObjectiveController>().ToggleCanCapture(false);
             }
+
             throwAnnouncement?.Invoke("end");
             deactivateAllCapturePoints = true;
         }
@@ -215,13 +223,14 @@ namespace GameScene.GameManagers
             {
                 Vector3 pos = new Vector3(Random.Range(-285, 280), 60, Random.Range(-280, 275));
                 Physics.Raycast(pos, Vector3.down, out RaycastHit hit);
-                while (Vector3.Distance(hit.point, new Vector3(0,0,0)) < 150)
+                while (Vector3.Distance(hit.point, new Vector3(0, 0, 0)) < 150)
                 {
                     pos = new Vector3(Random.Range(-285, 280), 60, Random.Range(-280, 275));
                     Physics.Raycast(pos, Vector3.down, out hit);
                 }
+
                 GameObject instance = Instantiate(GameController.Singleton.MonsterPrefab, hit.point,
-                        Quaternion.identity);
+                    Quaternion.identity);
                 instance.GetComponent<NetworkObject>().Spawn();
                 if (instance.GetComponent<NavMeshAgent>().isOnNavMesh)
                 {
@@ -250,14 +259,6 @@ namespace GameScene.GameManagers
         {
             yield return new WaitForSeconds(1);
             hasBeenChange = false;
-        }
-
-        private string MakeBeautyTimer(TimeSpan timeSpan)
-        {
-            string seconds = timeSpan.Seconds / 10 == 0 ? $"0{timeSpan.Seconds}" : $"{timeSpan.Seconds}";
-            string minutes = timeSpan.Minutes / 10 == 0 ? $"0{timeSpan.Minutes}" : $"{timeSpan.Minutes}";
-            string hours = timeSpan.Hours / 10 == 0 ? $"0{timeSpan.Hours}" : $"{timeSpan.Hours}";
-            return $"{hours}:{minutes}:{seconds}";
         }
     }
 }

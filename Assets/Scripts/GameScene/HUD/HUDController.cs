@@ -359,9 +359,8 @@ namespace GameScene.HUD
         {
             MoneyLevel.text = "Player's Money: " + money;
         }
-
-        [ClientRpc]
-        public void SetTimerClientRpc(string timing, bool End)
+        
+        public void DisplayTimer(string timing, bool End)
         {
             timer.GetComponent<Text>().text = timing;
             timer.GetComponent<Text>().color = End ? Color.red : Color.white;
