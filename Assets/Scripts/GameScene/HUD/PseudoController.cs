@@ -63,7 +63,7 @@ namespace GameScene.HUD
                     var textObj = obj.GetComponentInChildren<Text>();
                     textObj.text = GetPseudo(player.OwnerClientId);
                     obj.GetComponent<RectTransform>().anchoredPosition = PseudoPosition(player);
-                    var color = player.TeamId == localPlayer.TeamId ? teamColor : enemyColor;
+                    var color = player.TeamId == 0 ? teamColor : enemyColor;
                     textObj.color = color;
                 }
             }
