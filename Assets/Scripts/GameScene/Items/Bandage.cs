@@ -9,6 +9,7 @@ namespace GameScene.Items
     public class Bandage : BaseItem
     {
         public override float Duration { get; } = 2f;
+        protected override float ReadyCooldown { get; } = 2.5f;
         public override int Price { get; } = 30;
         private int HealingAmount = 15;
         private float _baseSpeed;
