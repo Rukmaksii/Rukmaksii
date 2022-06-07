@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028305, g: 0.22571313, b: 0.3069213, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -930,6 +930,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 7a17a08371c960943a017f3db1fcdb92, type: 3}
       propertyPath: m_TagString
       value: Ground
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7a17a08371c960943a017f3db1fcdb92, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a17a08371c960943a017f3db1fcdb92, type: 3}
@@ -2391,9 +2395,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 6.438
       objectReference: {fileID: 0}
+    - target: {fileID: 5907572963287525237, guid: 45d20bddbb40f0c71bd7fdbd455cbafa, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 6757048585293782873, guid: 45d20bddbb40f0c71bd7fdbd455cbafa, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 4290642989
+      objectReference: {fileID: 0}
+    - target: {fileID: 8316045321158119969, guid: 45d20bddbb40f0c71bd7fdbd455cbafa, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 0}
@@ -5384,6 +5396,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 1d7b40d1dad85fd49acb6668cd0b1f0b, type: 3}
       propertyPath: m_TagString
       value: Ground
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1d7b40d1dad85fd49acb6668cd0b1f0b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1d7b40d1dad85fd49acb6668cd0b1f0b, type: 3}
@@ -23383,9 +23399,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5907572963287525237, guid: 45d20bddbb40f0c71bd7fdbd455cbafa, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 6757048585293782873, guid: 45d20bddbb40f0c71bd7fdbd455cbafa, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 1499984441
+      objectReference: {fileID: 0}
+    - target: {fileID: 8316045321158119969, guid: 45d20bddbb40f0c71bd7fdbd455cbafa, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 0}
@@ -32913,6 +32937,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 1d7b40d1dad85fd49acb6668cd0b1f0b, type: 3}
       propertyPath: m_TagString
       value: Ground
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1d7b40d1dad85fd49acb6668cd0b1f0b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1d7b40d1dad85fd49acb6668cd0b1f0b, type: 3}
@@ -46851,9 +46879,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5907572963287525237, guid: 45d20bddbb40f0c71bd7fdbd455cbafa, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 6757048585293782873, guid: 45d20bddbb40f0c71bd7fdbd455cbafa, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 4204819608
+      objectReference: {fileID: 0}
+    - target: {fileID: 8316045321158119969, guid: 45d20bddbb40f0c71bd7fdbd455cbafa, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 0}
@@ -62631,7 +62667,7 @@ GameObject:
   m_TagString: Base
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!114 &1449683956256713903
 MonoBehaviour:
@@ -62675,7 +62711,7 @@ GameObject:
   m_TagString: Base
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!114 &1449683957499213355
 MonoBehaviour:
