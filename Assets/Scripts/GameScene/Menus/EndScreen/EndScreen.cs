@@ -50,7 +50,11 @@ namespace GameScene.Menus.EndScreen
         private void DisplayStats()
         {
             
-            List<ulong> orderPlayers =  _scoreboard.Keys.OrderByDescending(key => _scoreboard[key][PlayerInfoField.Kill]).ToList();
+            List<ulong> orderPlayers =  _scoreboard.Keys.OrderByDescending(key =>
+            {
+                var fields = _scoreboard[key];
+                return !fields.ContainsKey(PlayerInfoField.Kill) ? 0 : fields[PlayerInfoField.Kill];
+            }).ToList();
 
             foreach (ulong p in orderPlayers)
             {
