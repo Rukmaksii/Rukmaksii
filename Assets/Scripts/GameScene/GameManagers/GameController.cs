@@ -247,7 +247,7 @@ namespace GameScene.GameManagers
             player.Money = 500;
 
             GameObject autoWeaponPrefab =
-                WeaponPrefabs.Find(go => go.name == "GalilPrefab");
+                WeaponPrefabs.Find(go => go.name == "M4Prefab");
             GameObject weaponInstance = Instantiate(autoWeaponPrefab);
             var netObj = weaponInstance.GetComponent<NetworkObject>();
             netObj.Spawn(true);
@@ -262,14 +262,15 @@ namespace GameScene.GameManagers
 
             GameObject fuelBoosterPrefab =
                 ItemPrefabs.Find(go => go.name == "FuelBoosterPrefab");
+            FuelBooster itemInstance = Instantiate(fuelBoosterPrefab).GetComponent<FuelBooster>();
+
             GameObject grenadePrefab =
                 ItemPrefabs.Find(go => go.name == "Grenade");
+            
             GameObject bandagePrefab =
                 ItemPrefabs.Find(go => go.name == "Bandage");
-            GameObject medkitPrefab =
-                ItemPrefabs.Find(go => go.name == "Medkit");
-            FuelBooster itemInstance = Instantiate(fuelBoosterPrefab).GetComponent<FuelBooster>();
-            for (int i = 0; i < 10; i++)
+            
+            for (int i = 0; i < 3; i++)
             {
                 Grenade grenade = Instantiate(grenadePrefab).GetComponent<Grenade>();
                 grenade.NetworkObject.Spawn(true);
@@ -280,10 +281,6 @@ namespace GameScene.GameManagers
                 player.Inventory.AddItem(bandage);
             }
 
-            Medkit medkit = Instantiate(medkitPrefab).GetComponent<Medkit>();
-            medkit.NetworkObject.Spawn(true);
-            player.Inventory.AddItem(medkit);
-            
             itemInstance.NetworkObject.Spawn(true);
             player.Inventory.AddItem(itemInstance);
         }
