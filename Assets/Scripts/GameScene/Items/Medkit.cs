@@ -9,6 +9,7 @@ namespace GameScene.Items
     public class Medkit : BaseItem
     {
         public override float Duration { get; } = 3f;
+        protected override float ReadyCooldown { get; } = 3.5f;
         public override int Price { get; } = 250;
         private int HealingAmount = 70;
         private float _baseSpeed;
