@@ -11,13 +11,13 @@ using Unity.Netcode;
 using Unity.Netcode.Samples;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Serialization;
 
 namespace GameScene.Weapons
 {
     [RequireComponent(typeof(NetworkObject))]
     [RequireComponent(typeof(ClientNetworkTransform))]
     [RequireComponent(typeof(Rigidbody))]
-    [RequireComponent(typeof(AudioSource))]
     public abstract class BaseWeapon : NetworkBehaviour, IWeapon, IPickable
     {
         [SerializeField] private Sprite sprite;
@@ -137,7 +137,8 @@ namespace GameScene.Weapons
 
         private NetworkVariable<bool> renderState = new NetworkVariable<bool>(true);
 
-        private AudioSource source;
+        [SerializeField]private AudioClip sourceFire;
+        [SerializeField]private AudioClip sourceReload;
 
         public abstract int Price { get; }
 
@@ -145,7 +146,6 @@ namespace GameScene.Weapons
 
         private void Awake()
         {
-            source = GetComponent<AudioSource>();
             renderState.OnValueChanged += (_, val) => SwitchRenderers(val);
             playerReference.OnValueChanged += (_, val) => SwitchColliders(!IsInteractable);
         }
@@ -324,6 +324,7 @@ namespace GameScene.Weapons
         {
             UpdateAmmoServerRpc(0);
             this.isReloading = true;
+            PlaySoundClientRPC(false);
             remainingReloadTime = ReloadTime;
         }
 
@@ -343,7 +344,7 @@ namespace GameScene.Weapons
         {
             if (!IsServer)
                 throw new NotServerException();
-            PlaySoundClientRPC();
+            PlaySoundClientRPC(true);
 
             updatedDamage = (int)Math.Floor(Damage * Player.damageMultiplier);
 
@@ -419,10 +420,14 @@ namespace GameScene.Weapons
         }
 
         [ClientRpc]
-        private void PlaySoundClientRPC()
+        private void PlaySoundClientRPC(bool fired)
         {
-            AudioSource source = gameObject.GetComponent<AudioSource>();
-            AudioSource.PlayClipAtPoint(source.clip, gameObject.transform.position, source.volume);
+            if(fired)
+                AudioSource.PlayClipAtPoint(sourceFire, gameObject.transform.position);
+            else
+            {
+                AudioSource.PlayClipAtPoint(sourceReload, transform.position);
+            }
         }
 
         [ClientRpc]
