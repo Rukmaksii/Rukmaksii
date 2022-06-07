@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using GameScene.GameManagers;
 using GameScene.Map;
 using GameScene.model.Network;
@@ -48,33 +49,13 @@ namespace GameScene.Menus.EndScreen
 
         private void DisplayStats()
         {
-            List<Tuple<ulong,int>> players = new List<Tuple<ulong,int>>();
             
-            foreach (ulong player in _scoreboard.Keys)
-            {
-                if (players.Count == 0 || !_scoreboard[player].ContainsKey(PlayerInfoField.Kill))
-                    players.Add(new Tuple<ulong, int>(player,
-                        _scoreboard[player].ContainsKey(PlayerInfoField.Kill) ? _scoreboard[player][PlayerInfoField.Kill] : 0));
-                else
-                {
-                    int i = 0;
-                    while (i < players.Count)
-                    {
-                        if (_scoreboard[player][PlayerInfoField.Kill] >= players[i].Item2)
-                        {
-                            players.Insert(i,new Tuple<ulong, int>(player, _scoreboard[player][PlayerInfoField.Kill]));
-                            break;
-                        }
+            List<ulong> orderPlayers =  _scoreboard.Keys.OrderByDescending(key => _scoreboard[key][PlayerInfoField.Kill]).ToList();
 
-                        i++;
-                    }
-                }
-            }
-            
-            foreach (Tuple<ulong,int> p in players)
+            foreach (ulong p in orderPlayers)
             {
                 BaseEntry baseEntry = Instantiate(baseEntryPrefab, holderScoreboard.transform).GetComponent<BaseEntry>();
-                baseEntry.PlayerId = p.Item1;
+                baseEntry.PlayerId = p;
             }
         }
     }
