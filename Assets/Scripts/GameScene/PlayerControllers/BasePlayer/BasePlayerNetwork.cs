@@ -24,9 +24,18 @@ namespace GameScene.PlayerControllers.BasePlayer
             instance.GetComponent<NetworkObject>().Spawn();
             BaseMinion minion = instance.GetComponent<BaseMinion>();
             minion.BindOwnerServerRpc(this.OwnerClientId, strat);
+            spawnedMinions.Push(minion);
             GameController.Singleton.Scoreboard.UpdateData(this.OwnerClientId, PlayerInfoField.SpawnedMinions, 1, true);
         }
 
+        [ServerRpc]
+        private void DestroyMinionServerRpc()
+        {
+            if (spawnedMinions.Count <= 0)
+                return;
+            
+            spawnedMinions.Pop().OnKill();
+        }
 
         [ServerRpc(RequireOwnership = false)]
         public void UpdateHealthServerRpc(int newHealth)

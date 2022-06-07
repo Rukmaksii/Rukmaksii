@@ -218,6 +218,11 @@ namespace GameScene.PlayerControllers.BasePlayer
 
         public List<BaseMinion> Minions => GameController.Singleton.Minions.FindAll(m => m.OwnerId == OwnerClientId);
 
+        /**
+         * server only stack of last spawned minions
+         */
+        private Stack<BaseMinion> spawnedMinions = new Stack<BaseMinion>();
+
         private IMinion.Strategy strategy = IMinion.Strategy.PROTECT;
         public IMinion.Strategy Strategy => strategy;
 

@@ -218,7 +218,7 @@ namespace GameScene.PlayerControllers.BasePlayer
         {
             if (!IsOwner || !ctx.started || playerState != PlayerState.Normal)
                 return;
-            strategy = (IMinion.Strategy) ((1 + (int) strategy) % (int) IMinion.Strategy.Count);
+            DestroyMinionServerRpc();
         }
 
         public void OnSpawnMinion(InputAction.CallbackContext ctx)
