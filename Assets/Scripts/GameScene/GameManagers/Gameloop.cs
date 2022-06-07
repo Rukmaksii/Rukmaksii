@@ -98,7 +98,8 @@ namespace GameScene.GameManagers
                     else
                         GameController.Singleton.winningTeam = 0;
                     NetworkManager.Singleton.SceneManager.LoadScene("EndScene", LoadSceneMode.Single);
-                    GetComponent<Gameloop>().enabled = false;
+                    this.enabled = false;
+                    HUDController.Singleton.enabled = false;
                 }
             }
             //set the current time
